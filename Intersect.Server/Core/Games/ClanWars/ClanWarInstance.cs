@@ -161,6 +161,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                     continue;
                 }
                 player.WarpToLastOverworldLocation(false, true);
+                PacketSender.SendToast(player, "The Clan War has ended!");
                 player.SendPacket(clanWarWinnerPacket);
             }
 
@@ -269,9 +270,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             var change = false;
-            using (var context = DbInterface.CreatePlayerContext()) 
-            {
-                var scoringGuilds = context.Territories
+            var scoringGuilds = ClanWarManager.CachedTerritories.Values
                     .Where(t => t != null &&
                                 t.ClanWarId == Id &&
                                 t.MapInstanceId == Id &&
@@ -286,21 +285,20 @@ namespace Intersect.Server.Core.Games.ClanWars
                         }
                     );
 
-                foreach (var scoringGuild in scoringGuilds) 
+            foreach (var scoringGuild in scoringGuilds)
+            {
+                var score = 0;
+                foreach (var territoryId in scoringGuild.ControlledTerritories)
                 {
-                    var score = 0;
-                    foreach (var territoryId in scoringGuild.ControlledTerritories)
+                    if (!TerritoryDescriptor.TryGet(territoryId, out var territory))
                     {
-                        if (!TerritoryDescriptor.TryGet(territoryId, out var territory))
-                        {
-                            continue;
-                        }
-
-                        score += territory.PointsPerTick;
-                        change = true;
+                        continue;
                     }
-                    ChangeGuildScore(scoringGuild.Key, score);
+
+                    score += territory.PointsPerTick;
+                    change = true;
                 }
+                ChangeGuildScore(scoringGuild.Key, score);
             }
 
             BroadcastScores();

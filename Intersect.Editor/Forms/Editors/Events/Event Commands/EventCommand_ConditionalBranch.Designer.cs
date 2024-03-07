@@ -31,6 +31,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpEnhancementOn = new DarkUI.Controls.DarkGroupBox();
+            this.chkAnyItem = new DarkUI.Controls.DarkCheckBox();
+            this.cmbEnhancementOnWeap = new DarkUI.Controls.DarkComboBox();
+            this.cmbItemEnhancement = new DarkUI.Controls.DarkComboBox();
+            this.lblEnhancementItem = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.grpRecordIs = new DarkUI.Controls.DarkGroupBox();
             this.lblRecordIsAtleast = new System.Windows.Forms.Label();
             this.nudRecordVal = new DarkUI.Controls.DarkNumericUpDown();
@@ -208,13 +214,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpEnhancementOn = new DarkUI.Controls.DarkGroupBox();
-            this.cmbEnhancementOnWeap = new DarkUI.Controls.DarkComboBox();
-            this.cmbItemEnhancement = new DarkUI.Controls.DarkComboBox();
-            this.lblEnhancementItem = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.chkAnyItem = new DarkUI.Controls.DarkCheckBox();
+            this.grpTerritory = new DarkUI.Controls.DarkGroupBox();
+            this.cmbTerritories = new DarkUI.Controls.DarkComboBox();
+            this.lblTerritory = new System.Windows.Forms.Label();
             this.grpConditional.SuspendLayout();
+            this.grpEnhancementOn.SuspendLayout();
             this.grpRecordIs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRecordVal)).BeginInit();
             this.grpSpawnGroup.SuspendLayout();
@@ -265,13 +269,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpEnhancementOn.SuspendLayout();
+            this.grpTerritory.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpTerritory);
             this.grpConditional.Controls.Add(this.grpEnhancementOn);
             this.grpConditional.Controls.Add(this.grpRecordIs);
             this.grpConditional.Controls.Add(this.grpSpawnGroup);
@@ -317,6 +322,90 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpEnhancementOn
+            // 
+            this.grpEnhancementOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpEnhancementOn.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEnhancementOn.Controls.Add(this.chkAnyItem);
+            this.grpEnhancementOn.Controls.Add(this.cmbEnhancementOnWeap);
+            this.grpEnhancementOn.Controls.Add(this.cmbItemEnhancement);
+            this.grpEnhancementOn.Controls.Add(this.lblEnhancementItem);
+            this.grpEnhancementOn.Controls.Add(this.label3);
+            this.grpEnhancementOn.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEnhancementOn.Location = new System.Drawing.Point(9, 44);
+            this.grpEnhancementOn.Name = "grpEnhancementOn";
+            this.grpEnhancementOn.Size = new System.Drawing.Size(262, 106);
+            this.grpEnhancementOn.TabIndex = 63;
+            this.grpEnhancementOn.TabStop = false;
+            this.grpEnhancementOn.Text = "Enhancement on Item...";
+            // 
+            // chkAnyItem
+            // 
+            this.chkAnyItem.Location = new System.Drawing.Point(181, 78);
+            this.chkAnyItem.Name = "chkAnyItem";
+            this.chkAnyItem.Size = new System.Drawing.Size(72, 17);
+            this.chkAnyItem.TabIndex = 57;
+            this.chkAnyItem.Text = "Any item?";
+            this.chkAnyItem.CheckedChanged += new System.EventHandler(this.chkAnyItem_CheckedChanged);
+            // 
+            // cmbEnhancementOnWeap
+            // 
+            this.cmbEnhancementOnWeap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancementOnWeap.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancementOnWeap.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancementOnWeap.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancementOnWeap.DrawDropdownHoverOutline = false;
+            this.cmbEnhancementOnWeap.DrawFocusRectangle = false;
+            this.cmbEnhancementOnWeap.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancementOnWeap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancementOnWeap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancementOnWeap.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancementOnWeap.FormattingEnabled = true;
+            this.cmbEnhancementOnWeap.Location = new System.Drawing.Point(86, 20);
+            this.cmbEnhancementOnWeap.Name = "cmbEnhancementOnWeap";
+            this.cmbEnhancementOnWeap.Size = new System.Drawing.Size(167, 21);
+            this.cmbEnhancementOnWeap.TabIndex = 31;
+            this.cmbEnhancementOnWeap.Text = null;
+            this.cmbEnhancementOnWeap.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // cmbItemEnhancement
+            // 
+            this.cmbItemEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbItemEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbItemEnhancement.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbItemEnhancement.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbItemEnhancement.DrawDropdownHoverOutline = false;
+            this.cmbItemEnhancement.DrawFocusRectangle = false;
+            this.cmbItemEnhancement.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbItemEnhancement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbItemEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbItemEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbItemEnhancement.FormattingEnabled = true;
+            this.cmbItemEnhancement.Location = new System.Drawing.Point(86, 51);
+            this.cmbItemEnhancement.Name = "cmbItemEnhancement";
+            this.cmbItemEnhancement.Size = new System.Drawing.Size(167, 21);
+            this.cmbItemEnhancement.TabIndex = 30;
+            this.cmbItemEnhancement.Text = null;
+            this.cmbItemEnhancement.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblEnhancementItem
+            // 
+            this.lblEnhancementItem.AutoSize = true;
+            this.lblEnhancementItem.Location = new System.Drawing.Point(50, 54);
+            this.lblEnhancementItem.Name = "lblEnhancementItem";
+            this.lblEnhancementItem.Size = new System.Drawing.Size(30, 13);
+            this.lblEnhancementItem.TabIndex = 29;
+            this.lblEnhancementItem.Text = "Item:";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(4, 25);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(76, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Enhancement:";
             // 
             // grpRecordIs
             // 
@@ -2867,89 +2956,48 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpEnhancementOn
+            // grpTerritory
             // 
-            this.grpEnhancementOn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpEnhancementOn.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpEnhancementOn.Controls.Add(this.chkAnyItem);
-            this.grpEnhancementOn.Controls.Add(this.cmbEnhancementOnWeap);
-            this.grpEnhancementOn.Controls.Add(this.cmbItemEnhancement);
-            this.grpEnhancementOn.Controls.Add(this.lblEnhancementItem);
-            this.grpEnhancementOn.Controls.Add(this.label3);
-            this.grpEnhancementOn.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEnhancementOn.Location = new System.Drawing.Point(9, 44);
-            this.grpEnhancementOn.Name = "grpEnhancementOn";
-            this.grpEnhancementOn.Size = new System.Drawing.Size(262, 106);
-            this.grpEnhancementOn.TabIndex = 63;
-            this.grpEnhancementOn.TabStop = false;
-            this.grpEnhancementOn.Text = "Enhancement on Item...";
+            this.grpTerritory.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpTerritory.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTerritory.Controls.Add(this.cmbTerritories);
+            this.grpTerritory.Controls.Add(this.lblTerritory);
+            this.grpTerritory.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTerritory.Location = new System.Drawing.Point(8, 41);
+            this.grpTerritory.Name = "grpTerritory";
+            this.grpTerritory.Size = new System.Drawing.Size(262, 56);
+            this.grpTerritory.TabIndex = 70;
+            this.grpTerritory.TabStop = false;
+            this.grpTerritory.Text = "Guild owns Territory...";
             // 
-            // cmbEnhancementOnWeap
+            // cmbTerritories
             // 
-            this.cmbEnhancementOnWeap.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbEnhancementOnWeap.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbEnhancementOnWeap.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbEnhancementOnWeap.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbEnhancementOnWeap.DrawDropdownHoverOutline = false;
-            this.cmbEnhancementOnWeap.DrawFocusRectangle = false;
-            this.cmbEnhancementOnWeap.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbEnhancementOnWeap.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEnhancementOnWeap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEnhancementOnWeap.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbEnhancementOnWeap.FormattingEnabled = true;
-            this.cmbEnhancementOnWeap.Location = new System.Drawing.Point(86, 20);
-            this.cmbEnhancementOnWeap.Name = "cmbEnhancementOnWeap";
-            this.cmbEnhancementOnWeap.Size = new System.Drawing.Size(167, 21);
-            this.cmbEnhancementOnWeap.TabIndex = 31;
-            this.cmbEnhancementOnWeap.Text = null;
-            this.cmbEnhancementOnWeap.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTerritories.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTerritories.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTerritories.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTerritories.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTerritories.DrawDropdownHoverOutline = false;
+            this.cmbTerritories.DrawFocusRectangle = false;
+            this.cmbTerritories.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTerritories.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTerritories.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTerritories.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTerritories.FormattingEnabled = true;
+            this.cmbTerritories.Location = new System.Drawing.Point(86, 20);
+            this.cmbTerritories.Name = "cmbTerritories";
+            this.cmbTerritories.Size = new System.Drawing.Size(167, 21);
+            this.cmbTerritories.TabIndex = 31;
+            this.cmbTerritories.Text = null;
+            this.cmbTerritories.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // cmbItemEnhancement
+            // lblTerritory
             // 
-            this.cmbItemEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbItemEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbItemEnhancement.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbItemEnhancement.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbItemEnhancement.DrawDropdownHoverOutline = false;
-            this.cmbItemEnhancement.DrawFocusRectangle = false;
-            this.cmbItemEnhancement.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbItemEnhancement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbItemEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbItemEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbItemEnhancement.FormattingEnabled = true;
-            this.cmbItemEnhancement.Location = new System.Drawing.Point(86, 51);
-            this.cmbItemEnhancement.Name = "cmbItemEnhancement";
-            this.cmbItemEnhancement.Size = new System.Drawing.Size(167, 21);
-            this.cmbItemEnhancement.TabIndex = 30;
-            this.cmbItemEnhancement.Text = null;
-            this.cmbItemEnhancement.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblEnhancementItem
-            // 
-            this.lblEnhancementItem.AutoSize = true;
-            this.lblEnhancementItem.Location = new System.Drawing.Point(50, 54);
-            this.lblEnhancementItem.Name = "lblEnhancementItem";
-            this.lblEnhancementItem.Size = new System.Drawing.Size(30, 13);
-            this.lblEnhancementItem.TabIndex = 29;
-            this.lblEnhancementItem.Text = "Item:";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(4, 25);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(76, 13);
-            this.label3.TabIndex = 28;
-            this.label3.Text = "Enhancement:";
-            // 
-            // chkAnyItem
-            // 
-            this.chkAnyItem.Location = new System.Drawing.Point(181, 78);
-            this.chkAnyItem.Name = "chkAnyItem";
-            this.chkAnyItem.Size = new System.Drawing.Size(72, 17);
-            this.chkAnyItem.TabIndex = 57;
-            this.chkAnyItem.Text = "Any item?";
-            this.chkAnyItem.CheckedChanged += new System.EventHandler(this.chkAnyItem_CheckedChanged);
+            this.lblTerritory.AutoSize = true;
+            this.lblTerritory.Location = new System.Drawing.Point(4, 25);
+            this.lblTerritory.Name = "lblTerritory";
+            this.lblTerritory.Size = new System.Drawing.Size(45, 13);
+            this.lblTerritory.TabIndex = 28;
+            this.lblTerritory.Text = "Territory";
             // 
             // EventCommandConditionalBranch
             // 
@@ -2962,6 +3010,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpEnhancementOn.ResumeLayout(false);
+            this.grpEnhancementOn.PerformLayout();
             this.grpRecordIs.ResumeLayout(false);
             this.grpRecordIs.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRecordVal)).EndInit();
@@ -3048,8 +3098,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpEnhancementOn.ResumeLayout(false);
-            this.grpEnhancementOn.PerformLayout();
+            this.grpTerritory.ResumeLayout(false);
+            this.grpTerritory.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3240,5 +3290,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblEnhancementItem;
         private System.Windows.Forms.Label label3;
         private DarkCheckBox chkAnyItem;
+        private DarkGroupBox grpTerritory;
+        private DarkComboBox cmbTerritories;
+        private System.Windows.Forms.Label lblTerritory;
     }
 }

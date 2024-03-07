@@ -118,17 +118,11 @@ namespace Intersect.Server.Maps
                         if (territoryInstance != null)
                         {
                             territoryInstance.Initialize();
-#if DEBUG
-                            Log.Debug($"Loaded existing territory: {territoryInstance.Territory.Name} on map {mMapController.Name}");
-#endif
                         }
                         else
                         {
                             // If not, make a new instance
                             territoryInstance = new TerritoryInstance(territoryId, clanWarId, mMapController?.Id ?? Guid.Empty, MapInstanceId);
-#if DEBUG
-                            Log.Debug($"Loaded new territory: {territoryInstance.Territory.Name} on map {mMapController.Name}");
-#endif
                             context.Territories.Add(territoryInstance);
                         }
 

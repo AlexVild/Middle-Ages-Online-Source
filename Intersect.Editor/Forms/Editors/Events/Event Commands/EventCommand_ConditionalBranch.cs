@@ -285,6 +285,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbItemEnhancement.Items.Clear();
             cmbItemEnhancement.Items.AddRange(ItemBase.Names);
 
+            cmbTerritories.Items.Clear();
+            cmbTerritories.Items.AddRange(TerritoryDescriptor.Names);
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -595,6 +598,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new ClanWarsActive();
 
                     break;
+                
+                case ConditionTypes.GuildOwnsTerritory:
+                    Condition = new GuildOwnsTerritory();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -636,6 +644,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpEnhancements.Hide();
             grpSpawnGroup.Hide();
             grpEnhancementOn.Hide();
+            grpTerritory.Hide();
 
             switch (type)
             {
@@ -942,6 +951,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                 case ConditionTypes.ClanWarsActive:
                     
+                    break;
+
+                case ConditionTypes.GuildOwnsTerritory:
+                    grpTerritory.Show();
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1911,6 +1925,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbItemEnhancement.Enabled = !chkAnyItem.Checked;
         }
 
+        private void SetupFormValues(GuildOwnsTerritory condition)
+        {
+            cmbTerritories.SelectedIndex = TerritoryDescriptor.ListIndex(condition.TerritoryId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2293,6 +2312,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancementOnWeap.SelectedIndex);
             condition.ItemId = ItemBase.IdFromList(cmbItemEnhancement.SelectedIndex);
             condition.AnyItem = chkAnyItem.Checked;
+        }
+
+        private void SaveFormValues(GuildOwnsTerritory condition)
+        {
+            condition.TerritoryId = TerritoryDescriptor.IdFromList(cmbTerritories.SelectedIndex);
         }
         #endregion
 

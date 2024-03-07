@@ -9,6 +9,7 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 namespace Intersect.Server.Core.Games.ClanWars
 {
@@ -25,6 +26,8 @@ namespace Intersect.Server.Core.Games.ClanWars
         public static Guid LastWinningGuild { get; set; }
         
         private static long mNextTick { get; set; }
+
+        public static Dictionary<Guid, TerritoryInstance> CachedTerritories = new Dictionary<Guid, TerritoryInstance>();
 
         public static ClanWarInstance CurrentWar
         {
@@ -52,6 +55,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public static void StartClanWar()
         {
+            CachedTerritories.Clear();
             lock (mLock)
             {
                 var prevState = ClanWarActive;
@@ -106,6 +110,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public static void EndAllClanWars()
         {
+            CachedTerritories.Clear();
             lock (mLock)
             {
                 var prevState = ClanWarActive;

@@ -194,6 +194,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                 StateChanged = true;
             }
             CachePlayerLookups();
+            ClanWarManager.CachedTerritories[TerritoryId] = this;
         }
 
         private void BroadcastStateChange()

@@ -112,6 +112,8 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             mNextHealthTick = Timing.Global.Milliseconds + Options.Instance.ClanWar.HealthTickMs;
             DebounceTime = Timing.Global.MillisecondsUtc;
+
+            ClanWarManager.CachedTerritories[TerritoryId] = this;
         }
 
         public void AddPlayer(Player player)

@@ -419,6 +419,11 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.ClanWarsActive;
         }
 
+        public static string GetEventConditionalDesc(GuildOwnsTerritory condition)
+        {
+            return EventConditionDesc.GuildOwnsTerritory.ToString(TerritoryDescriptor.GetName(condition.TerritoryId));
+        }
+
         public static string GetEventConditionalDesc(MapSpawnGroupIs condition)
         {
             if (condition.OrGreater && condition.OrLess)
@@ -2539,6 +2544,7 @@ Tick timer saved in server config.json.";
                 {52, @"Spell X is active on player..."},
                 {53, @"Enhancement X on item Y..."},
                 {54, @"Clan War is active..."},
+                {55, @"Guild controls Territory X..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2881,6 +2887,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ClanWarsActive = @"A Clan War is active";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString GuildOwnsTerritory = @"Player's Guild owns Territory: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapSpawnGroupIs = @"Map Spawn Group is {00}";

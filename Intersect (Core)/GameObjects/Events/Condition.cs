@@ -113,6 +113,8 @@ namespace Intersect.GameObjects.Events
         
         ClanWarsActive,
 
+        GuildOwnsTerritory,
+
     }
 
     public class Condition
@@ -738,6 +740,13 @@ namespace Intersect.GameObjects.Events
     public class ClanWarsActive : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.ClanWarsActive;
+    }
+
+    public class GuildOwnsTerritory : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.GuildOwnsTerritory;
+
+        public Guid TerritoryId { get; set; }
     }
 
     public class VariableCompaison

@@ -16,6 +16,7 @@ using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Core.Games.ClanWars;
+using Intersect.Server.Database;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -1263,7 +1264,7 @@ namespace Intersect.Server.Entities.Events
           Player player,
           Event eventInstance,
           QuestBase questBase
-      )
+        )
         {
             if (player == null || condition == null)
             {
@@ -1271,6 +1272,26 @@ namespace Intersect.Server.Entities.Events
             }
 
             return ClanWarManager.ClanWarActive;
+        }
+
+        public static bool MeetsCondition(
+          GuildOwnsTerritory condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null || !player.IsInGuild || !ClanWarManager.ClanWarActive)
+            {
+                return false;
+            }
+
+            if (!ClanWarManager.CachedTerritories.TryGetValue(condition.TerritoryId, out var territory))
+            {
+                return false;
+            }
+
+            return territory.GuildId != Guid.Empty && territory.GuildId == player.Guild?.Id;
         }
 
     }
