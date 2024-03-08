@@ -949,7 +949,7 @@ namespace Intersect.Editor.Core
                                             {
                                                 for (int xx = left; xx <= right; xx++) 
                                                 {
-                                                    var dist = Utilities.MathHelper.CalculateDistanceToPoint(x, y, xx, yy);
+                                                    var dist = Intersect.Utilities.MathHelper.CalculateDistanceToPoint(x, y, xx, yy);
                                                     if (Math.Floor(dist) > size)
                                                     {
                                                         continue;

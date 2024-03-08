@@ -15,6 +15,13 @@ namespace Intersect.Attributes
         public RelatedTable(GameObjectType db) { TableType = db; }
     }
 
+    public class RelatedVariableType : Attribute
+    {
+        public VariableTypes VariableType { get; set; }
+
+        public RelatedVariableType(VariableTypes type) { VariableType = type; }
+    }
+
     public class RecordType : Attribute
     {
         public GameObjects.Events.RecordType Type { get; set; }

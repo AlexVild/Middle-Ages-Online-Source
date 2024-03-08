@@ -894,5 +894,19 @@ namespace Intersect.Server.Database.PlayerData.Players
                 PacketSender.SendChatMsg(member, message, ChatMessageType.Guild);
             }
         }
+
+        /// <summary>
+        /// Starts all common events with a specified trigger for all online guild members
+        /// </summary>
+        /// <param name="trigger">The common event trigger to run</param>
+        /// <param name="command">The command which started this common event</param>
+        /// <param name="param">Common event parameter</param>
+        public void StartCommonEventsWithTriggerForAll(CommonEventTrigger trigger, string command, string param)
+        {
+            foreach (var plyr in FindOnlineMembers())
+            {
+                plyr.StartCommonEventsWithTrigger(trigger, command, param);
+            }
+        }
     }
 }

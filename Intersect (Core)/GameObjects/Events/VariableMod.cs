@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects.Events
 {
 
-    public class VariableMod
+    public abstract class VariableMod
     {
 
     }

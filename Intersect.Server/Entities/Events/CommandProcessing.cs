@@ -1923,7 +1923,13 @@ namespace Intersect.Server.Entities.Events
                                 sb.Replace(val.Key, instanceVarVal.ToString((val.Value).Type));
                     }
                 }
-                    
+
+                foreach (var val in DbInterface.GuildVariableEventTextLookup)
+                {
+                    if (input.Contains(val.Key))
+                        sb.Replace(val.Key, (player.Guild?.GetVariableValue(val.Value.Id) ?? new VariableValue()).ToString((val.Value).Type));
+                }
+
                 if (instance != null)
                 {
                     var parms = instance.GetParams(player);
@@ -1973,6 +1979,8 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
+            Guild guild = null;
+
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
                 value = player.GetVariableValue(command.VariableId);
@@ -1984,6 +1992,15 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance)) 
             {
                 value = mapInstance.GetInstanceVariable(command.VariableId);
+            }
+            else if (command.VariableType == VariableTypes.GuildVariable)
+            {
+                guild = player.Guild;
+                if (guild == null)
+                {
+                    return;
+                }
+                value = guild.GetVariableValue(command.VariableId) ?? new VariableValue();
             }
 
             if (value == null)
@@ -2052,6 +2069,11 @@ namespace Intersect.Server.Entities.Events
                 MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.MapInstanceId);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
+            else if (command.VariableType == VariableTypes.GuildVariable && changed)
+            {
+                guild.StartCommonEventsWithTriggerForAll(CommonEventTrigger.GuildVariableChange, "", command.VariableId.ToString());
+                guild.UpdatedVariables.AddOrUpdate(command.VariableId, GuildVariableBase.Get(command.VariableId), (key, oldValue) => GuildVariableBase.Get(command.VariableId));
+            }
         }
 
         private static void ProcessVariableModification(
@@ -2062,6 +2084,8 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
+            Guild guild = null;
+
             // Get the players instance so we have it for reaching instance variables.
             if (!MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var playersInstance))
             {
@@ -2079,6 +2103,15 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.InstanceVariable)
             {
                 value = playersInstance.GetInstanceVariable(command.VariableId);
+            }
+            else if (command.VariableType == VariableTypes.GuildVariable)
+            {
+                guild = player.Guild;
+                if (guild == null)
+                {
+                    return;
+                }
+                value = guild.GetVariableValue(command.VariableId);
             }
 
             if (value == null)
@@ -2307,8 +2340,8 @@ namespace Intersect.Server.Entities.Events
                 case VariableMods.DivideInstanceVar:
                     if (playersInstance != null)
                     {
-                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
-                        if (div != 0)
+                        var divI = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        if (divI != 0)
                         {
                             value.Integer /= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
                         }
@@ -2318,7 +2351,6 @@ namespace Intersect.Server.Entities.Events
                 case VariableMods.LeftShiftInstanceVar:
                     if (playersInstance != null)
                     {
-                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
                         value.Integer = value.Integer << (int)playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
                     }
 
@@ -2326,9 +2358,42 @@ namespace Intersect.Server.Entities.Events
                 case VariableMods.RightShiftInstanceVar:
                     if (playersInstance != null)
                     {
-                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
                         value.Integer = value.Integer >> (int)playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
                     }
+
+                    break;
+                case VariableMods.DupGuildVar:
+                    value.Integer = guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    break;
+
+                case VariableMods.AddGuildVar:
+                    value.Integer += guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    break;
+
+                case VariableMods.SubtractGuildVar:
+                    value.Integer -= guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    break;
+
+                case VariableMods.MultiplyGuildVar:
+                    value.Integer *= guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    break;
+
+                case VariableMods.DivideGuildVar:
+                    var div = guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    if (div != 0)
+                    {
+                        value.Integer /= div;
+                    }
+
+                    break;
+                case VariableMods.LeftShiftGuildVar:
+                    var lshift = guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    value.Integer = value.Integer << (int)lshift;
+                    break;
+
+                case VariableMods.RightShiftGuildVar:
+                    var rshift = guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    value.Integer = value.Integer >> (int)rshift;
 
                     break;
             }
@@ -2387,6 +2452,11 @@ namespace Intersect.Server.Entities.Events
                 MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.MapInstanceId);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
+            else if (command.VariableType == VariableTypes.GuildVariable && changed)
+            {
+                guild.StartCommonEventsWithTriggerForAll(CommonEventTrigger.GuildVariableChange, "", command.VariableId.ToString());
+                guild.UpdatedVariables.AddOrUpdate(command.VariableId, GuildVariableBase.Get(command.VariableId), (key, oldValue) => GuildVariableBase.Get(command.VariableId));
+            }
         }
 
         private static void ProcessVariableModification(
@@ -2397,6 +2467,8 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
+            Guild guild = null;
+
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
                 value = player.GetVariableValue(command.VariableId);
@@ -2408,6 +2480,15 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
                 value = mapInstance.GetInstanceVariable(command.VariableId);
+            }
+            else if (command.VariableType == VariableTypes.GuildVariable)
+            {
+                guild = player.Guild;
+                if (guild == null)
+                {
+                    return;
+                }
+                value = guild.GetVariableValue(command.VariableId) ?? new VariableValue();
             }
 
             if (value == null)
@@ -2461,6 +2542,11 @@ namespace Intersect.Server.Entities.Events
             {
                 MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.MapInstanceId);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
+            }
+            else if (command.VariableType == VariableTypes.GuildVariable && changed)
+            {
+                guild.StartCommonEventsWithTriggerForAll(CommonEventTrigger.GuildVariableChange, "", command.VariableId.ToString());
+                guild.UpdatedVariables.AddOrUpdate(command.VariableId, GuildVariableBase.Get(command.VariableId), (key, oldValue) => GuildVariableBase.Get(command.VariableId));
             }
         }
     }

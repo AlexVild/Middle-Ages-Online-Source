@@ -159,6 +159,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.Designer.cs">
       <DependentUpon>EventCommand_ChangeSpawn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeVariable.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeVariable.Designer.cs">
+      <DependentUpon>EventCommand_ChangeVariable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeWeaponTrack.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -857,6 +863,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\VariableModUtils.cs" />
+    <Compile Include="Utilities\VariableSelectorUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Costura, Version=3.3.3.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
@@ -974,6 +982,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.resx">
       <DependentUpon>EventCommand_ChangeSpawn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeVariable.resx">
+      <DependentUpon>EventCommand_ChangeVariable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeWeaponTrack.resx">
       <DependentUpon>EventCommand_ChangeWeaponTrack.cs</DependentUpon>

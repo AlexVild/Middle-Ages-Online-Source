@@ -128,6 +128,10 @@ namespace Intersect.Server.Entities.Events
             {
                 value = mapInstance.GetInstanceVariable(condition.VariableId);
             }
+            else if (condition.VariableType == VariableTypes.GuildVariable)
+            {
+                value = player.Guild?.GetVariableValue(condition.VariableId);
+            }
 
             if (value == null)
             {
@@ -1066,6 +1070,10 @@ namespace Intersect.Server.Entities.Events
                 {
                     compValue = mapInstance.GetInstanceVariable(comparison.CompareVariableId);
                 }
+                else if (comparison.CompareVariableType == VariableTypes.GuildVariable)
+                {
+                    compValue = player.Guild?.GetVariableValue(comparison.CompareVariableId);
+                }
             }
             else
             {
@@ -1121,6 +1129,10 @@ namespace Intersect.Server.Entities.Events
                 else if (comparison.CompareVariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
                 {
                     compValue = mapInstance.GetInstanceVariable(comparison.CompareVariableId);
+                }
+                else if (comparison.CompareVariableType == VariableTypes.GuildVariable)
+                {
+                    compValue = player.Guild?.GetVariableValue(comparison.CompareVariableId);
                 }
             }
             else

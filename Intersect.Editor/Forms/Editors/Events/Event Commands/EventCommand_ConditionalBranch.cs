@@ -7,6 +7,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.GameObjects.Timers;
 using Intersect.Utilities;
 
@@ -657,6 +658,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbComparePlayerVar.Items.AddRange(PlayerVariableBase.Names);
                     cmbCompareInstanceVar.Items.Clear();
                     cmbCompareInstanceVar.Items.AddRange(InstanceVariableBase.Names);
+                    cmbCompareGuildVar.Items.Clear();
+                    cmbCompareGuildVar.Items.AddRange(GuildVariableBase.Names);
 
                     cmbBooleanGlobalVariable.Items.Clear();
                     cmbBooleanGlobalVariable.Items.AddRange(ServerVariableBase.Names);
@@ -664,6 +667,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbBooleanPlayerVariable.Items.AddRange(PlayerVariableBase.Names);
                     cmbBooleanInstanceVariable.Items.Clear();
                     cmbBooleanInstanceVariable.Items.AddRange(InstanceVariableBase.Names);
+                    cmbBooleanInstanceVariable.Items.Clear();
+                    cmbBooleanInstanceVariable.Items.AddRange(GuildVariableBase.Names);
 
                     break;
                 case ConditionTypes.HasItem:
@@ -1117,10 +1122,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 }
                 else if (rdoInstanceVariable.Checked)
                 {
-                    var serverVar = InstanceVariableBase.FromList(cmbVariable.SelectedIndex);
-                    if (serverVar != null)
+                    var instanceVar = InstanceVariableBase.FromList(cmbVariable.SelectedIndex);
+                    if (instanceVar != null)
                     {
-                        varType = (byte) serverVar.Type;
+                        varType = (byte) instanceVar.Type;
+                    }
+                }
+                else if (rdoGuildVariable.Checked)
+                {
+                    var guildVar = GuildVariableBase.FromList(cmbVariable.SelectedIndex);
+                    if (guildVar != null)
+                    {
+                        varType = (byte)guildVar.Type;
                     }
                 }
             }
@@ -1191,6 +1204,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         optBooleanInstanceVariable.Checked = true;
                         cmbBooleanInstanceVariable.SelectedIndex = InstanceVariableBase.ListIndex(com.CompareVariableId);
                     }
+                    else if (com.CompareVariableType == VariableTypes.GuildVariable)
+                    {
+                        optBooleanGuildVariable.Checked = true;
+                        cmbBooleanGuildVariable.SelectedIndex = GuildVariableBase.ListIndex(com.CompareVariableId);
+                    }
                 }
             }
         }
@@ -1224,6 +1242,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         rdoVarCompareInstanceVar.Checked = true;
                         cmbCompareInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(com.CompareVariableId);
+                    }
+                    else if (com.CompareVariableType == VariableTypes.GuildVariable)
+                    {
+                        rdoVarCompareGuildVar.Checked = true;
+                        cmbCompareGuildVar.SelectedIndex = GuildVariableBase.ListIndex(com.CompareVariableId);
                     }
                 }
                 else
@@ -1272,6 +1295,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbVariable.Items.AddRange(InstanceVariableBase.Names);
                 cmbVariable.SelectedIndex = InstanceVariableBase.ListIndex(variableId);
             }
+            else if (rdoGuildVariable.Checked)
+            {
+                cmbVariable.Items.AddRange(GuildVariableBase.Names);
+                cmbVariable.SelectedIndex = GuildVariableBase.ListIndex(variableId);
+            }
 
             mLoading = false;
         }
@@ -1303,6 +1331,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 comp.CompareVariableType = VariableTypes.InstanceVariable;
                 comp.CompareVariableId = InstanceVariableBase.IdFromList(cmbBooleanInstanceVariable.SelectedIndex);
+            }
+            else if (optBooleanGuildVariable.Checked)
+            {
+                comp.CompareVariableType = VariableTypes.GuildVariable;
+                comp.CompareVariableId = GuildVariableBase.IdFromList(cmbBooleanGuildVariable.SelectedIndex);
             }
 
             return comp;
@@ -1339,6 +1372,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 comp.CompareVariableType = VariableTypes.InstanceVariable;
                 comp.CompareVariableId = InstanceVariableBase.IdFromList(cmbCompareInstanceVar.SelectedIndex);
+            }
+            else if (rdoGuildVariable.Checked)
+            {
+                comp.CompareVariableType = VariableTypes.GuildVariable;
+                comp.CompareVariableId = GuildVariableBase.IdFromList(cmbCompareGuildVar.SelectedIndex);
             }
 
             return comp;
@@ -1405,6 +1443,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             else if (rdoInstanceVariable.Checked)
             {
                 InitVariableElements(InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex));
+            }
+            else if (rdoGuildVariable.Checked)
+            {
+                InitVariableElements(GuildVariableBase.IdFromList(cmbVariable.SelectedIndex));
             }
 
             UpdateVariableElements();
@@ -1571,6 +1613,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             else if (condition.VariableType == VariableTypes.InstanceVariable)
             {
                 rdoInstanceVariable.Checked = true;
+            }
+            else if (condition.VariableType == VariableTypes.GuildVariable)
+            {
+                rdoGuildVariable.Checked = true;
             }
 
             InitVariableElements(condition.VariableId);
@@ -1950,6 +1996,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 condition.VariableType = VariableTypes.InstanceVariable;
                 condition.VariableId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex);
+            }
+            else if (rdoGuildVariable.Checked)
+            {
+                condition.VariableType = VariableTypes.GuildVariable;
+                condition.VariableId = GuildVariableBase.IdFromList(cmbVariable.SelectedIndex);
             }
 
             if (grpBooleanVariable.Visible)

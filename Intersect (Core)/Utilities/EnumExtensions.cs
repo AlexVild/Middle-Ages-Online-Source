@@ -122,6 +122,27 @@ namespace Intersect.Utilities
             throw new ArgumentException($"{nameof(value)} did not have a valid RelatedTable attribute to pull from");
         }
 
+        public static VariableTypes GetRelatedVariableType(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    RelatedVariableType attr =
+                           Attribute.GetCustomAttribute(field,
+                             typeof(RelatedVariableType)) as RelatedVariableType;
+                    if (attr != null)
+                    {
+                        return attr.VariableType;
+                    }
+                }
+            }
+            throw new ArgumentException($"{nameof(value)} did not have a valid VariableType attribute to pull from");
+        }
+
         public static int GetDefaultKillCount(this Enum value)
         {
             Type type = value.GetType();

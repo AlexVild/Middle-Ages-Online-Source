@@ -562,4 +562,31 @@ namespace Intersect.GameObjects.Events
         Overworld,
         Battlelands
     }
+
+    public enum VariableOperators
+    {
+        [Description("Set")]
+        Set,
+
+        [Description("Add")]
+        Add,
+
+        [Description("Subtract")]
+        Subtract,
+
+        [Description("Multiply")]
+        Multiply,
+
+        [Description("Divide")]
+        Divide,
+
+        [Description("Right Shift")]
+        RShift,
+
+        [Description("Left Shift")]
+        LShift,
+
+        [Description("Replace")]
+        Replace
+    }
 }

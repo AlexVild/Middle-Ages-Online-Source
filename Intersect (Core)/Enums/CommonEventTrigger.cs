@@ -66,6 +66,8 @@
 
         ClanWarEnded,
 
+        GuildVariableChange,
+
     }
 
 }

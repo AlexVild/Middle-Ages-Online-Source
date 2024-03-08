@@ -77,6 +77,8 @@ namespace Intersect.Enums
             .Select(pair => pair.Value?.Name ?? Deleted)
             .ToArray();
 
+        public static string GetName(this GameObjectType gameObjectType, Guid id) => gameObjectType.GetLookup().Get(id)?.Name ?? Deleted;
+
         public static int ListIndex(this GameObjectType gameObjectType, Guid id, VariableDataTypes dataTypeFilter = 0)
         {
             var lookup = gameObjectType.GetLookup();

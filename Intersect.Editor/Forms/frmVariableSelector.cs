@@ -21,12 +21,12 @@ namespace Intersect.Editor.Forms
 
         private VariableSelection mSelection { get; set; }
 
-        public FrmVariableSelector(VariableTypes VariableTypes, Guid variableId, VariableDataTypes filterType)
+        public FrmVariableSelector(VariableTypes variableType, Guid variableId, VariableDataTypes filterType)
         {
             PreInit();
 
             mSelectedVariableId = variableId;
-            mSelectedVariableTypes = VariableTypes;
+            mSelectedVariableTypes = variableType;
             mFilterType = filterType;
 
             PostInit();

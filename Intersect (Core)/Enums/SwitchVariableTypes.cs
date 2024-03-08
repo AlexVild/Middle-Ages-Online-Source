@@ -36,7 +36,6 @@ namespace Intersect.Enums
     //But technical debt :/
     public enum VariableMods
     {
-
         Set = 0,
 
         Add,
@@ -47,56 +46,77 @@ namespace Intersect.Enums
 
         SystemTime,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         DupPlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         DupGlobalVar,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         AddPlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         AddGlobalVar,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         SubtractPlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         SubtractGlobalVar,
 
         Replace,
 
         Multiply,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         MultiplyPlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         MultiplyGlobalVar,
 
         Divide,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         DividePlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         DivideGlobalVar,
 
         LeftShift,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         LeftShiftPlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         LeftShiftGlobalVar,
 
         RightShift,
 
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
         RightShiftPlayerVar,
 
+        [RelatedVariableType(VariableTypes.ServerVariable)]
         RightShiftGlobalVar,
 
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         DupInstanceVar,
 
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         AddInstanceVar,
 
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         SubtractInstanceVar,
-        
+
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         MultiplyInstanceVar,
 
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         DivideInstanceVar,
 
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         LeftShiftInstanceVar,
 
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
         RightShiftInstanceVar,
 
         PlayerX,
@@ -111,7 +131,28 @@ namespace Intersect.Enums
 
         SpawnGroup,
 
-        OpenSlots
+        OpenSlots,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        DupGuildVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        AddGuildVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        SubtractGuildVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        MultiplyGuildVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        DivideGuildVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        LeftShiftGuildVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        RightShiftGuildVar,
     }
 
     public enum VariableComparators
