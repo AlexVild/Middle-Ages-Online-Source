@@ -64,6 +64,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             base.SetPosition(x, y);
         }
 
+        public override void SetPositionRight(int x, int y)
+        {
+            base.SetPositionRight(x, y);
+            mSpellDescWindow?.SetPositionRight(x + Container.Width + 4, y);
+        }
+
         protected void SetupDescriptionWindow()
         {
             if (Enhancement == default)

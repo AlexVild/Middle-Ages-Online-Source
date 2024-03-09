@@ -228,9 +228,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
                 var tmpRow = EnhancementContainer.AddRow($"{EnhancementDescriptor.GetName(enhancementId)}");
 
-                tmpRow.UserData = new EnhancementRow(
-                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true), 
-                    enhancementId);
+                tmpRow.UserData = enhancementId;
 
                 if (EnhancementInterface.CanAddEnhancement(enhancement, out _))
                 {
@@ -340,7 +338,6 @@ namespace Intersect.Client.Interface.Game.Enhancement
         void UpdateAppliedEnhancements()
         {
             AppliedEnhancementsContainer.Clear();
-            AppliedEnhancementsContainer.ClearCreatedChildren();
             foreach (var enhancementItem in EnhancementInterface.EnhancementsApplied.ToArray())
             {
                 var enhancementId = enhancementItem.EnhancementId;
@@ -354,10 +351,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
                 var tmpRow = AppliedEnhancementsContainer.AddRow($"{EnhancementDescriptor.GetName(enhancementId)}");
 
-                tmpRow.UserData = new EnhancementRow(
-                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true),
-                    enhancementId);
-                
+                tmpRow.UserData = enhancementId;
+
                 if (enhancementItem.Removable)
                 {
                     tmpRow.SetTextColor(new Color(50, 19, 0));
@@ -375,8 +370,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private void Enhancement_Leave(Base sender, EventArgs arguments)
         {
-            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
-            mSelectedRow.DescriptionWindow.Hide();
+            mSelectedRow.Dispose();
             mSelectedRow = null;
         }
 
@@ -387,15 +381,17 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 return;
             }
 
-            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
+            var selectedId = (Guid)((ListBoxRow)sender).UserData;
+            mSelectedRow = new EnhancementRow(
+                new EnhancementDescriptionWindow(selectedId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true),
+                selectedId);
             mSelectedRow.DescriptionWindow.SetPosition(Background.X + 6, Background.Y + EnhancementBackground.Y + 40);
             mSelectedRow.DescriptionWindow.Show();
         }
 
         private void AppliedEnhancement_Leave(Base sender, EventArgs arguments)
         {
-            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
-            mSelectedRow.DescriptionWindow.Hide();
+            mSelectedRow.Dispose();
             mSelectedRow = null;
         }
 
@@ -406,15 +402,17 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 return;
             }
 
-            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
+            var selectedId = (Guid)((ListBoxRow)sender).UserData;
+            mSelectedRow = new EnhancementRow(
+                new EnhancementDescriptionWindow(selectedId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true),
+                selectedId);
             mSelectedRow.DescriptionWindow.SetPositionRight(Background.X + Background.Width, Background.Y + EnhancementBackground.Y + 40);
             mSelectedRow.DescriptionWindow.Show();
         }
 
         private void Enhancement_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
         {
-            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
-            SelectedEnhancementId = row.EnhancementId;
+            SelectedEnhancementId = (Guid)((ListBoxRow)sender).UserData;
 
             AppliedEnhancementsContainer.UnselectAll();
             SelectedAppliedEnhancementId = Guid.Empty;
@@ -424,8 +422,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private void AddedEnhancement_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
         {
-            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
-            SelectedAppliedEnhancementId = row.EnhancementId;
+            SelectedAppliedEnhancementId = (Guid)((ListBoxRow)sender).UserData;
 
             EnhancementContainer.UnselectAll();
             SelectedEnhancementId = Guid.Empty;
@@ -703,7 +700,6 @@ namespace Intersect.Client.Interface.Game.Enhancement
         protected override void Close()
         {
             EnhancementInterface?.Close();
-            AppliedEnhancementsContainer?.ClearCreatedChildren();
             CompletionWindow.Hide();
             PacketSender.SendCloseEnhancementPacket();
             mSelectedRow?.Dispose();

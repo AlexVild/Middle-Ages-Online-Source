@@ -157,7 +157,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             mContainer.MoveTo(newX, newY);
         }
 
-        public void SetPositionRight(int x, int y)
+        public virtual void SetPositionRight(int x, int y)
         {
             mContainer.MoveTo(x, y);
         }
