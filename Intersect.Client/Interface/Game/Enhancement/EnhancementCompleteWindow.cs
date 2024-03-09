@@ -4,6 +4,7 @@ using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
 using Intersect.Client.Utilities;
 using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game.Enhancement
@@ -127,6 +128,32 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 }
 
                 var row = new EnhancementRowComponent(EnhancementsContainer, "EnhancementRow", effectName, statStr, tooltip.Description ?? string.Empty);
+
+                row.SetPosition(row.X, row.Y + (YPadding * idx));
+                row.Initialize();
+
+                idx++;
+                effectIdx++;
+            }
+
+            foreach (var spellEnhancement in newProperties.SpellEnhancements)
+            {
+                var spell = SpellBase.Get(spellEnhancement.SpellId);
+                if (spell == default)
+                {
+                    effectIdx++;
+                    continue;
+                }
+
+                var spellName = spell.Name;
+
+                var statStr = $"+{spellEnhancement.Value}%";
+                if (spellEnhancement.Value < 0)
+                {
+                    statStr = $"{spellEnhancement.Value}%";
+                }
+
+                var row = new EnhancementRowComponent(EnhancementsContainer, "EnhancementRow", spellName, statStr, "Chance to cast spell on hit");
 
                 row.SetPosition(row.X, row.Y + (YPadding * idx));
                 row.Initialize();

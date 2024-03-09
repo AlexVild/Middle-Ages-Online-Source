@@ -444,29 +444,18 @@ namespace Intersect.Server.Entities
                 DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, spell?.DamageOverrides, range, out damage);
             }
             var damageWasDealt = damage != 0 || manaDamage != 0;
-            
-            // Spell proccing?
-            if (damageWasDealt && weapon?.ProcSpellId != default && weapon?.ProcChance > 0)
+
+            if (damageWasDealt)
             {
-                var procSpell = SpellBase.Get(weapon.ProcSpellId);
-                var affinity = GetBonusEffectTotal(EffectType.Affinity, 0);
-
-                var roll = Randomization.Next(0, 100001);
-
-                if (roll < ((weapon.ProcChance * 1000) + (affinity * 1000)))
-                {
-                    if (procSpell.Combat.TargetType == SpellTargetTypes.Self)
-                    {
-                        UseSpell(procSpell, -1, this, true, true, (byte)Dir, this, true);
-                    }
-                    else
-                    {
-                        HandleAoESpell(weapon.ProcSpellId, procSpell.Combat?.HitRadius ?? 0, enemy.MapId, enemy.X, enemy.Y, enemy, true);
-                    }
-                }
+                HandleSpellProccing(enemy);
             }
 
             return damageWasDealt;
+        }
+
+        public virtual void HandleSpellProccing(Entity enemy)
+        {
+            return;
         }
 
         public int DealTrueDamageTo(Entity enemy, int scaling, int damage, bool isSecondary, bool isNeutral)

@@ -1,6 +1,8 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects.Events;
 using Intersect.Models;
 using Intersect.Utilities;
+using MessagePack;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -36,7 +38,7 @@ namespace Intersect.GameObjects
         /// </summary>
         [NotMapped]
         public Dictionary<Guid, int> ValidWeaponTypes { get; set; } = new Dictionary<Guid, int>();
-        
+
         [Column("ValidWeaponTypes")]
         [JsonIgnore]
         public string ValidWeaponTypesJson
@@ -47,7 +49,7 @@ namespace Intersect.GameObjects
 
         [NotMapped]
         public List<Enhancement<Stats>> StatMods { get; set; } = new List<Enhancement<Stats>>();
-        
+
         [Column("StatMods")]
         [JsonIgnore]
         public string StatModsJson
@@ -76,6 +78,17 @@ namespace Intersect.GameObjects
         {
             get => JsonConvert.SerializeObject(EffectMods);
             set => EffectMods = JsonConvert.DeserializeObject<List<Enhancement<EffectType>>>(value ?? string.Empty) ?? new List<Enhancement<EffectType>>();
+        }
+
+        [NotMapped]
+        public List<SpellEnhancementDescriptor> SpellEnhancements { get; set; } = new List<SpellEnhancementDescriptor>();
+
+        [Column("SpellEnhancements")]
+        [JsonIgnore]
+        public string SpellEnhancementsJson
+        {
+            get => JsonConvert.SerializeObject(SpellEnhancements);
+            set => SpellEnhancements = JsonConvert.DeserializeObject<List<SpellEnhancementDescriptor>>(value ?? string.Empty) ?? new List<SpellEnhancementDescriptor>();
         }
 
         [NotMapped]
@@ -116,10 +129,10 @@ namespace Intersect.GameObjects
 
         public string GetRangeDisplay(bool percent, bool noEffectName = false)
         {
-            string effectName = string.IsNullOrEmpty(EnhancementType.GetDescription()) ? 
-                Enum.GetName(typeof(T), EnhancementType) : 
+            string effectName = string.IsNullOrEmpty(EnhancementType.GetDescription()) ?
+                Enum.GetName(typeof(T), EnhancementType) :
                 EnhancementType.GetDescription();
-            
+
             string range;
             if (percent)
             {
@@ -150,6 +163,43 @@ namespace Intersect.GameObjects
             }
 
             return $"{effectName}: {range}";
+        }
+    }
+
+    public class SpellEnhancementDescriptor
+    {
+        public SpellEnhancementDescriptor()
+        {
+        }
+
+        public SpellEnhancementDescriptor(Guid spellId, int minValue, int maxValue)
+        {
+            SpellId = spellId;
+            MinValue = minValue;
+            MaxValue = maxValue;
+        }
+
+        public Guid SpellId { get; set; }
+
+        public int MinValue { get; set; }
+
+        public int MaxValue { get; set; }
+
+        public string GetRangeDisplay()
+        {
+            var spellName = SpellBase.GetName(SpellId);
+
+            string range;
+            if (MinValue == MaxValue)
+            {
+                range = $"{MinValue}%";
+            }
+            else
+            {
+                range = $"{MinValue}% to {MaxValue}%";
+            }
+
+            return $"Proc {spellName} on hit: {range}";
         }
     }
 }

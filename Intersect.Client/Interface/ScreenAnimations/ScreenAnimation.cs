@@ -31,7 +31,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
         /// <summary>
         /// The scale to draw at
         /// </summary>
-        protected virtual int Scale { get; }
+        protected virtual float Scale { get; } = 1.0f;
 
         /// <summary>
         /// The current horizontal frame of animation

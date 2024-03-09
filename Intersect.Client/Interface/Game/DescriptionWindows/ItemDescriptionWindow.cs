@@ -98,10 +98,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 {
                     mSpellDescWindow = new SpellDescriptionWindow(mItem.SpecialAttack.SpellId, x, y);
                 }
+
                 if (mItem.ProcSpellId != default)
                 {
-                    mSpellDescWindow = new SpellDescriptionWindow(mItem.ProcSpellId, x, y);
+                    mSpellDescWindow = new SpellDescriptionWindow(mItem.ProcSpellId, x, y, abridged: true);
                 }
+                else if (mItemProperties.SpellEnhancements != null && mItemProperties.SpellEnhancements.Count > 0)
+                {
+                    mSpellDescWindow = new SpellDescriptionWindow(mItemProperties.SpellEnhancements[0].SpellId, x, y, abridged: true);
+                }
+
                 if (mItem.ItemType == ItemTypes.Enhancement)
                 {
                     mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.EnhancementId, mItem.Icon, x, y, isLearnable: true);

@@ -19,11 +19,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         readonly Color StatHeaderColor = Color.White;
         readonly Color WeaponInheritColor = CustomColors.ItemDesc.WeaponType;
 
+        private bool mAbridged { get; set; }
+
         bool IsPassive => mSpell != null && mSpell.SpellType == SpellTypes.Passive;
 
-        public SpellDescriptionWindow(Guid spellId, int x, int y) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
+        public SpellDescriptionWindow(Guid spellId, int x, int y, bool abridged = false) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             mSpell = SpellBase.Get(spellId);
+            mAbridged = abridged;
 
             GenerateComponents();
             SetupDescriptionWindow();
@@ -41,18 +44,18 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             SetupHeader();
 
             // if we have a description, set that up.
-            if (!string.IsNullOrWhiteSpace(mSpell.Description))
+            if (!string.IsNullOrWhiteSpace(mSpell.Description) && !mAbridged)
             {
                 SetupDescription();
             }
 
-            if (mSpell.CastingComponents.Count > 0)
+            if (mSpell.CastingComponents.Count > 0 && !mAbridged)
             {
                 SetupComponentInfo();
             }
 
             // Set up requirements
-            if (mSpell.RestrictionStrings.Count > 0)
+            if (mSpell.RestrictionStrings.Count > 0 && !mAbridged)
             {
                 SetupRestrictionInfo();
             }

@@ -96,6 +96,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbEffect.Items.Clear();
             cmbEffect.Items.AddRange(EnumExtensions.GetDescriptions(typeof(EffectType)));
 
+            cmbSpells.Items.Clear();
+            cmbSpells.Items.AddRange(SpellBase.Names);
+
+            cmbEnhancementPrereq.Items.Clear();
             cmbEnhancementPrereq.Items.AddRange(EnhancementDescriptor.Names);
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
@@ -117,6 +121,7 @@ namespace Intersect.Editor.Forms.Editors
             RefreshList(ref lstStatBuffs, mEditorItem.StatMods, false, false);
             RefreshList(ref lstVitalMods, mEditorItem.VitalMods, false, false);
             RefreshList(ref lstBonuses, mEditorItem.EffectMods, true, false);
+            RefreshList(ref lstSpellEffects, mEditorItem.SpellEnhancements, false);
             RefreshWeaponTypes(false);
 
             RefreshPrereqList();
@@ -136,6 +141,26 @@ namespace Intersect.Editor.Forms.Editors
             foreach (var item in enhancements)
             {
                 list.Items.Add(item.GetRangeDisplay(isPercent));
+            }
+
+            if (savePos && list.Items.Count > 0 && list.Items.Count > prevPos)
+            {
+                list.SelectedIndex = prevPos;
+            }
+        }
+
+        private void RefreshList(ref ListBox list, List<SpellEnhancementDescriptor> enhancements, bool savePos)
+        {
+            var prevPos = -1;
+            if (savePos)
+            {
+                prevPos = list.SelectedIndex;
+            }
+
+            list.Items.Clear();
+            foreach (var item in enhancements)
+            {
+                list.Items.Add(item.GetRangeDisplay());
             }
 
             if (savePos && list.Items.Count > 0 && list.Items.Count > prevPos)
@@ -195,6 +220,24 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             enhancements.RemoveAt(listBox.SelectedIndex);
+        }
+
+        private void AddOrReplaceSpellEnhancement(DarkComboBox cmbSpell, List<SpellEnhancementDescriptor> enhancements, Guid selectedSpell, int min, int max)
+        {
+            if (cmbSpell.SelectedIndex < 0 || cmbSpell.SelectedIndex >= cmbSpell.Items.Count)
+            {
+                return;
+            }
+
+            var prevMod = enhancements.Find(mod => mod.SpellId.Equals(selectedSpell));
+            if (prevMod != default)
+            {
+                prevMod.MinValue = min;
+                prevMod.MaxValue = max;
+                return;
+            }
+
+            enhancements.Add(new SpellEnhancementDescriptor(selectedSpell, min, max));
         }
 
         #region Editor Form stuffs
@@ -446,6 +489,18 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lstPrereqs.Items.Add(EnhancementDescriptor.GetName(prereq));
             }
+        }
+
+        private void btnRemoveSpell_Click(object sender, EventArgs e)
+        {
+            RemoveEnhancement(lstBonuses, mEditorItem.EffectMods);
+            RefreshList(ref lstSpellEffects, mEditorItem.SpellEnhancements, false);
+        }
+
+        private void btnAddSpell_Click(object sender, EventArgs e)
+        {
+            AddOrReplaceSpellEnhancement(cmbSpells, mEditorItem.SpellEnhancements, SpellBase.IdFromList(cmbSpells.SelectedIndex), (int)nudMinSpell.Value, (int)nudMaxSpell.Value);
+            RefreshList(ref lstSpellEffects, mEditorItem.SpellEnhancements, true);
         }
     }
 }

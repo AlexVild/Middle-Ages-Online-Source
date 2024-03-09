@@ -229,7 +229,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 var tmpRow = EnhancementContainer.AddRow($"{EnhancementDescriptor.GetName(enhancementId)}");
 
                 tmpRow.UserData = new EnhancementRow(
-                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y), 
+                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true), 
                     enhancementId);
 
                 if (EnhancementInterface.CanAddEnhancement(enhancement, out _))
@@ -340,6 +340,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         void UpdateAppliedEnhancements()
         {
             AppliedEnhancementsContainer.Clear();
+            AppliedEnhancementsContainer.ClearCreatedChildren();
             foreach (var enhancementItem in EnhancementInterface.EnhancementsApplied.ToArray())
             {
                 var enhancementId = enhancementItem.EnhancementId;
@@ -354,7 +355,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 var tmpRow = AppliedEnhancementsContainer.AddRow($"{EnhancementDescriptor.GetName(enhancementId)}");
 
                 tmpRow.UserData = new EnhancementRow(
-                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y),
+                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true),
                     enhancementId);
                 
                 if (enhancementItem.Removable)
@@ -702,6 +703,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         protected override void Close()
         {
             EnhancementInterface?.Close();
+            AppliedEnhancementsContainer?.ClearCreatedChildren();
             CompletionWindow.Hide();
             PacketSender.SendCloseEnhancementPacket();
             mSelectedRow?.Dispose();

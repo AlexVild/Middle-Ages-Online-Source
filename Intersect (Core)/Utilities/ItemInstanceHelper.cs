@@ -129,5 +129,31 @@ namespace Intersect.Utilities
 
             return newFields.ToArray();
         }
+
+        public static Dictionary<Guid, float> GetSpellProcs(ItemBase descriptor, List<SpellEnhancement> spellEnhancements)
+        {
+            var spellProcs = new Dictionary<Guid, float>();
+
+            if (descriptor != null && descriptor.ProcSpellId != Guid.Empty)
+            {
+                spellProcs.Add(descriptor.ProcSpellId, descriptor.ProcChance);
+            }
+
+            if (spellEnhancements != default)
+            {
+                foreach (var enhancement in spellEnhancements)
+                {
+                    if (spellProcs.TryGetValue(enhancement.SpellId, out var proc))
+                    {
+                        spellProcs[enhancement.SpellId] = proc + enhancement.Value;
+                        continue;
+                    }
+
+                    spellProcs.Add(enhancement.SpellId, enhancement.Value);
+                }
+            }
+
+            return spellProcs;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
 
         protected override string Sound => "al_enhancement.wav";
 
-        protected override int Scale => 4;
+        protected override float Scale => 4.0f;
 
         public ClanWarCompleteAnimation(Action callback) : base(callback) { }
     }

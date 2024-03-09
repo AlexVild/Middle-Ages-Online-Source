@@ -62,7 +62,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows.Components
         /// <summary>
         /// Hide the control.
         /// </summary>
-        public void Hide() => mContainer.Hide();
+        public virtual void Hide() => mContainer.Hide();
 
         /// <summary>
         /// Show the control.

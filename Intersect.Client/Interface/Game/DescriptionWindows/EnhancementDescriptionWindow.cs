@@ -12,13 +12,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
     {
         protected EnhancementDescriptor Enhancement { get; set; }
 
+        protected SpellDescriptionWindow mSpellDescWindow;
+
         protected string Icon { get; set; }
 
         protected float StudyChance { get; set; }
 
         protected bool Learnable { get; set; }
 
-        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f, bool isLearnable = false) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
+        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f, bool isLearnable = false, bool showSpellInfo = false) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             Enhancement = EnhancementDescriptor.Get(enhancementId);
             Icon = icon;
@@ -28,9 +30,38 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             GenerateComponents();
             SetupDescriptionWindow();
 
+            if (Enhancement.SpellEnhancements.Count > 0 && showSpellInfo)
+            {
+                mSpellDescWindow = new SpellDescriptionWindow(Enhancement.SpellEnhancements[0].SpellId, x, y, abridged: true);
+                x -= mSpellDescWindow.Container.Width + 4;
+                mSpellDescWindow.Hide();
+            }
+
             SetPosition(x, y);
 
             Hide();
+        }
+
+        public override void Show()
+        {
+            mSpellDescWindow?.Show();
+            base.Show();
+        }
+
+        public override void Hide()
+        {
+            mSpellDescWindow?.Hide();
+            base.Hide();
+        }
+
+        public override void SetPosition(int x, int y)
+        {
+            if (mSpellDescWindow != null)
+            {
+                mSpellDescWindow.SetPosition(x, y);
+                x -= mSpellDescWindow.Container.Width + 4;
+            }
+            base.SetPosition(x, y);
         }
 
         protected void SetupDescriptionWindow()
@@ -61,6 +92,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (Enhancement.EffectMods.Count > 0)
             {
                 SetupMods(Enhancement.EffectMods, "Effects:", Strings.ItemDescription.BonusEffects, true);
+            }
+
+            if (Enhancement.SpellEnhancements.Count > 0)
+            {
+                SetupProcSpellInfo(Enhancement.SpellEnhancements);
             }
 
             FinalizeWindow();
@@ -101,6 +137,34 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             rows.SizeToChildren(true, true);
+        }
+
+        private void SetupProcSpellInfo(List<SpellEnhancementDescriptor> enhancements)
+        {
+            if (enhancements.Count == 0)
+            {
+                return;
+            }
+            var procRow = AddRowContainer();
+
+            if (enhancements.Count == 1)
+            {
+                procRow.AddKeyValueRow("   Spell on Hit", "", CustomColors.ItemDesc.Primary, Color.White);
+            }
+            else
+            {
+                procRow.AddKeyValueRow("   Spells on Hit", "", CustomColors.ItemDesc.Primary, Color.White);
+            }
+
+            foreach (var proc in enhancements)
+            {
+                var modColor = proc.MinValue > 0 ? CustomColors.ItemDesc.Better : CustomColors.ItemDesc.Worse;
+
+                procRow.AddKeyValueRow("Spell:", SpellBase.GetName(proc.SpellId), CustomColors.ItemDesc.Primary, CustomColors.ItemDesc.Primary);
+                procRow.AddKeyValueRow("Chance:", $"{proc.MinValue} - {proc.MaxValue}%", CustomColors.ItemDesc.Primary, modColor);
+
+                procRow.SizeToChildren();
+            }
         }
 
         protected void SetupHeader()
@@ -171,6 +235,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             rows.AddKeyValueRow("Enhancement Points:", Enhancement.RequiredEnhancementPoints.ToString("N0"), CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Primary);
 
             rows.SizeToChildren(true, true);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            mSpellDescWindow?.Dispose();
         }
     }
 }

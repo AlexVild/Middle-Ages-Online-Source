@@ -458,21 +458,28 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         private void SetupProcSpellInfo()
         {
-            if (mItem.ProcSpellId == default)
+            var procs = ItemInstanceHelper.GetSpellProcs(mItem, mItemProperties.SpellEnhancements);
+
+            if (procs.Count == 0)
             {
                 return;
             }
+            var procRow = AddRowContainer();
 
-            var spell = SpellBase.Get(mItem.ProcSpellId);
-            if (mItem.ProcChance > 0 && spell != default)
+            if (procs.Count == 1)
             {
-                var procRow = AddRowContainer();
-
                 procRow.AddKeyValueRow("   Spell on Hit", "", StatHeaderColor, Color.White);
+            }
+            else
+            {
+                procRow.AddKeyValueRow("   Spells on Hit", "", StatHeaderColor, Color.White);
+            }
 
-                procRow.AddKeyValueRow("Spell:", spell.Name, StatLabelColor, StatValueColor);
-                procRow.AddKeyValueRow("Chance:", $"{mItem.ProcChance.ToString("N2")}%", StatLabelColor, StatValueColor);
-                
+            foreach (var proc in procs)
+            {
+                procRow.AddKeyValueRow("Spell:", SpellBase.GetName(proc.Key), StatLabelColor, StatValueColor);
+                procRow.AddKeyValueRow("Chance:", $"{proc.Value.ToString("N2")}%", StatLabelColor, StatValueColor);
+
                 procRow.SizeToChildren();
             }
         }

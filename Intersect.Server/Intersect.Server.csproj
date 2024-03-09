@@ -1414,6 +1414,10 @@
     <Compile Include="Migrations\Game\20240307201020_GuildVariableMigration.designer.cs">
       <DependentUpon>20240307201020_GuildVariableMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240309192912_SpellProcEnhancementMigration.cs" />
+    <Compile Include="Migrations\Game\20240309192912_SpellProcEnhancementMigration.designer.cs">
+      <DependentUpon>20240309192912_SpellProcEnhancementMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

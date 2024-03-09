@@ -47,6 +47,12 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.grpEnhancements = new DarkUI.Controls.DarkGroupBox();
             this.grpProps = new DarkUI.Controls.DarkGroupBox();
+            this.grpPrereqs = new DarkUI.Controls.DarkGroupBox();
+            this.btnAddPrereq = new DarkUI.Controls.DarkButton();
+            this.btnRemovePrereq = new DarkUI.Controls.DarkButton();
+            this.lstPrereqs = new System.Windows.Forms.ListBox();
+            this.cmbEnhancementPrereq = new DarkUI.Controls.DarkComboBox();
+            this.lblPrereqEnhancement = new System.Windows.Forms.Label();
             this.grpWeaponTypes = new DarkUI.Controls.DarkGroupBox();
             this.lblMinLvl = new System.Windows.Forms.Label();
             this.nudMinWeaponLevel = new DarkUI.Controls.DarkNumericUpDown();
@@ -95,15 +101,20 @@ namespace Intersect.Editor.Forms.Editors
             this.lblStat = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.grpPrereqs = new DarkUI.Controls.DarkGroupBox();
-            this.btnAddPrereq = new DarkUI.Controls.DarkButton();
-            this.btnRemovePrereq = new DarkUI.Controls.DarkButton();
-            this.lstPrereqs = new System.Windows.Forms.ListBox();
-            this.cmbEnhancementPrereq = new DarkUI.Controls.DarkComboBox();
-            this.lblPrereqEnhancement = new System.Windows.Forms.Label();
+            this.grpSpellProcs = new DarkUI.Controls.DarkGroupBox();
+            this.lstSpellEffects = new System.Windows.Forms.ListBox();
+            this.cmbSpells = new DarkUI.Controls.DarkComboBox();
+            this.btnRemoveSpell = new DarkUI.Controls.DarkButton();
+            this.btnAddSpell = new DarkUI.Controls.DarkButton();
+            this.label5 = new System.Windows.Forms.Label();
+            this.nudMaxSpell = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudMinSpell = new DarkUI.Controls.DarkNumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblSpell = new System.Windows.Forms.Label();
             this.toolStrip.SuspendLayout();
             this.grpEnhancements.SuspendLayout();
             this.grpProps.SuspendLayout();
+            this.grpPrereqs.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinWeaponLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReqEp)).BeginInit();
@@ -117,7 +128,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxStat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinStat)).BeginInit();
-            this.grpPrereqs.SuspendLayout();
+            this.grpSpellProcs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxSpell)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinSpell)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripItemNew
@@ -313,6 +326,84 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProps.TabIndex = 46;
             this.grpProps.TabStop = false;
             this.grpProps.Text = "Properties";
+            // 
+            // grpPrereqs
+            // 
+            this.grpPrereqs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPrereqs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPrereqs.Controls.Add(this.btnAddPrereq);
+            this.grpPrereqs.Controls.Add(this.btnRemovePrereq);
+            this.grpPrereqs.Controls.Add(this.lstPrereqs);
+            this.grpPrereqs.Controls.Add(this.cmbEnhancementPrereq);
+            this.grpPrereqs.Controls.Add(this.lblPrereqEnhancement);
+            this.grpPrereqs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPrereqs.Location = new System.Drawing.Point(11, 233);
+            this.grpPrereqs.Name = "grpPrereqs";
+            this.grpPrereqs.Size = new System.Drawing.Size(342, 128);
+            this.grpPrereqs.TabIndex = 60;
+            this.grpPrereqs.TabStop = false;
+            this.grpPrereqs.Text = "Prerequisite Enhancements";
+            // 
+            // btnAddPrereq
+            // 
+            this.btnAddPrereq.Location = new System.Drawing.Point(163, 89);
+            this.btnAddPrereq.Name = "btnAddPrereq";
+            this.btnAddPrereq.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddPrereq.Size = new System.Drawing.Size(79, 23);
+            this.btnAddPrereq.TabIndex = 59;
+            this.btnAddPrereq.Text = "Add";
+            this.btnAddPrereq.Click += new System.EventHandler(this.btnAddPrereq_Click);
+            // 
+            // btnRemovePrereq
+            // 
+            this.btnRemovePrereq.Location = new System.Drawing.Point(249, 89);
+            this.btnRemovePrereq.Name = "btnRemovePrereq";
+            this.btnRemovePrereq.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemovePrereq.Size = new System.Drawing.Size(79, 23);
+            this.btnRemovePrereq.TabIndex = 58;
+            this.btnRemovePrereq.Text = "Remove";
+            this.btnRemovePrereq.Click += new System.EventHandler(this.btnRemovePrereq_Click);
+            // 
+            // lstPrereqs
+            // 
+            this.lstPrereqs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstPrereqs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstPrereqs.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstPrereqs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstPrereqs.FormattingEnabled = true;
+            this.lstPrereqs.Location = new System.Drawing.Point(9, 42);
+            this.lstPrereqs.Name = "lstPrereqs";
+            this.lstPrereqs.Size = new System.Drawing.Size(319, 41);
+            this.lstPrereqs.TabIndex = 57;
+            // 
+            // cmbEnhancementPrereq
+            // 
+            this.cmbEnhancementPrereq.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancementPrereq.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancementPrereq.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancementPrereq.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancementPrereq.DrawDropdownHoverOutline = false;
+            this.cmbEnhancementPrereq.DrawFocusRectangle = false;
+            this.cmbEnhancementPrereq.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancementPrereq.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancementPrereq.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancementPrereq.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancementPrereq.FormattingEnabled = true;
+            this.cmbEnhancementPrereq.Location = new System.Drawing.Point(109, 15);
+            this.cmbEnhancementPrereq.Name = "cmbEnhancementPrereq";
+            this.cmbEnhancementPrereq.Size = new System.Drawing.Size(217, 21);
+            this.cmbEnhancementPrereq.TabIndex = 56;
+            this.cmbEnhancementPrereq.Text = null;
+            this.cmbEnhancementPrereq.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblPrereqEnhancement
+            // 
+            this.lblPrereqEnhancement.AutoSize = true;
+            this.lblPrereqEnhancement.Location = new System.Drawing.Point(6, 18);
+            this.lblPrereqEnhancement.Name = "lblPrereqEnhancement";
+            this.lblPrereqEnhancement.Size = new System.Drawing.Size(73, 13);
+            this.lblPrereqEnhancement.TabIndex = 21;
+            this.lblPrereqEnhancement.Text = "Enhancement";
             // 
             // grpWeaponTypes
             // 
@@ -515,6 +606,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpSpellProcs);
             this.pnlContainer.Controls.Add(this.grpBonuses);
             this.pnlContainer.Controls.Add(this.grpVitalMods);
             this.pnlContainer.Controls.Add(this.grpStats);
@@ -658,7 +750,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblEffect
             // 
             this.lblEffect.AutoSize = true;
-            this.lblEffect.Location = new System.Drawing.Point(6, 133);
+            this.lblEffect.Location = new System.Drawing.Point(8, 17);
             this.lblEffect.Name = "lblEffect";
             this.lblEffect.Size = new System.Drawing.Size(35, 13);
             this.lblEffect.TabIndex = 20;
@@ -983,83 +1075,143 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // grpPrereqs
+            // grpSpellProcs
             // 
-            this.grpPrereqs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpPrereqs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpPrereqs.Controls.Add(this.btnAddPrereq);
-            this.grpPrereqs.Controls.Add(this.btnRemovePrereq);
-            this.grpPrereqs.Controls.Add(this.lstPrereqs);
-            this.grpPrereqs.Controls.Add(this.cmbEnhancementPrereq);
-            this.grpPrereqs.Controls.Add(this.lblPrereqEnhancement);
-            this.grpPrereqs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpPrereqs.Location = new System.Drawing.Point(11, 233);
-            this.grpPrereqs.Name = "grpPrereqs";
-            this.grpPrereqs.Size = new System.Drawing.Size(342, 128);
-            this.grpPrereqs.TabIndex = 60;
-            this.grpPrereqs.TabStop = false;
-            this.grpPrereqs.Text = "Prerequisite Enhancements";
+            this.grpSpellProcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpSpellProcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpellProcs.Controls.Add(this.lstSpellEffects);
+            this.grpSpellProcs.Controls.Add(this.cmbSpells);
+            this.grpSpellProcs.Controls.Add(this.btnRemoveSpell);
+            this.grpSpellProcs.Controls.Add(this.btnAddSpell);
+            this.grpSpellProcs.Controls.Add(this.label5);
+            this.grpSpellProcs.Controls.Add(this.nudMaxSpell);
+            this.grpSpellProcs.Controls.Add(this.nudMinSpell);
+            this.grpSpellProcs.Controls.Add(this.label6);
+            this.grpSpellProcs.Controls.Add(this.lblSpell);
+            this.grpSpellProcs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpSpellProcs.Location = new System.Drawing.Point(374, 544);
+            this.grpSpellProcs.Name = "grpSpellProcs";
+            this.grpSpellProcs.Size = new System.Drawing.Size(359, 171);
+            this.grpSpellProcs.TabIndex = 59;
+            this.grpSpellProcs.TabStop = false;
+            this.grpSpellProcs.Text = "Spell Effects";
             // 
-            // btnAddPrereq
+            // lstSpellEffects
             // 
-            this.btnAddPrereq.Location = new System.Drawing.Point(163, 89);
-            this.btnAddPrereq.Name = "btnAddPrereq";
-            this.btnAddPrereq.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAddPrereq.Size = new System.Drawing.Size(79, 23);
-            this.btnAddPrereq.TabIndex = 59;
-            this.btnAddPrereq.Text = "Add";
-            this.btnAddPrereq.Click += new System.EventHandler(this.btnAddPrereq_Click);
+            this.lstSpellEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstSpellEffects.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstSpellEffects.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstSpellEffects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstSpellEffects.FormattingEnabled = true;
+            this.lstSpellEffects.Location = new System.Drawing.Point(9, 41);
+            this.lstSpellEffects.Name = "lstSpellEffects";
+            this.lstSpellEffects.Size = new System.Drawing.Size(255, 54);
+            this.lstSpellEffects.TabIndex = 56;
             // 
-            // btnRemovePrereq
+            // cmbSpells
             // 
-            this.btnRemovePrereq.Location = new System.Drawing.Point(249, 89);
-            this.btnRemovePrereq.Name = "btnRemovePrereq";
-            this.btnRemovePrereq.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemovePrereq.Size = new System.Drawing.Size(79, 23);
-            this.btnRemovePrereq.TabIndex = 58;
-            this.btnRemovePrereq.Text = "Remove";
-            this.btnRemovePrereq.Click += new System.EventHandler(this.btnRemovePrereq_Click);
+            this.cmbSpells.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSpells.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSpells.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpells.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpells.DrawDropdownHoverOutline = false;
+            this.cmbSpells.DrawFocusRectangle = false;
+            this.cmbSpells.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpells.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSpells.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpells.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSpells.FormattingEnabled = true;
+            this.cmbSpells.Location = new System.Drawing.Point(47, 14);
+            this.cmbSpells.Name = "cmbSpells";
+            this.cmbSpells.Size = new System.Drawing.Size(217, 21);
+            this.cmbSpells.TabIndex = 55;
+            this.cmbSpells.Text = null;
+            this.cmbSpells.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // lstPrereqs
+            // btnRemoveSpell
             // 
-            this.lstPrereqs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstPrereqs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstPrereqs.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstPrereqs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstPrereqs.FormattingEnabled = true;
-            this.lstPrereqs.Location = new System.Drawing.Point(9, 42);
-            this.lstPrereqs.Name = "lstPrereqs";
-            this.lstPrereqs.Size = new System.Drawing.Size(319, 41);
-            this.lstPrereqs.TabIndex = 57;
+            this.btnRemoveSpell.Location = new System.Drawing.Point(270, 72);
+            this.btnRemoveSpell.Name = "btnRemoveSpell";
+            this.btnRemoveSpell.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveSpell.Size = new System.Drawing.Size(79, 23);
+            this.btnRemoveSpell.TabIndex = 54;
+            this.btnRemoveSpell.Text = "Remove";
+            this.btnRemoveSpell.Click += new System.EventHandler(this.btnRemoveSpell_Click);
             // 
-            // cmbEnhancementPrereq
+            // btnAddSpell
             // 
-            this.cmbEnhancementPrereq.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbEnhancementPrereq.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbEnhancementPrereq.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbEnhancementPrereq.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbEnhancementPrereq.DrawDropdownHoverOutline = false;
-            this.cmbEnhancementPrereq.DrawFocusRectangle = false;
-            this.cmbEnhancementPrereq.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbEnhancementPrereq.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEnhancementPrereq.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEnhancementPrereq.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbEnhancementPrereq.FormattingEnabled = true;
-            this.cmbEnhancementPrereq.Location = new System.Drawing.Point(109, 15);
-            this.cmbEnhancementPrereq.Name = "cmbEnhancementPrereq";
-            this.cmbEnhancementPrereq.Size = new System.Drawing.Size(217, 21);
-            this.cmbEnhancementPrereq.TabIndex = 56;
-            this.cmbEnhancementPrereq.Text = null;
-            this.cmbEnhancementPrereq.TextPadding = new System.Windows.Forms.Padding(2);
+            this.btnAddSpell.Location = new System.Drawing.Point(270, 142);
+            this.btnAddSpell.Name = "btnAddSpell";
+            this.btnAddSpell.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddSpell.Size = new System.Drawing.Size(79, 23);
+            this.btnAddSpell.TabIndex = 53;
+            this.btnAddSpell.Text = "Add/Replace";
+            this.btnAddSpell.Click += new System.EventHandler(this.btnAddSpell_Click);
             // 
-            // lblPrereqEnhancement
+            // label5
             // 
-            this.lblPrereqEnhancement.AutoSize = true;
-            this.lblPrereqEnhancement.Location = new System.Drawing.Point(6, 18);
-            this.lblPrereqEnhancement.Name = "lblPrereqEnhancement";
-            this.lblPrereqEnhancement.Size = new System.Drawing.Size(73, 13);
-            this.lblPrereqEnhancement.TabIndex = 21;
-            this.lblPrereqEnhancement.Text = "Enhancement";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(180, 119);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(27, 13);
+            this.label5.TabIndex = 52;
+            this.label5.Text = "Max";
+            // 
+            // nudMaxSpell
+            // 
+            this.nudMaxSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMaxSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMaxSpell.Location = new System.Drawing.Point(210, 117);
+            this.nudMaxSpell.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.nudMaxSpell.Name = "nudMaxSpell";
+            this.nudMaxSpell.Size = new System.Drawing.Size(129, 20);
+            this.nudMaxSpell.TabIndex = 51;
+            this.nudMaxSpell.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // nudMinSpell
+            // 
+            this.nudMinSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMinSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMinSpell.Location = new System.Drawing.Point(38, 117);
+            this.nudMinSpell.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.nudMinSpell.Name = "nudMinSpell";
+            this.nudMinSpell.Size = new System.Drawing.Size(129, 20);
+            this.nudMinSpell.TabIndex = 50;
+            this.nudMinSpell.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(8, 119);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(24, 13);
+            this.label6.TabIndex = 49;
+            this.label6.Text = "Min";
+            // 
+            // lblSpell
+            // 
+            this.lblSpell.AutoSize = true;
+            this.lblSpell.Location = new System.Drawing.Point(6, 17);
+            this.lblSpell.Name = "lblSpell";
+            this.lblSpell.Size = new System.Drawing.Size(30, 13);
+            this.lblSpell.TabIndex = 20;
+            this.lblSpell.Text = "Spell";
             // 
             // frmEnhancement
             // 
@@ -1082,6 +1234,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancements.PerformLayout();
             this.grpProps.ResumeLayout(false);
             this.grpProps.PerformLayout();
+            this.grpPrereqs.ResumeLayout(false);
+            this.grpPrereqs.PerformLayout();
             this.grpWeaponTypes.ResumeLayout(false);
             this.grpWeaponTypes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinWeaponLevel)).EndInit();
@@ -1099,8 +1253,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxStat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinStat)).EndInit();
-            this.grpPrereqs.ResumeLayout(false);
-            this.grpPrereqs.PerformLayout();
+            this.grpSpellProcs.ResumeLayout(false);
+            this.grpSpellProcs.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxSpell)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinSpell)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1177,5 +1333,15 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.ListBox lstPrereqs;
         private DarkUI.Controls.DarkComboBox cmbEnhancementPrereq;
         private System.Windows.Forms.Label lblPrereqEnhancement;
+        private DarkUI.Controls.DarkGroupBox grpSpellProcs;
+        private System.Windows.Forms.ListBox lstSpellEffects;
+        private DarkUI.Controls.DarkComboBox cmbSpells;
+        private DarkUI.Controls.DarkButton btnRemoveSpell;
+        private DarkUI.Controls.DarkButton btnAddSpell;
+        private System.Windows.Forms.Label label5;
+        private DarkUI.Controls.DarkNumericUpDown nudMaxSpell;
+        private DarkUI.Controls.DarkNumericUpDown nudMinSpell;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblSpell;
     }
 }

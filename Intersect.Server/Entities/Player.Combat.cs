@@ -10,6 +10,7 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using MimeKit.Cryptography;
 using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
@@ -921,6 +922,46 @@ namespace Intersect.Server.Entities
             }
 
             base.TakeDamage(attacker, damage, vital);
+        }
+
+        public override void HandleSpellProccing(Entity enemy)
+        {
+            if (!TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+            {
+                return;
+            }
+
+            var weaponDesc = weapon.Descriptor;
+            if (weaponDesc == null)
+            {
+                return;
+            }
+
+            var spellProcs = ItemInstanceHelper.GetSpellProcs(weaponDesc, weapon.ItemProperties.SpellEnhancements);
+
+            foreach (var spellProc in spellProcs)
+            {
+                var procSpell = SpellBase.Get(spellProc.Key);
+                var affinity = GetBonusEffectTotal(EffectType.Affinity, 0);
+
+                var roll = Randomization.Next(0, 100001);
+
+                if (roll >= ((spellProc.Value * 1000) + (affinity * 1000)))
+                {
+                    continue;
+                }
+
+                if (procSpell.Combat.TargetType == SpellTargetTypes.Self)
+                {
+                    UseSpell(procSpell, -1, this, true, true, (byte)Dir, this, true);
+                }
+                else
+                {
+                    HandleAoESpell(spellProc.Key, procSpell.Combat?.HitRadius ?? 0, enemy.MapId, enemy.X, enemy.Y, enemy, true);
+                }
+            }
+            
+            base.HandleSpellProccing(enemy);
         }
     }
 }

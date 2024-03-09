@@ -32,15 +32,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpChangeItems = new DarkUI.Controls.DarkGroupBox();
             this.chkStacks = new DarkUI.Controls.DarkCheckBox();
+            this.grpManualAmount = new DarkUI.Controls.DarkGroupBox();
+            this.nudGiveTakeAmount = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblAmount = new System.Windows.Forms.Label();
             this.grpVariableAmount = new DarkUI.Controls.DarkGroupBox();
             this.rdoInstanceVariable = new DarkUI.Controls.DarkRadioButton();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.lblVariable = new System.Windows.Forms.Label();
             this.rdoGlobalVariable = new DarkUI.Controls.DarkRadioButton();
             this.rdoPlayerVariable = new DarkUI.Controls.DarkRadioButton();
-            this.grpManualAmount = new DarkUI.Controls.DarkGroupBox();
-            this.nudGiveTakeAmount = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblAmount = new System.Windows.Forms.Label();
             this.grpAmountType = new DarkUI.Controls.DarkGroupBox();
             this.rdoVariable = new DarkUI.Controls.DarkRadioButton();
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
@@ -53,9 +53,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpChangeItems.SuspendLayout();
-            this.grpVariableAmount.SuspendLayout();
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudGiveTakeAmount)).BeginInit();
+            this.grpVariableAmount.SuspendLayout();
             this.grpAmountType.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,6 +90,53 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.chkStacks.Size = new System.Drawing.Size(98, 17);
             this.chkStacks.TabIndex = 60;
             this.chkStacks.Text = "Stacks?";
+            // 
+            // grpManualAmount
+            // 
+            this.grpManualAmount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpManualAmount.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpManualAmount.Controls.Add(this.nudGiveTakeAmount);
+            this.grpManualAmount.Controls.Add(this.lblAmount);
+            this.grpManualAmount.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpManualAmount.Location = new System.Drawing.Point(6, 196);
+            this.grpManualAmount.Name = "grpManualAmount";
+            this.grpManualAmount.Size = new System.Drawing.Size(292, 71);
+            this.grpManualAmount.TabIndex = 37;
+            this.grpManualAmount.TabStop = false;
+            this.grpManualAmount.Text = "Manual Amount:";
+            // 
+            // nudGiveTakeAmount
+            // 
+            this.nudGiveTakeAmount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudGiveTakeAmount.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudGiveTakeAmount.Location = new System.Drawing.Point(67, 32);
+            this.nudGiveTakeAmount.Maximum = new decimal(new int[] {
+            1215752192,
+            23,
+            0,
+            0});
+            this.nudGiveTakeAmount.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudGiveTakeAmount.Name = "nudGiveTakeAmount";
+            this.nudGiveTakeAmount.Size = new System.Drawing.Size(115, 20);
+            this.nudGiveTakeAmount.TabIndex = 28;
+            this.nudGiveTakeAmount.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblAmount
+            // 
+            this.lblAmount.AutoSize = true;
+            this.lblAmount.Location = new System.Drawing.Point(8, 32);
+            this.lblAmount.Name = "lblAmount";
+            this.lblAmount.Size = new System.Drawing.Size(46, 13);
+            this.lblAmount.TabIndex = 27;
+            this.lblAmount.Text = "Amount:";
             // 
             // grpVariableAmount
             // 
@@ -169,53 +216,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoPlayerVariable.TabStop = true;
             this.rdoPlayerVariable.Text = "Player Variable";
             this.rdoPlayerVariable.CheckedChanged += new System.EventHandler(this.rdoPlayerVariable_CheckedChanged);
-            // 
-            // grpManualAmount
-            // 
-            this.grpManualAmount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpManualAmount.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpManualAmount.Controls.Add(this.nudGiveTakeAmount);
-            this.grpManualAmount.Controls.Add(this.lblAmount);
-            this.grpManualAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpManualAmount.Location = new System.Drawing.Point(6, 196);
-            this.grpManualAmount.Name = "grpManualAmount";
-            this.grpManualAmount.Size = new System.Drawing.Size(292, 71);
-            this.grpManualAmount.TabIndex = 37;
-            this.grpManualAmount.TabStop = false;
-            this.grpManualAmount.Text = "Manual Amount:";
-            // 
-            // nudGiveTakeAmount
-            // 
-            this.nudGiveTakeAmount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudGiveTakeAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudGiveTakeAmount.Location = new System.Drawing.Point(67, 32);
-            this.nudGiveTakeAmount.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudGiveTakeAmount.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudGiveTakeAmount.Name = "nudGiveTakeAmount";
-            this.nudGiveTakeAmount.Size = new System.Drawing.Size(115, 20);
-            this.nudGiveTakeAmount.TabIndex = 28;
-            this.nudGiveTakeAmount.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblAmount
-            // 
-            this.lblAmount.AutoSize = true;
-            this.lblAmount.Location = new System.Drawing.Point(8, 32);
-            this.lblAmount.Name = "lblAmount";
-            this.lblAmount.Size = new System.Drawing.Size(46, 13);
-            this.lblAmount.TabIndex = 27;
-            this.lblAmount.Text = "Amount:";
             // 
             // grpAmountType
             // 
@@ -378,11 +378,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(314, 384);
             this.grpChangeItems.ResumeLayout(false);
             this.grpChangeItems.PerformLayout();
-            this.grpVariableAmount.ResumeLayout(false);
-            this.grpVariableAmount.PerformLayout();
             this.grpManualAmount.ResumeLayout(false);
             this.grpManualAmount.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudGiveTakeAmount)).EndInit();
+            this.grpVariableAmount.ResumeLayout(false);
+            this.grpVariableAmount.PerformLayout();
             this.grpAmountType.ResumeLayout(false);
             this.grpAmountType.PerformLayout();
             this.ResumeLayout(false);

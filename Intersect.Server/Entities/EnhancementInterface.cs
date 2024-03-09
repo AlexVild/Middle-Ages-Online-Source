@@ -58,6 +58,7 @@ namespace Intersect.Server.Entities
                 ApplyItemEnhancements(desc.StatMods, enhancedItem.ItemProperties.StatEnhancements);
                 ApplyItemEnhancements(desc.VitalMods, enhancedItem.ItemProperties.VitalEnhancements);
                 ApplyItemEnhancements(desc.EffectMods, enhancedItem.ItemProperties.EffectEnhancements);
+                ApplySpellEnhancements(desc.SpellEnhancements, enhancedItem.ItemProperties.SpellEnhancements);
 
                 enhancedItem.ItemProperties.AppliedEnhancementIds.Add(enhancementId);
             }
@@ -164,6 +165,25 @@ namespace Intersect.Server.Entities
             }
         }
 
+        private static void ApplySpellEnhancements(List<SpellEnhancementDescriptor> newEnhancements, List<SpellEnhancement> spellEnhancements)
+        {
+            // For each of the new potential enhancements...
+            foreach (var enhancement in newEnhancements.ToArray())
+            {
+                // Get the randomized range val
+                var modVal = Randomization.Next(enhancement.MinValue, enhancement.MaxValue + 1);
+
+                var existingSpell = spellEnhancements.Find(spell => spell.SpellId == enhancement.SpellId);
+                if (existingSpell != default)
+                {
+                    existingSpell.Value += modVal;
+                    continue;
+                }
+
+                spellEnhancements.Add(new SpellEnhancement(enhancement.SpellId, modVal));
+            }
+        }
+
         public bool TryRemoveEnhancementsOnItem(bool sendUiPackets = true, bool ignoreCurrency = false, Item item = null)
         {
             if (item == null)
@@ -203,6 +223,8 @@ namespace Intersect.Server.Entities
             {
                 removalItem.ItemProperties.EffectEnhancements[i] = default;
             }
+
+            removalItem.ItemProperties.SpellEnhancements.Clear();
 
             item.Set(removalItem);
 

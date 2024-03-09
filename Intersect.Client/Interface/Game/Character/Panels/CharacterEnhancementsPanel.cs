@@ -267,7 +267,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             var x = mBackground?.Parent?.Parent.X ?? 0;
             var y = (mBackground?.Parent?.Parent?.Y ?? 0) + (mBackground.Y + EnhancementListBg.Y);
-            EnhancementDescription = new EnhancementDescriptionWindow(hoveredEnhancement.Id, string.Empty, x, y);
+            EnhancementDescription = new EnhancementDescriptionWindow(hoveredEnhancement.Id, string.Empty, x, y, showSpellInfo: true);
             EnhancementDescription.Show();
         }
 

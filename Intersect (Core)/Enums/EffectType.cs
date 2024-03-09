@@ -66,5 +66,4 @@ namespace Intersect.Enums
         [Description("Block")]
         Block = 19,
     }
-
 }

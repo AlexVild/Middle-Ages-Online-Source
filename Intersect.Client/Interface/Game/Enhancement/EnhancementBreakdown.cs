@@ -9,8 +9,6 @@ using Intersect.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Enhancement
 {
@@ -29,6 +27,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         Dictionary<Stats, Enhancement<Stats>> StatEnhancements = new Dictionary<Stats, Enhancement<Stats>>();
         Dictionary<EffectType, Enhancement<EffectType>> BonusEnhancements = new Dictionary<EffectType, Enhancement<EffectType>>();
         Dictionary<Vitals, Enhancement<Vitals>> VitalEnhancements = new Dictionary<Vitals, Enhancement<Vitals>>();
+        Dictionary<Guid, SpellEnhancementDescriptor> SpellEnhancements = new Dictionary<Guid, SpellEnhancementDescriptor>();
 
         public EnhancementBreakdown(EnhancementWindow parent, Base gameCanvas)
         {
@@ -71,6 +70,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             BonusEnhancements.Clear();
             StatEnhancements.Clear();
             VitalEnhancements.Clear();
+            SpellEnhancements.Clear();
             foreach (var enhancement in enhancements)
             {
                 var desc = EnhancementDescriptor.Get(enhancement.EnhancementId);
@@ -111,6 +111,18 @@ namespace Intersect.Client.Interface.Game.Enhancement
                         VitalEnhancements[effect.EnhancementType] = new Enhancement<Vitals>(effect.EnhancementType, effect.MinValue, effect.MaxValue);
                     }
                 }
+                foreach (var effect in desc.SpellEnhancements)
+                {
+                    if (SpellEnhancements.ContainsKey(effect.SpellId))
+                    {
+                        SpellEnhancements[effect.SpellId].MinValue += effect.MinValue;
+                        SpellEnhancements[effect.SpellId].MaxValue += effect.MaxValue;
+                    }
+                    else
+                    {
+                        SpellEnhancements[effect.SpellId] = new SpellEnhancementDescriptor(effect.SpellId, effect.MinValue, effect.MaxValue);
+                    }
+                }
             }
 
             var yEnd = 0;
@@ -118,7 +130,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
             ClearRows();
             RefreshStats(0, out yEnd);
             RefreshVitals(yEnd, out yEnd);
-            RefreshBonuses(yEnd, out _);
+            RefreshBonuses(yEnd, out yEnd);
+            RefreshSpells(yEnd, out _);
         }
 
         void RefreshStats(int yStart, out int yEnd)
@@ -201,6 +214,31 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 var tooltip = BonusEffectHelper.BonusEffectDescriptions[effect].Description;
 
                 var row = new CharacterBonusRow(ModContainer, "BonusRow", effectName, range, tooltip);
+
+                row.SetPosition(row.X, row.Y + (YPadding * idx) + yStart);
+                row.Initialize();
+
+                idx++;
+            }
+
+            yEnd = yStart + (idx * YPadding);
+        }
+
+        void RefreshSpells(int yStart, out int yEnd)
+        {
+            var idx = 0;
+            yEnd = yStart;
+
+            if (SpellEnhancements.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var effectMapping in SpellEnhancements.Values)
+            {
+                var range = effectMapping.GetRangeDisplay();
+
+                var row = new CharacterBonusRow(ModContainer, "BonusRow", $"Proc {SpellBase.GetName(effectMapping.SpellId)}", range, string.Empty);
 
                 row.SetPosition(row.X, row.Y + (YPadding * idx) + yStart);
                 row.Initialize();

@@ -1,4 +1,5 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Utilities;
 using MessagePack;
 using System;
@@ -31,7 +32,16 @@ namespace Intersect.Network.Packets.Server
             EnhancedBy = other.EnhancedBy;
 
             AppliedEnhancementIds.Clear();
-            AppliedEnhancementIds.AddRange(other.AppliedEnhancementIds);
+            if (other.AppliedEnhancementIds != default)
+            {
+                AppliedEnhancementIds.AddRange(other.AppliedEnhancementIds);
+            }
+
+            SpellEnhancements.Clear();
+            if (other.SpellEnhancements != default)
+            {
+                SpellEnhancements.AddRange(other.SpellEnhancements);
+            }
         }
         
         [Key(0)]
@@ -51,6 +61,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(5)]
         public string EnhancedBy { get; set; }
+
+        [Key(6)]
+        public List<SpellEnhancement> SpellEnhancements { get; set; } = new List<SpellEnhancement>();
     }
 
     [MessagePackObject]
@@ -67,5 +80,25 @@ namespace Intersect.Network.Packets.Server
             BaseEnhancementId = baseEnhancementId;
             Value = value;
         }
+    }
+
+    [MessagePackObject]
+    public class SpellEnhancement
+    {
+        public SpellEnhancement()
+        {
+        }
+
+        public SpellEnhancement(Guid spellId, int value)
+        {
+            SpellId = spellId;
+            Value = value;
+        }
+
+        [Key(0)]
+        public Guid SpellId { get; set; }
+
+        [Key(1)]
+        public int Value { get; set; }
     }
 }
