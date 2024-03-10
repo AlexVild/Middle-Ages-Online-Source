@@ -157,7 +157,7 @@ namespace Intersect.Editor.Networking
 
         public static void SendOpenEditor(GameObjectType type)
         {
-            if (Globals.CurrentEditor != -1)
+            if (Globals.CurrentEditor != -1 || Globals.CopierOpened)
             {
                 return;
             }
@@ -188,6 +188,11 @@ namespace Intersect.Editor.Networking
         public static void SendEnterMap(Guid mapId)
         {
             Network.SendPacket(new EnterMapPacket(mapId));
+        }
+
+        public static void SendCopyMap(Guid mapId, Guid copyingMapId)
+        {
+            Network.SendPacket(new MapCopyPacket(mapId, copyingMapId));
         }
 
     }

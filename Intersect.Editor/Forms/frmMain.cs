@@ -1531,7 +1531,7 @@ namespace Intersect.Editor.Forms
         //Cross Threading Delegate Methods
         private void TryOpenEditorMethod(GameObjectType type)
         {
-            if (Globals.CurrentEditor == -1)
+            if (Globals.CurrentEditor == -1 && !Globals.CopierOpened)
             {
                 switch (type)
                 {
@@ -2206,6 +2206,12 @@ namespace Intersect.Editor.Forms
         private void territoryEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Territory);
+        }
+
+        private void mapPropertyCopierToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var copier = new frmMapCopier();
+            copier.Show();
         }
     }
 

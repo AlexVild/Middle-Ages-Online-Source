@@ -458,6 +458,7 @@
     <Compile Include="Network\Packets\Client\WeaponPickerResponsePacket.cs" />
     <Compile Include="Network\Packets\Client\WishlistAddPacket.cs" />
     <Compile Include="Network\Packets\Client\WishlistRemovePacket.cs" />
+    <Compile Include="Network\Packets\Editor\MapCopyPacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Server\ClanWarCompletePacket.cs" />
     <Compile Include="Network\Packets\Server\ClanWarScoreUpdatePacket.cs" />

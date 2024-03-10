@@ -1225,7 +1225,7 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void picMap_MouseEnter(object sender, EventArgs e)
         {
-            if (Globals.CurrentEditor == -1)
+            if (Globals.CurrentEditor == -1 && !Globals.CopierOpened)
             {
                 Globals.MapEditorWindow.DockPanel.Focus();
             }

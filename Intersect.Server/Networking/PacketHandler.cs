@@ -4851,5 +4851,74 @@ namespace Intersect.Server.Networking
 
             mapInstance.SendTerritoryUpdatesTo(player);
         }
+
+        public void HandlePacket(Client client, Network.Packets.Editor.MapCopyPacket packet)
+        {
+            if (!client.IsEditor)
+            {
+                return;
+            }
+
+            var map = MapController.Get(packet.MapId);
+            var copyingMap = MapController.Get(packet.CopyingMapId);
+
+            if (map == null || copyingMap == null)
+            {
+                return;
+            }
+
+            map.Music = copyingMap.Music;
+            map.Sound = copyingMap.Sound;
+            map.ZoneType = copyingMap.ZoneType;
+            
+            map.Fog = copyingMap.Fog;
+            map.FogTransparency = copyingMap.FogTransparency;
+            map.FogXSpeed = copyingMap.FogXSpeed;
+            map.FogYSpeed = copyingMap.FogYSpeed;
+            
+            map.Panorama = copyingMap.Panorama;
+            
+            map.OverlayGraphic = copyingMap.OverlayGraphic;
+            map.AHue = copyingMap.AHue;
+            map.RHue = copyingMap.RHue;
+            map.GHue = copyingMap.GHue;
+            map.BHue = copyingMap.BHue;
+
+            map.IsIndoors = copyingMap.IsIndoors;
+
+            map.Brightness = copyingMap.Brightness;
+            map.PlayerLightColor = copyingMap.PlayerLightColor;
+            map.PlayerLightExpand = copyingMap.PlayerLightExpand;
+            map.PlayerLightIntensity = copyingMap.PlayerLightIntensity;
+            map.PlayerLightSize = copyingMap.PlayerLightSize;
+
+            map.WeatherAnimation = AnimationBase.Get(copyingMap.WeatherAnimationId);
+            map.WeatherIntensity = copyingMap.WeatherIntensity;
+            map.WeatherXSpeed = copyingMap.WeatherXSpeed;
+            map.WeatherYSpeed = copyingMap.WeatherYSpeed;
+
+            map.RegenType = copyingMap.RegenType;
+
+            map.LoginEventId = copyingMap.LoginEventId;
+            
+            map.Revision += 1;
+
+            MapList.List.UpdateMap(packet.MapId);
+            DbInterface.SaveGameObject(map);
+
+            var players = new List<Player>();
+            foreach (var surrMap in map.GetSurroundingMaps(true))
+            {
+                players.AddRange(surrMap.GetPlayersOnAllInstances().ToArray());
+            }
+
+            foreach (var plyr in players)
+            {
+                plyr.Warp(plyr.MapId, (byte) plyr.X, (byte) plyr.Y, (byte) plyr.Dir, false, (byte) plyr.Z, true);
+                PacketSender.SendMap(plyr.Client, packet.MapId);
+            }
+
+            PacketSender.SendMap(client, packet.MapId, true); //Sends map to everyone/everything in proximity
+        }
     }
 }

@@ -50,6 +50,10 @@ namespace Intersect.Editor.General
 
         //Editor Variables
         public static MapInstance CurrentMap = null;
+        
+        public static Guid LastMapCopied = Guid.Empty;
+
+        public static bool CopierOpened = false;
 
         public static int SelectedMapNpc = -1;
 

@@ -400,6 +400,12 @@
     <Compile Include="Forms\Editors\frmWeaponType.Designer.cs">
       <DependentUpon>frmWeaponType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmMapCopier.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMapCopier.Designer.cs">
+      <DependentUpon>frmMapCopier.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1138,6 +1144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmWeaponType.resx">
       <DependentUpon>frmWeaponType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMapCopier.resx">
+      <DependentUpon>frmMapCopier.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmVariableSelector.resx">
       <DependentUpon>frmVariableSelector.cs</DependentUpon>
