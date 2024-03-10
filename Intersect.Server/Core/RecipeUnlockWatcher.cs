@@ -263,6 +263,12 @@ namespace Intersect.Server.Core
                         }
 
                     case RecipeTrigger.ItemObtained:
+                        // If the player has previously completed this, then consider it done.
+                        // This DOES mean I can't retroactively change these in-editor, but decent fix for now
+                        if (player.UnlockedRecipeIds.Contains(requirement.Recipe?.Id ?? Guid.Empty))
+                        {
+                            return requirement.Amount;
+                        }
                         return player.CountItems(requirement.TriggerId, true, true);
 
                     default:
