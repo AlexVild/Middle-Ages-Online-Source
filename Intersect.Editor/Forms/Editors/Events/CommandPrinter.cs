@@ -1946,13 +1946,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             if (command.RespawnType == RespawnChangeType.Default)
             {
                 return Strings.EventCommandList.ChangeOverworldSpawn.ToString(
-                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction]
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1]
                 );
             }
             else
             {
                 return Strings.EventCommandList.ChangeArenaSpawn.ToString(
-                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction]
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1]
                 );
             }
         }
