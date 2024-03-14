@@ -1303,14 +1303,17 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
+                var pts = Options.Instance.ClanWar.BasePointsPerKill;
                 if (DefendingTerritory && LastTerritory != null)
                 {
-                    ClanWarManager.ChangePoints(Guild?.Id ?? Guid.Empty, LastTerritory?.Territory?.PointsPerDefend ?? 0);
+                    pts += LastTerritory?.Territory?.PointsPerDefend ?? 0;
                 }
                 else if (slainPlayer.DefendingTerritory && slainPlayer.LastTerritory != null)
                 {
-                    ClanWarManager.ChangePoints(Guild?.Id ?? Guid.Empty, slainPlayer.LastTerritory?.Territory?.PointsPerAttack ?? 0);
+                    pts += LastTerritory?.Territory?.PointsPerAttack ?? 0;
                 }
+
+                ClanWarManager.ChangePoints(Guild?.Id ?? Guid.Empty, pts);
             }
         }
 

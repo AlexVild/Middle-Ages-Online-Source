@@ -31,6 +31,8 @@ namespace Intersect.Config
 
         public int MinimumScore { get; set; } = 200;
 
+        public int BasePointsPerKill { get; set; } = 1;
+
         /// <summary>
         /// A janky way to populate the clan war map before territories have been created on the server side.
         /// </summary>
