@@ -105,6 +105,8 @@ namespace Intersect.Config
 
         public float AmmoRetrieveChance = 30.0f;
 
+        public float PvPRPBonus = .15f;
+
         /// <summary>
         /// Contains the slots used during character creation - instead of relating these with equipment.
         /// </summary>

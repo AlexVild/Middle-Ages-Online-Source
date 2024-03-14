@@ -211,7 +211,13 @@ namespace Intersect.Server.Entities
             var rpBase = ItemBase.Get(Guid.Parse(Options.Instance.LootOpts.RPItemGuid));
             if (rpBase != null && Base?.RP > 0)
             {
-                var rp = new Item(rpBase.Id, Base.RP);
+                // In PvP, award extra RP
+                var amount = Base.RP;
+                if (killer.Map?.ZoneType == MapZones.Normal)
+                {
+                    amount += (int)Math.Ceiling(amount * Options.Instance.PlayerOpts.PvPRPBonus);
+                }
+                var rp = new Item(rpBase.Id, amount);
                 rolledItems.Add(rp);
             }
 
