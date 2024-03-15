@@ -2032,6 +2032,13 @@ namespace Intersect.Server.Entities.Events
                         value.Boolean = variable.Boolean;
                     }
                 }
+                else if (mod.DupVariableType == VariableTypes.GuildVariable)
+                {
+                    if (player.Guild != null)
+                    {
+                        value.Boolean = player.Guild.GetVariableValue(mod.DuplicateVariableId).Boolean;
+                    }
+                }
             }
             else
             {
@@ -2084,7 +2091,7 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
-            Guild guild = null;
+            Guild guild = player.Guild;
 
             // Get the players instance so we have it for reaching instance variables.
             if (!MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var playersInstance))
@@ -2106,7 +2113,6 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.GuildVariable)
             {
-                guild = player.Guild;
                 if (guild == null)
                 {
                     return;

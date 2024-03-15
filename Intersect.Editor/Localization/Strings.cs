@@ -1996,6 +1996,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString globalvariable = @"Set Global Variable {00} ({01})";
 
             public static LocalizedString instancevariable = @"Set Instance Variable {00} ({01})";
+            
+            public static LocalizedString guildvariable = @"Set Guild Variable {00} ({01})";
 
             public static LocalizedString gotolabel = @"Go to Label {00}";
 
