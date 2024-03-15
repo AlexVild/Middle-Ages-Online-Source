@@ -654,15 +654,15 @@ namespace Intersect.Editor.Forms.Editors
                         !mFolders.Contains(((GuildVariableBase)itm.Value).Folder))
                     {
                         mFolders.Add(((GuildVariableBase)itm.Value).Folder);
-                        if (!mInstanceKnownFolders.Contains(((GuildVariableBase)itm.Value).Folder))
+                        if (!mGuildKnownFolders.Contains(((GuildVariableBase)itm.Value).Folder))
                         {
-                            mInstanceKnownFolders.Add(((GuildVariableBase)itm.Value).Folder);
+                            mGuildKnownFolders.Add(((GuildVariableBase)itm.Value).Folder);
                         }
                     }
                 }
 
-                mInstanceKnownFolders.Sort();
-                cmbFolder.Items.AddRange(mInstanceKnownFolders.ToArray());
+                mGuildKnownFolders.Sort();
+                cmbFolder.Items.AddRange(mGuildKnownFolders.ToArray());
                 lblId.Text = Strings.VariableEditor.textidiv;
             }
 

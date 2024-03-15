@@ -19,6 +19,7 @@ using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Utilities;
 
 using Newtonsoft.Json;
@@ -2166,6 +2167,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmbVariable.Items.AddRange(InstanceVariableBase.Names);
                     cmbVariable.SelectedIndex = InstanceVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
                 }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.GuildVariableChange)
+                {
+                    cmbVariable.Show();
+                    lblVariableTrigger.Show();
+                    cmbVariable.Items.Add(Strings.General.none);
+                    cmbVariable.Items.AddRange(GuildVariableBase.Names);
+                    cmbVariable.SelectedIndex = GuildVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
+                }
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ClassRankIncreased)
                 {
                     cmbClass.Show();
@@ -2257,6 +2266,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.InstanceVariableChange)
                 {
                     CurrentPage.TriggerId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex - 1);
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.GuildVariableChange)
+                {
+                    CurrentPage.TriggerId = GuildVariableBase.IdFromList(cmbVariable.SelectedIndex - 1);
                 }
             }
         }

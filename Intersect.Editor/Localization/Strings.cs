@@ -3068,6 +3068,7 @@ Tick timer saved in server config.json.";
                 {28, @"Duel Started"},
                 {29, @"Clan War Started"},
                 {30, @"Clan War Ended"},
+                {31, @"Guild Variable Changed"},
             };
 
             public static LocalizedString conditions = @"Conditions";
