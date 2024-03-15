@@ -213,6 +213,11 @@ namespace Intersect.Server.Core.Games.ClanWars
 
                 var guild = Guild.LoadGuild(participant.GuildId);
 
+                if (guild == null) 
+                {
+                    continue;
+                }
+
                 if (guild?.TryDirectBankDeposit(valorCoins) ?? false)
                 {
                     guild?.SendMessageToMembers($"Your clan earned {payout} Valor Coin(s) from Clan Wars! They have been deposited in your clan bank. Your clan came in {place.ToOrdinal()} place with a score of {participant.Score.ToString("N0")} points.");
