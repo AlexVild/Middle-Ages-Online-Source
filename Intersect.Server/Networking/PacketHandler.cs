@@ -4027,6 +4027,10 @@ namespace Intersect.Server.Networking
                         // Don't trigger a instance change common event, because the editor can not change instance variable values - only their defaults
                         DbInterface.CacheInstanceVariableEventTextLookups();
                     }
+                    else if (type == GameObjectType.GuildVariable)
+                    {
+                        DbInterface.CacheGuildVariableEventTextLookups();
+                    }
 
                     // Save the object. Resolves #915 - we needed to make sure we did this AFTER modifying the object if it was a quest
                     DbInterface.SaveGameObject(obj);

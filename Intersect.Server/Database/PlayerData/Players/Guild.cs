@@ -353,6 +353,16 @@ namespace Intersect.Server.Database.PlayerData.Players
             }
         }
 
+        public void Update()
+        {
+            if (UpdatedVariables.Count > 0)
+            {
+                Save();
+                UpdatedVariables.Clear();
+            }
+            UpdateMemberList();
+        }
+
         /// <summary>
         /// Send an updated version of our guild's memberlist to each online member.
         /// </summary>
