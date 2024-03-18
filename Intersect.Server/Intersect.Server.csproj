@@ -1418,6 +1418,10 @@
     <Compile Include="Migrations\Game\20240309192912_SpellProcEnhancementMigration.designer.cs">
       <DependentUpon>20240309192912_SpellProcEnhancementMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240318201615_CraftExtrasMigration.cs" />
+    <Compile Include="Migrations\Game\20240318201615_CraftExtrasMigration.designer.cs">
+      <DependentUpon>20240318201615_CraftExtrasMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

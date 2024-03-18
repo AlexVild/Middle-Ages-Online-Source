@@ -4884,7 +4884,7 @@ namespace Intersect.Server.Entities
                 quantity = 1;
             }
 
-            if (TryGiveItem(craft.ItemId, quantity))
+            if (craft.EventOnly || TryGiveItem(craft.ItemId, quantity))
             {
                 // Tell the player about their new craft!
                 string itemName = ItemBase.GetName(craft.ItemId);

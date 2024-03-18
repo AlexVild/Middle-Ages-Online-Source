@@ -918,6 +918,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new CastSpellOn();
                     break;
 
+                case EventCommandType.CloseCraftingTable:
+                    tmpCommand = new CloseCraftingTable();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1711,6 +1715,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.CastSpellOn:
                     cmdWindow = new EventCommand_CastSpellOn((CastSpellOn)command, this);
+                    break;
+
+                case EventCommandType.CloseCraftingTable:
+                    // No editor
                     break;
 
                 default:

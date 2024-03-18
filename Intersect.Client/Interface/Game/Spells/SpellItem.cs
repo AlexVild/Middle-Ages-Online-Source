@@ -179,21 +179,10 @@ namespace Intersect.Client.Interface.Game.Spells
                     if (mIconCd)
                     {
                         mCooldownLabel.IsHidden = false;
-                        var secondsRemaining =
+                        var msRemaining =
                             (float) (Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) -
-                                     Timing.Global.Milliseconds) /
-                            1000f;
-
-                        if (secondsRemaining > 10f)
-                        {
-                            mCooldownLabel.Text = Strings.Spells.cooldown.ToString(secondsRemaining.ToString("N0"));
-                        }
-                        else
-                        {
-                            mCooldownLabel.Text = Strings.Spells.cooldown.ToString(
-                                secondsRemaining.ToString("N1").Replace(".", Strings.Numbers.dec)
-                            );
-                        }
+                                     Timing.Global.Milliseconds);
+                        mCooldownLabel.Text = TextUtils.CooldownText(msRemaining);
                     }
                 }
                 else

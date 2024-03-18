@@ -8,6 +8,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Localization;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.EntityPanel
 {
@@ -89,46 +90,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             mStatus = status;
         }
 
-        private void SetDurationText(float remainingMs)
-        {
-            var secondsRemaining = remainingMs / 1000f;
-            var minutesRemaining = secondsRemaining / 60f;
-            var hoursRemaining = minutesRemaining / 60f;
-            var daysRemaining = hoursRemaining / 24f;
-
-            if (daysRemaining >= 1)
-            {
-                var hourRemainder = hoursRemaining - (hoursRemaining * daysRemaining);
-                mDurationLabel.Text = $"{hoursRemaining.ToString("N0")}d {hourRemainder.ToString("N0")}h";
-                return;
-            }
-
-            if (hoursRemaining >= 1)
-            {
-                var minuteRemainder = minutesRemaining - (hoursRemaining * 60);
-                mDurationLabel.Text = $"{hoursRemaining.ToString("N0")}h {minuteRemainder.ToString("N0")}m";
-                return;
-            }
-
-            if (secondsRemaining > 90f)
-            {
-                var secondsRemainder = secondsRemaining - (secondsRemaining * 60);
-                mDurationLabel.Text = $"{minutesRemaining.ToString("N0")}m {secondsRemainder}s";
-                return;
-            }
-            
-            if (secondsRemaining > 10f)
-            {
-                mDurationLabel.Text =
-                    Strings.EntityBox.cooldown.ToString(secondsRemaining.ToString("N0"));
-                return;
-            }
-
-            mDurationLabel.Text = Strings.EntityBox.cooldown.ToString(
-                (secondsRemaining).ToString("N1").Replace(".", Strings.Numbers.dec)
-            );
-        }
-
         public void Update()
         {
             if (mStatus != null)
@@ -136,7 +97,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 var remaining = mStatus.RemainingMs;
                 var spell = SpellBase.Get(mStatus.SpellId);
 
-                SetDurationText(mStatus.RemainingMs);
+                mDurationLabel.Text = TextUtils.CooldownText(mStatus.RemainingMs);
 
                 if ((mTexLoaded != "" && spell == null ||
                      spell != null && mTexLoaded != spell.Icon ||

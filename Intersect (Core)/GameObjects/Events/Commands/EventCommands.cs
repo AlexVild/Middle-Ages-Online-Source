@@ -1586,4 +1586,9 @@ namespace Intersect.GameObjects.Events.Commands
         
         public bool InstanceMembers { get; set; }
     }
+
+    public partial class CloseCraftingTable : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.CloseCraftingTable;
+    }
 }

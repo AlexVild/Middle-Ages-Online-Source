@@ -286,6 +286,7 @@ namespace Intersect.GameObjects.Events
         HideEvent, // 94
         ShowEvent, // 95
         CastSpellOn, // 96
+        CloseCraftingTable, // 97
     }
 
     public enum NPCGuildManagementSelection

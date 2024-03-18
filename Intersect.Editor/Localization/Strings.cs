@@ -2431,6 +2431,7 @@ Tick timer saved in server config.json.";
                 {"hideevent", @"Hide Event"},
                 {"showevent", @"Show Event"},
                 {"castspellon", @"Cast Spell On"},
+                {"closecraftingtable", @"Close Crafting Table"},
             };
 
         }

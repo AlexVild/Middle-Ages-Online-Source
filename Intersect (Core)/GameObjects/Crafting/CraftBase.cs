@@ -76,6 +76,10 @@ namespace Intersect.GameObjects.Crafting
 
         public Guid Recipe { get; set; }
 
+        public bool EventOnly { get; set; }
+
+        public bool CraftAllDisabled { get; set; }
+
     }
 
     public class CraftIngredient

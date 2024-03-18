@@ -26,6 +26,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Utilities;
 using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
 using Intersect.Server.Entities.Combat;
+using Intersect.Network.Packets.Client;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -3923,6 +3924,22 @@ namespace Intersect.Server.Entities.Events
 
                 affectedPlayer?.UseSpell(spell, -1, affectedPlayer, ignoreVitals: true, instantCast: true);
             }
+        }
+
+        private static void ProcessCommand(
+          CloseCraftingTable command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !player.Online)
+            {
+                return;
+            }
+
+            player?.CloseCraftingTable();
         }
     }
 }

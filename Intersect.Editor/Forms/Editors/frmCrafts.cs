@@ -135,6 +135,9 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudExp.Value = mEditorItem.Experience;
 
+                chkDisableCraftAll.Checked = mEditorItem.CraftAllDisabled;
+                chkEventOnly.Checked = mEditorItem.EventOnly;
+
                 if (mEditorItem.ItemId != Guid.Empty && mEditorItem.Ingredients != null && mEditorItem.Ingredients.Count > 0)
                 {
                     int craftCost = 0;
@@ -616,6 +619,16 @@ namespace Intersect.Editor.Forms.Editors
 
             var exp = NpcExperienceCalculator.Calculate(npc);
             nudExp.Value = exp;
+        }
+
+        private void chkDisableCraftAll_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CraftAllDisabled = chkDisableCraftAll.Checked;
+        }
+
+        private void chkEventOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EventOnly = chkEventOnly.Checked;
         }
     }
 

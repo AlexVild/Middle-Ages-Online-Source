@@ -80,6 +80,39 @@ namespace Intersect.Utilities
 
             return elapsedString;
         }
+
+        public static string CooldownText(float remainingMs)
+        {
+            var secondsRemaining = (int)Math.Floor(remainingMs / 1000f);
+            var minutesRemaining = (int)Math.Floor(secondsRemaining / 60f);
+            var hoursRemaining = (int)Math.Floor(minutesRemaining / 60f);
+            var daysRemaining = (int)Math.Floor(hoursRemaining / 24f);
+
+            if (daysRemaining >= 1)
+            {
+                var hourRemainder = hoursRemaining - (daysRemaining * 24);
+                return $"{hoursRemaining.ToString("N0")}d{hourRemainder.ToString("N0")}h";
+            }
+
+            if (hoursRemaining >= 1)
+            {
+                var minuteRemainder = minutesRemaining - (hoursRemaining * 60);
+                return $"{hoursRemaining.ToString("N0")}h{minuteRemainder.ToString("N0")}m";
+            }
+
+            if (minutesRemaining >= 1)
+            {
+                var secondsRemainder = secondsRemaining - (minutesRemaining * 60);
+                return $"{minutesRemaining.ToString("N0")}m";
+            }
+
+            if (secondsRemaining > 10f)
+            {
+                return $"{secondsRemaining.ToString("N0")}s";
+            }
+
+            return $"{(remainingMs / 1000f).ToString("N1")}s";
+        }
     }
 
 }

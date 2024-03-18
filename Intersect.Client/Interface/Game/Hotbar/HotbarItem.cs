@@ -397,21 +397,11 @@ namespace Intersect.Client.Interface.Game.Hotbar
                         if (mIsFaded)
                         {
                             mCooldownLabel.IsHidden = false;
-                            var secondsRemaining =
+                            var msRemaining =
                                 (float) (Globals.Me.GetSpellCooldown(mSpellBookItem.SpellId) -
-                                         Timing.Global.Milliseconds) /
-                                1000f;
+                                         Timing.Global.Milliseconds);
 
-                            if (secondsRemaining > 10f)
-                            {
-                                mCooldownLabel.Text = Strings.Spells.cooldown.ToString(secondsRemaining.ToString("N0"));
-                            }
-                            else
-                            {
-                                mCooldownLabel.Text = Strings.Spells.cooldown.ToString(
-                                    secondsRemaining.ToString("N1").Replace(".", Strings.Numbers.dec)
-                                );
-                            }
+                            mCooldownLabel.Text = TextUtils.CooldownText(msRemaining);
                         }
                     }
                     else

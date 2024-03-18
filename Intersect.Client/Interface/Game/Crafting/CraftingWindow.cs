@@ -303,7 +303,7 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private void DetermineCraftAllVisibility(int quantity)
         {
-            if (quantity > 1)
+            if (quantity > 1 && CraftBase.TryGet(mCraftId, out var craft) && !craft.CraftAllDisabled)
             {
                 mCraftAll.Show();
                 mCraftAll.SetText(Strings.Crafting.craftall.ToString(quantity.ToString()));
@@ -400,6 +400,11 @@ namespace Intersect.Client.Interface.Game.Crafting
         //Craft all the items
         void craftAll_Clicked(Base sender, ClickedEventArgs arguments)
         {
+            if (CraftBase.TryGet(mCraftId, out var craft) && craft.CraftAllDisabled)
+            {
+                return;
+            }
+
             var amountToCraft = (int)mCraftAll.UserData;
             ToggleStartCrafting(amountToCraft);
         }

@@ -41,10 +41,14 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.grpInspiration = new DarkUI.Controls.DarkGroupBox();
+            this.btnUseBase = new DarkUI.Controls.DarkButton();
+            this.lblInspirationBase = new System.Windows.Forms.Label();
+            this.cmbNpcs = new DarkUI.Controls.DarkComboBox();
+            this.lblExp = new System.Windows.Forms.Label();
+            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbRecipe = new DarkUI.Controls.DarkComboBox();
             this.lblRecipe = new System.Windows.Forms.Label();
-            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblExp = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -79,26 +83,24 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpInspiration = new DarkUI.Controls.DarkGroupBox();
-            this.cmbNpcs = new DarkUI.Controls.DarkComboBox();
-            this.lblInspirationBase = new System.Windows.Forms.Label();
-            this.btnUseBase = new DarkUI.Controls.DarkButton();
+            this.chkDisableCraftAll = new DarkUI.Controls.DarkCheckBox();
+            this.chkEventOnly = new DarkUI.Controls.DarkCheckBox();
             this.grpCrafts.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            this.grpInspiration.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCraftQuantity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             this.grpIngredients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).BeginInit();
             this.toolStrip.SuspendLayout();
-            this.grpInspiration.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(322, 622);
+            this.btnCancel.Location = new System.Drawing.Point(327, 661);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(172, 27);
@@ -108,7 +110,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(147, 622);
+            this.btnSave.Location = new System.Drawing.Point(144, 661);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(169, 27);
@@ -173,12 +175,14 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // pnlContainer
             // 
+            this.pnlContainer.Controls.Add(this.chkEventOnly);
+            this.pnlContainer.Controls.Add(this.chkDisableCraftAll);
             this.pnlContainer.Controls.Add(this.btnDynamicRequirements);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpIngredients);
             this.pnlContainer.Location = new System.Drawing.Point(221, 36);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(281, 580);
+            this.pnlContainer.Size = new System.Drawing.Size(281, 619);
             this.pnlContainer.TabIndex = 31;
             this.pnlContainer.Visible = false;
             // 
@@ -217,6 +221,91 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
             // 
+            // grpInspiration
+            // 
+            this.grpInspiration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpInspiration.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInspiration.Controls.Add(this.btnUseBase);
+            this.grpInspiration.Controls.Add(this.lblInspirationBase);
+            this.grpInspiration.Controls.Add(this.cmbNpcs);
+            this.grpInspiration.Controls.Add(this.lblExp);
+            this.grpInspiration.Controls.Add(this.nudExp);
+            this.grpInspiration.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInspiration.Location = new System.Drawing.Point(11, 174);
+            this.grpInspiration.Name = "grpInspiration";
+            this.grpInspiration.Size = new System.Drawing.Size(256, 95);
+            this.grpInspiration.TabIndex = 51;
+            this.grpInspiration.TabStop = false;
+            this.grpInspiration.Text = "Inspiration Props";
+            // 
+            // btnUseBase
+            // 
+            this.btnUseBase.Location = new System.Drawing.Point(9, 69);
+            this.btnUseBase.Name = "btnUseBase";
+            this.btnUseBase.Padding = new System.Windows.Forms.Padding(5);
+            this.btnUseBase.Size = new System.Drawing.Size(233, 23);
+            this.btnUseBase.TabIndex = 54;
+            this.btnUseBase.Text = "Use NPC as Insp. EXP Base";
+            this.btnUseBase.Click += new System.EventHandler(this.btnUseBase_Click);
+            // 
+            // lblInspirationBase
+            // 
+            this.lblInspirationBase.AutoSize = true;
+            this.lblInspirationBase.Location = new System.Drawing.Point(6, 45);
+            this.lblInspirationBase.Name = "lblInspirationBase";
+            this.lblInspirationBase.Size = new System.Drawing.Size(34, 13);
+            this.lblInspirationBase.TabIndex = 53;
+            this.lblInspirationBase.Text = "Base:";
+            // 
+            // cmbNpcs
+            // 
+            this.cmbNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcs.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcs.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcs.DrawDropdownHoverOutline = false;
+            this.cmbNpcs.DrawFocusRectangle = false;
+            this.cmbNpcs.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcs.FormattingEnabled = true;
+            this.cmbNpcs.Location = new System.Drawing.Point(62, 42);
+            this.cmbNpcs.Name = "cmbNpcs";
+            this.cmbNpcs.Size = new System.Drawing.Size(180, 21);
+            this.cmbNpcs.TabIndex = 52;
+            this.cmbNpcs.Text = null;
+            this.cmbNpcs.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblExp
+            // 
+            this.lblExp.AutoSize = true;
+            this.lblExp.Location = new System.Drawing.Point(6, 18);
+            this.lblExp.Name = "lblExp";
+            this.lblExp.Size = new System.Drawing.Size(79, 13);
+            this.lblExp.TabIndex = 47;
+            this.lblExp.Text = "Inspiration Exp:";
+            // 
+            // nudExp
+            // 
+            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudExp.Location = new System.Drawing.Point(91, 16);
+            this.nudExp.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.nudExp.Name = "nudExp";
+            this.nudExp.Size = new System.Drawing.Size(151, 20);
+            this.nudExp.TabIndex = 48;
+            this.nudExp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
+            // 
             // cmbRecipe
             // 
             this.cmbRecipe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -246,35 +335,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblRecipe.Size = new System.Drawing.Size(41, 13);
             this.lblRecipe.TabIndex = 49;
             this.lblRecipe.Text = "Recipe";
-            // 
-            // nudExp
-            // 
-            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudExp.Location = new System.Drawing.Point(91, 16);
-            this.nudExp.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.nudExp.Name = "nudExp";
-            this.nudExp.Size = new System.Drawing.Size(151, 20);
-            this.nudExp.TabIndex = 48;
-            this.nudExp.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
-            // 
-            // lblExp
-            // 
-            this.lblExp.AutoSize = true;
-            this.lblExp.Location = new System.Drawing.Point(6, 18);
-            this.lblExp.Name = "lblExp";
-            this.lblExp.Size = new System.Drawing.Size(79, 13);
-            this.lblExp.TabIndex = 47;
-            this.lblExp.Text = "Inspiration Exp:";
             // 
             // btnAddFolder
             // 
@@ -726,61 +786,25 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpInspiration
+            // chkDisableCraftAll
             // 
-            this.grpInspiration.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpInspiration.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpInspiration.Controls.Add(this.btnUseBase);
-            this.grpInspiration.Controls.Add(this.lblInspirationBase);
-            this.grpInspiration.Controls.Add(this.cmbNpcs);
-            this.grpInspiration.Controls.Add(this.lblExp);
-            this.grpInspiration.Controls.Add(this.nudExp);
-            this.grpInspiration.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInspiration.Location = new System.Drawing.Point(11, 174);
-            this.grpInspiration.Name = "grpInspiration";
-            this.grpInspiration.Size = new System.Drawing.Size(256, 95);
-            this.grpInspiration.TabIndex = 51;
-            this.grpInspiration.TabStop = false;
-            this.grpInspiration.Text = "Inspiration Props";
+            this.chkDisableCraftAll.AutoSize = true;
+            this.chkDisableCraftAll.Location = new System.Drawing.Point(8, 580);
+            this.chkDisableCraftAll.Name = "chkDisableCraftAll";
+            this.chkDisableCraftAll.Size = new System.Drawing.Size(95, 17);
+            this.chkDisableCraftAll.TabIndex = 54;
+            this.chkDisableCraftAll.Text = "No \"Craft All\"?";
+            this.chkDisableCraftAll.CheckedChanged += new System.EventHandler(this.chkDisableCraftAll_CheckedChanged);
             // 
-            // cmbNpcs
+            // chkEventOnly
             // 
-            this.cmbNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpcs.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpcs.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpcs.DrawDropdownHoverOutline = false;
-            this.cmbNpcs.DrawFocusRectangle = false;
-            this.cmbNpcs.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpcs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpcs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpcs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpcs.FormattingEnabled = true;
-            this.cmbNpcs.Location = new System.Drawing.Point(62, 42);
-            this.cmbNpcs.Name = "cmbNpcs";
-            this.cmbNpcs.Size = new System.Drawing.Size(180, 21);
-            this.cmbNpcs.TabIndex = 52;
-            this.cmbNpcs.Text = null;
-            this.cmbNpcs.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblInspirationBase
-            // 
-            this.lblInspirationBase.AutoSize = true;
-            this.lblInspirationBase.Location = new System.Drawing.Point(6, 45);
-            this.lblInspirationBase.Name = "lblInspirationBase";
-            this.lblInspirationBase.Size = new System.Drawing.Size(34, 13);
-            this.lblInspirationBase.TabIndex = 53;
-            this.lblInspirationBase.Text = "Base:";
-            // 
-            // btnUseBase
-            // 
-            this.btnUseBase.Location = new System.Drawing.Point(9, 69);
-            this.btnUseBase.Name = "btnUseBase";
-            this.btnUseBase.Padding = new System.Windows.Forms.Padding(5);
-            this.btnUseBase.Size = new System.Drawing.Size(233, 23);
-            this.btnUseBase.TabIndex = 54;
-            this.btnUseBase.Text = "Use NPC as Insp. EXP Base";
-            this.btnUseBase.Click += new System.EventHandler(this.btnUseBase_Click);
+            this.chkEventOnly.AutoSize = true;
+            this.chkEventOnly.Location = new System.Drawing.Point(109, 580);
+            this.chkEventOnly.Name = "chkEventOnly";
+            this.chkEventOnly.Size = new System.Drawing.Size(84, 17);
+            this.chkEventOnly.TabIndex = 55;
+            this.chkEventOnly.Text = "Event Only?";
+            this.chkEventOnly.CheckedChanged += new System.EventHandler(this.chkEventOnly_CheckedChanged);
             // 
             // FrmCrafts
             // 
@@ -788,7 +812,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(508, 661);
+            this.ClientSize = new System.Drawing.Size(508, 700);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.pnlContainer);
@@ -807,8 +831,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCrafts.ResumeLayout(false);
             this.grpCrafts.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
+            this.pnlContainer.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            this.grpInspiration.ResumeLayout(false);
+            this.grpInspiration.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCraftQuantity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).EndInit();
@@ -817,8 +844,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpInspiration.ResumeLayout(false);
-            this.grpInspiration.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -876,5 +901,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnUseBase;
         private System.Windows.Forms.Label lblInspirationBase;
         private DarkComboBox cmbNpcs;
+        private DarkCheckBox chkEventOnly;
+        private DarkCheckBox chkDisableCraftAll;
     }
 }

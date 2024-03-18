@@ -370,17 +370,9 @@ namespace Intersect.Client.Interface.Game.Inventory
                     if (mIconCd)
                     {
                         mCooldownLabel.IsHidden = false;
-                        var secondsRemaining = (float) Globals.Me.ItemCdRemainder(mMySlot) / 1000f;
-                        if (secondsRemaining > 10f)
-                        {
-                            mCooldownLabel.Text = Strings.Inventory.cooldown.ToString(secondsRemaining.ToString("N0"));
-                        }
-                        else
-                        {
-                            mCooldownLabel.Text = Strings.Inventory.cooldown.ToString(
-                                secondsRemaining.ToString("N1").Replace(".", Strings.Numbers.dec)
-                            );
-                        }
+                        
+                        var msRemaining = (float) Globals.Me.ItemCdRemainder(mMySlot);
+                        mCooldownLabel.Text = TextUtils.CooldownText(msRemaining);
                     }
                 }
                 else

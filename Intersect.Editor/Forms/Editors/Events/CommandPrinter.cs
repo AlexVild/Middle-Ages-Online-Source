@@ -2214,5 +2214,10 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.CastSpellOn.ToString(SpellBase.GetName(command.SpellId), command.Self, command.PartyMembers, command.GuildMembers, command.InstanceMembers);
         }
+
+        private static string GetCommandText(CloseCraftingTable command, MapInstance map)
+        {
+            return "Close Crafting Table";
+        }
     }
 }
