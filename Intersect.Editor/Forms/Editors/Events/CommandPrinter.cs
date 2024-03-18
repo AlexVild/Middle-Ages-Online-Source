@@ -1628,43 +1628,43 @@ namespace Intersect.Editor.Forms.Editors.Events
                 
                 case Enums.VariableMods.DupGuildVar:
                     varvalue = Strings.EventCommandList.dupguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;
                 case Enums.VariableMods.AddGuildVar:
                     varvalue = Strings.EventCommandList.addguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;
                 case Enums.VariableMods.SubtractGuildVar:
                     varvalue = Strings.EventCommandList.subtractguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;
                 case Enums.VariableMods.MultiplyGuildVar:
                     varvalue = Strings.EventCommandList.multiplyguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;
                 case Enums.VariableMods.DivideGuildVar:
                     varvalue = Strings.EventCommandList.divideguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;
                 case Enums.VariableMods.LeftShiftGuildVar:
                     varvalue = Strings.EventCommandList.leftshiftguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;
                 case Enums.VariableMods.RightShiftGuildVar:
                     varvalue = Strings.EventCommandList.rightshiftguildvariable.ToString(
-                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;

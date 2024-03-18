@@ -1091,6 +1091,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbComparePlayerVar.Enabled = rdoVarComparePlayerVar.Checked;
             cmbCompareGlobalVar.Enabled = rdoVarCompareGlobalVar.Checked;
             cmbCompareInstanceVar.Enabled = rdoVarCompareInstanceVar.Checked;
+            cmbCompareGuildVar.Enabled = rdoVarCompareGuildVar.Checked;
         }
 
         private void UpdateVariableElements()
@@ -1373,7 +1374,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 comp.CompareVariableType = VariableTypes.InstanceVariable;
                 comp.CompareVariableId = InstanceVariableBase.IdFromList(cmbCompareInstanceVar.SelectedIndex);
             }
-            else if (rdoGuildVariable.Checked)
+            else if (rdoVarCompareGuildVar.Checked)
             {
                 comp.CompareVariableType = VariableTypes.GuildVariable;
                 comp.CompareVariableId = GuildVariableBase.IdFromList(cmbCompareGuildVar.SelectedIndex);

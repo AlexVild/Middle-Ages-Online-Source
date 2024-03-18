@@ -1097,6 +1097,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             UpdateNumericFormElements();
         }
+
+        private void rdoGuildVarNum_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
     }
 
 }
