@@ -308,9 +308,10 @@ namespace Intersect.Server.Entities
 
         public virtual bool IsCriticalHit(int critChance)
         {
-            if (StatusActive(StatusTypes.Accurate))
+            var accurateBonus = StatusCount(StatusTypes.Accurate);
+            if (accurateBonus > 0)
             {
-                critChance *= Options.Instance.CombatOpts.AccurateCritChanceMultiplier;
+                critChance *= (Options.Instance.CombatOpts.AccurateCritChanceMultiplier * accurateBonus);
             }
 
             if (Randomization.Next(1, 101) > critChance)

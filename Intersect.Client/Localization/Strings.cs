@@ -2136,17 +2136,17 @@ namespace Intersect.Client.Localization
                 {11, @"On-Hit"},
                 {12, @"Taunt"},
                 {13, @"Swift"},
-                {14, @"Accurate"},
+                {14, @"Accurate (stackable)"},
                 {15, @"Haste"},
                 {16, @"Slowed"},
                 {17, @"Confused"},
                 {18, @"Steady"},
-                {19, @"Attuned"},
+                {19, @"Attuned (stackable)"},
                 {20, @"Enfeebled"},
-                {21, @"EXP Boost"},
-                {22, @"Temporary Angler"},
-                {23, @"Temporary Lumberjack"},
-                {24, @"Temporary Prospector"},
+                {21, @"EXP Boost (stackable)"},
+                {22, @"Angler (stackable)"},
+                {23, @"Lumberjack (stackable)"},
+                {24, @"Prospector (stackable)"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

@@ -2414,9 +2414,12 @@ namespace Intersect.Client.Entities
                             harvestBonusValue += GetBonusEffect(harvestBonusEffect) * 0.01;
                         }
 
-                        if (StatusIsActive(HarvestBonusHelper.GetStatusTypeForResource(Globals.Me.HarvestingResource, out int bonus)))
+                        StatusTypes relevantStatus = HarvestBonusHelper.GetStatusTypeForResource(Globals.Me.HarvestingResource, out int bonus);
+
+                        var statusCount = StatusCount(relevantStatus);
+                        if (statusCount > 0)
                         {
-                            harvestBonusValue += bonus * 0.01;
+                            harvestBonusValue += (bonus * statusCount) * 0.01;
                         };
 
                         var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * harvestBonusValue);

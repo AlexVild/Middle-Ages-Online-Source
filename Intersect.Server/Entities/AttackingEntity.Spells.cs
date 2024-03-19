@@ -306,10 +306,12 @@ namespace Intersect.Server.Entities
         {
             var manaCost = spell.VitalCost[(int)Vitals.Mana];
             var healthCost = spell.VitalCost[(int)Vitals.Health];
-            if (StatusActive(StatusTypes.Attuned))
+
+            var attunementCount = StatusCount(StatusTypes.Attuned);
+            if (attunementCount > 0)
             {
-                manaCost = (int)Math.Floor(manaCost / Options.Instance.CombatOpts.AttunedStatusDividend);
-                healthCost = (int)Math.Floor(healthCost / Options.Instance.CombatOpts.AttunedStatusDividend);
+                manaCost = (int)Math.Floor(manaCost / (Options.Instance.CombatOpts.AttunedStatusDividend * attunementCount));
+                healthCost = (int)Math.Floor(healthCost / (Options.Instance.CombatOpts.AttunedStatusDividend * attunementCount));
             }
 
             if (manaCost > 0)

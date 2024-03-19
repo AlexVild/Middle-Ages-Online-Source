@@ -963,6 +963,7 @@ namespace Intersect.Server.Entities
                     time = (float)MathHelper.Clamp(time, maximumTime, float.MaxValue);
                 }
             }
+
             if (StatusActive(StatusTypes.Slowed))
             {
                 time *= Options.Instance.CombatOpts.SlowedModifier;
@@ -2179,14 +2180,12 @@ namespace Intersect.Server.Entities
 
         public bool StatusActive(StatusTypes status)
         {
-            foreach (var cachedStatus in CachedStatuses)
-            {
-                if (cachedStatus.Type == status)
-                {
-                    return true;
-                }
-            }
-            return false;
+            return CachedStatuses.Any(st => st.Type == status);
+        }
+
+        public int StatusCount(StatusTypes status)
+        {
+            return CachedStatuses.Where(st => st.Type == status).Count();
         }
 
         public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)

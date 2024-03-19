@@ -334,9 +334,10 @@ namespace Intersect.Server.Entities
 
             var cost = spell.VitalCost[(int)Vitals.Mana];
 
-            if (StatusActive(StatusTypes.Attuned))
+            var attunementCount = StatusCount(StatusTypes.Attuned);
+            if (attunementCount > 0)
             {
-                cost = (int)Math.Floor(cost / Options.Instance.CombatOpts.AttunedStatusDividend);
+                cost = (int)Math.Floor(cost / (Options.Instance.CombatOpts.AttunedStatusDividend * attunementCount));
             }
 
             if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))

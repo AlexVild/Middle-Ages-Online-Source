@@ -2121,6 +2121,11 @@ namespace Intersect.Client.Entities
             return statusFound;
         }
 
+        public int StatusCount(StatusTypes status)
+        {
+            return Status.Where(Status => Status.Type == status).Count();
+        }
+
         public Status GetStatus(Guid guid)
         {
             foreach (var status in Status)

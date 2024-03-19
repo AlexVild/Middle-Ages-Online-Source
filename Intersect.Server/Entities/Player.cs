@@ -1561,9 +1561,11 @@ namespace Intersect.Server.Entities
             if (opponent != null)
             {
                 bonusAmount = GetBonusEffectTotal(EffectType.EXP, 0);
-                if (StatusActive(StatusTypes.ExpBoost))
+
+                var expBoostAmt = StatusCount(StatusTypes.ExpBoost);
+                if (expBoostAmt > 0)
                 {
-                    bonusAmount += Options.Instance.CombatOpts.ExpBoostStatusPercent;
+                    bonusAmount += (Options.Instance.CombatOpts.ExpBoostStatusPercent * expBoostAmt);
                 }
             }
 
@@ -2005,9 +2007,13 @@ namespace Intersect.Server.Entities
                         {
                             harvestBonus += GetBonusEffectTotal(effectType) * 0.01;
                         }
-                        if (StatusActive(Intersect.Utilities.HarvestBonusHelper.GetStatusTypeForResource(resourceId, out int bonus)))
+
+                        StatusTypes relevantStatus = Intersect.Utilities.HarvestBonusHelper.GetStatusTypeForResource(resourceId, out int bonus);
+
+                        var statusCount = StatusCount(relevantStatus);
+                        if (statusCount > 0)
                         {
-                            harvestBonus += bonus * 0.01;
+                            harvestBonus += (bonus * statusCount) * 0.01;
                         };
 
                         harvestBonus = Math.Min(harvestBonus, 0.8);
