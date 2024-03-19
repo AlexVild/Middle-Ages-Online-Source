@@ -2985,7 +2985,7 @@ namespace Intersect.Server.Entities
                     break;
 
                 default:
-                    Log.Error($"Player {Name} requested an instance type that is not supported. Their map instance settings will not change.");
+                    Log.Error($"Player {Name} requested an instance type ({mapInstanceType}) that is not supported. Their map instance settings will not change.");
                     break;
             }
 
