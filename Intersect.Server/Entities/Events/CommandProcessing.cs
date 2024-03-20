@@ -862,19 +862,20 @@ namespace Intersect.Server.Entities.Events
             }
 
             player.NextInstanceLives = command.SharedLives - 1;
+            player.NextDungeonId = command.DungeonId;
             if (command.ChangeInstance)
             {
                 player.Warp(
                     command.MapId, command.X, command.Y,
                     command.Direction == WarpDirection.Retain ? (byte)player.Dir : (byte)(command.Direction - 1),
-                    false, 0, false, command.FadeOnWarp, command.InstanceType, dungeonId: command.DungeonId
+                    false, 0, false, command.FadeOnWarp, command.InstanceType
                 );
             } else
             {
                 player.Warp(
                     command.MapId, command.X, command.Y,
                     command.Direction == WarpDirection.Retain ? (byte)player.Dir : (byte)(command.Direction - 1),
-                    false, 0, false, command.FadeOnWarp, dungeonId: command.DungeonId
+                    false, 0, false, command.FadeOnWarp
                 );
             }
 

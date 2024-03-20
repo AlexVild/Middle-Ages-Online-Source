@@ -2254,12 +2254,7 @@ namespace Intersect.Client.Networking
         // Update future warp position packet
         public void HandlePacket(IPacketSender packetSender, UpdateFutureWarpPacket packet)
         {
-            Globals.futureWarpMapId = packet.NewMapId;
-            Globals.futureWarpX = packet.X;
-            Globals.futureWarpY = packet.Y;
-            Globals.futureWarpDir = packet.Dir;
-            Globals.futureWarpInstanceType = packet.InstanceType;
-            Globals.futureDungeonId = packet.DungeonId;
+            Globals.InformServerOfFade = true;
         }
 
         // Combo handling packet

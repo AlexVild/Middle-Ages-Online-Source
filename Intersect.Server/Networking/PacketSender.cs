@@ -2385,12 +2385,6 @@ namespace Intersect.Server.Networking
             client?.Send(new MapFadePacket(fadeIn));
         }
 
-        public static void SendUpdateFutureWarpPacket(Client client, Guid mapId, float x, float y, byte dir, MapInstanceType mapInstanceType, Guid? dungeonId)
-        {
-            var dId = dungeonId.GetValueOrDefault();
-            client?.Send(new UpdateFutureWarpPacket(mapId, x, y, dir, mapInstanceType, dId));
-        }
-
         //PasswordResetResultPacket
         public static void SendPasswordResetResult(Client client, bool result)
         {

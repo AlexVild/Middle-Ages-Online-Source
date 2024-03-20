@@ -1685,7 +1685,6 @@ namespace Intersect.Server.Entities
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
             bool fromLogin = false,
             bool forceInstanceChange = false, 
-            Guid? dungeonId = null,
             int instanceLives = 0
         )
         {

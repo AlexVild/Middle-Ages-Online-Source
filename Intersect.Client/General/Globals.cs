@@ -183,19 +183,6 @@ namespace Intersect.Client.General
 
         public static bool InMapTransition = false;
 
-        // Used for when a warp is using a transition - we want to transition them AFTER the client has "faded out"
-        public static Guid futureWarpMapId;
-
-        public static float futureWarpX;
-
-        public static float futureWarpY;
-
-        public static byte futureWarpDir;
-
-        public static MapInstanceType futureWarpInstanceType = MapInstanceType.NoChange;
-        
-        public static Guid futureDungeonId = Guid.Empty;
-
         public static Entity GetEntity(Guid id, EntityTypes type)
         {
             if (Entities.ContainsKey(id))
@@ -243,6 +230,8 @@ namespace Intersect.Client.General
         public static Dictionary<Guid, int> CachedNpcSpellScalar = new Dictionary<Guid, int>();
 
         public static HashSet<Guid> UsedPermabuffs = new HashSet<Guid>();
+
+        public static bool InformServerOfFade { get; set; }
 
         public static void RefreshNpcSpellScalars()
         {

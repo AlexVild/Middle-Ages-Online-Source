@@ -2257,6 +2257,21 @@ namespace Intersect.Server.Entities
             Warp(newMapId, newX, newY, (byte)Directions.Up, forceInstanceChange: force);
         }
 
+        [NotMapped, JsonIgnore]
+        public Guid FadeMapId { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public float FadeMapX { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public float FadeMapY { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public byte FadeMapDir { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public MapInstanceType FadeMapInstanceType { get; set; }
+
         public override void Warp(
             Guid newMapId,
             float newX,
@@ -2265,11 +2280,10 @@ namespace Intersect.Server.Entities
             bool adminWarp = false,
             byte zOverride = 0,
             bool mapSave = false,
-            bool fromWarpEvent = false,
+            bool fade = false,
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
             bool fromLogin = false,
             bool forceInstanceChange = false,
-            Guid? dungeonId = null,
             int instanceLives = 0
         )
         {
@@ -2279,12 +2293,18 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            if (fromWarpEvent && Options.DebugAllowMapFades)
+            if (fade && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
                 FadeWarp = true;
-                // TODO it's weird that the client cares where you're going? Store that in the server instead
-                PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType, dungeonId);
+                FadeMapId = newMapId;
+                FadeMapX = newX;
+                FadeMapY = newY;
+                FadeMapDir = newDir;
+                FadeMapInstanceType = mapInstanceType;
+
+                // Tell the client to let us know when it's done fading
+                SendPacket(new UpdateFutureWarpPacket());
                 return;
             }
             #endregion
@@ -2370,13 +2390,6 @@ namespace Intersect.Server.Entities
                 }
             }
             #endregion
-
-
-            if (dungeonId != null && dungeonId != Guid.Empty && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
-            {
-                var dId = dungeonId.GetValueOrDefault();
-                instanceController.TryInitializeOrJoinDungeon(dId, this);
-            }
 
             if (newMapId != MapId || mSentMap == false) // Player warped to a new map?
             {
@@ -8234,7 +8247,8 @@ namespace Intersect.Server.Entities
                     }
 
                     NextInstanceLives = warpAtt.SharedLives;
-                    Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType, dungeonId: warpAtt.DungeonId);
+                    NextDungeonId = warpAtt.DungeonId;
+                    Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType);
                 }
 
                 // Auto-pickup ammo & gold
@@ -9927,11 +9941,21 @@ namespace Intersect.Server.Entities
             if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var newInstController))
             {
                 newInstController.AddPlayer(this);
+
+                if (NextDungeonId != Guid.Empty)
+                {
+                    newInstController.TryInitializeOrJoinDungeon(NextDungeonId, this);
+                    NextDungeonId = Guid.Empty;
+                }
+
                 return true;
             }
 
             return false;
         }
+
+        [NotMapped, JsonIgnore]
+        public Guid NextDungeonId { get; set; }
 
         [NotMapped, JsonIgnore]
         public int NextInstanceLives { get; set; }

@@ -2717,7 +2717,7 @@ namespace Intersect.Server.Networking
             }
 
             player.FadeWarp = false;
-            player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir, false, 0, false, false, packet.InstanceType, dungeonId: packet.DungeonId);
+            player.Warp(player.FadeMapId, player.FadeMapX, player.FadeMapY, player.FadeMapDir, false, 0, false, false, player.FadeMapInstanceType);
         }
 
         // BankSortPacket

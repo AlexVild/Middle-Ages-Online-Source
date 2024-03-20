@@ -59,7 +59,7 @@ namespace Intersect.Client.Core
                 }
                 if (alertServerWhenFaded)
                 {
-                    Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir, Globals.futureWarpInstanceType, Globals.futureDungeonId);
+                    Networking.PacketSender.SendMapTransitionReady();
                 }
 
                 if (callback != null)
