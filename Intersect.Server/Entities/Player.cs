@@ -2357,6 +2357,8 @@ namespace Intersect.Server.Entities
                 {
                     _ = TryAddToInstanceController();
                 }
+
+                AddToInstanceDungeon(MapInstanceId);
             }
 
             // An instance of the map MUST exist. Otherwise, head to spawn.
@@ -9941,17 +9943,24 @@ namespace Intersect.Server.Entities
             if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var newInstController))
             {
                 newInstController.AddPlayer(this);
-
-                if (NextDungeonId != Guid.Empty)
-                {
-                    newInstController.TryInitializeOrJoinDungeon(NextDungeonId, this);
-                    NextDungeonId = Guid.Empty;
-                }
-
                 return true;
             }
 
             return false;
+        }
+
+        public void AddToInstanceDungeon(Guid instanceId)
+        {
+            if (NextDungeonId == Guid.Empty)
+            {
+                return;
+            }
+
+            if (InstanceProcessor.TryGetInstanceController(instanceId, out var newInstController))
+            {
+                newInstController.TryInitializeOrJoinDungeon(NextDungeonId, this);
+            }
+            NextDungeonId = Guid.Empty;
         }
 
         [NotMapped, JsonIgnore]

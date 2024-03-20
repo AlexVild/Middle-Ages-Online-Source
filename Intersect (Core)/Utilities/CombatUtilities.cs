@@ -261,9 +261,9 @@ namespace Intersect.Utilities
         }
 
 
-        const float HIGH_ARMOR_RES = 0.6f;
-        const float MED_ARMOR_RES = 0.45f;
-        const float LOW_ARMOR_RES = 0.20f;
+        const float HIGH_ARMOR_RES = 0.74f;
+        const float MED_ARMOR_RES = 0.58f;
+        const float LOW_ARMOR_RES = 0.32f;
         const float ARMOR_MULT = 0.45f;
         const float HELMET_MULT = 0.35f;
         const float BOOTS_MULT = 0.2f;
@@ -308,7 +308,8 @@ namespace Intersect.Utilities
             }
 
             var damageAtTier = TierToDamageFormula(equipmentTier);
-            var fullResPoints = damageAtTier * 5 * ArmorResistanceConstants[resistanceLevel];
+            var resistancePercent = ArmorResistanceConstants[resistanceLevel] + ((float)Math.Round((equipmentTier - 1) * 0.2f) / 100f);
+            var fullResPoints = damageAtTier * 5 * resistancePercent;
 
             return slotMultiplier * fullResPoints;
         }
