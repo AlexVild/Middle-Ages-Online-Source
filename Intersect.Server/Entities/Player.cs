@@ -1190,6 +1190,7 @@ namespace Intersect.Server.Entities
 
             if (InCurrentClanWar)
             {
+                LeaveTerritory();
                 LastTerritory = null;
                 TerritoryLeaveTimer = Timing.Global.MillisecondsUtc;
             }
@@ -1202,7 +1203,6 @@ namespace Intersect.Server.Entities
             DestroyVehicle();
             PlayDeathAnimation();
             EndDeathTimers();
-            LeaveTerritory();
 
             // Force a fade in in case the player died during fade out
             PacketSender.SendFadePacket(Client, true);
@@ -3000,7 +3000,7 @@ namespace Intersect.Server.Entities
                     break;
 
                 default:
-                    Log.Error($"Player {Name} requested an instance type ({mapInstanceType}) that is not supported. Their map instance settings will not change.");
+                    Log.Error($"Player {Name} requested an instance type ({mapInstanceType}) on map {Map?.Name} that is not supported. Their map instance settings will not change.");
                     break;
             }
 
