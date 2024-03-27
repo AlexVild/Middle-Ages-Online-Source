@@ -4386,117 +4386,19 @@ namespace Intersect.Server.Networking
 
             // If the players harvest info hasn't changed (new record or variable change), and
             // we have a cached value for the requested tool type
-           /* if (player.UseCachedHarvestInfo && player.CachedHarvestInfo.TryGetValue(packet.Tool, out var cachedInfo))
+            /* if (player.UseCachedHarvestInfo && player.CachedHarvestInfo.TryGetValue(packet.Tool, out var cachedInfo))
+             {
+                 player?.SendPacket(cachedInfo);
+                 return;
+             }*/
+            player.CacheHarvestInfo(packet.Tool);
+
+            if (!player.CachedHarvestInfo.TryGetValue(packet.Tool, out var info))
             {
-                player?.SendPacket(cachedInfo);
                 return;
-            }*/
-
-            var tool = packet.Tool;
-
-            var resources = ResourceBase.Lookup.Select(kv => (ResourceBase)kv.Value)
-                .Where(resource => resource.Tool == tool && !resource.DoNotRecord)
-                .ToArray();
-
-            var nonGroupedResource = resources.Where(resource => string.IsNullOrEmpty(resource.ResourceGroup));
-
-            // Manipulate group resources such that:
-            // A) They use a display name if one is given in the group
-            // B) They use a non-empty, non-tileset graphic if one is in the group
-            var groupedResources = resources
-                .GroupBy(resource => new { resource.ResourceGroup })
-                .Select((resourceGroupings) =>
-                {
-                    var resourceToReturn = resourceGroupings.First();
-                    if (!string.IsNullOrEmpty(resourceToReturn.DisplayName) 
-                        && !string.IsNullOrEmpty(resourceToReturn.Initial.Graphic)
-                        && !resourceToReturn.Initial.GraphicFromTileset)
-                    {
-                        return resourceToReturn;
-                    }
-
-                    var texture = resourceToReturn.Initial.Graphic;
-                    var displayName = resourceToReturn.Name;
-                    // Do any of the others have a display name to use?
-                    if (string.IsNullOrEmpty(resourceToReturn.DisplayName))
-                    {
-                        displayName = resourceGroupings.Where(resource => !string.IsNullOrEmpty(resource.DisplayName)).ToList().FirstOrDefault()?.DisplayName ?? resourceToReturn.Name;
-                    }
-                    if (string.IsNullOrEmpty(texture))
-                    {
-                        texture = resourceGroupings.Where(resource => !string.IsNullOrEmpty(resource.Initial.Graphic) && !resource.Initial.GraphicFromTileset).ToList().FirstOrDefault()?.Initial.Graphic ?? string.Empty;
-                        if (!string.IsNullOrEmpty(texture))
-                        {
-                            resourceToReturn.Initial.GraphicFromTileset = false;
-                        }
-                    }
-
-                    resourceToReturn.DisplayName = displayName;
-                    resourceToReturn.Initial.Graphic = texture;
-
-                    return resourceToReturn;
-                });
-
-            var validResources = new List<ResourceBase>();
-            validResources.AddRange(nonGroupedResource);
-            validResources.AddRange(groupedResources);
-            validResources = validResources
-                .GroupBy(resource => new { resource.Name })
-                .Select(resourceGroupings => resourceGroupings.First())
-                .OrderBy(resource =>
-                {
-                    var requiredTier = 0;
-                    var varName = "";
-                    // Axe
-                    if (resource.Tool == 0)
-                    {
-                        varName = "Woodcut Tier";
-                    }
-                    // Mining
-                    else if (resource.Tool == 1)
-                    {
-                        varName = "Mining Tier";
-                    }
-                    // Fishing
-                    else if (resource.Tool == 3)
-                    {
-                        varName = "Fishing Tier";
-                    }
-
-                    foreach (var requirement in resource.HarvestingRequirements?.Lists.ToArray())
-                    {
-                        if (requirement.Conditions.Count <= 0)
-                        {
-                            continue;
-                        }
-                        foreach (var condition in requirement.Conditions.OfType<VariableIsCondition>().ToArray())
-                        {
-                            var variable = player.GetVariable(condition.VariableId);
-
-                            if (variable.VariableName.Equals(varName) && condition.Comparison is IntegerVariableComparison intComparison)
-                            {
-                                requiredTier = Math.Max(requiredTier, (int)intComparison.Value);
-                            }
-                        }
-                    }
-
-                    return requiredTier;
-                })
-                .ThenBy(resource => resource.DisplayName ?? resource.Name)
-                .ToList();
-
-            var allInfo = new Network.Packets.Server.ResourceInfoPackets();
-
-            foreach (var resource in validResources)
-            {
-                var dto = new PlayerHarvestDTO(player, resource);
-                
-                allInfo.Packets.Add(dto.Packetize());
             }
 
-            player.CachedHarvestInfo[packet.Tool] = allInfo;
-            player.UseCachedHarvestInfo = true;
-            player?.SendPacket(allInfo);
+            player?.SendPacket(info);
         }
 
         public void HandlePacket(Client client, RequestLabelsPacket packet)

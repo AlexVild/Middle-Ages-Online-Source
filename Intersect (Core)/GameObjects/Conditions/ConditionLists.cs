@@ -70,6 +70,7 @@ namespace Intersect.GameObjects.Conditions
                 var npcKilled = new List<string>();
                 var records = new List<string>();
                 var weaponTracks = new List<string>();
+                var harvestLevels = new List<string>();
                 foreach (var condition in conditionList.Conditions)
                 {
                     if (condition.Type == ConditionTypes.ClassIs && condition is ClassIsCondition classIs)
@@ -190,6 +191,18 @@ namespace Intersect.GameObjects.Conditions
                             }
                         }
                     }
+                    if (condition.Type == ConditionTypes.ToolHarvestLevelsAt && condition is ToolHarvestLevelsAt harvestLevelCond)
+                    {
+                        if (condition.Negated)
+                        {
+                            harvestLevels.Add($"NOT {harvestLevelCond.GetPrettyString()}");
+                        }
+                        else
+                        {
+                            harvestLevels.Add($"{harvestLevelCond.GetPrettyString()}");
+                        }
+                    }
+
                     if (condition.Type == ConditionTypes.WeaponMasteryOf && condition is WeaponTypeIs weaponTypeIs)
                     {
                         if (condition.Negated)
@@ -243,9 +256,14 @@ namespace Intersect.GameObjects.Conditions
                     requirements.Add(string.Join(", ", records));
                 }
 
+                if (harvestLevels.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", harvestLevels));
+                }
+
                 if (weaponTracks.Count > 0)
                 {
-                    weaponTracks.Add(string.Join(", ", weaponTracks));
+                    requirements.Add(string.Join(", ", weaponTracks));
                 }
 
 

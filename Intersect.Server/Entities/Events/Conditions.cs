@@ -1306,6 +1306,28 @@ namespace Intersect.Server.Entities.Events
             return territory.GuildId != Guid.Empty && territory.GuildId == player.Guild?.Id;
         }
 
+        public static bool MeetsCondition(
+          ToolHarvestLevelsAt condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            player.CacheHarvestInfo(condition.Tool);
+
+            if (!player.CachedHarvestInfo.TryGetValue(condition.Tool, out var harvestInfo))
+            {
+                return false;
+            }
+
+            return harvestInfo.Packets.Where(pkt => pkt.HarvestLevel >= condition.Level).Count() >= condition.Amount;
+        }
+
     }
 
 }

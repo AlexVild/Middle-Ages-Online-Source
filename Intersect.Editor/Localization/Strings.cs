@@ -431,6 +431,12 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.GuildOwnsTerritory.ToString(TerritoryDescriptor.GetName(condition.TerritoryId));
         }
 
+        public static string GetEventConditionalDesc(ToolHarvestLevelsAt condition)
+        {
+            var toolName = Intersect.Options.ToolTypes.ElementAtOrDefault(condition.Tool);
+            return EventConditionDesc.HarvestLevelsAt.ToString(condition.Amount, toolName, condition.Level);
+        }
+
         public static string GetEventConditionalDesc(MapSpawnGroupIs condition)
         {
             if (condition.OrGreater && condition.OrLess)
@@ -2581,6 +2587,7 @@ Tick timer saved in server config.json.";
                 {53, @"Enhancement X on item Y..."},
                 {54, @"Clan War is active..."},
                 {55, @"Guild controls Territory X..."},
+                {56, @"Has X Harvest Levels at Y level..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2930,6 +2937,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString GuildOwnsTerritory = @"Player's Guild owns Territory: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HarvestLevelsAt = @"Player has {00} {01} harvest levels of at least {02}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapSpawnGroupIs = @"Map Spawn Group is {00}";

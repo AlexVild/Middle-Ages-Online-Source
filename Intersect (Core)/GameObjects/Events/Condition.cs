@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Intersect.Enums;
 
@@ -114,6 +115,8 @@ namespace Intersect.GameObjects.Events
         ClanWarsActive,
 
         GuildOwnsTerritory,
+
+        ToolHarvestLevelsAt,
 
     }
 
@@ -747,6 +750,23 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.GuildOwnsTerritory;
 
         public Guid TerritoryId { get; set; }
+    }
+
+    public class ToolHarvestLevelsAt : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.ToolHarvestLevelsAt;
+
+        public int Tool { get; set; }
+
+        public int Level { get; set; }
+
+        public int Amount { get; set; }
+
+        public string GetPrettyString()
+        {
+            var toolName = Options.ToolTypes.ElementAtOrDefault(Level);
+            return $"{Amount} {toolName} Harvest Levels at {Level}+";
+        }
     }
 
     public class VariableCompaison

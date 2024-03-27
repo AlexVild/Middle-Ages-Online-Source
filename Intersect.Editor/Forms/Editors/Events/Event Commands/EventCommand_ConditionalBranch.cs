@@ -289,6 +289,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbTerritories.Items.Clear();
             cmbTerritories.Items.AddRange(TerritoryDescriptor.Names);
 
+            cmbTools.Items.Clear();
+            cmbTools.Items.AddRange(Options.ToolTypes.ToArray());
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -604,6 +607,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new GuildOwnsTerritory();
 
                     break;
+
+                case ConditionTypes.ToolHarvestLevelsAt:
+                    Condition = new ToolHarvestLevelsAt();
+                    if (cmbTools.Items.Count > 0)
+                    {
+                        cmbTools.SelectedIndex = 0;
+                    }
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -646,6 +658,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpSpawnGroup.Hide();
             grpEnhancementOn.Hide();
             grpTerritory.Hide();
+            grpHarvestLvl.Hide();
 
             switch (type)
             {
@@ -962,6 +975,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     grpTerritory.Show();
 
                     break;
+
+                case ConditionTypes.ToolHarvestLevelsAt:
+                    grpHarvestLvl.Show();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1977,6 +1996,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbTerritories.SelectedIndex = TerritoryDescriptor.ListIndex(condition.TerritoryId);
         }
 
+        private void SetupFormValues(ToolHarvestLevelsAt condition)
+        {
+            cmbTools.SelectedIndex = condition?.Tool ?? 0;
+            nudHarvestLevel.Value = condition?.Level ?? 0;
+            nudHarvestAmt.Value = condition?.Amount ?? 0;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2369,6 +2395,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(GuildOwnsTerritory condition)
         {
             condition.TerritoryId = TerritoryDescriptor.IdFromList(cmbTerritories.SelectedIndex);
+        }
+
+        private void SaveFormValues(ToolHarvestLevelsAt condition)
+        {
+            condition.Tool = cmbTools.SelectedIndex;
+            condition.Level = (int)nudHarvestLevel.Value;
+            condition.Amount = (int)nudHarvestAmt.Value;
         }
         #endregion
 
