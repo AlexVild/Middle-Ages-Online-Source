@@ -13,7 +13,7 @@ using Intersect.Client.Interface.Game;
 using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.Interface.Menu;
 using Intersect.Client.Interface.Shared.Errors;
-
+using Intersect.Utilities;
 using Base = Intersect.Client.Framework.Gwen.Renderer.Base;
 
 namespace Intersect.Client.Interface
@@ -157,7 +157,16 @@ namespace Intersect.Client.Interface
                 return false;
             }
 
-            return FocusElements.Any(t => t.MouseInputEnabled && (t?.HasFocus ?? false)) || InputBlockingElements.Any(t => t?.IsHidden == false);
+            return FocusElements.Any(t => t.MouseInputEnabled && (t?.HasFocus ?? false)) || InputBlockingElements.Any(t => t?.IsHidden == false) || Timing.Global.Milliseconds < Globals.LastDialogClosed;
+        }
+
+        /// <summary>
+        /// This is used to provide a delay between wrapping up some menu and gaining control of your character. A cheat, shit way to skirt around ping issues when events are firing that
+        /// don't necessarily need to hold the player but look bad if the player is moving while they're going
+        /// </summary>
+        public static void EventWindowClosed()
+        {
+            Globals.LastDialogClosed = Timing.Global.Milliseconds + 125;
         }
 
         #endregion

@@ -60,6 +60,8 @@ namespace Intersect.Client.Interface.Game
 
         public new string Name = "InputBox";
 
+        public bool mHasFocused = false;
+
         public InputBox(
             string title,
             string prompt,
@@ -87,25 +89,18 @@ namespace Intersect.Client.Interface.Game
 
             mMyWindow = new WindowControl(parent, title, modal, "InputBox");
             mMyWindow.BeforeDraw += _myWindow_BeforeDraw;
+            mMyWindow.AfterDraw += MMyWindow_AfterDraw;
             mMyWindow.DisableResizing();
 
             mNumericTextboxBg = new ImagePanel(mMyWindow, "Textbox");
             mNumericTextbox = new TextBoxNumeric(mNumericTextboxBg, "TextboxText");
             mNumericTextbox.SubmitPressed += TextBox_SubmitPressed;
             mNumericTextbox.Text = quantity.ToString();
-            if (inputtype == InputType.NumericInput)
-            {
-                mNumericTextbox.Focus();
-            }
 
             mTextboxBg = new ImagePanel(mMyWindow, "Textbox");
             mTextbox = new TextBox(mTextboxBg, "TextboxText");
             mTextbox.SubmitPressed += TextBox_SubmitPressed;
-            if (inputtype == InputType.TextInput)
-            {
-                mTextbox.Focus();
-            }
-
+            
             if (inputtype != InputType.NumericInput)
             {
                 mNumericTextboxBg.IsHidden = true;
@@ -132,9 +127,33 @@ namespace Intersect.Client.Interface.Game
             Interface.InputBlockingElements.Add(this);
         }
 
+        private void MMyWindow_AfterDraw(Base sender, EventArgs arguments)
+        {
+            if (mHasFocused)
+            {
+                return;
+            }
+
+            Focus();
+        }
+
         private void TextBox_SubmitPressed(Base sender, EventArgs arguments)
         {
             SubmitInput();
+        }
+
+        public void Focus()
+        {
+            if (mInputType == InputType.NumericInput)
+            {
+                mNumericTextbox.SelectAllOnFocus = true;
+                mNumericTextbox.Focus();
+            }
+            if (mInputType == InputType.TextInput)
+            {
+                mTextbox.Focus();
+            }
+            mHasFocused = true;
         }
 
         private void _myWindow_BeforeDraw(Base sender, EventArgs arguments)
@@ -250,6 +269,7 @@ namespace Intersect.Client.Interface.Game
 
         public void Dispose()
         {
+            mHasFocused = false;
             mMyWindow.Close();
             mMyWindow.Parent.RemoveChild(mMyWindow, false);
             mMyWindow.Dispose();

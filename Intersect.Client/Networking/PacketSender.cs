@@ -117,7 +117,7 @@ namespace Intersect.Client.Networking
         public static void SendEventResponse(byte response, Dialog ed)
         {
             Globals.EventDialogs.Remove(ed);
-            Globals.LastDialogClosed = Timing.Global.Milliseconds + 100;
+            Interface.Interface.EventWindowClosed();
             Network.SendPacket(new EventResponsePacket(ed.EventId, response));
         }
 
@@ -128,6 +128,7 @@ namespace Intersect.Client.Networking
                     (Guid) ((InputBox) sender).UserData, (int) ((InputBox) sender).Value, ((InputBox) sender).TextValue
                 )
             );
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendEventInputVariableCancel(object sender, EventArgs e)
@@ -138,6 +139,7 @@ namespace Intersect.Client.Networking
                     true
                 )
             );
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendCreateAccount(string username, string password, string email)
@@ -235,6 +237,7 @@ namespace Intersect.Client.Networking
         public static void SendCloseQuestBoard()
         {
             Network.SendPacket(new CloseQuestBoardPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         //Admin Action Packet Should be Here
@@ -257,6 +260,7 @@ namespace Intersect.Client.Networking
         public static void SendCloseShop()
         {
             Network.SendPacket(new CloseShopPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendDepositItem(int slot, int amount)
@@ -277,11 +281,13 @@ namespace Intersect.Client.Networking
         public static void SendCloseBank()
         {
             Network.SendPacket(new CloseBankPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendCloseCrafting()
         {
             Network.SendPacket(new CloseCraftingPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendMoveBankItems(int slot1, int slot2)
@@ -322,11 +328,13 @@ namespace Intersect.Client.Networking
         public static void SendAcceptQuest(Guid questId, bool fromQuestBoard)
         {
             Network.SendPacket(new QuestResponsePacket(questId, true, fromQuestBoard));
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendDeclineQuest(Guid questId, bool fromQuestBoard)
         {
             Network.SendPacket(new QuestResponsePacket(questId, false, fromQuestBoard));
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendAbandonQuest(Guid questId)
@@ -578,6 +586,7 @@ namespace Intersect.Client.Networking
         public static void SendCloseLeaderboardPacket()
         {
             Network.SendPacket(new CloseLeaderboardPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendLootUpdateRequest(LootUpdateType type, int idx = -1)
@@ -690,6 +699,7 @@ namespace Intersect.Client.Networking
         public static void SendCloseDeconstructorPacket()
         {
             Network.SendPacket(new CloseDeconstructorPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendRequestCreateFuelPacket(Dictionary<int, int> invQuantities)
@@ -705,6 +715,7 @@ namespace Intersect.Client.Networking
         public static void SendCloseEnhancementPacket()
         {
             Network.SendPacket(new CloseEnhancementPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendApplyEnhancementPacket(Guid[] enhancementIds)
@@ -720,6 +731,7 @@ namespace Intersect.Client.Networking
         public static void SendCloseUpgradeStation()
         {
             Network.SendPacket(new CloseUpgradeStationPacket());
+            Interface.Interface.EventWindowClosed();
         }
 
         public static void SendRequestUpgrade(Guid craftId)

@@ -12,10 +12,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.BestiaryUi
 {

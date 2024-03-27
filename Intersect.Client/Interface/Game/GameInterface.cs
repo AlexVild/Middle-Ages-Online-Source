@@ -64,7 +64,7 @@ namespace Intersect.Client.Interface.Game
 
         private DebugMenu mDebugMenu;
 
-        private EventWindow mEventWindow;
+        public EventWindow EventWindow;
 
         private HarvestBonusWindow mHarvestBonusWindow;
 
@@ -158,7 +158,7 @@ namespace Intersect.Client.Interface.Game
             }
 
             mTimerWindow = new TimerWindow(GameCanvas);
-            mEventWindow = new EventWindow(GameCanvas);
+            EventWindow = new EventWindow(GameCanvas);
             mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
             mDebugMenu = new DebugMenu(GameCanvas);
             mMapItemWindow = new MapItemWindow(GameCanvas);
@@ -490,7 +490,7 @@ namespace Intersect.Client.Interface.Game
                 }
             }
 
-            mEventWindow?.Update();
+            EventWindow?.Update();
 
             //Admin window update
             if (mShouldOpenAdminWindow)
@@ -826,6 +826,8 @@ namespace Intersect.Client.Interface.Game
         public ClanWarCompletionWindow ClanWarCompletionWindow;
         private CharacterPanelType _CurrentCharPanel;
 
+        public EventWindow EventDialog { get; set; }
+
         public CharacterPanelType CurrentCharacterPanel
         {
             get => !GameMenu?.CharacterWindowOpen() ?? true ? CharacterPanelType.None : _CurrentCharPanel;
@@ -892,7 +894,7 @@ namespace Intersect.Client.Interface.Game
 
         public void SetDialogResponses(string response1, string response2, string response3, string response4)
         {
-            mEventWindow.SetResponses(response1, response2, response3, response4);
+            EventWindow.SetResponses(response1, response2, response3, response4);
         }
 
         public void HideWeaponPicker()

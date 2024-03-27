@@ -9,6 +9,7 @@ using Intersect.Client.Interface.Game;
 using Intersect.Client.Maps;
 using Intersect.Client.Networking;
 using Intersect.Logging;
+using Intersect.Updater;
 using Intersect.Utilities;
 using static Intersect.Client.Core.Fade;
 
@@ -112,21 +113,49 @@ namespace Intersect.Client.Core
                             }
                         }
                         catch { }
-
-                        try
-                        {
-                            var eventWindow = (EventWindow)Interface.Interface.InputBlockingElements[i];
-                            if (eventWindow != null && !eventWindow.IsHidden && Globals.EventDialogs.Count > 0)
-                            {
-                                eventWindow.EventResponse1_Clicked(null, null);
-                                canFocusChat = false;
-
-                                break;
-                            }
-                        }
-                        catch { }
                     }
 
+                    if (TryEventDialogResponse(0))
+                    {
+                        return;
+                    }
+
+                    break;
+
+                case Keys.Space:
+                    if (TryEventDialogResponse(0))
+                    {
+                        return;
+                    }
+                    break;
+
+                case Keys.NumPad1:
+                case Keys.D1:
+                    if (TryEventDialogResponse(0))
+                    {
+                        return;
+                    }
+                    break;
+                case Keys.NumPad2:
+                case Keys.D2:
+                    if (TryEventDialogResponse(1))
+                    {
+                        return;
+                    }
+                    break;
+                case Keys.NumPad3:
+                case Keys.D3:
+                    if (TryEventDialogResponse(2))
+                    {
+                        return;
+                    }
+                    break;
+                case Keys.NumPad4:
+                case Keys.D4:
+                    if (TryEventDialogResponse(3))
+                    {
+                        return;
+                    }
                     break;
             }
 
@@ -366,6 +395,44 @@ namespace Intersect.Client.Core
                         }
                     }
                 );
+        }
+
+        public static bool TryEventDialogResponse(int response)
+        {
+            try
+            {
+                var eventWindow = Interface.Interface.GameUi?.EventWindow;
+                if (eventWindow == null || eventWindow.IsHidden || Globals.EventDialogs.Count <= 0)
+                {
+                    return false;
+                }
+
+                eventWindow.SkipTypewriting();
+
+                if (!eventWindow.ResponseAvailable(response))
+                {
+                    return false;
+                }
+
+                switch (response)
+                {
+                    case 0:
+                        eventWindow.EventResponse1_Clicked(null, null);
+                        return true;
+                    case 1:
+                        eventWindow.EventResponse2_Clicked(null, null);
+                        return true;
+                    case 2:
+                        eventWindow.EventResponse3_Clicked(null, null);
+                        return true;
+                    case 3:
+                        eventWindow.EventResponse4_Clicked(null, null);
+                        return true;
+                }
+            }
+            catch { }
+
+            return false;
         }
 
         public static void OnKeyReleased(Keys key)

@@ -283,6 +283,11 @@ namespace Intersect.Client.Interface.Game
                     }
                     else
                     {
+                        // Making room for the new [numbers] next to selections
+                        mEventResponse1.MoveBy(-12, 0);
+                        mEventResponse2.MoveBy(-12, 0);
+                        mEventResponse3.MoveBy(-12, 0);
+                        mEventResponse4.MoveBy(-12, 0);
                         ShowHideResponse(mEventResponse1, 0);
                         ShowHideResponse(mEventResponse2, 1);
                         ShowHideResponse(mEventResponse3, 2);
@@ -314,14 +319,16 @@ namespace Intersect.Client.Interface.Game
                         ShowHideResponse(mEventResponse3, 2);
                         ShowHideResponse(mEventResponse4, 3);
 
-                        mEventResponse1.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
-                        mEventResponse2.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
-                        mEventResponse3.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
-                        mEventResponse4.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
+                        mEventResponse1.IsDisabled = UnderResponseDisplayDelay;
+                        mEventResponse2.IsDisabled = UnderResponseDisplayDelay;
+                        mEventResponse3.IsDisabled = UnderResponseDisplayDelay;
+                        mEventResponse4.IsDisabled = UnderResponseDisplayDelay;
                     }
                 }
             }
         }
+
+        public bool UnderResponseDisplayDelay => Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
 
         public void ShowText(ScrollControl dialogArea, RichLabel label, Label labelTemplate, string prompt)
         {
@@ -348,7 +355,7 @@ namespace Intersect.Client.Interface.Game
             if (Responses.Count >= idx + 1 && !string.IsNullOrEmpty(Responses[idx].Response))
             {
                 responseButton.Show();
-                responseButton.SetText(Responses[idx].Response);
+                responseButton.SetText($"[{idx + 1}] {Responses[idx].Response}");
                 responseButton.UserData = Responses[idx].Index;
             }
             else
@@ -357,8 +364,30 @@ namespace Intersect.Client.Interface.Game
             }
         }
 
+        public bool ResponseAvailable(int responseIdx)
+        {
+            if (UnderResponseDisplayDelay)
+            {
+                return false;
+            }
+
+            switch (responseIdx)
+            {
+                case 0:
+                    return mEventResponse1.IsVisible;
+                case 1:
+                    return mEventResponse2.IsVisible;
+                case 2:
+                    return mEventResponse3.IsVisible;
+                case 3:
+                    return mEventResponse4.IsVisible;
+                default:
+                    return false;
+            }
+        }
+
         //Input Handlers
-        void EventResponse4_Clicked(Base sender, ClickedEventArgs arguments)
+        public void EventResponse4_Clicked(Base sender, ClickedEventArgs arguments)
         {
             var ed = Globals.EventDialogs[0];
             if (ed.ResponseSent != 0)
@@ -373,7 +402,7 @@ namespace Intersect.Client.Interface.Game
             base.Hide();
         }
 
-        void EventResponse3_Clicked(Base sender, ClickedEventArgs arguments)
+        public void EventResponse3_Clicked(Base sender, ClickedEventArgs arguments)
         {
             var ed = Globals.EventDialogs[0];
             if (ed.ResponseSent != 0)
@@ -388,7 +417,7 @@ namespace Intersect.Client.Interface.Game
             base.Hide();
         }
 
-        void EventResponse2_Clicked(Base sender, ClickedEventArgs arguments)
+        public void EventResponse2_Clicked(Base sender, ClickedEventArgs arguments)
         {
             var ed = Globals.EventDialogs[0];
             if (ed.ResponseSent != 0)
