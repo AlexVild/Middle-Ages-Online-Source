@@ -1822,6 +1822,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (PvpHide)
+            {
+                return;
+            }
+
             if (IsDead)
             {
                 return;
@@ -1953,6 +1958,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (PvpHide)
+            {
+                return;
+            }
+
             if (CurrentMap == default)
             {
                 return;
@@ -2024,6 +2034,8 @@ namespace Intersect.Client.Entities
             }
         }
 
+        public bool PvpHide => this is Player && Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight;
+
         //
         public void DrawTarget(int priority)
         {
@@ -2044,7 +2056,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (this is Player && Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight)
+            if (PvpHide)
             {
                 return;
             }
@@ -2082,6 +2094,11 @@ namespace Intersect.Client.Entities
         public void AddChatBubble(string text, ChatBubbleType type)
         {
             if (string.IsNullOrEmpty(text))
+            {
+                return;
+            }
+
+            if (PvpHide)
             {
                 return;
             }
@@ -2779,6 +2796,11 @@ namespace Intersect.Client.Entities
                 return false;
             }
 
+            if (PvpHide)
+            {
+                return false;
+            }
+
             if (!friendly && !Globals.Database.HostileTileMarkers)
             {
                 return false;
@@ -3307,8 +3329,13 @@ namespace Intersect.Client.Entities
             );
         }
 
-        private static void DrawSpellIcon(int x, int y, string icon, Color color)
+        private void DrawSpellIcon(int x, int y, string icon, Color color)
         {
+            if (PvpHide)
+            {
+                return;
+            }
+
             var backgroundTex = Globals.ContentManager.GetTexture(TextureType.Misc, "spellcast.png");
             var texture = Globals.ContentManager.GetTexture(TextureType.Spell, icon);
             var iconWidth = 40;
@@ -3331,7 +3358,7 @@ namespace Intersect.Client.Entities
 
         public void DrawStatuses()
         {
-            if (Texture == null || (IsStealthed() && !IsAllyOf(Globals.Me)))
+            if (Texture == null || (IsStealthed() && !IsAllyOf(Globals.Me)) || PvpHide)
             {
                 return;
             }
