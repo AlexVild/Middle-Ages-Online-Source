@@ -925,8 +925,13 @@ namespace Intersect.Server.Entities
             base.TakeDamage(attacker, damage, vital);
         }
 
-        public override void HandleSpellProccing(Entity enemy)
+        public override void HandleOffensiveSpellProccing(Entity enemy)
         {
+            if (IsDead() || enemy.IsDead())
+            {
+                return;
+            }
+
             if (!TryGetEquippedItem(Options.WeaponIndex, out var weapon))
             {
                 return;
@@ -940,29 +945,80 @@ namespace Intersect.Server.Entities
 
             var spellProcs = ItemInstanceHelper.GetSpellProcs(weaponDesc, weapon.ItemProperties.SpellEnhancements);
 
+            var success = false;
             foreach (var spellProc in spellProcs)
             {
-                var procSpell = SpellBase.Get(spellProc.Key);
-                var affinity = GetBonusEffectTotal(EffectType.Affinity, 0);
+                success = success || TryProcSpell(spellProc.Key, spellProc.Value, enemy);
+            }
+            
+            if (success)
+            {
+                PacketSender.SendActionMsg(this, "PROC!", CustomColors.Combat.MagicDamage);
+            }
+            base.HandleOffensiveSpellProccing(enemy);
+        }
 
-                var roll = Randomization.Next(0, 100001);
+        public bool TryProcSpell(Guid spellId, float chance, Entity enemy)
+        {
+            var procSpell = SpellBase.Get(spellId);
+            var affinity = GetBonusEffectTotal(EffectType.Affinity, 0);
 
-                if (roll >= ((spellProc.Value * 1000) + (affinity * 1000)))
+            var roll = Randomization.Next(0, 100001);
+
+            if (roll >= ((chance * 1000) + (affinity * 1000)))
+            {
+                return false;
+            }
+
+            if (procSpell.Combat.TargetType == SpellTargetTypes.Self)
+            {
+                UseSpell(procSpell, -1, this, true, true, (byte)Dir, this, true);
+            }
+            else
+            {
+                HandleAoESpell(spellId, procSpell.Combat?.HitRadius ?? 0, enemy.MapId, enemy.X, enemy.Y, null, true);
+            }
+            return true;
+        }
+
+        public override void HandleDefensiveSpellProccing(Entity attacker)
+        {
+            if (IsDead() || attacker.IsDead())
+            {
+                return;
+            }
+
+            var spellProcs = new Dictionary<Guid, float>();
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (i == Options.WeaponIndex || !TryGetEquippedItem(i, out var equipment) || equipment == null || equipment.Descriptor == null)
                 {
                     continue;
                 }
 
-                if (procSpell.Combat.TargetType == SpellTargetTypes.Self)
+                var newProcs = ItemInstanceHelper.GetSpellProcs(equipment.Descriptor, equipment.ItemProperties.SpellEnhancements);
+                if (newProcs.Count == 0)
                 {
-                    UseSpell(procSpell, -1, this, true, true, (byte)Dir, this, true);
+                    continue;
                 }
-                else
+                
+                foreach (var proc in newProcs)
                 {
-                    HandleAoESpell(spellProc.Key, procSpell.Combat?.HitRadius ?? 0, enemy.MapId, enemy.X, enemy.Y, enemy, true);
+                    spellProcs[proc.Key] = proc.Value;
                 }
             }
-            
-            base.HandleSpellProccing(enemy);
+
+            var success = false;
+            foreach (var spellProc in spellProcs)
+            {
+                success = success || TryProcSpell(spellProc.Key, spellProc.Value, attacker);
+            }
+
+            if (success)
+            {
+                PacketSender.SendActionMsg(this, "PROC!", CustomColors.Combat.MagicDamage);
+            }
+            base.HandleDefensiveSpellProccing(attacker);
         }
     }
 }

@@ -757,7 +757,7 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        SpellAttack(entity, spellBase, (sbyte)Directions.Up, null); //Handle damage
+                        SpellAttack(entity, spellBase, (sbyte)Directions.Up, null, ignoreEvasion); //Handle damage
                         SendSpellHitAnimation(spellBase, entity, entity.Id);
                         entitiesHit++;
                     }

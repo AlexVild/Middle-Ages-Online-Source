@@ -446,16 +446,24 @@ namespace Intersect.Server.Entities
             }
             var damageWasDealt = damage != 0 || manaDamage != 0;
 
-            if (damageWasDealt)
+            // Only handle procs if auto-attack/weapon spell
+            if (damageWasDealt && (spell?.WeaponSpell ?? true))
             {
-                HandleSpellProccing(enemy);
+                HandleOffensiveSpellProccing(enemy);
             }
 
             return damageWasDealt;
         }
 
-        public virtual void HandleSpellProccing(Entity enemy)
+        public virtual void HandleOffensiveSpellProccing(Entity enemy)
         {
+            // Non-players don't yet have procs
+            return;
+        }
+
+        public virtual void HandleDefensiveSpellProccing(Entity attacker)
+        {
+            // Non-players don't yet have procs
             return;
         }
 
@@ -618,6 +626,10 @@ namespace Intersect.Server.Entities
         public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             DamageTaken.Invoke(attacker, damage);
+            if (damage > 0)
+            {
+                HandleDefensiveSpellProccing(attacker);
+            }
             base.TakeDamage(attacker, damage, vital);
         }
 
