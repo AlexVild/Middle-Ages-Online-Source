@@ -63,9 +63,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 AddDivider();
                 SetupEnhancementThresholdBreakdown();
                 AddDivider();
-                SetupProcSpellInfo();
-                AddDivider();
             }
+
+            SetupProcSpellInfo();
+            AddDivider();
 
             if (DisplayEffectBonuses())
             {
