@@ -2053,7 +2053,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (damage <= 0 || target == null)
+            if (damage <= 0 || target == null || target.IsDisposed || target.IsDead())
             {
                 return false;
             }
@@ -2090,7 +2090,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (damage <= 0 || target == null)
+            if (damage <= 0 || target == null || target.IsDisposed || target.IsDead())
             {
                 return false;
             }

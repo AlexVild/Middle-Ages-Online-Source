@@ -529,7 +529,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (damage <= 0 || target == null || target is Resource)
+            if (damage <= 0 || target == null || target is Resource || target.IsDisposed || target.IsDead())
             {
                 return false;
             }
@@ -568,7 +568,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (damage <= 0 || target == null || target is Resource)
+            if (damage <= 0 || target == null || target is Resource || target.IsDisposed || target.IsDead())
             {
                 return false;
             }
