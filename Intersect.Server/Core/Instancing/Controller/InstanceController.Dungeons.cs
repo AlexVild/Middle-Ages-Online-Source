@@ -38,7 +38,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             Logging.Log.Debug($"Attempting dungeon initialization...");
             if (Dungeon.State != DungeonState.Null)
             {
-                Logging.Log.Debug($"Initialization failed, dungeon {DungeonDescriptor.GetName(dungeonId)} already on instance {InstanceId} initialized! State is {Dungeon.State}");
+                Logging.Log.Error($"Dungeon Initialization failed, dungeon {DungeonDescriptor.GetName(dungeonId)} already on instance {InstanceId} initialized! State is {Dungeon.State}");
                 return;
             }
             Dungeon = new Dungeon(dungeonId);
@@ -46,7 +46,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             DungeonDescriptor = DungeonDescriptor.Get(dungeonId);
             if (DungeonDescriptor == default)
             {
-                Logging.Log.Debug($"Initialization failed, dungeon descriptor not found for dungeonId {dungeonId}!");
+                Logging.Log.Error($"Dungeon Initialization failed, dungeon descriptor not found for dungeonId {dungeonId}!");
                 return;
             }
 
@@ -58,6 +58,7 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             if (!DungeonReady && DungeonDescriptor != default)
             {
+                Logging.Log.Error($"Tried to start a dungeon for {player.Name}, but failed. State is {DungeonState} and descriptor name is {DungeonDescriptor?.Name}");
                 return;
             }
 

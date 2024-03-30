@@ -9955,6 +9955,7 @@ namespace Intersect.Server.Entities
         {
             if (NextDungeonId == Guid.Empty)
             {
+                Logging.Log.Error($"Tried to add {Name} to instance dungeon, but next dungeon was empty");
                 return;
             }
 

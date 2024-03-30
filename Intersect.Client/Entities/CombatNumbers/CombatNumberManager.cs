@@ -252,7 +252,7 @@ namespace Intersect.Client.Entities.CombatNumbers
             lock (EntityCombatNumbers)
             {
                 // If interrupt exists, update it
-                if (IsDamageType(type) && EntityCombatNumbers.TryGetValue(CombatNumber.GenerateKey(targetId, CombatNumberType.Interrupt), out var interrupt))
+                if ((type == CombatNumberType.DamageHealth || type == CombatNumberType.DamageCritical) && EntityCombatNumbers.TryGetValue(CombatNumber.GenerateKey(targetId, CombatNumberType.Interrupt), out var interrupt))
                 {
                     interrupt.Refresh(value);
                 }
