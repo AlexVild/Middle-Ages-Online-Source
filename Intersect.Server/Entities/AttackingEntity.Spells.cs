@@ -26,6 +26,9 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public bool IsCasting => CastTime > Timing.Global.Milliseconds;
 
+        [NotMapped, JsonIgnore]
+        public int InterruptThreshold { get; set; } = -1; // <0 == no interrupt threshold set
+
         /// <summary>
         /// Whether an entity meets casting requirements (ammo & conditions) of some spell
         /// </summary>
@@ -106,6 +109,7 @@ namespace Intersect.Server.Entities
                 // Spell requires valid target!
                 if (spell.Combat.Friendly && !IsAllyOf(target))
                 {
+                    Target = this;
                     return CanCastSpell(spell, this, ignoreVitals, instantCast);
                 }
 
@@ -235,12 +239,18 @@ namespace Intersect.Server.Entities
                 );
             }
 
+            InterruptThreshold = -1;
             if (instant || CastTime == 0)
             {
                 UseSpell(spell, SpellCastSlot, Target);
             }
             else
             {
+                if (spell.CastDuration > 0 && spell.InterruptThreshold > 0)
+                {
+                    InterruptThreshold = spell.InterruptThreshold;
+                    PacketSender.SendCombatNumber(CombatNumberType.Interrupt, this, 0, threshold: spell.InterruptThreshold);
+                }
                 PacketSender.SendEntityCastTime(this, spell.Id);
             }
         }

@@ -32,6 +32,8 @@ namespace Intersect.Client.Entities.CombatNumbers
         public static GameTexture DamageCriticalFlashTexture { get; set; }
         public static GameTexture DamageCriticalTextureLg { get; set; }
         public static GameTexture DamageCriticalFlashTextureLg { get; set; }
+        public static GameTexture InterruptTexture { get; set; }
+        public static GameTexture InterruptTextureFlash { get; set; }
 
         public static void CacheTextureRefs()
         {
@@ -134,6 +136,16 @@ namespace Intersect.Client.Entities.CombatNumbers
                 GameContentManager.TextureType.Gui,
                 "combat_addmana_lg.png"
             );
+
+            InterruptTexture = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_interrupt.png"
+            );
+
+            InterruptTextureFlash = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_interrupt_flash.png"
+            );
         }
 
         public static bool IsDamageType(CombatNumberType type)
@@ -216,6 +228,13 @@ namespace Intersect.Client.Entities.CombatNumbers
                     combatNumber.FontColor = new Color(15, 15, 101);
                     combatNumber.FontFlashColor = new Color(204, 204, 255);
                     break;
+
+                case CombatNumberType.Interrupt:
+                    combatNumber.BackgroundTexture = InterruptTexture;
+                    combatNumber.BackgroundTextureFlash = InterruptTextureFlash;
+                    combatNumber.FontColor = new Color(63, 9, 4);
+                    combatNumber.FontFlashColor = new Color(241, 199, 194);
+                    break;
             }
         }
     }
@@ -232,6 +251,12 @@ namespace Intersect.Client.Entities.CombatNumbers
         {
             lock (EntityCombatNumbers)
             {
+                // If interrupt exists, update it
+                if (IsDamageType(type) && EntityCombatNumbers.TryGetValue(CombatNumber.GenerateKey(targetId, CombatNumberType.Interrupt), out var interrupt))
+                {
+                    interrupt.Refresh(value);
+                }
+
                 var combatNumber = CreateNumber(targetId, value, type, mapX, mapY, mapId, visibleTo);
                 if (!EntityCombatNumbers.TryGetValue(combatNumber.Id, out var existingNumber))
                 {
@@ -248,6 +273,21 @@ namespace Intersect.Client.Entities.CombatNumbers
                 {
                     EntityCombatNumbers[combatNumber.Id] = combatNumber;
                 }
+            }
+        }
+
+        public static void AddInterrupt(Guid targetId, int value, int threshold, int mapX, int mapY, Guid mapId, Entity visibleTo = null)
+        {
+            lock (EntityCombatNumbers)
+            {
+                var interruptNumber = new InterruptNumber(targetId, 0, CombatNumberType.Interrupt, mapX, mapY, mapId, threshold, visibleTo);
+                if (!EntityCombatNumbers.TryGetValue(interruptNumber.Id, out var existingNumber))
+                {
+                    EntityCombatNumbers[interruptNumber.Id] = interruptNumber;
+                    return;
+                }
+
+                existingNumber.Refresh(value);
             }
         }
 

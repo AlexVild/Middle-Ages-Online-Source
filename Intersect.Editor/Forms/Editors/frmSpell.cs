@@ -323,6 +323,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudSkillPoints.Value = mEditorItem.RequiredSkillPoints;
 
+                nudInterruptThreshold.Value = mEditorItem.InterruptThreshold;
+
                 UpdateSpellTypePanels();
 
                 RefreshBonusEffects(true);
@@ -1702,6 +1704,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbDashAnimation_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Dash.DashAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbDashAnimation.SelectedIndex - 1));
+        }
+
+        private void nudInterruptThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.InterruptThreshold = (int)nudInterruptThreshold.Value;
         }
     }
 }

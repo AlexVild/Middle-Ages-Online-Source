@@ -409,7 +409,7 @@ namespace Intersect.Server.Entities
             if (blockChance > 0)
             {
                 var blocked = Randomization.Next(1, 101) <= blockChance;
-                if ((spell == null || spell.IsBlockable()) && blocked)
+                if ((spell == null || spell.Blockable) && blocked)
                 {
                     SendBlockedAttackMessage(enemy);
                     return false;
@@ -629,6 +629,15 @@ namespace Intersect.Server.Entities
             if (damage > 0)
             {
                 HandleDefensiveSpellProccing(attacker);
+                if (IsCasting && InterruptThreshold > 0)
+                {
+                    InterruptThreshold -= damage;
+                    if (InterruptThreshold <= 0)
+                    {
+                        PacketSender.SendActionMsg(this, "INTERRUPT!", CustomColors.Combat.MagicDamage);
+                        CancelCast();
+                    }
+                }
             }
             base.TakeDamage(attacker, damage, vital);
         }

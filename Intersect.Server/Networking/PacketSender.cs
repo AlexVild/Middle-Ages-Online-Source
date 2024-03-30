@@ -2771,9 +2771,9 @@ namespace Intersect.Server.Networking
             player.SendPacket(new RespawnFinishedPacket());
         }
 
-        public static void SendCombatNumber(CombatNumberType type, Entity target, int value, Entity visibleTo = null)
+        public static void SendCombatNumber(CombatNumberType type, Entity target, int value, Entity visibleTo = null, int threshold = 0)
         {
-            if (value == 0)
+            if (value == 0 && type != CombatNumberType.Interrupt)
             {
                 return;
             }
@@ -2782,7 +2782,7 @@ namespace Intersect.Server.Networking
                 return;
             }
             
-            var packet = new CombatNumberPacket(type, Math.Abs(value), target.Id, visibleTo?.Id ?? Guid.Empty, target.X, target.Y, target.MapId);
+            var packet = new CombatNumberPacket(type, Math.Abs(value), target.Id, visibleTo?.Id ?? Guid.Empty, target.X, target.Y, target.MapId, threshold);
             if (Options.Instance.Packets.BatchActionMessagePackets)
             {
                 mapInstance.AddBatchedCombatNumber(packet);

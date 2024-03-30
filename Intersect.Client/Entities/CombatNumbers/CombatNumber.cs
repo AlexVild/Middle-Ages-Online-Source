@@ -73,7 +73,7 @@ namespace Intersect.Client.Entities.CombatNumbers
             }
         }
 
-        protected float Y
+        protected virtual float Y
         {
             get
             {
@@ -123,7 +123,7 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         protected bool Resized = false;
 
-        private string GenerateKey(Guid targetId, CombatNumberType type)
+        public static string GenerateKey(Guid targetId, CombatNumberType type)
         {
             return $"{targetId}_{type}";
         }
@@ -152,13 +152,20 @@ namespace Intersect.Client.Entities.CombatNumbers
             FallbackY = fallbackY;
             FallbackMapId = fallbackMapId;
 
-            var maxWidth = (Target?.WorldPos.Width ?? 0) / 8;
-            SpawnXOffset = Randomization.Next((int) -maxWidth, (int)maxWidth + 1);
+            SetXOffset();
         }
 
-        protected void CenterText()
+        protected virtual void SetXOffset()
         {
-            var textRect = Graphics.Renderer.MeasureText(Value.ToString(), Graphics.DamageFont, 1.0f);
+            var maxWidth = (Target?.WorldPos.Width ?? 0) / 8;
+            SpawnXOffset = Randomization.Next((int)-maxWidth, (int)maxWidth + 1);
+        }
+
+        protected virtual string Str => Value.ToString();
+
+        protected virtual void CenterText()
+        {
+            var textRect = Graphics.Renderer.MeasureText(Str, Graphics.DamageFont, 1.0f);
             var textLength = textRect.X;
             var textHeight = textRect.Y;
 
@@ -187,7 +194,7 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         public void UpdateAndDraw()
         {
-            if (NeedsCleaned)
+            if (Cleanup())
             {
                 return;
             }
@@ -242,12 +249,12 @@ namespace Intersect.Client.Entities.CombatNumbers
             }
         }
 
-        public bool ShouldRefresh()
+        public virtual bool ShouldRefresh()
         {
             return Timing.Global.MillisecondsUtcUnsynced - RefreshWindow < CreatedAt;
         }
 
-        public bool Cleanup()
+        public virtual bool Cleanup()
         {
             return NeedsCleaned;
         }
@@ -266,12 +273,12 @@ namespace Intersect.Client.Entities.CombatNumbers
             // Intentionally blank
         }
 
-        protected void DrawText()
+        protected virtual void DrawText()
         {
             Graphics.Renderer.DrawString(Value.ToString(), Graphics.DamageFont, FontX, FontY, 1.0f, CurrentFontColor);
         }
 
-        public void ResizeBackground()
+        public virtual void ResizeBackground()
         {
             switch (Type)
             {
@@ -303,6 +310,11 @@ namespace Intersect.Client.Entities.CombatNumbers
                 case CombatNumberType.HealMana:
                     BackgroundTexture = CombatNumberManager.AddManaTextureLg;
                     BackgroundTextureFlash = CombatNumberManager.AddManaTextureLg;
+                    break;
+
+                case CombatNumberType.Interrupt:
+                    BackgroundTexture = CombatNumberManager.InterruptTexture;
+                    BackgroundTextureFlash = CombatNumberManager.InterruptTextureFlash;
                     break;
             }
 

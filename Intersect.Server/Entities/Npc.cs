@@ -794,6 +794,13 @@ namespace Intersect.Server.Entities
                 //Target Type 1 will be global entity
             }
 
+            InterruptThreshold = -1;
+            if (spellBase.InterruptThreshold > 0 && spellBase.CastDuration > 0)
+            {
+                InterruptThreshold = spellBase.InterruptThreshold;
+                PacketSender.SendCombatNumber(CombatNumberType.Interrupt, this, 0, threshold: spellBase.InterruptThreshold);
+            }
+
             PacketSender.SendEntityCastTime(this, spellId);
         }
 

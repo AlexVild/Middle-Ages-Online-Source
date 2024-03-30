@@ -28,7 +28,10 @@ namespace Intersect.Network.Packets.Server
         [Key(6)]
         public Guid MapId { get; set; }
 
-        public CombatNumberPacket(CombatNumberType type, int value, Guid target, Guid visibleTo, int x, int y, Guid mapId)
+        [Key(7)]
+        public int Threshold { get; set; }
+
+        public CombatNumberPacket(CombatNumberType type, int value, Guid target, Guid visibleTo, int x, int y, Guid mapId, int threshold)
         {
             Type = type;
             Value = value;
@@ -37,6 +40,7 @@ namespace Intersect.Network.Packets.Server
             X = x;
             Y = y;
             MapId = mapId;
+            Threshold = threshold;
         }
     }
 }

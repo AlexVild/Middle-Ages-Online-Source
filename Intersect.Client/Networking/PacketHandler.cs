@@ -2655,7 +2655,14 @@ namespace Intersect.Client.Networking
                 visibleTo = null;
             }
 
-            CombatNumberManager.AddCombatNumber(packet.Target, packet.Value, packet.Type, packet.X, packet.Y, packet.MapId, visibleTo);
+            if (packet.Type == GameObjects.Events.CombatNumberType.Interrupt)
+            {
+                CombatNumberManager.AddInterrupt(packet.Target, packet.Value, packet.Threshold, packet.X, packet.Y, packet.MapId, visibleTo);
+            }
+            else
+            {
+                CombatNumberManager.AddCombatNumber(packet.Target, packet.Value, packet.Type, packet.X, packet.Y, packet.MapId, visibleTo);
+            }
         }
 
         public void HandlePacket(IPacketSender packetSender, ResourceInfoPackets packet)

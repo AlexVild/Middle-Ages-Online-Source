@@ -361,6 +361,7 @@ namespace Intersect.GameObjects.Events
         HealHealth,
         HealMana,
         Neutral,
+        Interrupt,
     }
 
     public enum BestiaryUnlock

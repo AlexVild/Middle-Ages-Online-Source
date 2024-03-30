@@ -427,21 +427,26 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public static List<SpellTargetTypes> BlockableSpellTypes = new List<SpellTargetTypes>() { SpellTargetTypes.Projectile, SpellTargetTypes.OnHit };
 
-        public bool IsBlockable()
+        public bool Blockable
         {
-            // All weapon spells are blockable
-            if (WeaponSpell)
+            get
             {
-                return true;
-            }
+                // All weapon spells are blockable
+                if (WeaponSpell)
+                {
+                    return true;
+                }
 
-            // If magic-only attack
-            if (Combat.DamageTypes.Count == 1 && Combat.DamageTypes.Contains(AttackTypes.Magic))
-            {
-                return false;
-            }
+                // If magic-only attack
+                if (Combat.DamageTypes.Count == 1 && Combat.DamageTypes.Contains(AttackTypes.Magic))
+                {
+                    return false;
+                }
 
-            return BlockableSpellTypes.Contains(Combat.TargetType);
+                return BlockableSpellTypes.Contains(Combat.TargetType);
+            }
         }
+
+        public int InterruptThreshold { get; set; }
     }
 }

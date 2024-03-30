@@ -103,6 +103,7 @@
     <Compile Include="Entities\CombatNumbers\DamageNumber.cs" />
     <Compile Include="Entities\CombatNumbers\HealingNumber.cs" />
     <Compile Include="Entities\CombatNumbers\ICombatNumberDisplayer.cs" />
+    <Compile Include="Entities\CombatNumbers\InterruptNumber.cs" />
     <Compile Include="Entities\Critter.cs" />
     <Compile Include="Entities\Dash.cs" />
     <Compile Include="Entities\Entity.cs" />
