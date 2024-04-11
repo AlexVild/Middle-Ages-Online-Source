@@ -35,10 +35,8 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         void InitializeDungeon(Guid dungeonId)
         {
-            Logging.Log.Debug($"Attempting dungeon initialization...");
             if (Dungeon.State != DungeonState.Null)
             {
-                Logging.Log.Error($"Dungeon Initialization failed, dungeon {DungeonDescriptor.GetName(dungeonId)} already on instance {InstanceId} initialized! State is {Dungeon.State}");
                 return;
             }
             Dungeon = new Dungeon(dungeonId);
@@ -46,7 +44,6 @@ namespace Intersect.Server.Core.Instancing.Controller
             DungeonDescriptor = DungeonDescriptor.Get(dungeonId);
             if (DungeonDescriptor == default)
             {
-                Logging.Log.Error($"Dungeon Initialization failed, dungeon descriptor not found for dungeonId {dungeonId}!");
                 return;
             }
 
@@ -56,9 +53,10 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void StartDungeon(Player player)
         {
+            Logging.Log.Error($"Dungeon {DungeonDescriptor.GetName(Dungeon.DescriptorId)} started by {player.Name}, state is {Dungeon.State} and will become Active");
             if (!DungeonReady && DungeonDescriptor != default)
             {
-                Logging.Log.Error($"Tried to start a dungeon for {player.Name}, but failed. State is {DungeonState} and descriptor name is {DungeonDescriptor?.Name}");
+                Logging.Log.Error($"Just kidding!");
                 return;
             }
 
@@ -87,7 +85,6 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
 
             Dungeon.State = DungeonState.Active;
-            Logging.Log.Debug($"Dungeon {DungeonDescriptor.GetName(Dungeon.DescriptorId)} started by {player.Name}");
         }
 
         bool TryAddPlayerToDungeon(Player player)
@@ -95,6 +92,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             if (!DungeonJoinable)
             {
                 PacketSender.SendChatMsg(player, $"This dungeon has already been completed.", ChatMessageType.Notice, CustomColors.General.GeneralWarning);
+                Logging.Log.Error($"Player {player.Name} tried to join Dungeon {Dungeon.DescriptorId} but was told it was already completed.");
                 return false;
             }
 
@@ -115,6 +113,7 @@ namespace Intersect.Server.Core.Instancing.Controller
                 return;
             }
 
+            Logging.Log.Error($"Player {player.Name} completed Dungeon {Dungeon.DescriptorId}");
             Dungeon.State = DungeonState.Complete;
 
             // Complete the dungeon timer & fire its events

@@ -8250,7 +8250,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendPlaySound(this, warpAtt.WarpSound);
                     }
 
-                    NextInstanceLives = warpAtt.SharedLives;
+                    NextInstanceLives = warpAtt.SharedLives - 1;
                     NextDungeonId = warpAtt.DungeonId;
                     Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType);
                 }
@@ -9955,7 +9955,6 @@ namespace Intersect.Server.Entities
         {
             if (NextDungeonId == Guid.Empty)
             {
-                Logging.Log.Error($"Tried to add {Name} to instance dungeon, but next dungeon was empty");
                 return;
             }
 
