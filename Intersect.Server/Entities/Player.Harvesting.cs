@@ -92,9 +92,20 @@ namespace Intersect.Server.Entities
             var descriptor = target.Base;
             if (descriptor.Tool != tool && descriptor.Tool != -1)
             {
-                PacketSender.SendChatMsg(
-                    this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
-                );
+                // Funky little override to give better hints for using bombs as a resource
+                if (descriptor.Tool == 5 && !string.IsNullOrEmpty(descriptor.CannotHarvestMessage))
+                {
+                    PacketSender.SendChatMsg(
+                            this, descriptor.CannotHarvestMessage, ChatMessageType.Error
+                        );
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(
+                        this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
+                    );
+                }
+                
 
                 return false;
             }

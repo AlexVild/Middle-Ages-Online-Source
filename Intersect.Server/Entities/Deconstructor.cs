@@ -105,7 +105,6 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            Owner.Fuel -= fuelRequired;
             // Now, for each item we successfully deconstruct (remove), add to our loot table/weapon progress
             List<LootRoll> deconstructedLoot = new List<LootRoll>();
             Dictionary<Guid, long> expEarned = new Dictionary<Guid, long>();
@@ -116,6 +115,7 @@ namespace Intersect.Server.Entities
                 var item = ItemBase.Get(slot.ItemId);
                 if (!Owner.TryTakeItem(slot, 1, Enums.ItemHandling.Normal, sendUpdate: false))
                 {
+                    fuelRequired -= item.FuelRequired;
                     continue;
                 }
 
@@ -147,6 +147,9 @@ namespace Intersect.Server.Entities
                     cosmeticsEarned.Add(item.Id);
                 }
             }
+
+            // Remove fuel after going through each deconstructed item
+            Owner.Fuel -= fuelRequired;
 
             foreach (var kv in expEarned)
             {
