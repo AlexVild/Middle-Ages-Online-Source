@@ -335,7 +335,10 @@ namespace Intersect.GameObjects.Events
         SoloDungeonTimes,
 
         [Description("Melee Victories")]
-        MeleeVictories
+        MeleeVictories,
+
+        [Description("Item Used in Craft"), RelatedTable(GameObjectType.Item)]
+        ItemUsedInCraft
     }
 
     public enum RespawnChangeType

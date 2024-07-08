@@ -2795,7 +2795,7 @@ namespace Intersect.Server.Networking
 
         public static void SendToast(Player player, string message)
         {
-            if (!player.Online)
+            if (!player.Online || player.SilenceToasts)
             {
                 return;
             }

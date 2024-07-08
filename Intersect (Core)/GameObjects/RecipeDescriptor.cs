@@ -65,7 +65,10 @@ namespace Intersect.GameObjects
         ItemObtained,
 
         [Description("Spell Learned"), RelatedTable(Enums.GameObjectType.Spell)]
-        SpellLearned
+        SpellLearned,
+            
+        [Description("Item Used in Craft"), RelatedTable(Enums.GameObjectType.Item), RecordType(Events.RecordType.ItemUsedInCraft)]
+        ItemUsedInCraft,
     }
 
     public class RecipeDescriptor : DatabaseObject<RecipeDescriptor>, IFolderable

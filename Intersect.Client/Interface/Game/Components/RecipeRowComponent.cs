@@ -291,6 +291,15 @@ namespace Intersect.Client.Interface.Game.Components
                             $"Harvest one {trigger.Name}";
                     case RecipeTrigger.SpellLearned:
                         return $"Learn spell: {trigger.Name}";
+                    case RecipeTrigger.ItemUsedInCraft:
+                        if (requirement.Amount > 1)
+                        {
+                            return $"Use {requirement.Amount} {trigger.Name}s crafting";
+                        }
+                        else
+                        {
+                            return $"Use {TextUtils.GetArticle(trigger.Name)} {trigger.Name} in a craft";
+                        }
                     default:
                         return string.Empty;
                 }

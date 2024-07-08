@@ -113,6 +113,30 @@ namespace Intersect.Utilities
 
             return $"{(remainingMs / 1000f).ToString("N1")}s";
         }
+
+        public static string GetArticle(string word)
+        {
+            if (string.IsNullOrWhiteSpace(word))
+            {
+                throw new ArgumentException("Input word cannot be null or whitespace.", nameof(word));
+            }
+
+            char firstChar = word[0];
+            string[] vowels = { "a", "e", "i", "o", "u" };
+
+            // Special cases for words starting with a vowel sound
+            if (firstChar == 'u' && word.Length > 2 && word[1] == 'n') // e.g., "unicorn"
+            {
+                return "a";
+            }
+            if (firstChar == 'h' && word.Length > 1 && (word[1] == 'o' || word[1] == 'i')) // e.g., "honor", "hour"
+            {
+                return "an";
+            }
+
+            // Default case
+            return Array.Exists(vowels, v => v.Equals(firstChar.ToString(), StringComparison.OrdinalIgnoreCase)) ? "an" : "a";
+        }
     }
 
 }

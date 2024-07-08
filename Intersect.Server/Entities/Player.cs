@@ -473,6 +473,11 @@ namespace Intersect.Server.Entities
             {
                 JoinClanWar();
             }
+
+            if (!CraftingDataBackfilled)
+            {
+                BackfillHistoricalCraftingData();
+            }
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -4880,6 +4885,7 @@ namespace Intersect.Server.Entities
 
             var craft = CraftBase.Get(id);
 
+            var ingredientUsages = new Dictionary<Guid, int>();
             //Take the items
             foreach (var c in craft.Ingredients)
             {
@@ -4896,6 +4902,15 @@ namespace Intersect.Server.Entities
                     PacketSender.SendInventory(this);
 
                     return false;
+                }
+
+                if (ingredientUsages.ContainsKey(c.ItemId))
+                {
+                    ingredientUsages[c.ItemId] += c.Quantity;
+                }
+                else
+                {
+                    ingredientUsages[c.ItemId] = c.Quantity;
                 }
             }
 
@@ -4918,6 +4933,13 @@ namespace Intersect.Server.Entities
 
                 // Update our record of how many of this item we've crafted
                 long recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
+
+                // Update our record of how many times we've used certain items in crafting
+                foreach (var usage in ingredientUsages)
+                {
+                    IncrementRecord(RecordType.ItemUsedInCraft, usage.Key, amount: usage.Value);
+                }
+                
                 if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
                 {
                     SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
@@ -9066,8 +9088,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private ConcurrentQueue<RecordEvent> RecordEventQueue = new System.Collections.Concurrent.ConcurrentQueue<RecordEvent>();
-        public long IncrementRecord(RecordType type, Guid recordId, bool instantSave = false)
+        public long IncrementRecord(RecordType type, Guid recordId, bool instantSave = false, int amount = 1)
         {
             PlayerRecord matchingRecord;
             long recordAmt = 0;
@@ -9079,12 +9100,12 @@ namespace Intersect.Server.Entities
                 matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);
                 if (matchingRecord != null)
                 {
-                    matchingRecord.Amount++;
+                    matchingRecord.Amount += amount;
                     recordAmt = matchingRecord.Amount;
                 }
                 else
                 {
-                    PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, 1);
+                    PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, amount);
                     PlayerRecords.Add(newRecord);
                     recordAmt = newRecord.Amount;
                 }
@@ -9751,6 +9772,12 @@ namespace Intersect.Server.Entities
     public partial class Player : AttackingEntity
     {
         [JsonIgnore, NotMapped]
+        public bool SilenceToasts = false;
+
+        // Set to true so that accounts created after migration never backfill
+        public bool CraftingDataBackfilled { get; set; } = true;
+
+        [JsonIgnore, NotMapped]
         public bool UseCachedHarvestInfo = false;
 
         [JsonIgnore, NotMapped]
@@ -10189,6 +10216,41 @@ namespace Intersect.Server.Entities
 
             CachedHarvestInfo[tool] = allInfo;
             UseCachedHarvestInfo = true;
+        }
+
+        private void BackfillHistoricalCraftingData()
+        {
+            SilenceToasts = true;
+
+            var ingredients = new Dictionary<Guid, int>();
+            
+            foreach (var record in PlayerRecords.ToArray().Where(record => record.Type == RecordType.ItemCrafted))
+            {
+                if (!CraftBase.TryGet(record.RecordId, out var craft))
+                {
+                    continue;
+                }
+
+                foreach (var ingredient in craft.Ingredients)
+                {
+                    if (ingredients.ContainsKey(ingredient.ItemId))
+                    {
+                        ingredients[ingredient.ItemId] += ingredient.Quantity;
+                    }
+                    else
+                    {
+                        ingredients[ingredient.ItemId] = ingredient.Quantity;
+                    }
+                }
+            }
+
+            foreach (var ingredient in ingredients)
+            {
+                IncrementRecord(RecordType.ItemUsedInCraft, ingredient.Key, amount: ingredient.Value);
+            }
+
+            SilenceToasts = false;
+            CraftingDataBackfilled = true;
         }
     }
 }
