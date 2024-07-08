@@ -37,7 +37,7 @@ namespace Intersect.GameObjects
         [Description("Alchemy")]
         Alchemy,
 
-        [Description("Summoning & Spellcraft")]
+        [Description("Ritual")]
         MageCraft,
 
         [Description("Mage Craft")]

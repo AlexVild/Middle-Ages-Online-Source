@@ -240,11 +240,11 @@ namespace Intersect.Client.Interface.Game.Crafting
 
                 if (craftType == RecipeCraftType.Other)
                 {
-                    NeedsRecipeLabel.SetText($"Requires recipe: {recipeName}");
+                    NeedsRecipeLabel.SetText($"Requires crafting challenge: {recipeName}");
                 }
                 else
                 {
-                    NeedsRecipeLabel.SetText($"Requires {recipe.DisplayCraftType} recipe: {recipeName}");
+                    NeedsRecipeLabel.SetText($"Requires {recipe.DisplayCraftType} challenge: {recipeName}");
                 }
                 mBar.Hide();
                 mBarContainer.Hide();

@@ -127,7 +127,7 @@ namespace Intersect.Client.Interface.Game.Character
 
             RecipesButton = new Button(Container, "RecipesPanelSelector")
             {
-                Text = "RECIPES"
+                Text = "CRAFTING"
             };
             RecipesButton.Clicked += RecipesClicked;
 
@@ -157,7 +157,7 @@ namespace Intersect.Client.Interface.Game.Character
 
             ChallengesButton = new Button(Container, "ChallengesPanelSelector")
             {
-                Text = "CHALLENGES"
+                Text = "WPN. TRACKS"
             };
             ChallengesButton.Clicked += ChallengesButton_Clicked;
 
@@ -171,21 +171,21 @@ namespace Intersect.Client.Interface.Game.Character
             {
                 Text = "WISHLIST"
             };
-            WishlistButton.Clicked += WishlistButton_Clicked; ;
+            WishlistButton.Clicked += WishlistButton_Clicked;
 
             PanelSelectors = new List<Button>
             {
-                StatsButton,
                 BonusesButton,
-                HarvestingButton,
+                CosmeticsButton,
                 RecipesButton,
                 DecorButton,
-                CosmeticsButton,
-                SkillsButton,
-                LoadoutsButton,
-                ChallengesButton,
                 EnhancementsButton,
-                WishlistButton
+                HarvestingButton,
+                LoadoutsButton,
+                SkillsButton,
+                StatsButton,
+                WishlistButton,
+                ChallengesButton
             };
         }
 

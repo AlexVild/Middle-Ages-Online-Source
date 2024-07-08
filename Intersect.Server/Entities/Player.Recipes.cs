@@ -8,12 +8,10 @@ using Intersect.GameObjects.Crafting;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
-using Intersect.Server.Entities.Events;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Bcpg;
 
 namespace Intersect.Server.Entities
 {
@@ -60,10 +58,10 @@ namespace Intersect.Server.Entities
             var recipeName = recipe?.DisplayName ?? recipe?.Name ?? "NOT FOUND";
             var recipeType = recipe?.CraftType;
 
-            var msg = $"You've unlocked a new recipe: {recipeName}!";
+            var msg = $"You've completed a crafting challenge: {recipeName}!";
             if (recipeType != RecipeCraftType.Other && recipeType != null)
             {
-                msg = $"You've unlocked a new {recipeType.GetDescription()} recipe: {recipeName}!";
+                msg = $"You've unlocked a {recipeType.GetDescription()} challenge: {recipeName}!";
             }
             PacketSender.SendChatMsg(this, msg, Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
         }
