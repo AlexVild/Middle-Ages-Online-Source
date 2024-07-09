@@ -764,7 +764,7 @@ namespace Intersect.GameObjects.Events
 
         public string GetPrettyString()
         {
-            var toolName = Options.ToolTypes.ElementAtOrDefault(Level);
+            var toolName = Options.ToolTypes.ElementAtOrDefault(Tool);
             return $"{Amount} {toolName} Harvest Levels at {Level}+";
         }
     }
