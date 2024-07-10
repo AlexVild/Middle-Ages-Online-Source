@@ -765,8 +765,18 @@ namespace Intersect.Server.Entities
                         foreach (var obj in EventBase.Lookup)
                         {
                             var evt = obj.Value as EventBase;
-                            if (evt != null && evt.CommonEvent)
+                            if (evt == null || !evt.CommonEvent)
                             {
+                                continue;
+                            }
+                            
+                            foreach (var page in evt.Pages)
+                            {
+                                if (page.CommonTrigger != CommonEventTrigger.Autorun)
+                                {
+                                    continue;
+                                }
+
                                 if (Options.Instance.Metrics.Enable)
                                 {
                                     autorunEvents += evt.Pages.Count(p => p.CommonTrigger == CommonEventTrigger.Autorun);
@@ -8042,7 +8052,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (EventBaseIdLookup.ContainsKey(baseEvent.Id))
+            if (EventBaseIdLookup.ContainsKey(baseEvent.Id) && !baseEvent.CanRunInParallel)
             {
                 return false;
             }

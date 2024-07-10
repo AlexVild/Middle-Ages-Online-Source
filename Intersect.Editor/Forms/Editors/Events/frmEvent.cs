@@ -1130,6 +1130,9 @@ namespace Intersect.Editor.Forms.Editors.Events
             cmbAnimation.Items.Clear();
             cmbAnimation.Items.Add(Strings.General.none);
             cmbAnimation.Items.AddRange(AnimationBase.Names);
+            
+            chkParallelRun.Checked = MyEvent.CanRunInParallel;
+            
             QuestEvent = questEvent;
             if (MyEvent.CommonEvent || QuestEvent)
             {
@@ -2412,6 +2415,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkIdleAnim_CheckedChanged(object sender, EventArgs e)
         {
             CurrentPage.IdleAnimation = chkIdleAnim.Checked;
+        }
+
+        private void chkParallelRun_CheckedChanged(object sender, EventArgs e)
+        {
+            MyEvent.CanRunInParallel = chkParallelRun.Checked;
         }
     }
 

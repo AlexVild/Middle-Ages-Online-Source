@@ -19,6 +19,11 @@ namespace Intersect.GameObjects.Events
         //Event Pages
         private List<EventPage> mPages = new List<EventPage>();
 
+        /// <summary>
+        /// Option used to run events even when another is already running
+        /// </summary>
+        public bool CanRunInParallel { get; set; }
+
         //EF Parameterless Constructor
         public EventBase()
         {
