@@ -383,7 +383,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
             var selectedId = (Guid)((ListBoxRow)sender).UserData;
             mSelectedRow = new EnhancementRow(
-                new EnhancementDescriptionWindow(selectedId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true),
+                new EnhancementDescriptionWindow(selectedId, EnhancementItemDescriptor.Icon, Background.X, Background.Y, showSpellInfo: true, abridged: true),
                 selectedId);
             mSelectedRow.DescriptionWindow.SetPosition(Background.X + 6, Background.Y + EnhancementBackground.Y + 40);
             mSelectedRow.DescriptionWindow.Show();

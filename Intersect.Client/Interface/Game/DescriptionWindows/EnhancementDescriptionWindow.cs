@@ -20,12 +20,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected bool Learnable { get; set; }
 
-        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f, bool isLearnable = false, bool showSpellInfo = false) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
+        protected bool Abridged { get; set; }
+
+        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f, bool isLearnable = false, bool showSpellInfo = false, bool abridged = false) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             Enhancement = EnhancementDescriptor.Get(enhancementId);
             Icon = icon;
             StudyChance = studyChance;
             Learnable = isLearnable;
+            Abridged = abridged;
 
             GenerateComponents();
             SetupDescriptionWindow();
@@ -81,7 +84,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             AddDivider();
 
-            SetupRequirements();
+            if (!Abridged)
+            {
+                SetupRequirements();
+            }
 
             AddDivider();
 
