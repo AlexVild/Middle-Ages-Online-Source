@@ -422,6 +422,9 @@ namespace Intersect.Server.Entities
                 _ = TryDealManaDamageTo(enemy, spell.Combat.VitalDiff[(int)Vitals.Mana], dmgScaling, critMultiplier, spell?.Combat?.ManaSteal ?? false, out manaDamage);
             }
 
+            // Check for "Healer" bonus effect and increase scaling if using spell and it is "healing"
+            dmgScaling += GetPotentialHealerAmount(spell);
+
             // If we have a true damage override in our attack somewhere...
             if (weapon?.DamageType == (int)DamageType.True || spell?.Combat?.DamageType == (int)DamageType.True)
             {
@@ -453,6 +456,16 @@ namespace Intersect.Server.Entities
             }
 
             return damageWasDealt;
+        }
+
+        private int GetPotentialHealerAmount(SpellBase spell)
+        {
+            if (spell == null || spell.Combat == null || !spell.Combat.Friendly)
+            {
+                return 0;
+            }
+
+            return GetBonusEffectTotal(EffectType.Healer);
         }
 
         public virtual void HandleOffensiveSpellProccing(Entity enemy)

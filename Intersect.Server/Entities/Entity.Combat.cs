@@ -193,5 +193,11 @@ namespace Intersect.Server.Entities
         {
             return 1f;
         }
+
+        public int ApplyBonusEffectInt(int value, EffectType effect, bool additive, int startValue = 0)
+        {
+            var percent = GetBonusEffectPercent(effect, additive, startValue);
+            return (int)Math.Ceiling(value * percent);
+        }
     }
 }

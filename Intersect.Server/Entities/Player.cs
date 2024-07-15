@@ -3727,6 +3727,8 @@ namespace Intersect.Server.Entities
                                         itemBase.Consumable.Percentage /
                                         100;
 
+                                value = ApplyBonusEffectInt(value, EffectType.Foodie, true);
+
                                 AddVital(Vitals.Health, value);
                                 if (value < 0)
                                 {
@@ -3743,6 +3745,8 @@ namespace Intersect.Server.Entities
                                         GetMaxVital((int) itemBase.Consumable.Type) *
                                         itemBase.Consumable.Percentage /
                                         100;
+
+                                value = ApplyBonusEffectInt(value, EffectType.Manaflow, true);
 
                                 AddVital(Vitals.Mana, value);
                                 color = CustomColors.Items.ConsumeMp;

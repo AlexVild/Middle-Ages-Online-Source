@@ -29,6 +29,9 @@ namespace Intersect.Client.Utilities
             {EffectType.Vampire, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Vampire], "Increases effects of manasteal and lifesteal.")}, // Vampire
             {EffectType.Junkrat, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Junkrat], "Increases scrap yield when deconstructing equipment.")}, // Junkrat
             {EffectType.Block, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Block], "A flat-chance to nullify incoming physical damage.")}, // Block
+            {EffectType.Healer, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Healer], "Increases potency of healing spells.")}, // Healer
+            {EffectType.Foodie, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Foodie], "Increases HP recovery of consumables.")}, // Foodie
+            {EffectType.Manaflow, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Manaflow], "Increases MP recovery of consumables.")}, // Manaflow
         };
 
         public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>

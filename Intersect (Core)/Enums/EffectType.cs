@@ -65,5 +65,14 @@ namespace Intersect.Enums
 
         [Description("Block")]
         Block = 19,
+
+        [Description("Healer")]
+        Healer = 20,
+        
+        [Description("Foodie")]
+        Foodie = 21,
+
+        [Description("Manaflow")]
+        Manaflow = 22,
     }
 }
