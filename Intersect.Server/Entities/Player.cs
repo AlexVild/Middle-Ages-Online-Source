@@ -2161,9 +2161,6 @@ namespace Intersect.Server.Entities
                 PacketSender.SendChatMsg(this, "You can not earn any more skill points.", ChatMessageType.Experience);
             }
 
-            // Check permabuff stats to make sure they're kosher
-
-
             // Send skill point update to client
             PacketSender.SendSkillbookToClient(this);
 
@@ -2193,6 +2190,7 @@ namespace Intersect.Server.Entities
                 (VitalPointAllocations.Sum() / Options.Instance.PlayerOpts.BaseVitalPointIncrease);
 
             var expectedPoints = playerClass.BasePoints + playerClass.PointIncrease * levelsWithStatBoosts;
+            expectedPoints += (playerClass.PointIncrease - 1) * levelsWithoutStatBoosts;
             if (expectedPoints > currentPoints)
             {
                 StatPoints += expectedPoints - currentPoints;

@@ -30,7 +30,6 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
         private Player Me => Globals.Me;
         Label mName { get; set; }
         Label mLevelAndClass { get; set; }
-        Label mClassRank { get; set; }
 
         //Equipment List
         public List<EquipmentItem> Items = new List<EquipmentItem>();
@@ -53,17 +52,23 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
         ImagePanel ScaleDownImage { get; set; }
 
+        ImagePanel ClassRankContainer { get; set; }
+
+        ImagePanel ClassRankImage { get; set; }
+        ImageLabelComponent WarriorRank { get; set; }
+        ImageLabelComponent RogueRank { get; set; }
+        ImageLabelComponent MageRank { get; set; }
+
         private GameTexture DayBgTexture;
         private GameTexture NightBgTexture;
         private GameTexture InteriorBgTexture;
 
         public CharacterPanelType Type { get; } = CharacterPanelType.Equipment;
-        
-        private int[] mEmptyStatBoost = new int[(int)Stats.StatCount];
 
         private Guid PreviousMap;
 
         private ComponentList<IGwenComponent> ContainerComponents;
+        private ComponentList<IGwenComponent> ClassRankLabels;
 
         private List<GameTexture> ScaleDownTextures = new List<GameTexture>();
 
@@ -99,6 +104,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             ScaleDownImage.SetTooltipGraphicsMAO();
 
             ContainerComponents.InitializeAll();
+            ClassRankLabels.InitializeAll();
         }
 
         public override void Show()
@@ -131,6 +137,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             PopulateCharacterInfo();
             PopulateEquipStats();
             PopulateEquipment();
+            SetClassRanks();
             PopulateCharacterPortrait();
         }
 
@@ -146,8 +153,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             }
 
             mName.SetText(name);
-            mLevelAndClass.SetText(Strings.Character.levelandclass.ToString(level, className));
-            mClassRank.SetText(Strings.Character.classrank.ToString(className, classRank));
+            mLevelAndClass.SetText($"Level {level}");
         }
 
         private void PopulateEquipStats()
@@ -379,7 +385,34 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
         {
             mName = GenerateLabel("CharacterName", Globals.Me?.Name ?? string.Empty);
             mLevelAndClass = GenerateLabel("CharacterLevelAndClass");
-            mClassRank = GenerateLabel("ClassRank");
+
+            ClassRankLabels = new ComponentList<IGwenComponent>();
+            ClassRankContainer = new ImagePanel(mBackground, "ClassRanks");
+            ClassRankImage = new ImagePanel(ClassRankContainer, "ClassRankImage");
+
+            var labelColor = new Color(255, 50, 19, 0);
+            var hoverColor = new Color(255, 111, 63, 0);
+
+            WarriorRank = new ImageLabelComponent(ClassRankContainer, "WarriorRank", labelColor, hoverColor, "cr_warrior.png", "0", "Warrior class rank", ClassRankLabels);
+            RogueRank = new ImageLabelComponent(ClassRankContainer, "RogueRank", labelColor, hoverColor, "cr_rogue.png", "0", "Rogue class rank", ClassRankLabels);
+            MageRank = new ImageLabelComponent(ClassRankContainer, "MageRank", labelColor, hoverColor, "cr_mage.png", "0", "Mage class rank", ClassRankLabels);
+        }
+
+        private void SetClassRanks()
+        {
+            var warriorRank = 0;
+            var rogueRank = 0;
+            var mageRank = 0;
+            if (Globals.Me.ClassRanks != null)
+            {
+                Globals.Me.ClassRanks.TryGetValue("Warrior", out warriorRank);
+                Globals.Me.ClassRanks.TryGetValue("Rogue", out rogueRank);
+                Globals.Me.ClassRanks.TryGetValue("Mage", out mageRank);
+            }
+
+            WarriorRank.SetLabel(warriorRank.ToString());
+            RogueRank.SetLabel(rogueRank.ToString());
+            MageRank.SetLabel(mageRank.ToString());
         }
 
         private void InitializeEquipmentStatContainers()

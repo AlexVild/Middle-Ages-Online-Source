@@ -238,11 +238,6 @@ namespace Intersect.Client.Interface.Game.HUD
             var level = Globals.Me.Level.ToString();
 
             var levelString = $"LVL {level}".ToUpper();
-            if (Globals.Me.Class != default)
-            {
-                var className = ClassBase.Get(Globals.Me.Class)?.Name;
-                levelString = $"LVL {level} {className}".ToUpper();
-            }
 
             var playerNameWidth = Graphics.Renderer.MeasureText(playerName, font, 1).X;
             var playerNameHeight = Graphics.Renderer.MeasureText(playerName, font, 1).Y;

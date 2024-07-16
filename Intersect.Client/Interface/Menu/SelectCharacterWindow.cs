@@ -170,11 +170,7 @@ namespace Intersect.Client.Interface.Menu
             if (Characters[mSelectedChar] != null)
             {
                 mCharnameLabel.SetText(Strings.CharacterSelection.name.ToString(Characters[mSelectedChar].Name));
-                mInfoLabel.SetText(
-                    Strings.CharacterSelection.info.ToString(
-                        Characters[mSelectedChar].Level, Characters[mSelectedChar].Class
-                    )
-                );
+                mInfoLabel.SetText($"Level {Characters[mSelectedChar].Level}");
 
                 mPlayButton.Show();
                 mDeleteButton.Show();
