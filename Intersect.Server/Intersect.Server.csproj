@@ -1438,6 +1438,10 @@
     <Compile Include="Migrations\Game\20240710012225_ParallelEventMigration.designer.cs">
       <DependentUpon>20240710012225_ParallelEventMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240717011646_ChallengeVitalBoostMigration.cs" />
+    <Compile Include="Migrations\Game\20240717011646_ChallengeVitalBoostMigration.designer.cs">
+      <DependentUpon>20240717011646_ChallengeVitalBoostMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

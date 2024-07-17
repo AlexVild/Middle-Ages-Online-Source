@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -62,6 +63,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbEnhancement.Items.Add(Strings.General.none);
             cmbEnhancement.Items.AddRange(EnhancementDescriptor.Names);
 
+            RefreshLists();
+
             lstGameObjects.Init(UpdateToolStripItems, 
                 AssignEditorItem, 
                 toolStripItemNew_Click_1, 
@@ -69,6 +72,68 @@ namespace Intersect.Editor.Forms.Editors
                 toolStripItemUndo_Click, 
                 toolStripItemPaste_Click, 
                 toolStripItemDelete_Click);
+        }
+
+        private void RefreshLists()
+        {
+            RefreshStatList();
+            RefreshVitalList();
+            RefreshBonusEffectList();
+        }
+
+        private void RefreshStatList()
+        {
+            lstStats.Items.Clear();
+            foreach (Stats stat in Enum.GetValues(typeof(Stats)))
+            {
+                if (stat == Stats.StatCount)
+                {
+                    continue;
+                }
+
+                var val = 0;
+                if (mEditorItem != default && mEditorItem.StatBoosts.TryGetValue(stat, out var statVal))
+                {
+                    val = statVal;
+                }
+
+                lstStats.Items.Add($"{stat.GetDescription()}: {val}");
+            }
+        }
+
+        private void RefreshVitalList()
+        {
+            lstVitals.Items.Clear();
+            foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
+            {
+                if (vital == Vitals.VitalCount)
+                {
+                    continue;
+                }
+
+                var val = 0;
+                if (mEditorItem != default && mEditorItem.VitalBoosts.TryGetValue(vital, out var vitalVal))
+                {
+                    val = vitalVal;
+                }
+
+                lstVitals.Items.Add($"{vital.GetDescription()}: {val}");
+            }
+        }
+
+        private void RefreshBonusEffectList()
+        {
+            lstBonuses.Items.Clear();
+            foreach (EffectType effect in Enum.GetValues(typeof(EffectType)))
+            {
+                var val = 0;
+                if (mEditorItem != default)
+                {
+                    val = mEditorItem.BonusEffects.Find(eff => eff.Type == effect)?.Percentage ?? 0;
+                }
+
+                lstBonuses.Items.Add($"{effect.GetDescription()}: {val}%");
+            }
         }
 
         protected override void GameObjectUpdatedDelegate(GameObjectType type)
@@ -159,6 +224,23 @@ namespace Intersect.Editor.Forms.Editors
 
             chkRequiresContract.Checked = mEditorItem.RequiresContract;
             txtRequirementDescription.Text = mEditorItem.RequirementsString;
+
+            if (mEditorItem.StatBoosts == null)
+            {
+                mEditorItem.StatBoosts = new Dictionary<Stats, int>();
+            }
+
+            if (mEditorItem.VitalBoosts == null)
+            {
+                mEditorItem.VitalBoosts = new Dictionary<Vitals, int>();
+            }
+
+            if (mEditorItem.BonusEffects == null)
+            {
+                mEditorItem.BonusEffects = new List<EffectData>();
+            }
+
+            RefreshLists();
         }
 
         private void UpdateEditor()
@@ -469,6 +551,79 @@ namespace Intersect.Editor.Forms.Editors
         private void nudMinTier_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.MinTier = (int)nudMinTier.Value;
+        }
+
+        private void nudStats_ValueChanged(object sender, EventArgs e)
+        {
+            var prevSelection = lstStats.SelectedIndex;
+            if (prevSelection == -1)
+            {
+                return;
+            }
+
+            mEditorItem.StatBoosts[(Stats)lstStats.SelectedIndex] = (int)nudStats.Value;
+            RefreshStatList();
+            lstStats.SelectedIndex = prevSelection;
+        }
+
+        private void nudVitals_ValueChanged(object sender, EventArgs e)
+        {
+            var prevSelection = lstVitals.SelectedIndex;
+            if (prevSelection == -1)
+            {
+                return;
+            }
+
+            mEditorItem.VitalBoosts[(Vitals)lstVitals.SelectedIndex] = (int)nudVitals.Value;
+            RefreshVitalList();
+            lstVitals.SelectedIndex = prevSelection;
+        }
+
+        private void nudBonusEffects_ValueChanged(object sender, EventArgs e)
+        {
+            var prevSelection = lstVitals.SelectedIndex;
+            if (prevSelection == -1)
+            {
+                return;
+            }
+
+            mEditorItem.SetBonusEffectOfType((EffectType)prevSelection, (int)nudBonusEffects.Value);
+            RefreshBonusEffectList();
+            lstBonuses.SelectedIndex = prevSelection;
+        }
+
+        private void lstStats_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstStats.SelectedIndex < 0 || !mEditorItem.StatBoosts.TryGetValue((Stats)lstStats.SelectedIndex, out var val))
+            {
+                nudStats.Value = 0;
+                return;
+            }
+
+            nudStats.Value = val;
+        }
+
+        private void lstVitals_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstVitals.SelectedIndex < 0 || !mEditorItem.VitalBoosts.TryGetValue((Vitals)lstVitals.SelectedIndex, out var val))
+            {
+                nudVitals.Value = 0;
+                return;
+            }
+
+            nudVitals.Value = val;
+        }
+
+        private void lstBonuses_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstBonuses.SelectedIndex < 0)
+            {
+                nudBonusEffects.Value = 0;
+                return;
+            }
+
+            var val = mEditorItem.GetBonusEffectPercentage((EffectType)lstBonuses.SelectedIndex);
+            nudBonusEffects.Value = val;
         }
     }
 }

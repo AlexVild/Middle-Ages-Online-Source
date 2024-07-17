@@ -74,6 +74,14 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstTasks = new System.Windows.Forms.ListBox();
             this.btnAddTask = new DarkUI.Controls.DarkButton();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpTaskOptions = new DarkUI.Controls.DarkGroupBox();
+            this.cmbClass = new DarkUI.Controls.DarkComboBox();
+            this.lblClassRank = new System.Windows.Forms.Label();
+            this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblQuestClass = new System.Windows.Forms.Label();
+            this.grpAdditionalOptions = new DarkUI.Controls.DarkGroupBox();
+            this.cmbQuestType = new DarkUI.Controls.DarkComboBox();
+            this.lblQuestType = new System.Windows.Forms.Label();
             this.grpActions = new DarkUI.Controls.DarkGroupBox();
             this.btnEditCompletionEvent = new DarkUI.Controls.DarkButton();
             this.btnEditStartEvent = new DarkUI.Controls.DarkButton();
@@ -92,14 +100,6 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpAdditionalOptions = new DarkUI.Controls.DarkGroupBox();
-            this.lblQuestType = new System.Windows.Forms.Label();
-            this.cmbQuestType = new DarkUI.Controls.DarkComboBox();
-            this.grpTaskOptions = new DarkUI.Controls.DarkGroupBox();
-            this.lblQuestClass = new System.Windows.Forms.Label();
-            this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblClassRank = new System.Windows.Forms.Label();
-            this.cmbClass = new DarkUI.Controls.DarkComboBox();
             this.grpQuests.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpQuestReqs.SuspendLayout();
@@ -108,11 +108,11 @@ namespace Intersect.Editor.Forms.Editors.Quest
             ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).BeginInit();
             this.grpQuestTasks.SuspendLayout();
             this.pnlContainer.SuspendLayout();
-            this.grpActions.SuspendLayout();
-            this.toolStrip.SuspendLayout();
-            this.grpAdditionalOptions.SuspendLayout();
             this.grpTaskOptions.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).BeginInit();
+            this.grpAdditionalOptions.SuspendLayout();
+            this.grpActions.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpQuests
@@ -125,7 +125,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuests.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpQuests.Location = new System.Drawing.Point(12, 34);
             this.grpQuests.Name = "grpQuests";
-            this.grpQuests.Size = new System.Drawing.Size(203, 493);
+            this.grpQuests.Size = new System.Drawing.Size(343, 492);
             this.grpQuests.TabIndex = 14;
             this.grpQuests.TabStop = false;
             this.grpQuests.Text = "Quests";
@@ -167,7 +167,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.lstGameObjects.Location = new System.Drawing.Point(6, 45);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 442);
+            this.lstGameObjects.Size = new System.Drawing.Size(324, 435);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpGeneral
@@ -192,14 +192,14 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpGeneral.Location = new System.Drawing.Point(0, 0);
             this.grpGeneral.Name = "grpGeneral";
-            this.grpGeneral.Size = new System.Drawing.Size(580, 164);
+            this.grpGeneral.Size = new System.Drawing.Size(625, 164);
             this.grpGeneral.TabIndex = 15;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
             // 
             // btnAddFolder
             // 
-            this.btnAddFolder.Location = new System.Drawing.Point(143, 42);
+            this.btnAddFolder.Location = new System.Drawing.Point(192, 41);
             this.btnAddFolder.Name = "btnAddFolder";
             this.btnAddFolder.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddFolder.Size = new System.Drawing.Size(18, 21);
@@ -222,7 +222,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpQuestReqs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpQuestReqs.Controls.Add(this.btnEditRequirements);
             this.grpQuestReqs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestReqs.Location = new System.Drawing.Point(169, 11);
+            this.grpQuestReqs.Location = new System.Drawing.Point(216, 12);
             this.grpQuestReqs.Name = "grpQuestReqs";
             this.grpQuestReqs.Size = new System.Drawing.Size(271, 52);
             this.grpQuestReqs.TabIndex = 20;
@@ -254,7 +254,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.cmbFolder.FormattingEnabled = true;
             this.cmbFolder.Location = new System.Drawing.Point(51, 42);
             this.cmbFolder.Name = "cmbFolder";
-            this.cmbFolder.Size = new System.Drawing.Size(86, 21);
+            this.cmbFolder.Size = new System.Drawing.Size(135, 21);
             this.cmbFolder.TabIndex = 50;
             this.cmbFolder.Text = null;
             this.cmbFolder.TextPadding = new System.Windows.Forms.Padding(2);
@@ -357,7 +357,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.txtName.ForeColor = System.Drawing.Color.Gainsboro;
             this.txtName.Location = new System.Drawing.Point(51, 17);
             this.txtName.Name = "txtName";
-            this.txtName.Size = new System.Drawing.Size(110, 20);
+            this.txtName.Size = new System.Drawing.Size(159, 20);
             this.txtName.TabIndex = 1;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
@@ -377,7 +377,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpProgessionOptions.Controls.Add(this.chkQuittable);
             this.grpProgessionOptions.Controls.Add(this.chkRepeatable);
             this.grpProgessionOptions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpProgessionOptions.Location = new System.Drawing.Point(446, 9);
+            this.grpProgessionOptions.Location = new System.Drawing.Point(493, 12);
             this.grpProgessionOptions.Name = "grpProgessionOptions";
             this.grpProgessionOptions.Size = new System.Drawing.Size(126, 60);
             this.grpProgessionOptions.TabIndex = 34;
@@ -653,11 +653,130 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpLogOptions);
             this.pnlContainer.Controls.Add(this.grpQuestTasks);
-            this.pnlContainer.Location = new System.Drawing.Point(221, 34);
+            this.pnlContainer.Location = new System.Drawing.Point(361, 34);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(765, 543);
+            this.pnlContainer.Size = new System.Drawing.Size(805, 492);
             this.pnlContainer.TabIndex = 20;
             this.pnlContainer.Visible = false;
+            // 
+            // grpTaskOptions
+            // 
+            this.grpTaskOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTaskOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTaskOptions.Controls.Add(this.cmbClass);
+            this.grpTaskOptions.Controls.Add(this.lblClassRank);
+            this.grpTaskOptions.Controls.Add(this.nudClassRank);
+            this.grpTaskOptions.Controls.Add(this.lblQuestClass);
+            this.grpTaskOptions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTaskOptions.Location = new System.Drawing.Point(277, 375);
+            this.grpTaskOptions.Name = "grpTaskOptions";
+            this.grpTaskOptions.Size = new System.Drawing.Size(295, 105);
+            this.grpTaskOptions.TabIndex = 61;
+            this.grpTaskOptions.TabStop = false;
+            this.grpTaskOptions.Text = "Task Options";
+            // 
+            // cmbClass
+            // 
+            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbClass.DrawDropdownHoverOutline = false;
+            this.cmbClass.DrawFocusRectangle = false;
+            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbClass.FormattingEnabled = true;
+            this.cmbClass.Location = new System.Drawing.Point(137, 22);
+            this.cmbClass.Name = "cmbClass";
+            this.cmbClass.Size = new System.Drawing.Size(142, 21);
+            this.cmbClass.TabIndex = 61;
+            this.cmbClass.Text = null;
+            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
+            // 
+            // lblClassRank
+            // 
+            this.lblClassRank.AutoSize = true;
+            this.lblClassRank.Location = new System.Drawing.Point(6, 69);
+            this.lblClassRank.Name = "lblClassRank";
+            this.lblClassRank.Size = new System.Drawing.Size(95, 13);
+            this.lblClassRank.TabIndex = 61;
+            this.lblClassRank.Text = "Quest Class Rank:";
+            // 
+            // nudClassRank
+            // 
+            this.nudClassRank.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudClassRank.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudClassRank.Location = new System.Drawing.Point(137, 69);
+            this.nudClassRank.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudClassRank.Name = "nudClassRank";
+            this.nudClassRank.Size = new System.Drawing.Size(142, 20);
+            this.nudClassRank.TabIndex = 60;
+            this.nudClassRank.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudClassRank.ValueChanged += new System.EventHandler(this.nudClassRank_ValueChanged);
+            // 
+            // lblQuestClass
+            // 
+            this.lblQuestClass.AutoSize = true;
+            this.lblQuestClass.Location = new System.Drawing.Point(6, 25);
+            this.lblQuestClass.Name = "lblQuestClass";
+            this.lblQuestClass.Size = new System.Drawing.Size(53, 13);
+            this.lblQuestClass.TabIndex = 60;
+            this.lblQuestClass.Text = "For Class:";
+            // 
+            // grpAdditionalOptions
+            // 
+            this.grpAdditionalOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAdditionalOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdditionalOptions.Controls.Add(this.cmbQuestType);
+            this.grpAdditionalOptions.Controls.Add(this.lblQuestType);
+            this.grpAdditionalOptions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAdditionalOptions.Location = new System.Drawing.Point(3, 375);
+            this.grpAdditionalOptions.Name = "grpAdditionalOptions";
+            this.grpAdditionalOptions.Size = new System.Drawing.Size(268, 82);
+            this.grpAdditionalOptions.TabIndex = 60;
+            this.grpAdditionalOptions.TabStop = false;
+            this.grpAdditionalOptions.Text = "Additional Quest Options";
+            // 
+            // cmbQuestType
+            // 
+            this.cmbQuestType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbQuestType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbQuestType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbQuestType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbQuestType.DrawDropdownHoverOutline = false;
+            this.cmbQuestType.DrawFocusRectangle = false;
+            this.cmbQuestType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbQuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbQuestType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbQuestType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbQuestType.FormattingEnabled = true;
+            this.cmbQuestType.Location = new System.Drawing.Point(77, 22);
+            this.cmbQuestType.Name = "cmbQuestType";
+            this.cmbQuestType.Size = new System.Drawing.Size(185, 21);
+            this.cmbQuestType.TabIndex = 60;
+            this.cmbQuestType.Text = null;
+            this.cmbQuestType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbQuestType.SelectedIndexChanged += new System.EventHandler(this.cmbQuestType_SelectedIndexChanged);
+            // 
+            // lblQuestType
+            // 
+            this.lblQuestType.AutoSize = true;
+            this.lblQuestType.Location = new System.Drawing.Point(6, 25);
+            this.lblQuestType.Name = "lblQuestType";
+            this.lblQuestType.Size = new System.Drawing.Size(65, 13);
+            this.lblQuestType.TabIndex = 60;
+            this.lblQuestType.Text = "Quest Type:";
             // 
             // grpActions
             // 
@@ -668,7 +787,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.grpActions.Controls.Add(this.lblOnEnd);
             this.grpActions.Controls.Add(this.lblOnStart);
             this.grpActions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpActions.Location = new System.Drawing.Point(586, 0);
+            this.grpActions.Location = new System.Drawing.Point(631, 3);
             this.grpActions.Name = "grpActions";
             this.grpActions.Size = new System.Drawing.Size(171, 164);
             this.grpActions.TabIndex = 21;
@@ -716,7 +835,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(796, 583);
+            this.btnCancel.Location = new System.Drawing.Point(976, 532);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -726,7 +845,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(603, 583);
+            this.btnSave.Location = new System.Drawing.Point(780, 532);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -753,7 +872,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(992, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1178, 25);
             this.toolStrip.TabIndex = 40;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -855,132 +974,13 @@ namespace Intersect.Editor.Forms.Editors.Quest
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpAdditionalOptions
-            // 
-            this.grpAdditionalOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpAdditionalOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpAdditionalOptions.Controls.Add(this.cmbQuestType);
-            this.grpAdditionalOptions.Controls.Add(this.lblQuestType);
-            this.grpAdditionalOptions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAdditionalOptions.Location = new System.Drawing.Point(3, 375);
-            this.grpAdditionalOptions.Name = "grpAdditionalOptions";
-            this.grpAdditionalOptions.Size = new System.Drawing.Size(268, 82);
-            this.grpAdditionalOptions.TabIndex = 60;
-            this.grpAdditionalOptions.TabStop = false;
-            this.grpAdditionalOptions.Text = "Additional Quest Options";
-            // 
-            // lblQuestType
-            // 
-            this.lblQuestType.AutoSize = true;
-            this.lblQuestType.Location = new System.Drawing.Point(6, 25);
-            this.lblQuestType.Name = "lblQuestType";
-            this.lblQuestType.Size = new System.Drawing.Size(65, 13);
-            this.lblQuestType.TabIndex = 60;
-            this.lblQuestType.Text = "Quest Type:";
-            // 
-            // cmbQuestType
-            // 
-            this.cmbQuestType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbQuestType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbQuestType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbQuestType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbQuestType.DrawDropdownHoverOutline = false;
-            this.cmbQuestType.DrawFocusRectangle = false;
-            this.cmbQuestType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbQuestType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbQuestType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbQuestType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbQuestType.FormattingEnabled = true;
-            this.cmbQuestType.Location = new System.Drawing.Point(77, 22);
-            this.cmbQuestType.Name = "cmbQuestType";
-            this.cmbQuestType.Size = new System.Drawing.Size(185, 21);
-            this.cmbQuestType.TabIndex = 60;
-            this.cmbQuestType.Text = null;
-            this.cmbQuestType.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbQuestType.SelectedIndexChanged += new System.EventHandler(this.cmbQuestType_SelectedIndexChanged);
-            // 
-            // grpTaskOptions
-            // 
-            this.grpTaskOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpTaskOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTaskOptions.Controls.Add(this.cmbClass);
-            this.grpTaskOptions.Controls.Add(this.lblClassRank);
-            this.grpTaskOptions.Controls.Add(this.nudClassRank);
-            this.grpTaskOptions.Controls.Add(this.lblQuestClass);
-            this.grpTaskOptions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTaskOptions.Location = new System.Drawing.Point(277, 375);
-            this.grpTaskOptions.Name = "grpTaskOptions";
-            this.grpTaskOptions.Size = new System.Drawing.Size(295, 165);
-            this.grpTaskOptions.TabIndex = 61;
-            this.grpTaskOptions.TabStop = false;
-            this.grpTaskOptions.Text = "Task Options";
-            // 
-            // lblQuestClass
-            // 
-            this.lblQuestClass.AutoSize = true;
-            this.lblQuestClass.Location = new System.Drawing.Point(6, 25);
-            this.lblQuestClass.Name = "lblQuestClass";
-            this.lblQuestClass.Size = new System.Drawing.Size(53, 13);
-            this.lblQuestClass.TabIndex = 60;
-            this.lblQuestClass.Text = "For Class:";
-            // 
-            // nudClassRank
-            // 
-            this.nudClassRank.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudClassRank.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudClassRank.Location = new System.Drawing.Point(137, 69);
-            this.nudClassRank.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudClassRank.Name = "nudClassRank";
-            this.nudClassRank.Size = new System.Drawing.Size(142, 20);
-            this.nudClassRank.TabIndex = 60;
-            this.nudClassRank.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudClassRank.ValueChanged += new System.EventHandler(this.nudClassRank_ValueChanged);
-            // 
-            // lblClassRank
-            // 
-            this.lblClassRank.AutoSize = true;
-            this.lblClassRank.Location = new System.Drawing.Point(6, 69);
-            this.lblClassRank.Name = "lblClassRank";
-            this.lblClassRank.Size = new System.Drawing.Size(95, 13);
-            this.lblClassRank.TabIndex = 61;
-            this.lblClassRank.Text = "Quest Class Rank:";
-            // 
-            // cmbClass
-            // 
-            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbClass.DrawDropdownHoverOutline = false;
-            this.cmbClass.DrawFocusRectangle = false;
-            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbClass.FormattingEnabled = true;
-            this.cmbClass.Location = new System.Drawing.Point(137, 22);
-            this.cmbClass.Name = "cmbClass";
-            this.cmbClass.Size = new System.Drawing.Size(142, 21);
-            this.cmbClass.TabIndex = 61;
-            this.cmbClass.Text = null;
-            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
-            // 
             // FrmQuest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(992, 622);
+            this.ClientSize = new System.Drawing.Size(1178, 576);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -1006,15 +1006,15 @@ namespace Intersect.Editor.Forms.Editors.Quest
             ((System.ComponentModel.ISupportInitialize)(this.nudOrderValue)).EndInit();
             this.grpQuestTasks.ResumeLayout(false);
             this.pnlContainer.ResumeLayout(false);
+            this.grpTaskOptions.ResumeLayout(false);
+            this.grpTaskOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).EndInit();
+            this.grpAdditionalOptions.ResumeLayout(false);
+            this.grpAdditionalOptions.PerformLayout();
             this.grpActions.ResumeLayout(false);
             this.grpActions.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpAdditionalOptions.ResumeLayout(false);
-            this.grpAdditionalOptions.PerformLayout();
-            this.grpTaskOptions.ResumeLayout(false);
-            this.grpTaskOptions.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).EndInit();
             this.ResumeLayout(false);
 
         }

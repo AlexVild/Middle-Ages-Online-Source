@@ -31,6 +31,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpHarvestLvl = new DarkUI.Controls.DarkGroupBox();
+            this.nudHarvestAmt = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblHarvestAmt = new System.Windows.Forms.Label();
+            this.lblHarvestLvl = new System.Windows.Forms.Label();
+            this.nudHarvestLevel = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbTools = new DarkUI.Controls.DarkComboBox();
+            this.lblTool = new System.Windows.Forms.Label();
             this.grpVariable = new DarkUI.Controls.DarkGroupBox();
             this.grpStringVariable = new DarkUI.Controls.DarkGroupBox();
             this.lblStringTextVariables = new System.Windows.Forms.Label();
@@ -222,14 +229,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpHarvestLvl = new DarkUI.Controls.DarkGroupBox();
-            this.lblTool = new System.Windows.Forms.Label();
-            this.cmbTools = new DarkUI.Controls.DarkComboBox();
-            this.nudHarvestLevel = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblHarvestLvl = new System.Windows.Forms.Label();
-            this.lblHarvestAmt = new System.Windows.Forms.Label();
-            this.nudHarvestAmt = new DarkUI.Controls.DarkNumericUpDown();
             this.grpConditional.SuspendLayout();
+            this.grpHarvestLvl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestAmt)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestLevel)).BeginInit();
             this.grpVariable.SuspendLayout();
             this.grpStringVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -282,15 +285,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpHarvestLvl.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestLevel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestAmt)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpQuestInProgress);
             this.grpConditional.Controls.Add(this.grpHarvestLvl);
             this.grpConditional.Controls.Add(this.grpVariable);
             this.grpConditional.Controls.Add(this.grpTerritory);
@@ -323,7 +324,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.Controls.Add(this.grpQuestCompleted);
             this.grpConditional.Controls.Add(this.lblType);
             this.grpConditional.Controls.Add(this.btnCancel);
-            this.grpConditional.Controls.Add(this.grpQuestInProgress);
             this.grpConditional.Controls.Add(this.grpStartQuest);
             this.grpConditional.Controls.Add(this.grpTime);
             this.grpConditional.Controls.Add(this.grpPowerIs);
@@ -338,6 +338,119 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpHarvestLvl
+            // 
+            this.grpHarvestLvl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpHarvestLvl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpHarvestLvl.Controls.Add(this.nudHarvestAmt);
+            this.grpHarvestLvl.Controls.Add(this.lblHarvestAmt);
+            this.grpHarvestLvl.Controls.Add(this.lblHarvestLvl);
+            this.grpHarvestLvl.Controls.Add(this.nudHarvestLevel);
+            this.grpHarvestLvl.Controls.Add(this.cmbTools);
+            this.grpHarvestLvl.Controls.Add(this.lblTool);
+            this.grpHarvestLvl.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpHarvestLvl.Location = new System.Drawing.Point(10, 38);
+            this.grpHarvestLvl.Name = "grpHarvestLvl";
+            this.grpHarvestLvl.Size = new System.Drawing.Size(247, 124);
+            this.grpHarvestLvl.TabIndex = 71;
+            this.grpHarvestLvl.TabStop = false;
+            this.grpHarvestLvl.Text = "Harvest Levels";
+            // 
+            // nudHarvestAmt
+            // 
+            this.nudHarvestAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudHarvestAmt.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudHarvestAmt.Location = new System.Drawing.Point(115, 94);
+            this.nudHarvestAmt.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudHarvestAmt.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            -2147483648});
+            this.nudHarvestAmt.Name = "nudHarvestAmt";
+            this.nudHarvestAmt.Size = new System.Drawing.Size(125, 20);
+            this.nudHarvestAmt.TabIndex = 53;
+            this.nudHarvestAmt.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblHarvestAmt
+            // 
+            this.lblHarvestAmt.AutoSize = true;
+            this.lblHarvestAmt.Location = new System.Drawing.Point(10, 95);
+            this.lblHarvestAmt.Name = "lblHarvestAmt";
+            this.lblHarvestAmt.Size = new System.Drawing.Size(43, 13);
+            this.lblHarvestAmt.TabIndex = 52;
+            this.lblHarvestAmt.Text = "Amount";
+            // 
+            // lblHarvestLvl
+            // 
+            this.lblHarvestLvl.AutoSize = true;
+            this.lblHarvestLvl.Location = new System.Drawing.Point(10, 67);
+            this.lblHarvestLvl.Name = "lblHarvestLvl";
+            this.lblHarvestLvl.Size = new System.Drawing.Size(73, 13);
+            this.lblHarvestLvl.TabIndex = 51;
+            this.lblHarvestLvl.Text = "Harvest Level";
+            // 
+            // nudHarvestLevel
+            // 
+            this.nudHarvestLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudHarvestLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudHarvestLevel.Location = new System.Drawing.Point(116, 67);
+            this.nudHarvestLevel.Maximum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudHarvestLevel.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            -2147483648});
+            this.nudHarvestLevel.Name = "nudHarvestLevel";
+            this.nudHarvestLevel.Size = new System.Drawing.Size(125, 20);
+            this.nudHarvestLevel.TabIndex = 50;
+            this.nudHarvestLevel.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // cmbTools
+            // 
+            this.cmbTools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTools.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTools.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTools.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTools.DrawDropdownHoverOutline = false;
+            this.cmbTools.DrawFocusRectangle = false;
+            this.cmbTools.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTools.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTools.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTools.FormattingEnabled = true;
+            this.cmbTools.Location = new System.Drawing.Point(11, 36);
+            this.cmbTools.Name = "cmbTools";
+            this.cmbTools.Size = new System.Drawing.Size(229, 21);
+            this.cmbTools.TabIndex = 4;
+            this.cmbTools.Text = null;
+            this.cmbTools.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblTool
+            // 
+            this.lblTool.AutoSize = true;
+            this.lblTool.Location = new System.Drawing.Point(10, 20);
+            this.lblTool.Name = "lblTool";
+            this.lblTool.Size = new System.Drawing.Size(28, 13);
+            this.lblTool.TabIndex = 3;
+            this.lblTool.Text = "Tool";
             // 
             // grpVariable
             // 
@@ -2636,7 +2749,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpQuestInProgress.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpQuestInProgress.Location = new System.Drawing.Point(9, 40);
             this.grpQuestInProgress.Name = "grpQuestInProgress";
-            this.grpQuestInProgress.Size = new System.Drawing.Size(263, 122);
+            this.grpQuestInProgress.Size = new System.Drawing.Size(263, 145);
             this.grpQuestInProgress.TabIndex = 32;
             this.grpQuestInProgress.TabStop = false;
             this.grpQuestInProgress.Text = "Quest In Progress:";
@@ -2665,9 +2778,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuestTask.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbQuestTask.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbQuestTask.FormattingEnabled = true;
-            this.cmbQuestTask.Location = new System.Drawing.Point(92, 83);
+            this.cmbQuestTask.Location = new System.Drawing.Point(6, 107);
             this.cmbQuestTask.Name = "cmbQuestTask";
-            this.cmbQuestTask.Size = new System.Drawing.Size(163, 21);
+            this.cmbQuestTask.Size = new System.Drawing.Size(252, 21);
             this.cmbQuestTask.TabIndex = 8;
             this.cmbQuestTask.Text = null;
             this.cmbQuestTask.TextPadding = new System.Windows.Forms.Padding(2);
@@ -3087,118 +3200,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpHarvestLvl
-            // 
-            this.grpHarvestLvl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpHarvestLvl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpHarvestLvl.Controls.Add(this.nudHarvestAmt);
-            this.grpHarvestLvl.Controls.Add(this.lblHarvestAmt);
-            this.grpHarvestLvl.Controls.Add(this.lblHarvestLvl);
-            this.grpHarvestLvl.Controls.Add(this.nudHarvestLevel);
-            this.grpHarvestLvl.Controls.Add(this.cmbTools);
-            this.grpHarvestLvl.Controls.Add(this.lblTool);
-            this.grpHarvestLvl.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpHarvestLvl.Location = new System.Drawing.Point(10, 38);
-            this.grpHarvestLvl.Name = "grpHarvestLvl";
-            this.grpHarvestLvl.Size = new System.Drawing.Size(247, 124);
-            this.grpHarvestLvl.TabIndex = 71;
-            this.grpHarvestLvl.TabStop = false;
-            this.grpHarvestLvl.Text = "Harvest Levels";
-            // 
-            // lblTool
-            // 
-            this.lblTool.AutoSize = true;
-            this.lblTool.Location = new System.Drawing.Point(10, 20);
-            this.lblTool.Name = "lblTool";
-            this.lblTool.Size = new System.Drawing.Size(28, 13);
-            this.lblTool.TabIndex = 3;
-            this.lblTool.Text = "Tool";
-            // 
-            // cmbTools
-            // 
-            this.cmbTools.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTools.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTools.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTools.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTools.DrawDropdownHoverOutline = false;
-            this.cmbTools.DrawFocusRectangle = false;
-            this.cmbTools.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTools.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTools.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTools.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTools.FormattingEnabled = true;
-            this.cmbTools.Location = new System.Drawing.Point(11, 36);
-            this.cmbTools.Name = "cmbTools";
-            this.cmbTools.Size = new System.Drawing.Size(229, 21);
-            this.cmbTools.TabIndex = 4;
-            this.cmbTools.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // nudHarvestLevel
-            // 
-            this.nudHarvestLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudHarvestLevel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudHarvestLevel.Location = new System.Drawing.Point(116, 67);
-            this.nudHarvestLevel.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.nudHarvestLevel.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            -2147483648});
-            this.nudHarvestLevel.Name = "nudHarvestLevel";
-            this.nudHarvestLevel.Size = new System.Drawing.Size(125, 20);
-            this.nudHarvestLevel.TabIndex = 50;
-            this.nudHarvestLevel.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // lblHarvestLvl
-            // 
-            this.lblHarvestLvl.AutoSize = true;
-            this.lblHarvestLvl.Location = new System.Drawing.Point(10, 67);
-            this.lblHarvestLvl.Name = "lblHarvestLvl";
-            this.lblHarvestLvl.Size = new System.Drawing.Size(73, 13);
-            this.lblHarvestLvl.TabIndex = 51;
-            this.lblHarvestLvl.Text = "Harvest Level";
-            // 
-            // lblHarvestAmt
-            // 
-            this.lblHarvestAmt.AutoSize = true;
-            this.lblHarvestAmt.Location = new System.Drawing.Point(10, 95);
-            this.lblHarvestAmt.Name = "lblHarvestAmt";
-            this.lblHarvestAmt.Size = new System.Drawing.Size(43, 13);
-            this.lblHarvestAmt.TabIndex = 52;
-            this.lblHarvestAmt.Text = "Amount";
-            // 
-            // nudHarvestAmt
-            // 
-            this.nudHarvestAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudHarvestAmt.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudHarvestAmt.Location = new System.Drawing.Point(115, 94);
-            this.nudHarvestAmt.Maximum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.nudHarvestAmt.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            -2147483648});
-            this.nudHarvestAmt.Name = "nudHarvestAmt";
-            this.nudHarvestAmt.Size = new System.Drawing.Size(125, 20);
-            this.nudHarvestAmt.TabIndex = 53;
-            this.nudHarvestAmt.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3210,6 +3211,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 511);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpHarvestLvl.ResumeLayout(false);
+            this.grpHarvestLvl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestAmt)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestLevel)).EndInit();
             this.grpVariable.ResumeLayout(false);
             this.grpStringVariable.ResumeLayout(false);
             this.grpStringVariable.PerformLayout();
@@ -3300,10 +3305,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpHarvestLvl.ResumeLayout(false);
-            this.grpHarvestLvl.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestLevel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudHarvestAmt)).EndInit();
             this.ResumeLayout(false);
 
         }

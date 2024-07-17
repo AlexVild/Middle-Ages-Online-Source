@@ -159,6 +159,16 @@ namespace Intersect.GameObjects
             BonusEffects.FindAll(effect => effect.Type == type).ForEach(effect => effect.Percentage = value);
         }
 
+        [NotMapped]
+        public Dictionary<Vitals, int> VitalBoosts{ get; set; }
+
+        [Column("VitalBoosts")]
+        public string VitalBoostsJson
+        {
+            get => JsonConvert.SerializeObject(VitalBoosts);
+            set => VitalBoosts = JsonConvert.DeserializeObject<Dictionary<Vitals, int>>(value);
+        }
+
         public string EventDescription { get; set; }
 
         public Guid CompletionEventId { get; set; }
