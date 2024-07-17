@@ -4826,5 +4826,22 @@ namespace Intersect.Server.Networking
 
             PacketSender.SendMap(client, packet.MapId, true); //Sends map to everyone/everything in proximity
         }
+
+        public void HandlePacket(Client client, RequestChallengeBonusesPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            List<int> values = new List<int>();
+            foreach (EffectType effect in Enum.GetValues(typeof(EffectType))) 
+            {
+                values.Add(player.GetChallengeEffects(effect));
+            }
+
+            player.SendPacket(new Network.Packets.Server.ChallengeBonusesPacket(values.ToArray()));
+        }
     }
 }

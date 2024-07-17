@@ -55,38 +55,9 @@ namespace Intersect.Server.Entities.Combat
             var flatStats = BaseStat + mOwner.StatPointAllocations[(int)mStatType];
             var percentageStats = 0;
 
-            // Add item buffs
-            if (mOwner is Player player)
-            {
-                var statBuffs = player.GetItemStatBuffs(mStatType);
-                var permaBuffs = player.GetPermabuffStat(mStatType);
-
-                flatStats += statBuffs.Item1 + permaBuffs.Item1;
-                percentageStats += statBuffs.Item2 + permaBuffs.Item2;
-
-                // Apply current buffs - these are the kinds of buffs that will get capped (items and level stats)
-                flatStats = (int)Math.Ceiling(flatStats + (flatStats * (percentageStats / 100f)));
-                
-                if (player.StatCapActive)
-                {
-                    // +1 to tier because of the "None" rarity type throwing some stuff off
-                    var statIsScaledDown = CombatUtilities.TryCapStatToTier(player.CurrentTierCap + 1, mStatType, ref flatStats);
-                    
-                    player.IsScaledDown = player.IsScaledDown || statIsScaledDown;
-                    player.ScaledTo = player.CurrentTierCap;
-                }
-                else
-                {
-                    player.IsScaledDown = false;
-                }
-
-                // Reset so spell/passives can recalc for final value
-                percentageStats = 0;
-                var passiveBuffs = player.GetPassiveStatBuffs(mStatType);
-
-                flatStats += passiveBuffs.Item1;
-                percentageStats += passiveBuffs.Item2;
-            }
+            var statBonuses = mOwner.GetStatBonuses(mStatType);
+            flatStats += statBonuses.Item1;
+            percentageStats += statBonuses.Item2;
 
             //Add spell buffs
             foreach (var buff in mCachedBuffs)

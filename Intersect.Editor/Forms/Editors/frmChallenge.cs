@@ -581,7 +581,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudBonusEffects_ValueChanged(object sender, EventArgs e)
         {
-            var prevSelection = lstVitals.SelectedIndex;
+            var prevSelection = lstBonuses.SelectedIndex;
             if (prevSelection == -1)
             {
                 return;

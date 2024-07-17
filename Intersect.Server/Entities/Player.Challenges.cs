@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
@@ -86,6 +87,9 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         private bool WeaponMaxedReminder { get; set; } = false;
+
+        [NotMapped, JsonIgnore]
+        private ChallengeDescriptor[] CompletedChallenges => Challenges.Where(chg => chg.Complete && chg.Challenge != default).Select(chg => chg.Challenge).ToArray();
 
         public Guid TrackedWeaponType { get; set; }
 
@@ -469,10 +473,7 @@ namespace Intersect.Server.Entities
             return true;
 
             var equippedWeapon = GetEquippedWeapon();
-            return equippedWeapon != null 
-                && equippedWeapon.MaxWeaponLevels != null 
-                && equippedWeapon.MaxWeaponLevels.TryGetValue(mastery.WeaponTypeId, out var maxWeaponLevel)
-                && maxWeaponLevel > mastery.Level;
+            return WeaponCanProgressMastery(mastery, equippedWeapon);
         }
 
         public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery, ItemBase weapon)
@@ -790,6 +791,62 @@ namespace Intersect.Server.Entities
             {
                 challenge.Streak = 0;
             }
+        }
+
+        public Tuple<int, int> GetChallengeStatBuffs(Stats statType)
+        {
+            var flatStats = 0;
+            var percentageStats = 0;
+
+            //Add up player equipment values
+            foreach (var challenge in CompletedChallenges)
+            {
+                if (challenge.StatBoosts == null || !challenge.StatBoosts.TryGetValue(statType, out var val))
+                {
+                    continue;
+                }
+
+                flatStats += val;
+            }
+
+            return new Tuple<int, int>(flatStats, percentageStats);
+        }
+
+        public Tuple<int, int> GetChallengeVitalBuffs(Vitals vitalType)
+        {
+            var flatStats = 0;
+            var percentageStats = 0;
+
+            //Add up player equipment values
+            foreach (var challenge in CompletedChallenges)
+            {
+                if (challenge.VitalBoosts == null || !challenge.VitalBoosts.TryGetValue(vitalType, out var val))
+                {
+                    continue;
+                }
+
+                flatStats += val;
+            }
+
+            return new Tuple<int, int>(flatStats, percentageStats);
+        }
+
+        public int GetChallengeEffects(EffectType bonusEffect)
+        {
+            var percentage = 0;
+
+            //Add up player equipment values
+            foreach (var challenge in CompletedChallenges)
+            {
+                if (challenge.BonusEffects == null)
+                {
+                    continue;
+                }
+
+                percentage += challenge.GetBonusEffectPercentage(bonusEffect);
+            }
+
+            return percentage;
         }
     }
 }

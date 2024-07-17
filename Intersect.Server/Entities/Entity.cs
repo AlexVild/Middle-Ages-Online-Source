@@ -2423,5 +2423,10 @@ namespace Intersect.Server.Entities
         {
             return 0f;
         }
+
+        public virtual Tuple<int, int> GetStatBonuses(Stats stat)
+        {
+            return new Tuple<int, int>(0, 0);
+        }
     }
 }

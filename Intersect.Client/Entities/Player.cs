@@ -29,6 +29,7 @@ using Intersect.GameObjects.Crafting;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Localization;
 using Intersect.GameObjects.Events;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Intersect.Client.Entities
 {
@@ -3353,6 +3354,22 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            for (var idx = 0; idx < ChallengeBonusEffects.Count; idx++)
+            {
+                var amt = ChallengeBonusEffects[idx];
+                if (ChallengeBonusEffects.Count <= idx || amt == 0)
+                {
+                    continue;
+                }
+                
+                if (!effectValues.ContainsKey((EffectType)idx))
+                {
+                    effectValues[(EffectType)idx] = amt;
+                    continue;
+                }
+                effectValues[(EffectType)idx] += amt;
+            }
+
             return effectValues;
         }
     }
@@ -3368,6 +3385,8 @@ namespace Intersect.Client.Entities
         public CharacterWindowUpdate ChallengeUpdateDelegate;
 
         public List<Guid> UnlockedRecipes { get; set; } = new List<Guid>();
+
+        public List<int> ChallengeBonusEffects { get; set; } = new List<int>();
     }
 
     public partial class Player : Entity

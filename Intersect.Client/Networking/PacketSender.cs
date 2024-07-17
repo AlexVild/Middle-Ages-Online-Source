@@ -800,5 +800,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestTerritorySyncPacket(mapId, territoryDescriptorId));
         }
+
+        public static void SendRequestChallengeBonuses()
+        {
+            Network.SendPacket(new RequestChallengeBonusesPacket());
+        }
     }
 }

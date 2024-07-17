@@ -3091,6 +3091,17 @@ namespace Intersect.Client.Networking
             Interface.Interface.GameUi?.ClanWarCompletionWindow?.Show(packet.Placement, packet.Payout);
             Interface.Interface.GameUi?.ClanWarScorePanel?.Hide();
         }
+
+        public void HandlePacket(IPacketSender packetSender, ChallengeBonusesPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.ChallengeBonusEffects = packet.Bonuses.ToList();
+            CharacterBonusesPanelController.Refresh = true;
+        }
     }
 }
  

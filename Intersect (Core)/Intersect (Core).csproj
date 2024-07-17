@@ -426,6 +426,7 @@
     <Compile Include="Network\Packets\Client\OverwriteLoadoutPacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RemoveLoadoutPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestChallengeBonusesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeContractPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestCosmeticsPacket.cs" />
@@ -459,6 +460,7 @@
     <Compile Include="Network\Packets\Client\WishlistAddPacket.cs" />
     <Compile Include="Network\Packets\Client\WishlistRemovePacket.cs" />
     <Compile Include="Network\Packets\Editor\MapCopyPacket.cs" />
+    <Compile Include="Network\Packets\Server\ChallengeBonusesPacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Server\ClanWarCompletePacket.cs" />
     <Compile Include="Network\Packets\Server\ClanWarScoreUpdatePacket.cs" />

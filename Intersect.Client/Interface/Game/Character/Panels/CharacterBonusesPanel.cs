@@ -4,6 +4,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
+using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -83,6 +84,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         public override void Show()
         {
+            PacketSender.SendRequestChallengeBonuses();
             RefreshValues();
             base.Show();
         }

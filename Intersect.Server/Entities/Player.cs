@@ -1465,6 +1465,7 @@ namespace Intersect.Server.Entities
             }
 
             maxVital += PermabuffedVitals[vital];
+            maxVital += GetChallengeVitalBuffs((Vitals)vital).Item1;
 
             //Must have at least 1 hp and no less than 0 mp
             if (vital == (int) Vitals.Health)
@@ -4403,7 +4404,7 @@ namespace Intersect.Server.Entities
                 value += ItemInstanceHelper.GetEffectBoost(item.ItemProperties, effect);
             }
 
-            return value + PassiveEffectTotal(effect);
+            return value + PassiveEffectTotal(effect) + GetChallengeEffects(effect);
         }
 
         public override float GetBonusEffectPercent(EffectType effect, bool additive, int startValue = 0)
@@ -10263,6 +10264,42 @@ namespace Intersect.Server.Entities
 
             SilenceToasts = false;
             CraftingDataBackfilled = true;
+        }
+
+        public override Tuple<int, int> GetStatBonuses(Stats stat)
+        {
+            var flatStats = 0;
+            var percentageStats = 0;
+            var itemBuffs = GetItemStatBuffs(stat);
+            var permaBuffs = GetPermabuffStat(stat);
+            var challengeBuffs = GetChallengeStatBuffs(stat);
+
+            flatStats += itemBuffs.Item1 + permaBuffs.Item1 + challengeBuffs.Item1;
+            percentageStats += itemBuffs.Item2 + permaBuffs.Item2 + challengeBuffs.Item2;
+
+            // Apply current buffs - these are the kinds of buffs that will get capped (items and level stats)
+            flatStats = (int)Math.Ceiling(flatStats + (flatStats * (percentageStats / 100f)));
+
+            if (StatCapActive)
+            {
+                // +1 to tier because of the "None" rarity type throwing some stuff off
+                var statIsScaledDown = CombatUtilities.TryCapStatToTier(CurrentTierCap + 1, stat, ref flatStats);
+
+                IsScaledDown = IsScaledDown || statIsScaledDown;
+                ScaledTo = CurrentTierCap;
+            }
+            else
+            {
+                IsScaledDown = false;
+            }
+
+            // Reset so spell/passives can recalc for final value
+            percentageStats = 0;
+            var passiveBuffs = GetPassiveStatBuffs(stat);
+
+            flatStats += passiveBuffs.Item1;
+            percentageStats += passiveBuffs.Item2;
+            return new Tuple<int, int>(flatStats, percentageStats);
         }
     }
 }
