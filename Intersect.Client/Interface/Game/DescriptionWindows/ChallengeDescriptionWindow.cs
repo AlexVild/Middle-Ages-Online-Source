@@ -1,6 +1,7 @@
 ﻿using Intersect.GameObjects;
 using Intersect.Client.General;
 using System;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -48,8 +49,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var description = AddDescription();
             description.AddText(Challenge.GetDescription(), Color.White);
 
-            // Set up bind info, if applicable.
             SetupExtraInfo();
+
+            if (Challenge.HasStatBoosts())
+            {
+                SetupBoosts();
+            }
 
             // Resize the container, correct the display and position our window.
             FinalizeWindow();
@@ -123,6 +128,58 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 var description = AddDescription();
                 description.AddText(Challenge.EventDescription, CustomColors.ItemDesc.Muted);
             }
+        }
+
+        protected void SetupBoosts()
+        {
+            // Add a divider.
+            AddDivider();
+
+            // Add a row component.
+            var rows = AddRowContainer();
+
+            rows.AddKeyValueRow("Permanent Boosts:", string.Empty);
+            
+            if (Challenge.StatBoosts != null)
+            {
+                foreach (var statBoost in Challenge.StatBoosts)
+                {
+                    if (statBoost.Value == 0)
+                    {
+                        continue;
+                    }
+
+                    rows.AddKeyValueRow(statBoost.Key.GetDescription(), statBoost.Value.ToString("N0"));
+                }
+            }
+
+            if (Challenge.VitalBoosts != null)
+            {
+                foreach (var vitalBoost in Challenge.VitalBoosts)
+                {
+                    if (vitalBoost.Value == 0)
+                    {
+                        continue;
+                    }
+
+                    rows.AddKeyValueRow(vitalBoost.Key.GetDescription(), vitalBoost.Value.ToString("N0"));
+                }
+            }
+
+            if (Challenge.BonusEffects != null)
+            {
+                foreach (var bonus in Challenge.BonusEffects)
+                {
+                    if (bonus.Percentage == 0)
+                    {
+                        continue;
+                    }
+
+                    rows.AddKeyValueRow(bonus.Type.GetDescription(), $"${bonus.Percentage.ToString("N0")}%");
+                }
+            }
+
+            rows.SizeToChildren(true, true);
         }
 
         public override void Dispose()

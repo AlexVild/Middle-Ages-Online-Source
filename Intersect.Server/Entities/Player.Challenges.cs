@@ -191,7 +191,6 @@ namespace Intersect.Server.Entities
 
             // Instantiate new mastery tracks/challenges in response to this change
             List<string> newTracks = new List<string>();
-            List<string> newChallenges = new List<string>();
             List<Guid> challengeInstanceIds = new List<Guid>();
             foreach (var weaponType in weapon?.WeaponTypes ?? new List<Guid>())
             {
@@ -228,7 +227,7 @@ namespace Intersect.Server.Entities
                 challengeInstanceIds.AddRange(masteryChallenges);
             }
             SendNewTrack(newTracks);
-            SendChallengeUpdate(false, newChallenges);
+            SendChallengeUpdate(false, challengeInstanceIds);
             TrackChallenges(challengeInstanceIds);
 
             // Send weapon EXP update
@@ -275,19 +274,19 @@ namespace Intersect.Server.Entities
             }
 
             // Make sure our active challenges are up to date and, if not, alert the player
-            List<string> newChallenges = new List<string>();
+            List<Guid> newChallenges = new List<Guid>();
             foreach (var challengeId in currentChallenges)
             {
                 if (!TryAddNewChallenge(challengeId))
                 {
                     continue;
                 }
-                newChallenges.Add(ChallengeDescriptor.GetName(challengeId));
+                newChallenges.Add(challengeId);
             }
             if (newChallenges.Count > 0)
             {
                 SendChallengeUpdate(false, newChallenges);
-                TrackChallenges(currentChallenges);
+                TrackChallenges(newChallenges);
             }
 
             // If we're not done yet, then we can't level up yet!
@@ -344,18 +343,21 @@ namespace Intersect.Server.Entities
                 mastery.ExpRemaining = 0L;
                 SendMasteryUpdate(false, weaponType.Name);
 
+
+
                 // Is this weapon at the end of its progress cycle?
-                var weapon = GetEquippedWeapon();
+                /*var weapon = GetEquippedWeapon();
                 if (weapon.MaxWeaponLevels.TryGetValue(weaponType.Id, out var maxWeaponLevel) && maxWeaponLevel == mastery.Level)
                 {
                     SendWeaponMaxedMessage(weaponType);
 
+                    
                     // Is this the first mastery of this weapon that we've maxed?
                     if (FirstMaxLevelFor(weapon, weaponType))
                     {
                         PacketSender.SendChatMsg(this, Strings.Enhancements.CanEnhance.ToString(weapon.Name), Enums.ChatMessageType.Experience, sendToast: true);
                     }
-                }
+                } -- AVild: This is no longer needed */
             }
             PacketSender.SendExperience(this);
         }
@@ -615,7 +617,7 @@ namespace Intersect.Server.Entities
                     {
                         return true;
                     }
-                    SendChallengeUpdate(false, ChallengeDescriptor.GetName(challengeId));
+                    SendChallengeUpdate(false, challengeId);
                     return false;
                 }
 

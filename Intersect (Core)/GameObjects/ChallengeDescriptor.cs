@@ -348,5 +348,30 @@ namespace Intersect.GameObjects
                     return "No description";
             }
         }
+    
+        /// <summary>
+        /// Informs whether or not the challenge has stat, vital, or bonus boosts
+        /// </summary>
+        /// <returns>True if the challenge gives stat boosts</returns>
+        public bool HasStatBoosts()
+        {
+            if (StatBoosts != null && StatBoosts.Values.Any(v => v != 0))
+            {
+                return true;
+            }
+
+            if (VitalBoosts != null && VitalBoosts.Values.Any(v => v != 0))
+            {
+                return true;
+            }
+
+            if (BonusEffects != null && BonusEffects.Count > 0 && BonusEffects.Any(data => data.Percentage != 0))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    
     }
 }
