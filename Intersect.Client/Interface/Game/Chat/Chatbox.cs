@@ -32,8 +32,6 @@ namespace Intersect.Client.Interface.Game.Chat
 
         private ListBox mChatboxMessages;
 
-        private ScrollBar mChatboxScrollBar;
-
         private Button mChatboxSendButton;
 
         private Button mChatboxHideButton;
@@ -58,10 +56,6 @@ namespace Intersect.Client.Interface.Game.Chat
 
         private long mLastChatTime = -1;
 
-        private int mMessageIndex;
-
-        private bool mReceivedMessage;
-
         private bool mChatHidden;
 
         private long mQuickChatNotificationCooldown;
@@ -80,6 +74,8 @@ namespace Intersect.Client.Interface.Game.Chat
         /// The last tab that was looked at before switching around, if a switch was made at all.
         /// </summary>
         private ChatboxTab mLastTab = ChatboxTab.All;
+
+        private int mLastCount = 0;
 
         /// <summary>
         /// Keep track of what chat channel we were chatting in on certain tabs so we can remember this when switching back to them.
@@ -323,24 +319,38 @@ namespace Intersect.Client.Interface.Game.Chat
                 }
             }
 
+            if (mChatHidden)
+            {
+                return;
+            }
+
             var vScrollBar = mChatboxMessages.GetVerticalScrollBar();
             var scrollAmount = vScrollBar.ScrollAmount;
             var scrollBarVisible = vScrollBar.ContentSize > mChatboxMessages.Height;
             var scrollToBottom = vScrollBar.ScrollAmount == 1 || !scrollBarVisible;
 
-            // Did the tab change recently? If so, we need to reset a few things to make it work...
-            if (mLastTab != mCurrentTab)
-            {
-                mChatboxMessages.Clear();
-                mChatboxMessages.GetHorizontalScrollBar().SetScrollAmount(0);
-                mMessageIndex = 0;
-                mReceivedMessage = true;
+            var msgs = ChatboxMsg.GetMessages(mCurrentTab);
 
+            var tabChange = mLastTab != mCurrentTab;
+            // Did the tab change recently? If so, we need to reset a few things to make it work...
+            if (tabChange)
+            {
+                mChatboxMessages.GetHorizontalScrollBar().SetScrollAmount(0);
                 mLastTab = mCurrentTab;
+                ChatboxMsg.NewMessage = true;
             }
 
-            var msgs = ChatboxMsg.GetMessages(mCurrentTab);
-            for (var i = mMessageIndex; i < msgs.Count; i++)
+            mLastCount = msgs.Length;
+
+            if (!ChatboxMsg.NewMessage && !tabChange)
+            {
+                return;
+            }
+
+            ChatboxMsg.NewMessage = false;
+            mChatboxMessages.Clear();
+
+            for (var i = 0; i < msgs.Length; i++)
             {
                 var msg = msgs[i];
                 var myText = Interface.WrapText(
@@ -357,31 +367,24 @@ namespace Intersect.Client.Interface.Game.Chat
                     rw.UserData = msg.Target;
                     rw.Clicked += ChatboxRow_Clicked;
                     rw.RightClicked += ChatboxRow_RightClicked;
-                    mReceivedMessage = true;
 
                     while (mChatboxMessages.RowCount > ClientConfiguration.Instance.ChatLines)
                     {
                         mChatboxMessages.RemoveRow(0);
                     }
                 }
-
-                mMessageIndex++;
             }
 
 
-            if (mReceivedMessage)
+            mChatboxMessages.InnerPanel.SizeToChildren(false, true);
+            mChatboxMessages.UpdateScrollBars();
+            if (!scrollToBottom)
             {
-                mChatboxMessages.InnerPanel.SizeToChildren(false, true);
-                mChatboxMessages.UpdateScrollBars();
-                if (!scrollToBottom)
-                {
-                    vScrollBar.SetScrollAmount(scrollAmount);
-                }
-                else
-                {
-                    vScrollBar.SetScrollAmount(1);
-                }
-                mReceivedMessage = false;
+                vScrollBar.SetScrollAmount(scrollAmount);
+            }
+            else
+            {
+                vScrollBar.SetScrollAmount(1);
             }
         }
 

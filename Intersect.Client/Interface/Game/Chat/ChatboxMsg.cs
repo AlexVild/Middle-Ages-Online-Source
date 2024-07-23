@@ -1,16 +1,44 @@
 ﻿using Intersect.Client.General;
+using Intersect.Configuration;
 using Intersect.Enums;
+using Intersect.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 
 namespace Intersect.Client.Interface.Game.Chat
 {
+    public class SizedQueue<T>: Queue<T>
+    {
+        public int MaxSize = 100;
+
+        public SizedQueue(int maxSize): base()
+        {
+            MaxSize = maxSize;
+        }
+
+        public void EnqueueAndDequeue(T item)
+        {
+            if (Count >= MaxSize)
+            {
+                Dequeue();
+            }
+            
+            Enqueue(item);
+        }
+    }
+
 
     public class ChatboxMsg
     {
+        private static SizedQueue<ChatboxMsg> AllMessages = new SizedQueue<ChatboxMsg>(ClientConfiguration.Instance.ChatLines);
+        private static SizedQueue<ChatboxMsg> LocalMessages = new SizedQueue<ChatboxMsg>(ClientConfiguration.Instance.ChatLines);
+        private static SizedQueue<ChatboxMsg> PartyMessages = new SizedQueue<ChatboxMsg>(ClientConfiguration.Instance.ChatLines);
+        private static SizedQueue<ChatboxMsg> GlobalMessages = new SizedQueue<ChatboxMsg>(ClientConfiguration.Instance.ChatLines);
+        private static SizedQueue<ChatboxMsg> GuildMessages = new SizedQueue<ChatboxMsg>(ClientConfiguration.Instance.ChatLines);
+        private static SizedQueue<ChatboxMsg> SystemMessages = new SizedQueue<ChatboxMsg>(ClientConfiguration.Instance.ChatLines);
 
-        private static List<ChatboxMsg> sGameMessages = new List<ChatboxMsg>();
+        public static bool NewMessage = false;
 
         // TODO: Move to a configuration file to make this player configurable?
         /// <summary>
@@ -76,26 +104,49 @@ namespace Intersect.Client.Interface.Game.Chat
         /// <param name="msg">The message to add.</param>
         public static void AddMessage(ChatboxMsg msg)
         {
-            sGameMessages.Add(msg);
+            var toTab = ChatboxTab.All;
+            foreach (var tab in sTabMessageTypes)
+            {
+                if (!tab.Value.Contains(msg.Type))
+                {
+                    continue;
+                }
+
+                toTab = tab.Key;
+            }
+
+            AllMessages.EnqueueAndDequeue(msg);
+            
+            switch (toTab)
+            {
+                case ChatboxTab.Local:
+                    LocalMessages.EnqueueAndDequeue(msg);
+                    break;
+                case ChatboxTab.Party:
+                    PartyMessages.EnqueueAndDequeue(msg);
+                    break;
+                case ChatboxTab.System:
+                    SystemMessages.EnqueueAndDequeue(msg);
+                    break;
+                case ChatboxTab.Guild:
+                    GuildMessages.EnqueueAndDequeue(msg);
+                    break;
+                case ChatboxTab.Global:
+                    GlobalMessages.EnqueueAndDequeue(msg);
+                    break;
+            }
+            
+            NewMessage = true;
         }
 
         public static void DebugMessage(string message)
         {
 #if DEBUG
             var msg = new ChatboxMsg($"DEBUG: {message}", Color.Gray, ChatMessageType.Admin);
-            sGameMessages.Add(msg);
+            AddMessage(msg);
 #else
             Logging.Log.Debug($"DEBUG: {message}");
 #endif
-        }
-
-        /// <summary>
-        /// Retrieves all chat messages.
-        /// </summary>
-        /// <returns>Returns a list of chat messages.</returns>
-        public static List<ChatboxMsg> GetMessages()
-        {
-            return sGameMessages;
         }
 
         /// <summary>
@@ -103,28 +154,23 @@ namespace Intersect.Client.Interface.Game.Chat
         /// </summary>
         /// <param name="tab">The tab for which to retrieve all messages.</param>
         /// <returns>Returns a list of chat messages.</returns>
-        public static List<ChatboxMsg> GetMessages(ChatboxTab tab)
+        public static ChatboxMsg[] GetMessages(ChatboxTab tab)
         {
-            var output = new List<ChatboxMsg>();
-
-            // Are we looking for all messages?
-            if (tab == ChatboxTab.All)
+            switch (tab)
             {
-                output = GetMessages();
-            }
-            else
-            {
-                // No, sort them out! Select what we want to display in this tab.
-                foreach (var message in sGameMessages)
-                {
-                    if (sTabMessageTypes[tab].Contains(message.Type))
-                    {
-                        output.Add(message);
-                    }
-                }
-            }
-
-            return output;
+                case ChatboxTab.Local:
+                    return LocalMessages.ToArray();
+                case ChatboxTab.Guild:
+                    return GuildMessages.ToArray();
+                case ChatboxTab.Party:
+                    return PartyMessages.ToArray();
+                case ChatboxTab.Global:
+                    return GlobalMessages.ToArray();
+                case ChatboxTab.System:
+                    return SystemMessages.ToArray();
+                default:
+                    return AllMessages.ToArray();
+            }           
         }
 
         /// <summary>
@@ -132,7 +178,12 @@ namespace Intersect.Client.Interface.Game.Chat
         /// </summary>
         public static void ClearMessages()
         {
-            sGameMessages.Clear();
+            LocalMessages.Clear();
+            GuildMessages.Clear();
+            PartyMessages.Clear();
+            GlobalMessages.Clear();
+            SystemMessages.Clear();
+            AllMessages.Clear();
         }
     }
 

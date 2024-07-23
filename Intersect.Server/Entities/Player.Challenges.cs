@@ -408,6 +408,9 @@ namespace Intersect.Server.Entities
             {
                 _ = TryUnlockEnhancement(challenge.EnhancementUnlockId);
             }
+
+
+            SendChallengeStatUpdates(ChallengeDescriptor.Get(challengeId));
         }
 
         public void CompleteMasteryChallenges(WeaponMasteryInstance mastery)

@@ -138,7 +138,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Add a row component.
             var rows = AddRowContainer();
 
-            rows.AddKeyValueRow("Permanent Boosts:", string.Empty);
+            rows.AddKeyValueRow("Permanent Boosts:", string.Empty, CustomColors.ItemDesc.Special, null);
             
             if (Challenge.StatBoosts != null)
             {
@@ -149,7 +149,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                         continue;
                     }
 
-                    rows.AddKeyValueRow(statBoost.Key.GetDescription(), statBoost.Value.ToString("N0"));
+                    var symbol = Math.Sign(statBoost.Value) == 1 ? "+" : "-";
+                    rows.AddKeyValueRow(statBoost.Key.GetDescription(), $"{symbol}{statBoost.Value.ToString("N0")}");
                 }
             }
 
@@ -162,7 +163,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                         continue;
                     }
 
-                    rows.AddKeyValueRow(vitalBoost.Key.GetDescription(), vitalBoost.Value.ToString("N0"));
+                    var symbol = Math.Sign(vitalBoost.Value) == 1 ? "+" : "-";
+                    rows.AddKeyValueRow(vitalBoost.Key.GetDescription(), $"{symbol}{vitalBoost.Value.ToString("N0")}");
                 }
             }
 
@@ -175,7 +177,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                         continue;
                     }
 
-                    rows.AddKeyValueRow(bonus.Type.GetDescription(), $"${bonus.Percentage.ToString("N0")}%");
+                    var symbol = Math.Sign(bonus.Percentage) == 1 ? "+" : "-";
+                    rows.AddKeyValueRow(bonus.Type.GetDescription(), $"{symbol}{bonus.Percentage.ToString("N0")}%");
                 }
             }
 

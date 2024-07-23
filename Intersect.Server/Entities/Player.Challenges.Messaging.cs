@@ -28,8 +28,6 @@ namespace Intersect.Server.Entities
                     Strings.Player.ChallengeComplete.ToString(ChallengeDescriptor.GetName(challengeId)),
                     ChatMessageType.Experience,
                     sendToast: true);
-
-                SendChallengeStatUpdates(ChallengeDescriptor.Get(challengeId));
             }
             else
             {
