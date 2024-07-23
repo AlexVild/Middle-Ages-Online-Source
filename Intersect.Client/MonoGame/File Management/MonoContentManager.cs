@@ -34,8 +34,15 @@ namespace Intersect.Client.MonoGame.File_Management
         //Graphic Loading
         public override void LoadTilesets(string[] tilesetnames)
         {
-            mTilesetDict.Clear();
-
+            if (mTextureAssets.TryGetValue(TextureType.Tileset, out var tilesetDict))
+            {
+                tilesetDict.Clear();
+            }
+            else
+            {
+                InitializeTextureAsset(TextureType.Tileset);
+                tilesetDict = mTextureAssets[TextureType.Tileset];
+            }
             IEnumerable<string> tilesetFiles = Array.Empty<string>();
 
             var dir = Path.Combine("resources", "tilesets");
@@ -57,9 +64,9 @@ namespace Intersect.Client.MonoGame.File_Management
                 if (!string.IsNullOrWhiteSpace(t) &&
                     (!string.IsNullOrWhiteSpace(realFilename) ||
                      GameTexturePacks.GetFrame(Path.Combine("resources", "tilesets", t.ToLower())) != null) &&
-                    !mTilesetDict.ContainsKey(t.ToLower()))
+                    !tilesetDict.ContainsKey(t.ToLower()))
                 {
-                    mTilesetDict.Add(
+                    tilesetDict.Add(
                         t.ToLower(), Core.Graphics.Renderer.LoadTexture(Path.Combine("resources", "tilesets", t), Path.Combine("resources", "tilesets", realFilename))
                     );
                 }
@@ -149,69 +156,93 @@ namespace Intersect.Client.MonoGame.File_Management
             }
         }
 
+        private void InitializeTextureAsset(TextureType type)
+        {
+            if (mTextureAssets.ContainsKey(type))
+            {
+                mTextureAssets[type] = new Dictionary<string, IAsset>();
+                return;
+            }
+
+            mTextureAssets.Add(type, new Dictionary<string, IAsset>());
+        }
+
         public override void LoadItems()
         {
-            LoadTextureGroup("items", mItemDict);
+            InitializeTextureAsset(TextureType.Item);
+            LoadTextureGroup("items", mTextureAssets[TextureType.Item]);
         }
 
         public override void LoadEntities()
         {
-            LoadTextureGroup("entities", mEntityDict);
+            InitializeTextureAsset(TextureType.Entity);
+            LoadTextureGroup("entities", mTextureAssets[TextureType.Entity]);
         }
 
         public override void LoadSpells()
         {
-            LoadTextureGroup("spells", mSpellDict);
+            InitializeTextureAsset(TextureType.Spell);
+            LoadTextureGroup("spells", mTextureAssets[TextureType.Spell]);
         }
 
         public override void LoadAnimations()
         {
-            LoadTextureGroup("animations", mAnimationDict);
+            InitializeTextureAsset(TextureType.Animation);
+            LoadTextureGroup("animations", mTextureAssets[TextureType.Animation]);
         }
 
         public override void LoadFaces()
         {
-            LoadTextureGroup("faces", mFaceDict);
+            InitializeTextureAsset(TextureType.Face);
+            LoadTextureGroup("faces", mTextureAssets[TextureType.Face]);
         }
 
         public override void LoadImages()
         {
-            LoadTextureGroup("images", mImageDict);
+            InitializeTextureAsset(TextureType.Image);
+            LoadTextureGroup("images", mTextureAssets[TextureType.Image]);
         }
 
         public override void LoadFogs()
         {
-            LoadTextureGroup("fogs", mFogDict);
+            InitializeTextureAsset(TextureType.Fog);
+            LoadTextureGroup("fogs", mTextureAssets[TextureType.Fog]);
         }
 
         public override void LoadResources()
         {
-            LoadTextureGroup("resources", mResourceDict);
+            InitializeTextureAsset(TextureType.Resource);
+            LoadTextureGroup("resources", mTextureAssets[TextureType.Resource]);
         }
 
         public override void LoadPaperdolls()
         {
-            LoadTextureGroup("paperdolls", mPaperdollDict);
+            InitializeTextureAsset(TextureType.Paperdoll);
+            LoadTextureGroup("paperdolls", mTextureAssets[TextureType.Paperdoll]);
         }
 
         public override void LoadGui()
         {
-            LoadTextureGroup("gui", mGuiDict);
+            InitializeTextureAsset(TextureType.Gui);
+            LoadTextureGroup("gui", mTextureAssets[TextureType.Gui]);
         }
 
         public override void LoadDecor()
         {
-            LoadTextureGroup("decor", mDecorDict);
+            InitializeTextureAsset(TextureType.Decor);
+            LoadTextureGroup("decor", mTextureAssets[TextureType.Decor]);
         }
 
         public override void LoadChallenges()
         {
-            LoadTextureGroup("challenges", mChallengeDict);
+            InitializeTextureAsset(TextureType.Challenge);
+            LoadTextureGroup("challenges", mTextureAssets[TextureType.Challenge]);
         }
 
         public override void LoadMisc()
         {
-            LoadTextureGroup("misc", mMiscDict);
+            InitializeTextureAsset(TextureType.Misc);
+            LoadTextureGroup("misc", mTextureAssets[TextureType.Misc]);
         }
 
         public override void LoadFonts()

@@ -61,33 +61,11 @@ namespace Intersect.Client.Framework.File_Management
 
         public static GameContentManager Current;
 
-        protected Dictionary<string, IAsset> mAnimationDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mEntityDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mFaceDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mFogDict = new Dictionary<string, IAsset>();
+        protected Dictionary<TextureType, Dictionary<string, IAsset>> mTextureAssets = new Dictionary<TextureType, Dictionary<string, IAsset>>();
 
         protected List<GameFont> mFontDict = new List<GameFont>();
 
-        protected Dictionary<string, IAsset> mGuiDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mImageDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mItemDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mMiscDict = new Dictionary<string, IAsset>();
-
         protected Dictionary<string, GameAudioSource> mMusicDict = new Dictionary<string, GameAudioSource>();
-
-        protected Dictionary<string, IAsset> mPaperdollDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mResourceDict = new Dictionary<string, IAsset>();
-
-        protected Dictionary<string, IAsset> mDecorDict = new Dictionary<string, IAsset>();
-        
-        protected Dictionary<string, IAsset> mChallengeDict = new Dictionary<string, IAsset>();
 
         protected Dictionary<string, GameShader> mShaderDict = new Dictionary<string, GameShader>();
         
@@ -110,7 +88,6 @@ namespace Intersect.Client.Framework.File_Management
         protected Dictionary<string, IAsset> mTexturePackDict = new Dictionary<string, IAsset>();
 
         //Game Content
-        protected Dictionary<string, IAsset> mTilesetDict = new Dictionary<string, IAsset>();
 
         public bool TilesetsLoaded = false;
 
@@ -198,139 +175,18 @@ namespace Intersect.Client.Framework.File_Management
 
         public string[] GetTextureNames(TextureType type)
         {
-            switch (type)
+            if (mTextureAssets.TryGetValue(type, out var txtDict))
             {
-                case TextureType.Tileset:
-                    return mTilesetDict.Keys.ToArray();
-
-                case TextureType.Item:
-                    return mItemDict.Keys.ToArray();
-
-                case TextureType.Entity:
-                    return mEntityDict.Keys.ToArray();
-
-                case TextureType.Spell:
-                    return mSpellDict.Keys.ToArray();
-
-                case TextureType.Animation:
-                    return mAnimationDict.Keys.ToArray();
-
-                case TextureType.Face:
-                    return mFaceDict.Keys.ToArray();
-
-                case TextureType.Image:
-                    return mImageDict.Keys.ToArray();
-
-                case TextureType.Fog:
-                    return mFogDict.Keys.ToArray();
-
-                case TextureType.Resource:
-                    return mResourceDict.Keys.ToArray();
-
-                case TextureType.Paperdoll:
-                    return mPaperdollDict.Keys.ToArray();
-
-                case TextureType.Gui:
-                    return mGuiDict.Keys.ToArray();
-
-                case TextureType.Misc:
-                    return mMiscDict.Keys.ToArray();
-
-                case TextureType.Decor:
-                    return mDecorDict.Keys.ToArray();
-                
-                case TextureType.Challenge:
-                    return mChallengeDict.Keys.ToArray();
+                return null;
             }
 
-            return null;
+            return txtDict.Keys.ToArray();
         }
 
         //Content Getters
         public virtual GameTexture GetTexture(TextureType type, string name)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                return null;
-            }
-
-            IDictionary<string, IAsset> textureDict;
-            switch (type)
-            {
-                case TextureType.Tileset:
-                    textureDict = mTilesetDict;
-
-                    break;
-
-                case TextureType.Item:
-                    textureDict = mItemDict;
-
-                    break;
-
-                case TextureType.Entity:
-                    textureDict = mEntityDict;
-
-                    break;
-
-                case TextureType.Spell:
-                    textureDict = mSpellDict;
-
-                    break;
-
-                case TextureType.Animation:
-                    textureDict = mAnimationDict;
-
-                    break;
-
-                case TextureType.Face:
-                    textureDict = mFaceDict;
-
-                    break;
-
-                case TextureType.Image:
-                    textureDict = mImageDict;
-
-                    break;
-
-                case TextureType.Fog:
-                    textureDict = mFogDict;
-
-                    break;
-
-                case TextureType.Resource:
-                    textureDict = mResourceDict;
-
-                    break;
-
-                case TextureType.Paperdoll:
-                    textureDict = mPaperdollDict;
-
-                    break;
-
-                case TextureType.Gui:
-                    textureDict = mGuiDict;
-
-                    break;
-
-                case TextureType.Misc:
-                    textureDict = mMiscDict;
-
-                    break;
-
-                case TextureType.Decor:
-                    textureDict = mDecorDict;
-
-                    break;
-
-                case TextureType.Challenge:
-                    textureDict = mChallengeDict;
-
-                    break;
-                default:
-                    return null;
-            }
-
-            if (textureDict == null)
+            if (string.IsNullOrEmpty(name) || !mTextureAssets.TryGetValue(type, out var textureDict))
             {
                 return null;
             }
@@ -532,51 +388,49 @@ namespace Intersect.Client.Framework.File_Management
             switch (contentType)
             {
                 case ContentTypes.Animation:
-                    return mAnimationDict;
+                    return mTextureAssets[TextureType.Animation];
 
                 case ContentTypes.Entity:
-                    return mEntityDict;
+                    return mTextureAssets[TextureType.Entity];
 
                 case ContentTypes.Face:
-                    return mFaceDict;
+                    return mTextureAssets[TextureType.Face];
 
                 case ContentTypes.Fog:
-                    return mFogDict;
+                    return mTextureAssets[TextureType.Fog];
 
                 case ContentTypes.Image:
-                    return mImageDict;
+                    return mTextureAssets[TextureType.Image];
 
                 case ContentTypes.Interface:
-                    return mGuiDict;
+                    return mTextureAssets[TextureType.Gui];
 
                 case ContentTypes.Item:
-                    return mItemDict;
+                    return mTextureAssets[TextureType.Item];
 
                 case ContentTypes.Miscellaneous:
-                    return mMiscDict;
+                    return mTextureAssets[TextureType.Misc];
 
                 case ContentTypes.Paperdoll:
-                    return mPaperdollDict;
+                    return mTextureAssets[TextureType.Paperdoll];
 
                 case ContentTypes.Resource:
-                    return mResourceDict;
+                    return mTextureAssets[TextureType.Resource];
 
                 case ContentTypes.Spell:
-                    return mSpellDict;
+                    return mTextureAssets[TextureType.Spell];
 
                 case ContentTypes.TexturePack:
                     return mTexturePackDict;
 
                 case ContentTypes.TileSet:
-                    return mTilesetDict;
+                    return mTextureAssets[TextureType.Tileset];
 
                 case ContentTypes.Decor:
-                    return mDecorDict;
-                    break;
+                    return mTextureAssets[TextureType.Decor];
 
                 case ContentTypes.Challenges:
-                    return mChallengeDict;
-                    break;
+                    return mTextureAssets[TextureType.Challenge];
 
                 case ContentTypes.Font:
                     throw new NotImplementedException();
