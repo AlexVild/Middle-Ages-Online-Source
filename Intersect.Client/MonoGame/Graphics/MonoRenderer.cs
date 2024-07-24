@@ -18,6 +18,7 @@ using Microsoft.Xna.Framework.Graphics;
 using XNARectangle = Microsoft.Xna.Framework.Rectangle;
 using XNAColor = Microsoft.Xna.Framework.Color;
 using Intersect.Client.Interface.Game.Toasts;
+using Intersect.Configuration;
 
 namespace Intersect.Client.MonoGame.Graphics
 {
@@ -885,6 +886,10 @@ namespace Intersect.Client.MonoGame.Graphics
             }
 
             var tex = new MonoTexture(mGraphicsDevice, filename, realFilename);
+            if (ClientConfiguration.Instance.PreloadAssets)
+            {
+                tex.LoadTexture();
+            }
             mAllTextures.Add(tex);
 
             return tex;

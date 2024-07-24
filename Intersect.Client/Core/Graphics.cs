@@ -9,6 +9,7 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.HUD;
+using Intersect.Client.Interface.Loading;
 using Intersect.Client.Maps;
 using Intersect.Configuration;
 using Intersect.Enums;
@@ -134,9 +135,14 @@ namespace Intersect.Client.Core
         //Init Functions
         public static void InitGraphics()
         {
+            PreloadWindow loadingWindow = new PreloadWindow();
+            loadingWindow.Show();
+
             Renderer.Init();
             sContentManager = Globals.ContentManager;
+            
             sContentManager.LoadAll();
+            
             GameFont = FindFont(ClientConfiguration.Instance.GameFont);
             UIFont = FindFont(ClientConfiguration.Instance.UIFont);
             EntityNameFont = FindFont(ClientConfiguration.Instance.EntityNameFont);
@@ -155,6 +161,8 @@ namespace Intersect.Client.Core
                 GameContentManager.TextureType.Gui, ClientConfiguration.Instance.Logo
             );
             CombatNumberManager.CacheTextureRefs();
+
+            loadingWindow.Close();
         }
 
         public static GameFont FindFont(string font)

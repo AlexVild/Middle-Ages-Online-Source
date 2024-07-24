@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Toasts;
+using Intersect.Client.Interface.Loading;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
 using Intersect.Client.Networking;
@@ -30,7 +32,6 @@ namespace Intersect.Client.Core
 
         internal static void Start(IClientContext context)
         {
-            //Load Graphics
             Graphics.InitGraphics();
 
             //Load Sounds
@@ -54,6 +55,11 @@ namespace Intersect.Client.Core
                     lookup.Delete(item);
                 }
             }
+        }
+
+        private static void PostGraphicSetup()
+        {
+
         }
 
         public static void DestroyGame()

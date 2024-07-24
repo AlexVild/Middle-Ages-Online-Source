@@ -60,6 +60,8 @@ namespace Intersect.Configuration
 
         public const bool FADE_TRANSITION = false;
 
+        public const bool DEFAULT_PRELOAD = true;
+
         #endregion
 
         #region Static Properties and Methods
@@ -196,6 +198,8 @@ namespace Intersect.Configuration
         public int ProximityNameDistance { get; set; } = 5;
 
         public int MinimumNameOpacity { get; set; } = 80;
+
+        public bool PreloadAssets { get; set; } = DEFAULT_PRELOAD;
 
         #endregion
 

@@ -221,6 +221,7 @@
     <Compile Include="Interface\Game\UpgradeStation\UpgradeCompleteWindow.cs" />
     <Compile Include="Interface\Game\UpgradeStation\UpgradeStationWindow.cs" />
     <Compile Include="Interface\Game\WeaponPicker\WeaponPickerWindow.cs" />
+    <Compile Include="Interface\Loading\PreloadWindow.cs" />
     <Compile Include="Interface\Objects\HarvestInfoRows.cs" />
     <Compile Include="Interface\ScreenAnimations\AnvilAnim.cs" />
     <Compile Include="Interface\ScreenAnimations\ClanWarCompleteAnimation.cs" />
@@ -342,11 +343,29 @@
     <Compile Include="Utilities\UiHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="AtkSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\AtkSharp.3.24.24.95\lib\netstandard2.0\AtkSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CairoSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\CairoSharp.3.24.24.95\lib\netstandard2.0\CairoSharp.dll</HintPath>
+    </Reference>
     <Reference Include="CommandLine, Version=2.7.82.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.7.82\lib\net461\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="Costura, Version=3.3.3.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
       <HintPath>..\packages\Costura.Fody.3.3.3\lib\net40\Costura.dll</HintPath>
+    </Reference>
+    <Reference Include="GdkSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\GdkSharp.3.24.24.95\lib\netstandard2.0\GdkSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GioSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\GioSharp.3.24.24.95\lib\netstandard2.0\GioSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GLibSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\GLibSharp.3.24.24.95\lib\netstandard2.0\GLibSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GtkSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\GtkSharp.3.24.24.95\lib\netstandard2.0\GtkSharp.dll</HintPath>
     </Reference>
     <Reference Include="Lidgren.Network, Version=1.7.7518.2930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AscensionGameDev.Lidgren.Network.1.7.7518.2930-debug\lib\net46\Lidgren.Network.dll</HintPath>
@@ -360,6 +379,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PangoSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
+      <HintPath>..\packages\PangoSharp.3.24.24.95\lib\netstandard2.0\PangoSharp.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -484,10 +506,12 @@
     <Error Condition="!Exists('..\packages\Microsoft.NetFramework.Analyzers.3.0.0\build\Microsoft.NetFramework.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.NetFramework.Analyzers.3.0.0\build\Microsoft.NetFramework.Analyzers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.3.0.0\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.FxCopAnalyzers.3.0.0\build\Microsoft.CodeAnalysis.FxCopAnalyzers.props'))" />
     <Error Condition="!Exists('..\packages\MonoGame.Framework.DesktopGL.3.8.0.1641\build\MonoGame.Framework.DesktopGL.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MonoGame.Framework.DesktopGL.3.8.0.1641\build\MonoGame.Framework.DesktopGL.targets'))" />
+    <Error Condition="!Exists('..\packages\GtkSharp.3.24.24.95\build\GtkSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\GtkSharp.3.24.24.95\build\GtkSharp.targets'))" />
   </Target>
   <Import Project="..\packages\MonoGame.Content.Builder.3.7.0.9\build\MonoGame.Content.Builder.targets" Condition="Exists('..\packages\MonoGame.Content.Builder.3.7.0.9\build\MonoGame.Content.Builder.targets')" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
   <Import Project="..\packages\MonoGame.Framework.DesktopGL.3.8.0.1641\build\MonoGame.Framework.DesktopGL.targets" Condition="Exists('..\packages\MonoGame.Framework.DesktopGL.3.8.0.1641\build\MonoGame.Framework.DesktopGL.targets')" />
+  <Import Project="..\packages\GtkSharp.3.24.24.95\build\GtkSharp.targets" Condition="Exists('..\packages\GtkSharp.3.24.24.95\build\GtkSharp.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

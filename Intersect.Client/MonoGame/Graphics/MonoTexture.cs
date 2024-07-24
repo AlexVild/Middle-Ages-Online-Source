@@ -5,6 +5,7 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Localization;
 using Intersect.Compression;
+using Intersect.Configuration;
 using Intersect.IO.Files;
 using Intersect.Logging;
 using Intersect.Utilities;
@@ -263,7 +264,7 @@ namespace Intersect.Client.MonoGame.Graphics
 
         public void Update()
         {
-            if (mTexture == null)
+            if (ClientConfiguration.Instance.PreloadAssets || mTexture == null)
             {
                 return;
             }
