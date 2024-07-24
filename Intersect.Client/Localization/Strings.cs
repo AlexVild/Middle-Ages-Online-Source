@@ -1618,6 +1618,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString Cancel = @"Cancel";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fps240 = @"240";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Fps120 = @"120";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

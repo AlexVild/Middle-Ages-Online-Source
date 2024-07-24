@@ -212,20 +212,35 @@ namespace Intersect.Client.Interface.Menu
         
         public void UpdateButtonFades()
         {
-            mLoginButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
-            mLoginButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
-            
-            mRegisterButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
-            mRegisterButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            if (mLoginButton.RenderColor.A < 255)
+            {
+                mLoginButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+                mLoginButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            }
 
-            mCreditsButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
-            mCreditsButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            if (mRegisterButton.RenderColor.A < 255)
+            {
+                mRegisterButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+                mRegisterButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            }
 
-            mSettingsButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
-            mSettingsButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            if (mCreditsButton.RenderColor.A < 255)
+            {
+                mCreditsButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+                mCreditsButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            }
 
-            mExitButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
-            mExitButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            if (mSettingsButton.RenderColor.A < 255)
+            {
+                mSettingsButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+                mSettingsButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            }
+
+            if (mExitButton.RenderColor.A < 255)
+            {
+                mExitButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+                mExitButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            }
         }
 
         public void Reset()

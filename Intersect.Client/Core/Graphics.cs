@@ -141,6 +141,8 @@ namespace Intersect.Client.Core
 
         private static byte sCutsceneState = 0;
 
+        public static GameTexture ScanlineTexture;
+
         //Init Functions
         public static void InitGraphics()
         {
@@ -170,6 +172,7 @@ namespace Intersect.Client.Core
                 GameContentManager.TextureType.Gui, ClientConfiguration.Instance.Logo
             );
             CombatNumberManager.CacheTextureRefs();
+            ScanlineTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
 
             loadingWindow.Close();
         }
@@ -343,10 +346,8 @@ namespace Intersect.Client.Core
             }
             LastMap = currentMap;
 
-
             RefreshActiveEntities();
             DisposeOrphanedAnimations();
-            
             ClearDarknessTexture();
 
             DrawMapPanoramas();
@@ -354,44 +355,22 @@ namespace Intersect.Client.Core
             DrawTerritories();
             DrawSpellMarkers();
             DrawLowerAnimations();
-            DrawEntities();
             DrawMapItemsAndLights();
+            DrawEntities();
             DrawMiddleAnimations();
             DrawMapsOnLayer(1);
-
-            /*for (var y = 0; y < Options.MapHeight * 5; y++) - Z-Index drawing
-            {
-                for (var x = 3; x < 6; x++)
-                {
-                    foreach (var entity in RenderingEntities[x, y])
-                    {
-                        entity.Draw();
-                        EntitiesDrawn++;
-                    }
-                }
-            }*/
-
             DrawMapsOnLayer(2);
             DrawUpperAnimations();
             DrawMapExtras();
-
-            //Draw the players targets
             Globals.Me.DrawTargets();
-
             DrawOverlay();
-
             GenerateLightMap();
             DrawDarkness();
-
             DrawEntityExtras();
-
             //Draw action msg's
             DrawActionMsgs();
-
             CombatNumberManager.UpdateAndDrawCombatNumbers();
-
             EndAnimationDraw();
-
             DrawScanlines();
             
             // Because we want to render widescreen textures with different colors depending on the estimated background color of the map
@@ -416,11 +395,7 @@ namespace Intersect.Client.Core
         {
             if (Globals.Database.EnableScanlines)
             {
-                var imageTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
-                if (imageTex != null)
-                {
-                    DrawFullScreenTexture(imageTex, 1f);
-                }
+                DrawFullScreenTexture(ScanlineTexture, 1f);
             }
         }
 
@@ -826,6 +801,11 @@ namespace Intersect.Client.Core
 
         public static void DrawFullScreenTexture(GameTexture tex, Color color)
         {
+            if (tex == null)
+            {
+                return;
+            }
+
             // Always a scale of 1 if we're drawing something fullscreen
             var prevScale = Renderer.Scale;
             Renderer.Scale = 1;

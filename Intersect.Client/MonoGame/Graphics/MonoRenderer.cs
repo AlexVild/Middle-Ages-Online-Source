@@ -186,6 +186,10 @@ namespace Intersect.Client.MonoGame.Graphics
             {
                 mGame.TargetElapsedTime = new TimeSpan(333333 / 4);
             }
+            else if (Globals.Database.TargetFps == 5)
+            {
+                mGame.TargetElapsedTime = new TimeSpan(333333 / 8);
+            }
 
             mGame.IsFixedTimeStep = Globals.Database.TargetFps > 0;
 

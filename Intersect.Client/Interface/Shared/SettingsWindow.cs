@@ -368,6 +368,7 @@ namespace Intersect.Client.Interface.Shared
             mFpsList.AddItem(Strings.Settings.Fps60);
             mFpsList.AddItem(Strings.Settings.Fps90);
             mFpsList.AddItem(Strings.Settings.Fps120);
+            mFpsList.AddItem(Strings.Settings.Fps240);
             mFpsList.AddItem(Strings.Settings.UnlimitedFps);
 
             // Video Settings - Fullscreen Checkbox.
@@ -989,6 +990,10 @@ namespace Intersect.Client.Interface.Shared
             else if (mFpsList.SelectedItem.Text == Strings.Settings.Fps120)
             {
                 newFps = 4;
+            }
+            else if (mFpsList.SelectedItem.Text == Strings.Settings.Fps240)
+            {
+                newFps = 5;
             }
 
             if (newFps != Globals.Database.TargetFps)
