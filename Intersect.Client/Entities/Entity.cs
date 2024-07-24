@@ -633,7 +633,13 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            if (!Graphics.Viewport.IntersectsWith(GetRenderBounds()) && Id != Globals.Me?.Id)
+            {
+                RenderList?.Remove(this);
+                return false;
+            }
             RenderList = DetermineRenderOrder(RenderList, map);
+
             if (mLastUpdate == 0)
             {
                 mLastUpdate = Timing.Global.Milliseconds;
@@ -961,42 +967,36 @@ namespace Intersect.Client.Entities
             {
                 for (var y = gridY - 1; y <= gridY + 1; y++)
                 {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
+                    if (!Graphics.MapAtCoord(x, y) || Globals.MapGrid[x, y] != CurrentMap)
                     {
-                        if (Globals.MapGrid[x, y] == CurrentMap)
-                        {
-                            var priority = mRenderPriority;
-                            if (Z != 0)
-                            {
-                                priority += 3;
-                            }
-
-                            HashSet<Entity> renderSet;
-
-                            if (y == gridY - 1)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight + Y];
-                            }
-                            else if (y == gridY)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 2 + Y];
-                            }
-                            else
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 3 + Y];
-                            }
-
-                            renderSet.Add(this);
-                            Graphics.EntityUpdate = true;
-                            renderList = renderSet;
-
-                            return renderList;
-                        }
+                        continue;
                     }
+
+                    var priority = mRenderPriority;
+                    if (Z != 0)
+                    {
+                        priority += 3;
+                    }
+
+                    HashSet<Entity> renderSet;
+
+                    if (y == gridY - 1)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight + Y];
+                    }
+                    else if (y == gridY)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 2 + Y];
+                    }
+                    else
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 3 + Y];
+                    }
+
+                    renderSet.Add(this);
+                    renderList = renderSet;
+
+                    return renderList;
                 }
             }
 
@@ -1026,6 +1026,27 @@ namespace Intersect.Client.Entities
                 default:
                     return 3;
             }
+        }
+
+        /// <summary>
+        /// Lazily makes a best guess at a entity's render bounds. Can be improved upon
+        /// by getting sprite information, but for now just drawing a bigger box than a tile seems
+        /// to do the trick.
+        /// </summary>
+        /// <returns>A float rect representing a entity's rendering position, with some give</returns>
+        public virtual FloatRect GetRenderBounds()
+        {
+            var map = MapInstance.Get(CurrentMap);
+            if (map == null || !Globals.GridMaps.Contains(CurrentMap))
+            {
+                return new FloatRect(0, 0, 0, 0);
+            }
+
+            return new FloatRect(
+                map.GetX() + X * Options.TileWidth + OffsetX - (Options.TileWidth * 2),
+                map.GetY() + Y * Options.TileHeight + OffsetY - (Options.TileHeight * 2),
+                Options.TileWidth * 4,
+                Options.TileHeight * 4);
         }
 
         //Rendering Functions

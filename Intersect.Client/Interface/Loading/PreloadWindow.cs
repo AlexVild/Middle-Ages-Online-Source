@@ -20,7 +20,7 @@ namespace Intersect.Client.Interface.Loading
         {
             Application.Init();
             _window = new Window("Middle Ages: Online");
-            _window.SetDefaultSize(480, 360);
+            _window.SetDefaultSize(580, 380);
             _window.DeleteEvent += delegate { Application.Quit(); };
             Gdk.Color bgColor = new Gdk.Color(0, 38, 45);
             _window.ModifyBg(StateType.Normal, bgColor);
@@ -28,7 +28,7 @@ namespace Intersect.Client.Interface.Loading
 
             var vbox = new VBox();
             var logo = new Image("resources/misc/MAO_icon_text.png");
-            var label = new Label("Loading, please wait...");
+            var label = new Label("Loading, please wait. This could take a minute or so.");
             _progressBar = new ProgressBar();
 
             // Set text color

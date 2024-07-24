@@ -238,60 +238,54 @@ namespace Intersect.Client.Entities.Events
             {
                 for (var y = gridY - 1; y <= gridY + 1; y++)
                 {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
+                    if (!Graphics.MapAtCoord(x, y) || Globals.MapGrid[x, y] != CurrentMap)
                     {
-                        if (Globals.MapGrid[x, y] == CurrentMap)
-                        {
-                            if (RenderLevel == 0)
-                            {
-                                y--;
-                            }
-
-                            if (RenderLevel == 2)
-                            {
-                                y++;
-                            }
-
-                            var priority = mRenderPriority;
-                            if (Z != 0)
-                            {
-                                priority += 3;
-                            }
-
-                            HashSet<Entity> renderSet = null;
-
-                            if (y == gridY - 2)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Y];
-                            }
-                            else if (y == gridY - 1)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight + Y];
-                            }
-                            else if (y == gridY)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 2 + Y];
-                            }
-                            else if (y == gridY + 1)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 3 + Y];
-                            }
-                            else if (y == gridY + 2)
-                            {
-                                renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 4 + Y];
-                            }
-
-                            renderSet?.Add(this);
-                            Graphics.EntityUpdate = true;
-                            renderList = renderSet;
-
-                            return renderList;
-                        }
+                        continue;
                     }
+
+                    if (RenderLevel == 0)
+                    {
+                        y--;
+                    }
+
+                    if (RenderLevel == 2)
+                    {
+                        y++;
+                    }
+
+                    var priority = mRenderPriority;
+                    if (Z != 0)
+                    {
+                        priority += 3;
+                    }
+
+                    HashSet<Entity> renderSet = null;
+
+                    if (y == gridY - 2)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Y];
+                    }
+                    else if (y == gridY - 1)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight + Y];
+                    }
+                    else if (y == gridY)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 2 + Y];
+                    }
+                    else if (y == gridY + 1)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 3 + Y];
+                    }
+                    else if (y == gridY + 2)
+                    {
+                        renderSet = Graphics.RenderingEntities[priority, Options.MapHeight * 4 + Y];
+                    }
+
+                    renderSet?.Add(this);
+                    renderList = renderSet;
+
+                    return renderList;
                 }
             }
 

@@ -83,8 +83,6 @@ namespace Intersect.Client.Core
 
         private static Queue<Entity> ActiveEntities;
 
-        public static bool EntityUpdate = true;
-
         private static MapInstance LastMap;
 
         private static bool MapsLoading = false;
@@ -203,7 +201,6 @@ namespace Intersect.Client.Core
                 }
             }
 
-            EntityUpdate = true;
             LastMap = null;
         }
 
@@ -346,12 +343,8 @@ namespace Intersect.Client.Core
             }
             LastMap = currentMap;
 
-            if (EntityUpdate)
-            {
-                RefreshActiveEntities();
-                EntityUpdate = false;
-            }
 
+            RefreshActiveEntities();
             DisposeOrphanedAnimations();
             
             ClearDarknessTexture();
