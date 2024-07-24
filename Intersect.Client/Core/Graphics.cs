@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using GLib;
 using Intersect.Client.Entities;
 using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Entities.Events;
@@ -79,6 +80,16 @@ namespace Intersect.Client.Core
 
         //Cache the Y based rendering
         public static HashSet<Entity>[,] RenderingEntities;
+
+        private static Queue<Entity> ActiveEntities;
+
+        public static bool EntityUpdate = true;
+
+        private static MapInstance LastMap;
+
+        private static bool MapsLoading = false;
+
+        private static Queue<KeyValuePair<Guid, MapInstance>> ActiveMapGrid;
 
         private static GameContentManager sContentManager;
 
@@ -182,6 +193,8 @@ namespace Intersect.Client.Core
         public static void InitInGame()
         {
             RenderingEntities = new HashSet<Entity>[6, Options.MapHeight * 5];
+            ActiveEntities = new Queue<Entity>();
+            ActiveMapGrid = new Queue<KeyValuePair<Guid, MapInstance>>();
             for (var z = 0; z < 6; z++)
             {
                 for (var i = 0; i < Options.MapHeight * 5; i++)
@@ -189,6 +202,9 @@ namespace Intersect.Client.Core
                     RenderingEntities[z, i] = new HashSet<Entity>();
                 }
             }
+
+            EntityUpdate = true;
+            LastMap = null;
         }
 
         public static void DrawIntro()
@@ -232,6 +248,62 @@ namespace Intersect.Client.Core
             DrawLogo();
         }
 
+        public static bool MapAtCoord(int x, int y)
+        {
+            return x >= 0 &&
+                x < Globals.MapGridWidth &&
+                y >= 0 &&
+                y < Globals.MapGridHeight &&
+                Globals.MapGrid[x, y] != Guid.Empty;
+        }
+
+        private static void RefreshActiveEntities()
+        {
+            ActiveEntities.Clear();
+            for (var tile = 0; tile < Options.MapHeight * 5; tile++)
+            {
+                var max = Options.ZDimensionVisible ? 6 : 3;
+                for (var priority = 0; priority < max; priority++)
+                {
+                    foreach (var entity in RenderingEntities[priority, tile])
+                    {
+                        ActiveEntities.Enqueue(entity);
+                    }
+                }
+            }
+        }
+
+        private static void RefreshActiveMaps(MapInstance currentMap)
+        {
+            var gridX = currentMap.MapGridX;
+            var gridY = currentMap.MapGridY;
+
+            ActiveMapGrid.Clear();
+
+            var isLoading = false;
+            for (var x = gridX - 1; x <= gridX + 1; x++)
+            {
+                for (var y = gridY - 1; y <= gridY + 1; y++)
+                {
+                    if (!MapAtCoord(x, y))
+                    {
+                        continue;
+                    }
+
+                    var map = MapInstance.Get(Globals.MapGrid[x, y]);
+                    if (map == null)
+                    {
+                        isLoading = true;
+                        continue;
+                    }
+
+                    var mapPair = new KeyValuePair<Guid, MapInstance>(Globals.MapGrid[x, y], map);
+                    ActiveMapGrid.Enqueue(mapPair);
+                }
+            }
+            MapsLoading = isLoading;
+        }
+
         public static void DrawInGame()
         {
             var currentMap = Globals.Me.MapInstance;
@@ -268,191 +340,33 @@ namespace Intersect.Client.Core
                 GridSwitched = false;
             }
 
-            var animations = LiveAnimations.ToArray();
-            foreach (var animInstance in animations)
+            if (currentMap != LastMap || MapsLoading)
             {
-                if (animInstance.ParentGone())
-                {
-                    animInstance.Dispose();
-                }
+                RefreshActiveMaps(currentMap);
+            }
+            LastMap = currentMap;
+
+            if (EntityUpdate)
+            {
+                RefreshActiveEntities();
+                EntityUpdate = false;
             }
 
+            DisposeOrphanedAnimations();
+            
             ClearDarknessTexture();
 
-            var gridX = currentMap.MapGridX;
-            var gridY = currentMap.MapGridY;
+            DrawMapPanoramas();
+            DrawMapsOnLayer(0);
+            DrawTerritories();
+            DrawSpellMarkers();
+            DrawLowerAnimations();
+            DrawEntities();
+            DrawMapItemsAndLights();
+            DrawMiddleAnimations();
+            DrawMapsOnLayer(1);
 
-            //Draw Panoramas First...
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
-                    {
-                        DrawMapPanorama(Globals.MapGrid[x, y]);
-                    }
-                }
-            }
-
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
-                    {
-                        DrawMap(Globals.MapGrid[x, y], 0);
-                    }
-                }
-            }
-
-            // Draw territories
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
-                    {
-                        var map = MapInstance.Get(Globals.MapGrid[x, y]);
-                        if (map == null)
-                        {
-                            continue;
-                        }
-
-                        foreach (var territory in map.Territories.Values)
-                        {
-                            territory.Draw();
-                        }
-                    }
-                }
-            }
-
-            for (var y = 0; y < Options.MapHeight * 5; y++)
-            {
-                for (var x = 0; x < 6; x++)
-                {
-                    foreach (var entity in RenderingEntities[x, y]) 
-                    { 
-                        if (entity.SpellCast == default || entity.CurrentMap == default)
-                        {
-                            continue;
-                        }
-
-                        var castSpell = SpellBase.Get(entity.SpellCast);
-                        var map = MapInstance.Get(entity.CurrentMap);
-                        switch (castSpell.Combat.TargetType)
-                        {
-                            case SpellTargetTypes.AoE:
-                                entity.DrawAoe(castSpell, SpellTargetTypes.AoE, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
-                                break;
-                            case SpellTargetTypes.Single:
-                                if (!Globals.Entities.TryGetValue(entity.EntityTarget, out var target) || target.CurrentMap == default)
-                                {
-                                    break;
-                                }
-
-                                // Either you're the target or you're the caster
-                                if (target.Id == Globals.Me.Id || entity.Id == Globals.Me.Id)
-                                {
-                                    entity.DrawAoe(castSpell, SpellTargetTypes.Single, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.CastRange, entity.Id != Globals.Me.Id);
-                                }
-                                if (castSpell.Combat.HitRadius <= 0)
-                                {
-                                    break;
-                                }
-
-                                var entityX = entity.GetCurrentTileRectangle().CenterX;
-                                var entityY = entity.GetCurrentTileRectangle().CenterY;
-                                var targetX = target.GetCurrentTileRectangle().CenterX;
-                                var targetY = target.GetCurrentTileRectangle().CenterY;
-
-                                var distance = Math.Floor(MathHelper.CalculateDistanceToPoint(entityX, entityY, targetX, targetY) / Options.TileWidth);
-                                if (distance > castSpell.Combat.CastRange)
-                                {
-                                    break;
-                                }
-
-                                var targetMap = MapInstance.Get(target.CurrentMap);
-                                target.DrawAoe(castSpell, SpellTargetTypes.AoE, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
-                                break;
-                            case SpellTargetTypes.Projectile:
-                                entity.DrawProjectileSpawns(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me));
-                                break;
-                        }
-                    }
-                }
-            }
-
-            foreach (var animInstance in animations)
-            {
-                animInstance.Draw(false);
-            }
-
-            for (var y = 0; y < Options.MapHeight * 5; y++)
-            {
-                for (var x = 0; x < 3; x++)
-                {
-                    foreach (var entity in RenderingEntities[x, y])
-                    {
-                        entity.Draw();
-                        EntitiesDrawn++;
-                    }
-
-                    if (x == 0 && y > 0 && y % Options.MapHeight == 0)
-                    {
-                        for (var x1 = gridX - 1; x1 <= gridX + 1; x1++)
-                        {
-                            var y1 = gridY - 2 + (int) Math.Floor(y / (float) Options.MapHeight);
-                            if (x1 >= 0 &&
-                                x1 < Globals.MapGridWidth &&
-                                y1 >= 0 &&
-                                y1 < Globals.MapGridHeight &&
-                                Globals.MapGrid[x1, y1] != Guid.Empty)
-                            {
-                                var map = MapInstance.Get(Globals.MapGrid[x1, y1]);
-                                if (map != null)
-                                {
-                                    map.DrawItemsAndLights();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach (var animInstance in animations)
-            {
-                animInstance.Draw(false, true);
-                animInstance.Draw(true, true);
-            }
-
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
-                    {
-                        DrawMap(Globals.MapGrid[x, y], 1);
-                    }
-                }
-            }
-
-            for (var y = 0; y < Options.MapHeight * 5; y++)
+            /*for (var y = 0; y < Options.MapHeight * 5; y++) - Z-Index drawing
             {
                 for (var x = 3; x < 6; x++)
                 {
@@ -462,50 +376,11 @@ namespace Intersect.Client.Core
                         EntitiesDrawn++;
                     }
                 }
-            }
+            }*/
 
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
-                    {
-                        DrawMap(Globals.MapGrid[x, y], 2);
-                    }
-                }
-            }
-
-            foreach (var animInstance in animations)
-            {
-                animInstance.Draw(true);
-            }
-            
-
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x >= 0 &&
-                        x < Globals.MapGridWidth &&
-                        y >= 0 &&
-                        y < Globals.MapGridHeight &&
-                        Globals.MapGrid[x, y] != Guid.Empty)
-                    {
-                        var map = MapInstance.Get(Globals.MapGrid[x, y]);
-                        if (map != null)
-                        {
-                            map.DrawWeather();
-                            map.DrawFog();
-                            map.DrawOverlayGraphic();
-                            map.DrawItemNames();
-                        }
-                    }
-                }
-            }
+            DrawMapsOnLayer(2);
+            DrawUpperAnimations();
+            DrawMapExtras();
 
             //Draw the players targets
             Globals.Me.DrawTargets();
@@ -515,70 +390,14 @@ namespace Intersect.Client.Core
             GenerateLightMap();
             DrawDarkness();
 
-            for (var y = 0; y < Options.MapHeight * 5; y++)
-            {
-                for (var x = 0; x < 3; x++)
-                {
-                    foreach (var entity in RenderingEntities[x, y])
-                    {
-                        entity.DrawName(null);
-                        entity.DrawStatuses();
-                        if (entity.GetType() != typeof(Event))
-                        {
-                            entity.DrawHpBar();
-                            entity.DrawCastingBar();
-                            entity.DrawAggroIndicator(12, entity.IsAllyOf(Globals.Me));
-                        }
-
-                        entity.DrawChatBubbles();
-                    }
-                }
-            }
-
-            for (var y = 0; y < Options.MapHeight * 5; y++)
-            {
-                for (var x = 3; x < 6; x++)
-                {
-                    foreach (var entity in RenderingEntities[x, y])
-                    {
-                        entity.DrawName(null);
-                        entity.DrawStatuses();
-                        if (entity.GetType() != typeof(Event))
-                        {
-                            entity.DrawHpBar();
-                            entity.DrawCastingBar();
-                        }
-
-                        entity.DrawChatBubbles();
-                    }
-                }
-            }
+            DrawEntityExtras();
 
             //Draw action msg's
-            for (var x = gridX - 1; x <= gridX + 1; x++)
-            {
-                for (var y = gridY - 1; y <= gridY + 1; y++)
-                {
-                    if (x < 0 ||
-                        x >= Globals.MapGridWidth ||
-                        y < 0 ||
-                        y >= Globals.MapGridHeight ||
-                        Globals.MapGrid[x, y] == Guid.Empty)
-                    {
-                        continue;
-                    }
-
-                    var map = MapInstance.Get(Globals.MapGrid[x, y]);
-                    map?.DrawActionMsgs();
-                }
-            }
+            DrawActionMsgs();
 
             CombatNumberManager.UpdateAndDrawCombatNumbers();
 
-            foreach (var animInstance in animations)
-            {
-                animInstance.EndDraw();
-            }
+            EndAnimationDraw();
 
             DrawScanlines();
             

@@ -2747,23 +2747,25 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (MapInstance.Get(Globals.Me.CurrentMap) != null)
+            var currentMap = MapInstance.Get(Globals.Me.CurrentMap);
+
+            if (currentMap == null)
             {
-                var gridX = MapInstance.Get(Globals.Me.CurrentMap).MapGridX;
-                var gridY = MapInstance.Get(Globals.Me.CurrentMap).MapGridY;
-                for (var x = gridX - 1; x <= gridX + 1; x++)
+                return;
+            }
+
+            var gridX = currentMap.MapGridX;
+            var gridY = currentMap.MapGridY;
+            for (var x = gridX - 1; x <= gridX + 1; x++)
+            {
+                for (var y = gridY - 1; y <= gridY + 1; y++)
                 {
-                    for (var y = gridY - 1; y <= gridY + 1; y++)
+                    if (!Graphics.MapAtCoord(x, y))
                     {
-                        if (x >= 0 &&
-                            x < Globals.MapGridWidth &&
-                            y >= 0 &&
-                            y < Globals.MapGridHeight &&
-                            Globals.MapGrid[x, y] != Guid.Empty)
-                        {
-                            PacketSender.SendNeedMap(Globals.MapGrid[x, y]);
-                        }
+                        continue;
                     }
+                        
+                    PacketSender.SendNeedMap(Globals.MapGrid[x, y]);
                 }
             }
         }

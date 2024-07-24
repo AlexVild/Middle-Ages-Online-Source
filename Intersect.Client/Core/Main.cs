@@ -57,11 +57,6 @@ namespace Intersect.Client.Core
             }
         }
 
-        private static void PostGraphicSetup()
-        {
-
-        }
-
         public static void DestroyGame()
         {
             //Destroy Game
@@ -271,36 +266,26 @@ namespace Intersect.Client.Core
             }
 
             //If we are waiting on maps, lets see if we have them
+            var currentMap = MapInstance.Get(Globals.Me.CurrentMap);
+
             if (Globals.NeedsMaps)
             {
                 bool canShowWorld = true;
-                if (MapInstance.Get(Globals.Me.CurrentMap) != null)
+                if (currentMap != null)
                 {
-                    var gridX = MapInstance.Get(Globals.Me.CurrentMap).MapGridX;
-                    var gridY = MapInstance.Get(Globals.Me.CurrentMap).MapGridY;
+                    var gridX = currentMap.MapGridX;
+                    var gridY = currentMap.MapGridY;
                     for (int x = gridX - 1; x <= gridX + 1; x++)
                     {
                         for (int y = gridY - 1; y <= gridY + 1; y++)
                         {
-                            if (x >= 0 &&
-                                x < Globals.MapGridWidth &&
-                                y >= 0 &&
-                                y < Globals.MapGridHeight &&
-                                Globals.MapGrid[x, y] != Guid.Empty)
+                            if (!Graphics.MapAtCoord(x, y))
                             {
-                                var map = MapInstance.Get(Globals.MapGrid[x, y]);
-                                if (map != null)
-                                {
-                                    if (map.MapLoaded == false)
-                                    {
-                                        canShowWorld = false;
-                                    }
-                                }
-                                else
-                                {
-                                    canShowWorld = false;
-                                }
+                                continue;
                             }
+
+                            var map = MapInstance.Get(Globals.MapGrid[x, y]);
+                            canShowWorld = map != null && map.MapLoaded;
                         }
                     }
                 }
@@ -317,25 +302,20 @@ namespace Intersect.Client.Core
                     PacketSender.SendPing();
                 }
             }
-            else
+            else if (currentMap != null)
             {
-                if (MapInstance.Get(Globals.Me.CurrentMap) != null)
+                var gridX = currentMap.MapGridX;
+                var gridY = currentMap.MapGridY;
+                for (int x = gridX - 1; x <= gridX + 1; x++)
                 {
-                    var gridX = MapInstance.Get(Globals.Me.CurrentMap).MapGridX;
-                    var gridY = MapInstance.Get(Globals.Me.CurrentMap).MapGridY;
-                    for (int x = gridX - 1; x <= gridX + 1; x++)
+                    for (int y = gridY - 1; y <= gridY + 1; y++)
                     {
-                        for (int y = gridY - 1; y <= gridY + 1; y++)
+                        if (!Graphics.MapAtCoord(x, y))
                         {
-                            if (x >= 0 &&
-                                x < Globals.MapGridWidth &&
-                                y >= 0 &&
-                                y < Globals.MapGridHeight &&
-                                Globals.MapGrid[x, y] != Guid.Empty)
-                            {
-                                PacketSender.SendNeedMap(Globals.MapGrid[x, y]);
-                            }
+                            continue;
                         }
+
+                        PacketSender.SendNeedMap(Globals.MapGrid[x, y]);
                     }
                 }
             }

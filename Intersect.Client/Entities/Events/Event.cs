@@ -286,6 +286,7 @@ namespace Intersect.Client.Entities.Events
                             }
 
                             renderSet?.Add(this);
+                            Graphics.EntityUpdate = true;
                             renderList = renderSet;
 
                             return renderList;

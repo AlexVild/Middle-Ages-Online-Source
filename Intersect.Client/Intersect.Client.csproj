@@ -85,6 +85,7 @@
     <Compile Include="Core\Controls\ControlMap.cs" />
     <Compile Include="Core\Controls\Controls.cs" />
     <Compile Include="Core\FadeService.cs" />
+    <Compile Include="Core\Graphics.Renderloop.cs" />
     <Compile Include="Core\Wipe.cs" />
     <Compile Include="Core\Fade.cs" />
     <Compile Include="Core\Flash.cs" />
