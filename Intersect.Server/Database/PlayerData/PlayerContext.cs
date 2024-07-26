@@ -13,7 +13,6 @@ using Intersect.Server.Entities;
 
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Intersect.GameObjects.Timers;
 using Microsoft.EntityFrameworkCore.Internal;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Core.Games.ClanWars;
@@ -264,6 +263,10 @@ namespace Intersect.Server.Database.PlayerData
             if (migrations.IndexOf("20220331140427_GuildBankMaxSlotsMigration") > -1)
             {
                 GuildBankMaxSlotMigration.Run(this);
+            }
+            if (migrations.IndexOf("20240726190513_ResetLoadoutMigration") > -1)
+            {
+                LoadoutResetMigration.Run(this);
             }
         }
 

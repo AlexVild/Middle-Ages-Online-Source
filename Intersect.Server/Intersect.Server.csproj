@@ -492,6 +492,7 @@
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
     <Compile Include="Database\ContextInterface.cs" />
     <Compile Include="Database\GameData\Migrations\RecipeCrMigration.cs" />
+    <Compile Include="Database\PlayerData\Migrations\LoadoutResetMigration.cs" />
     <Compile Include="Database\PlayerData\Players\DungeonTrackerInstance.cs" />
     <Compile Include="Database\PlayerData\Players\GuildVariable.cs" />
     <Compile Include="Database\PlayerData\Players\ItemDiscoveryInstance.cs" />
@@ -843,6 +844,10 @@
     <Compile Include="Migrations\20240708184313_AddItemCraftBackfillMigration.cs" />
     <Compile Include="Migrations\20240708184313_AddItemCraftBackfillMigration.designer.cs">
       <DependentUpon>20240708184313_AddItemCraftBackfillMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20240726190513_ResetLoadoutMigration.cs" />
+    <Compile Include="Migrations\20240726190513_ResetLoadoutMigration.designer.cs">
+      <DependentUpon>20240726190513_ResetLoadoutMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

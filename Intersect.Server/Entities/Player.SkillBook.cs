@@ -147,7 +147,7 @@ namespace Intersect.Server.Entities
             // Not enough skill points
             if (SkillPointsAvailable < spell.RequiredSkillPoints)
             {
-                failureReason = "You don't have enough skill points available to equip this skill!";
+                failureReason = $"You don't have enough skill points available to equip the skill: {SpellBase.GetName(spellId)}.";
                 return false;
             }
 
@@ -158,17 +158,18 @@ namespace Intersect.Server.Entities
         public bool TryPrepareSkill(Guid spellId, bool quiet = false)
         {
             var descriptor = SpellBase.Get(spellId);
+            var name = SpellBase.GetName(spellId);
             var succeeded = true;
 
             if (!TryToggleSkillPrepare(spellId, true, out string failureReason))
             {
-                PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                PacketSender.SendChatMsg(this, failureReason, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
                 return false;
             }
 
             if (!TryGetSkillInSkillbook(spellId, out var skill))
             {
-                PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                PacketSender.SendChatMsg(this, $"{name} isn't in your skill book!", ChatMessageType.Error, CustomColors.General.GeneralDisabled);
                 succeeded = false;
             }
 
@@ -178,7 +179,7 @@ namespace Intersect.Server.Entities
             }
             else if (!TryTeachSpell(new Spell(spellId)))
             {
-                PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                PacketSender.SendChatMsg(this, $"You already have {name} prepared!", ChatMessageType.Error, CustomColors.General.GeneralDisabled);
                 succeeded = false;
             }
 
@@ -467,13 +468,9 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-            {
-                var newLoadout = new PlayerLoadout(Id, loadoutName, EquippedSkills, Hotbar);
-                Loadouts.Add(newLoadout);
-            }
-
-            PacketSender.SendLoadouts(this);
+            var newLoadout = new PlayerLoadout(Id, loadoutName, EquippedSkills, Hotbar.ToList());
+            Loadouts.Add(newLoadout);
+            DbInterface.Pool.QueueWorkItem(newLoadout.SaveToDb);
         }
 
         private List<Guid> EquippedSkills => SkillBook
@@ -492,7 +489,6 @@ namespace Intersect.Server.Entities
             Loadouts.RemoveAll(l => l.Id == loadoutId);
 
             DbInterface.Pool.QueueWorkItem(loadout.RemoveFromDb);
-
             PacketSender.SendLoadouts(this);
         }
 
@@ -505,6 +501,8 @@ namespace Intersect.Server.Entities
             }
 
             loadout.Spells = EquippedSkills;
+            loadout.SaveHotbarSlots(Hotbar.ToList());
+            DbInterface.Pool.QueueWorkItem(loadout.SaveToDb);
         }
 
         public void SelectLoadout(Guid loadoutId)
@@ -539,7 +537,22 @@ namespace Intersect.Server.Entities
 
             // Update the skillbook to reflect new skill selections
             PacketSender.SendSkillbookToClient(this);
-            // TODO: hotbar
+
+            // Load in loadout hotbar
+            for (var idx = 0; idx < Options.MaxHotbar; idx++)
+            {
+                var slot = loadout.HotbarSlots.ElementAtOrDefault(idx);
+                if (slot == null)
+                {
+                    continue;
+                }
+
+                Hotbar[idx].ItemOrSpellId = slot.ItemOrSpellId;
+                slot.PreferredStatBuffs.CopyTo(Hotbar[idx].PreferredStatBuffs, 0);
+                Hotbar[idx].BagId = slot.BagId;
+            }
+
+            PacketSender.SendHotbarSlots(this);
         }
 
         public Loadout[] PacketizeLoadouts()
