@@ -156,7 +156,7 @@ namespace Intersect.Client.MonoGame.Input
 
         private void CheckMouseButton(ButtonState bs, MouseButtons mb)
         {
-            if (Globals.GameState == GameStates.Intro)
+            if (Globals.GameState == GameStates.Intro || Globals.GameState == GameStates.Preloading)
             {
                 return; //No mouse input allowed while showing intro slides
             }

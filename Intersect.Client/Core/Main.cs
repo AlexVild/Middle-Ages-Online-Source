@@ -6,9 +6,9 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Toasts;
-using Intersect.Client.Interface.Loading;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
+using Intersect.Client.MonoGame;
 using Intersect.Client.Networking;
 using Intersect.Configuration;
 using Intersect.Enums;
@@ -30,8 +30,11 @@ namespace Intersect.Client.Core
 
         private static bool _loadedTilesets;
 
+        private static long GameStartTime;
+
         internal static void Start(IClientContext context)
         {
+            GameStartTime = Timing.Global.MillisecondsUtcUnsynced;
             Graphics.InitGraphics();
 
             //Load Sounds
@@ -39,8 +42,6 @@ namespace Intersect.Client.Core
 
             //Init Network
             Networking.Network.InitNetwork(context);
-
-            CheckForAnimatedIntro();
 
             //Make Json.Net Familiar with Our Object Types
             var id = Guid.NewGuid();
@@ -66,6 +67,10 @@ namespace Intersect.Client.Core
             Graphics.Renderer.Close();
         }
 
+        public static bool InitPreload = false;
+
+        public static bool InitLoad = false;
+
         public static void Update()
         {
             lock (Globals.GameLock)
@@ -74,7 +79,7 @@ namespace Intersect.Client.Core
                 Fade.Update();
                 Wipe.Update();
                 Flash.Update();
-                Interface.Interface.ToggleInput(Globals.GameState != GameStates.Intro);
+                Interface.Interface.ToggleInput(Globals.GameState != GameStates.Intro && Globals.GameState != GameStates.Preloading);
 
                 switch (Globals.GameState)
                 {
@@ -89,13 +94,25 @@ namespace Intersect.Client.Core
                         break;
 
                     case GameStates.Loading:
-                        ProcessLoading();
-
+                        if (InitLoad)
+                        {
+                            ProcessLoading();
+                        }
+                        InitLoad = true; // Draw a frame
                         break;
 
                     case GameStates.InGame:
                         ProcessGame();
 
+                        break;
+
+                    case GameStates.Preloading:
+                        if (InitPreload)
+                        {
+                            Globals.ContentManager.LoadAll();
+                            StartIntro();
+                        }
+                        InitPreload = true; // Force a frame to be drawn (the loading screen)
                         break;
 
                     case GameStates.Error:
@@ -112,6 +129,14 @@ namespace Intersect.Client.Core
 
                 Globals.OnGameUpdate();
             }
+        }
+
+        private static void StartIntro()
+        {
+            CheckForAnimatedIntro();
+            Globals.GameState = GameStates.Intro;
+            Interface.Interface.DestroyGwen();
+            Interface.Interface.InitGwen();
         }
 
         private static void ProcessIntro()
@@ -400,6 +425,7 @@ namespace Intersect.Client.Core
             Globals.StartMenuMusic = false;
             Globals.LastLevelJinglePlayed = 0L;
             ToastService.EmptyToastQueue();
+            InitLoad = false;
             FadeService.FadeOut(callback: () =>
             {
                 ForceLogout(characterSelect);

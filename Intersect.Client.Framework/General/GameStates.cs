@@ -12,7 +12,9 @@
 
         InGame,
 
-        Error
+        Error,
+        
+        Preloading
 
     }
 

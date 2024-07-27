@@ -26,9 +26,11 @@ using System.Reflection;
 using Intersect.Utilities;
 
 using MainMenu = Intersect.Client.Interface.Menu.MainMenu;
+using Microsoft.Xna.Framework.Input;
 
 namespace Intersect.Client.MonoGame
 {
+
     /// <summary>
     ///     This is the main type for your game.
     /// </summary>
@@ -110,12 +112,6 @@ namespace Intersect.Client.MonoGame
 
             Window.Position = new Microsoft.Xna.Framework.Point(-20, -2000);
             Window.AllowAltF4 = false;
-
-            // If we're going to be rendering a custom mouse cursor, hide the default one!
-            if (!string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor))
-            {
-                IsMouseVisible = false;
-            }
             
             if (!string.IsNullOrWhiteSpace(ClientConfiguration.Instance.UpdateUrl))
             {
@@ -177,6 +173,18 @@ namespace Intersect.Client.MonoGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // If we're going to be rendering a custom mouse cursor, hide the default one!
+            if (!string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor) && !Globals.IsLoading)
+            {
+                Mouse.SetCursor(MouseCursor.Arrow);
+                IsMouseVisible = false;
+            }
+            else
+            {
+                Mouse.SetCursor(MouseCursor.Wait);
+                IsMouseVisible = true;
+            }
+
             if (mUpdater != null)
             {
                 if (mUpdater.CheckUpdaterContentLoaded())
@@ -213,6 +221,11 @@ namespace Intersect.Client.MonoGame
                             break;
                     }
                 }
+            }
+
+            if (Globals.GameState == GameStates.Preloading && Core.Graphics.Initialized)
+            {
+                Core.Graphics.DrawPreloading();
             }
 
             if (mUpdater == null)

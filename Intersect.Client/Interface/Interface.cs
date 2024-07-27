@@ -176,6 +176,11 @@ namespace Intersect.Client.Interface
         //Actual Drawing Function
         public static void DrawGui()
         {
+            if (Globals.GameState == GameStates.Preloading)
+            {
+                return;
+            }
+
             if (!GwenInitialized)
             {
                 InitGwen();

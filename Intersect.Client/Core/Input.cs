@@ -218,6 +218,9 @@ namespace Intersect.Client.Core
 
                         switch (Globals.GameState)
                         {
+                            case GameStates.Preloading:
+                                break;
+
                             case GameStates.Intro:
                                 break;
 

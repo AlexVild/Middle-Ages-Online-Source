@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GLib;
+using Intersect.Attributes;
 using Intersect.Client.Entities;
 using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Entities.Events;
@@ -10,7 +11,6 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.HUD;
-using Intersect.Client.Interface.Loading;
 using Intersect.Client.Maps;
 using Intersect.Configuration;
 using Intersect.Enums;
@@ -143,16 +143,17 @@ namespace Intersect.Client.Core
 
         public static GameTexture ScanlineTexture;
 
+        public static bool Initialized = false;
+
         //Init Functions
         public static void InitGraphics()
         {
-            PreloadWindow loadingWindow = new PreloadWindow();
-            loadingWindow.Show();
-
             Renderer.Init();
             sContentManager = Globals.ContentManager;
-            
-            sContentManager.LoadAll();
+
+            // Needed for pre-loading screen, which loads the rest of the assets
+            sContentManager.LoadFonts();
+            sContentManager.LoadGui();
             
             GameFont = FindFont(ClientConfiguration.Instance.GameFont);
             UIFont = FindFont(ClientConfiguration.Instance.UIFont);
@@ -173,8 +174,7 @@ namespace Intersect.Client.Core
             );
             CombatNumberManager.CacheTextureRefs();
             ScanlineTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
-
-            loadingWindow.Close();
+            Initialized = true;
         }
 
         public static GameFont FindFont(string font)
@@ -234,6 +234,24 @@ namespace Intersect.Client.Core
             {
                 DrawFullScreenTextureFitMinimum(imageTex);
             }
+        }
+
+        public static void DrawPreloading()
+        {
+            // Get screen dimensions
+            var screenHeight = Renderer.GetScreenHeight();
+
+            var loadingText = "Loading, please wait...";
+            // Measure the text size
+            var textSize = Renderer.MeasureText(loadingText, HUDFont, 1.0f);
+            var textHeight = textSize.Y;
+
+            // Calculate text position for bottom-right corner
+            var textX = 10; // 10 pixels padding from the right edge
+            var textY = screenHeight - textHeight - 10; // 10 pixels padding from the bottom edge
+
+            // Draw the text
+            Renderer.DrawString(loadingText, HUDFont, textX, textY, 1.0f, Color.White);
         }
 
         public static void DrawMenu()
@@ -425,8 +443,12 @@ namespace Intersect.Client.Core
                 Renderer.DisplayModeChanged())
             {
                 sDarknessTexture = null;
-                Interface.Interface.DestroyGwen();
-                Interface.Interface.InitGwen();
+
+                if (Globals.GameState != GameStates.Preloading)
+                {
+                    Interface.Interface.DestroyGwen();
+                    Interface.Interface.InitGwen();
+                }
                 sOldWidth = Renderer.GetScreenWidth();
                 sOldHeight = Renderer.GetScreenHeight();
             }
@@ -450,6 +472,7 @@ namespace Intersect.Client.Core
 
                     break;
                 case GameStates.Loading:
+                    DrawPreloading();
                     break;
                 case GameStates.InGame:
                     DrawInGame();
@@ -457,6 +480,11 @@ namespace Intersect.Client.Core
                     break;
                 case GameStates.Error:
                     break;
+
+                case GameStates.Preloading:
+                    DrawPreloading();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -480,7 +508,7 @@ namespace Intersect.Client.Core
             }
 
             // Draw our mousecursor at the very end, but not when taking screenshots.
-            if (!takingScreenshot && !string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor))
+            if (!takingScreenshot && !string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor) && !Globals.IsLoading)
             {
                 var renderLoc = ConvertToWindowPoint(Globals.InputManager.GetMousePosition());
                 DrawGameTexture(
@@ -507,6 +535,11 @@ namespace Intersect.Client.Core
 
         private static void DrawFadeOrWipe()
         {
+            if (Globals.IsLoading)
+            {
+                return;
+            }
+
             if (FadeService.FadeInstead)
             {
                 // Draw the current Fade

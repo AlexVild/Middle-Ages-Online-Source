@@ -90,7 +90,7 @@ namespace Intersect.Client.General
             );
         }
 
-        private static GameStates mGameState = GameStates.Intro;
+        private static GameStates mGameState = GameStates.Preloading;
 
         /// <see cref="GameStates" />
         public static GameStates GameState
@@ -123,6 +123,8 @@ namespace Intersect.Client.General
         public static bool CanCloseInventory => !(InBag || InBank || InCraft || InShop || InTrade);
 
         public static GameInput InputManager;
+
+        public static bool IsLoading => GameState == GameStates.Loading || GameState == GameStates.Preloading;
 
         public static bool IntroComing = true;
 
