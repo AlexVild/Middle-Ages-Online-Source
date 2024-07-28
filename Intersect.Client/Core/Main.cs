@@ -35,7 +35,7 @@ namespace Intersect.Client.Core
         internal static void Start(IClientContext context)
         {
             GameStartTime = Timing.Global.MillisecondsUtcUnsynced;
-            Graphics.InitGraphics();
+            Graphics.InitPreload();
 
             //Load Sounds
             Audio.Init();
@@ -109,7 +109,7 @@ namespace Intersect.Client.Core
                     case GameStates.Preloading:
                         if (InitPreload)
                         {
-                            Globals.ContentManager.LoadAll();
+                            Graphics.InitGraphics();
                             StartIntro();
                         }
                         InitPreload = true; // Force a frame to be drawn (the loading screen)
@@ -135,8 +135,6 @@ namespace Intersect.Client.Core
         {
             CheckForAnimatedIntro();
             Globals.GameState = GameStates.Intro;
-            Interface.Interface.DestroyGwen();
-            Interface.Interface.InitGwen();
         }
 
         private static void ProcessIntro()

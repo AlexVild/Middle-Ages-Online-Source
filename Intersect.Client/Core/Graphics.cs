@@ -145,16 +145,25 @@ namespace Intersect.Client.Core
 
         public static bool Initialized = false;
 
+        /// <summary>
+        /// Initializes all that is necessary for preloading, which will init the rest of graphics.
+        /// </summary>
+        public static void InitPreload()
+        {
+            Renderer.Init();
+            sContentManager = Globals.ContentManager;
+            sContentManager.LoadFonts();
+            HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
+            Initialized = true;
+        }
+
         //Init Functions
         public static void InitGraphics()
         {
             Renderer.Init();
             sContentManager = Globals.ContentManager;
+            sContentManager.LoadAll();
 
-            // Needed for pre-loading screen, which loads the rest of the assets
-            sContentManager.LoadFonts();
-            sContentManager.LoadGui();
-            
             GameFont = FindFont(ClientConfiguration.Instance.GameFont);
             UIFont = FindFont(ClientConfiguration.Instance.UIFont);
             EntityNameFont = FindFont(ClientConfiguration.Instance.EntityNameFont);
@@ -174,7 +183,6 @@ namespace Intersect.Client.Core
             );
             CombatNumberManager.CacheTextureRefs();
             ScanlineTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
-            Initialized = true;
         }
 
         public static GameFont FindFont(string font)

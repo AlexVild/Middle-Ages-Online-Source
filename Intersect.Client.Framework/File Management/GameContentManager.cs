@@ -110,8 +110,7 @@ namespace Intersect.Client.Framework.File_Management
             LoadResources();
             LoadPaperdolls();
             LoadMisc();
-            //LoadGui(); Pre-Preloaded
-            //LoadFonts(); Pre-Preloaded
+            LoadGui();
             LoadShaders();
             LoadDecor();
             LoadChallenges();
