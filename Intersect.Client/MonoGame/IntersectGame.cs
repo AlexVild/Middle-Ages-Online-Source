@@ -225,7 +225,7 @@ namespace Intersect.Client.MonoGame
 
             if (Globals.GameState == GameStates.Preloading && Core.Graphics.Initialized)
             {
-                Core.Graphics.DrawPreloading();
+                Core.Graphics.DrawLoadingScreen();
             }
 
             if (mUpdater == null)

@@ -154,8 +154,7 @@ namespace Intersect.Client.Core
         {
             Renderer.Init();
             sContentManager = Globals.ContentManager;
-            sContentManager.LoadFonts();
-            HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
+            sContentManager.LoadMisc(); // Needed for loading screen
             Initialized = true;
         }
 
@@ -246,22 +245,26 @@ namespace Intersect.Client.Core
             }
         }
 
-        public static void DrawPreloading()
+        public static void DrawLoadingScreen()
         {
             // Get screen dimensions
             var screenHeight = Renderer.GetScreenHeight();
+            var screenWidth = Renderer.GetScreenWidth();
 
-            var loadingText = "Loading, please wait...";
-            // Measure the text size
-            var textSize = Renderer.MeasureText(loadingText, HUDFont, 1.0f);
-            var textHeight = textSize.Y;
+            var centerH = screenHeight / 2;
+            var centerW = screenWidth / 2;
 
-            // Calculate text position for bottom-right corner
-            var textX = 10; // 10 pixels padding from the right edge
-            var textY = screenHeight - textHeight - 10; // 10 pixels padding from the bottom edge
+            var loadingTxt = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "loading_screen.png");
+            if (loadingTxt == null)
+            {
+                return;
+            }
 
-            // Draw the text
-            Renderer.DrawString(loadingText, HUDFont, textX, textY, 1.0f, Color.White);
+            var scale = 4;
+            var x = centerW - (loadingTxt.Width * scale / 2);
+            var y = centerH - (loadingTxt.Height * scale / 2);
+
+            DrawGameTexture(loadingTxt, new FloatRect(0, 0, loadingTxt.Width, loadingTxt.Height), new FloatRect(x, y, loadingTxt.Width * scale, loadingTxt.Height * scale), Color.White);
         }
 
         public static void DrawMenu()
@@ -482,7 +485,7 @@ namespace Intersect.Client.Core
 
                     break;
                 case GameStates.Loading:
-                    DrawPreloading();
+                    DrawLoadingScreen();
                     break;
                 case GameStates.InGame:
                     DrawInGame();
@@ -492,7 +495,7 @@ namespace Intersect.Client.Core
                     break;
 
                 case GameStates.Preloading:
-                    DrawPreloading();
+                    DrawLoadingScreen();
                     break;
 
                 default:

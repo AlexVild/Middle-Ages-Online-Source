@@ -109,8 +109,8 @@ namespace Intersect.Client.Framework.File_Management
             LoadFogs();
             LoadResources();
             LoadPaperdolls();
-            LoadMisc();
             LoadGui();
+            LoadFonts();
             LoadShaders();
             LoadDecor();
             LoadChallenges();
