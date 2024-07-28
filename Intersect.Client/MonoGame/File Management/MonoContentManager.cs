@@ -239,6 +239,12 @@ namespace Intersect.Client.MonoGame.File_Management
             LoadTextureGroup("challenges", mTextureAssets[TextureType.Challenge]);
         }
 
+        public void LoadLoading()
+        {
+            InitializeTextureAsset(TextureType.Loading);
+            LoadTextureGroup("loading", mTextureAssets[TextureType.Loading]);
+        }
+
         public override void LoadMisc()
         {
             InitializeTextureAsset(TextureType.Misc);

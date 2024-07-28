@@ -12,6 +12,7 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.HUD;
 using Intersect.Client.Maps;
+using Intersect.Client.MonoGame.File_Management;
 using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -154,7 +155,10 @@ namespace Intersect.Client.Core
         {
             Renderer.Init();
             sContentManager = Globals.ContentManager;
-            sContentManager.LoadMisc(); // Needed for loading screen
+            if (sContentManager is MonoContentManager mManager)
+            {
+                mManager.LoadLoading();
+            }
             Initialized = true;
         }
 
@@ -254,7 +258,7 @@ namespace Intersect.Client.Core
             var centerH = screenHeight / 2;
             var centerW = screenWidth / 2;
 
-            var loadingTxt = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "loading_screen.png");
+            var loadingTxt = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Loading, "loading_screen.png");
             if (loadingTxt == null)
             {
                 return;

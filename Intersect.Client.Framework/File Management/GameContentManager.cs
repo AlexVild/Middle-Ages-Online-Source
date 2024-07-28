@@ -47,6 +47,8 @@ namespace Intersect.Client.Framework.File_Management
             Decor,
 
             Challenge,
+            
+            Loading,
 
         }
 
@@ -109,6 +111,7 @@ namespace Intersect.Client.Framework.File_Management
             LoadFogs();
             LoadResources();
             LoadPaperdolls();
+            LoadMisc();
             LoadGui();
             LoadFonts();
             LoadShaders();
@@ -147,7 +150,7 @@ namespace Intersect.Client.Framework.File_Management
         public abstract void LoadShaders();
 
         public abstract void LoadDecor();
-        
+
         public abstract void LoadChallenges();
 
         //Audio Loading
@@ -430,6 +433,9 @@ namespace Intersect.Client.Framework.File_Management
 
                 case ContentTypes.Challenges:
                     return mTextureAssets[TextureType.Challenge];
+
+                case ContentTypes.Loading:
+                    return mTextureAssets[TextureType.Loading];
 
                 case ContentTypes.Font:
                     throw new NotImplementedException();

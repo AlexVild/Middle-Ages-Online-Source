@@ -65,6 +65,9 @@ namespace Intersect.Client.Framework.Content
         [AssetType(typeof(GameTexture))]
         Challenges,
 
+        [AssetType(typeof(GameTexture))]
+        Loading,
+
         [Obsolete] Gui = Interface
 
     }
