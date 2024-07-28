@@ -34,6 +34,8 @@ namespace Intersect.Client.Core
 
         private static FloatRect _currentView;
 
+        public static bool HasRendered = false;
+
         public static FloatRect CurrentView
         {
             get => _currentView;
@@ -525,6 +527,7 @@ namespace Intersect.Client.Core
             }
             
             Renderer.End();
+            HasRendered = true;
 
             if (takingScreenshot)
             {

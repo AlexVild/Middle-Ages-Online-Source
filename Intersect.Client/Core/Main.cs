@@ -67,8 +67,6 @@ namespace Intersect.Client.Core
             Graphics.Renderer.Close();
         }
 
-        public static bool InitPreload = false;
-
         public static bool InitLoad = false;
 
         public static void Update()
@@ -107,12 +105,7 @@ namespace Intersect.Client.Core
                         break;
 
                     case GameStates.Preloading:
-                        if (InitPreload)
-                        {
-                            Graphics.InitGraphics();
-                            StartIntro();
-                        }
-                        InitPreload = true; // Force a frame to be drawn (the loading screen)
+                        ProcessPreloading();
                         break;
 
                     case GameStates.Error:
@@ -409,6 +402,17 @@ namespace Intersect.Client.Core
 
             Graphics.UpdatePlayerLight();
             Time.Update();
+        }
+
+        private static void ProcessPreloading()
+        {
+            if (!Graphics.HasRendered) // Don't hog the main-thread until we've rendered a frame -- otherwise the loading screen won't appear yet
+            {
+                return;
+            }
+
+            Graphics.InitGraphics();
+            StartIntro();
         }
 
         public static void JoinGame()
