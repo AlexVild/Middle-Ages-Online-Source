@@ -2886,13 +2886,13 @@ namespace Intersect.Server.Entities.Events
                         switch (command.Operator)
                         {
                             case TimerOperator.Set:
-                                activeTimer.TimeRemaining = Timing.Global.MillisecondsUtc + amount;
+                                activeTimer.ExpiryTime = Timing.Global.MillisecondsUtc + amount;
                                 break;
                             case TimerOperator.Add:
-                                activeTimer.TimeRemaining += amount;
+                                activeTimer.ExpiryTime += amount;
                                 break;
                             case TimerOperator.Subtract:
-                                activeTimer.TimeRemaining -= amount;
+                                activeTimer.ExpiryTime -= amount;
                                 break;
                             default:
                                 throw new NotImplementedException("Invalid operator given to modify timer value");
@@ -2905,7 +2905,7 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     // Re-sort with new timer values
-                    TimerProcessor.ActiveTimers.Sort();
+                    TimerProcessor.SortTimers();
 
                     // Update client values
                     activeTimer.SendTimerPackets();

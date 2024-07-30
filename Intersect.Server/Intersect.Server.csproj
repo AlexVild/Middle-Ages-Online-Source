@@ -849,6 +849,10 @@
     <Compile Include="Migrations\20240726190513_ResetLoadoutMigration.designer.cs">
       <DependentUpon>20240726190513_ResetLoadoutMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20240730014601_TimerStartTimeMigration.cs" />
+    <Compile Include="Migrations\20240730014601_TimerStartTimeMigration.designer.cs">
+      <DependentUpon>20240730014601_TimerStartTimeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

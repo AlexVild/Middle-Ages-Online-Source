@@ -11,10 +11,10 @@ namespace Intersect.Network.Packets.Server
         public Guid DescriptorId;
 
         [Key(4)]
-        public long Timestamp;
+        public long TimeRemaining;
 
         [Key(5)]
-        public long StartTime;
+        public long ElapsedTime;
 
         [Key(6)]
         public TimerType Type;
@@ -30,11 +30,11 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public TimerPacket(Guid descriptorId, long timestamp, long startTime, TimerType type, string displayName, bool continueAfterExpiration)
+        public TimerPacket(Guid descriptorId, long timeRemaining, long elapsedTime, TimerType type, string displayName, bool continueAfterExpiration)
         {
             DescriptorId = descriptorId;
-            Timestamp = timestamp;
-            StartTime = startTime;
+            TimeRemaining = timeRemaining;
+            ElapsedTime = elapsedTime;
             Type = type;
             DisplayName = displayName;
             ContinueAfterExpiration = continueAfterExpiration;

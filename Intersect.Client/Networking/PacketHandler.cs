@@ -2450,14 +2450,18 @@ namespace Intersect.Client.Networking
             if (activeTimer != default)
             {
                 // Timer already being shown - update it
-                activeTimer.Timestamp = packet.Timestamp;
-                activeTimer.StartTime = packet.StartTime;
+                activeTimer.Refresh(packet);
                 return;
             }
 
             var displayType = packet.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
 
-            var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, packet.DisplayName, packet.ContinueAfterExpiration);
+            if (!TimerDescriptor.TryGet(packet.DescriptorId, out var timerDescriptor))
+            {
+                return;
+            }
+
+            var timer = new Timer(timerDescriptor, packet, displayType);
             Timers.ActiveTimers.Add(timer);
 
             // Display the most recently added timer to the user

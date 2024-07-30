@@ -2606,7 +2606,9 @@ namespace Intersect.Server.Networking
         public static void SendTimerPacket(Player player, TimerInstance timer)
         {
             var descriptor = timer.Descriptor;
-            player?.SendPacket(new TimerPacket(timer.DescriptorId, timer.TimeRemaining, timer.StartTime, descriptor.Type, descriptor.DisplayName, descriptor.ContinueAfterExpiration));
+            var elapsedTimeOnRep = timer.ElapsedTime;
+
+            player?.SendPacket(new TimerPacket(timer.DescriptorId, timer.TimeRemaining, elapsedTimeOnRep, descriptor.Type, descriptor.DisplayName, descriptor.ContinueAfterExpiration));
         }
 
         public static void SendTimerStopPacket(Player player, TimerInstance timer)

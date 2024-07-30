@@ -9345,7 +9345,7 @@ namespace Intersect.Server.Entities
 
                     if (descriptor.LogoutBehavior == TimerLogoutBehavior.Pause)
                     {
-                        timer.TimeRemaining = now + (descriptor.TimeLimitSeconds - timer.PausedTime);
+                        timer.ExpiryTime = now + (descriptor.TimeLimitSeconds - timer.PausedTime);
                     }
 
                     // Add the timer back to the processing list
@@ -9391,7 +9391,7 @@ namespace Intersect.Server.Entities
                             // Intentionally blank - leave as is, and it'll be processed when the player returns
                             break;
                         case TimerLogoutBehavior.CancelOnLogin:
-                            timer.TimeRemaining = TimerConstants.TimerAborted; // Flags timer as aborted, so we know how to handle it when next processed
+                            timer.ExpiryTime = TimerConstants.TimerAborted; // Flags timer as aborted, so we know how to handle it when next processed
                             break;
                         default:
                             throw new NotImplementedException("Player timer has invalid logout behavior");

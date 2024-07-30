@@ -30,8 +30,9 @@ namespace Intersect.Server.Database.PlayerData
         {
             DescriptorId = descriptorId;
             OwnerId = ownerId;
-            TimeRemaining = now + (Descriptor.TimeLimit * 1000); // TimeLimit is in seconds, multiply accordingly
+            ExpiryTime = now + (Descriptor.TimeLimit * 1000); // TimeLimit is in seconds, multiply accordingly
             CompletionCount = completionCount;
+            StartTime = Timing.Global.MillisecondsUtc;
         }
 
         [ForeignKey(nameof(Descriptor))]
@@ -51,7 +52,14 @@ namespace Intersect.Server.Database.PlayerData
         /// <summary>
         /// A UTC Timestamp of when the timer will next expire
         /// </summary>
-        public long TimeRemaining { get; set; }
+        [Column("TimeRemaining")] // Deprecated solution, don't include [Column] to AGD (didn't wanna do a migration)
+        public long ExpiryTime { get; set; }
+
+        /// <summary>
+        /// A MS calculation of how much time until we reach the expiry
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public long TimeRemaining => ExpiryTime - Timing.Global.MillisecondsUtc;
 
         /// <summary>
         /// An amount of milliseconds that the timer was at when last paused. Used for repopulating a paused timer with correct values
@@ -63,7 +71,7 @@ namespace Intersect.Server.Database.PlayerData
         /// </summary>
         public int CompletionCount { get; set; }
 
-        public bool IsExpired => Timing.Global.MillisecondsUtc > TimeRemaining;
+        public bool IsExpired => Timing.Global.MillisecondsUtc > ExpiryTime;
 
         /// <summary>
         /// Helper for determining if this timer has expired
@@ -73,11 +81,9 @@ namespace Intersect.Server.Database.PlayerData
         public bool IsCompleted => Descriptor.Repetitions != TimerConstants.TimerIndefiniteRepeat && CompletionCount >= Descriptor.Repetitions + 1;
 
         /// <summary>
-        /// Helper to calculate the timer's start time
+        /// The timer's start time. Resets on expire.
         /// </summary>
-        [NotMapped]
-        [JsonIgnore] 
-        public long StartTime => TimeRemaining - (Descriptor.TimeLimit * 1000 * (CompletionCount > 1 ? CompletionCount : 1));
+        public long StartTime { get; set; }
 
         /// <summary>
         /// Helper to calculate how long this timer has been running
@@ -123,7 +129,8 @@ namespace Intersect.Server.Database.PlayerData
 
                 if (!IsCompleted)
                 {
-                    TimeRemaining = now + (descriptor.TimeLimit * 1000); // Extend timer for next repetition
+                    ExpiryTime = now + (descriptor.TimeLimit * 1000); // Extend timer for next repetition
+                    StartTime = now;
                 }
 
                 context.Timers.Update(this);

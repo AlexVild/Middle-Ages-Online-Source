@@ -1,6 +1,7 @@
 ﻿using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.GameObjects.Timers;
+using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 using System;
 
@@ -20,37 +21,46 @@ namespace Intersect.Client.Entities
 
     public class Timer
     {
-        public Guid DescriptorId;
+        public Guid DescriptorId => Descriptor?.Id ?? Guid.Empty;
 
-        public TimerDescriptor Descriptor;
+        public TimerDescriptor Descriptor { get; set; }
 
-        public long Timestamp;
+        public long TimeRemaining { get; set; }
 
-        public long StartTime;
+        public long ServerTimeElapsed { get; set; }
 
-        public string DisplayName;
+        public long StartTime { get; set; }
 
-        public bool ContinueAfterExpiration;
+        public string DisplayName { get; set; }
 
-        public string Time;
+        public bool ContinueAfterExpiration { get; set; }
 
-        public long ElapsedTime = 0L;
+        public string Time { get; set; }
 
-        public bool IsHidden = false;
+        public long ElapsedTime { get; set; }
 
-        private TimerState State = TimerState.Active;
+        public bool IsHidden { get; set; }
 
-        private TimerDisplayType DisplayType;
+        private TimerState State { get; set; } = TimerState.Active;
 
-        public Timer(Guid descriptorId, long timestamp, long startTime, TimerDisplayType displayType, string displayName, bool continueAfterExpiration)
+        private TimerDisplayType DisplayType { get; set; }
+
+        public Timer(TimerDescriptor descriptor, TimerPacket packet, TimerDisplayType displayType)
         {
-            DescriptorId = descriptorId;
-            Descriptor = TimerDescriptor.Get(DescriptorId);
-            Timestamp = timestamp;
-            StartTime = startTime;
+            Descriptor = descriptor;
+            TimeRemaining = packet.TimeRemaining;
+            ServerTimeElapsed = packet.ElapsedTime;
+            StartTime = Timing.Global.MillisecondsUtcUnsynced;
             DisplayType = displayType;
-            DisplayName = displayName;
-            ContinueAfterExpiration = continueAfterExpiration;
+            DisplayName = packet.DisplayName;
+            ContinueAfterExpiration = packet.ContinueAfterExpiration;
+        }
+
+        public void Refresh(TimerPacket packet)
+        {
+            TimeRemaining = packet.TimeRemaining;
+            ServerTimeElapsed = packet.ElapsedTime;
+            StartTime = Timing.Global.MillisecondsUtcUnsynced;
         }
 
         public void Update()
@@ -75,24 +85,22 @@ namespace Intersect.Client.Entities
 
         private void StateActive()
         {
-            switch (DisplayType)
+            var timePassed = (Timing.Global.MillisecondsUtcUnsynced - StartTime) + ServerTimeElapsed;
+            if (DisplayType == TimerDisplayType.Ascending)
             {
-                case TimerDisplayType.Ascending:
-                    ElapsedTime = Timing.Global.MillisecondsUtc - StartTime;
-                    if (!ContinueAfterExpiration)
-                    {
-                        // If the timer is not set to continue after expiration, never display a time longer than the configured time for the timer
-                        ElapsedTime = MathHelper.Clamp(ElapsedTime, 0, Timestamp - StartTime);
-                    }
-                    break;
-                case TimerDisplayType.Descending:
-                    ElapsedTime = Timestamp - Timing.Global.MillisecondsUtc;
-                    if (!ContinueAfterExpiration)
-                    {
-                        // If the timer is not set to continue after expiration, never display a negative time
-                        ElapsedTime = MathHelper.Clamp(ElapsedTime, 0, long.MaxValue);
-                    }
-                    break;
+                ElapsedTime = timePassed;
+            }
+            else
+            {
+                ElapsedTime = Descriptor.TimeLimitSeconds - timePassed;
+            }
+
+            if (!ContinueAfterExpiration)
+            {
+                // If the timer is ascending, never display a time longer than the configured time for the timer
+                // If the timer is descending, never display a negative time
+                var maxTime = DisplayType == TimerDisplayType.Ascending ? Descriptor.TimeLimitSeconds : long.MaxValue;
+                ElapsedTime = MathHelper.Clamp(ElapsedTime, 0, maxTime);
             }
 
             Time = GenerateTimeDisplay(ElapsedTime);

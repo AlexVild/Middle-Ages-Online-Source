@@ -18,7 +18,7 @@ namespace Intersect.Server.Core
     public class TimerComparer : IComparer<TimerInstance>
     {
         /// <summary>
-        /// Compares two timer's <see cref="TimerInstance.TimeRemaining"/>
+        /// Compares two timer's <see cref="TimerInstance.ExpiryTime"/>
         /// </summary>
         /// <param name="timerA">The first timer to compare</param>
         /// <param name="timerB">The timer to compare timerA to</param>
@@ -36,7 +36,7 @@ namespace Intersect.Server.Core
                 return 1;
             }
 
-            return timerA.TimeRemaining.CompareTo(timerB.TimeRemaining);
+            return timerA.ExpiryTime.CompareTo(timerB.ExpiryTime);
         }
     }
 
@@ -89,7 +89,7 @@ namespace Intersect.Server.Core
             foreach (var timer in ActiveTimers.ToArray().Where(t => t?.Descriptor?.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit))
             {
                 // Short-circuit out if the newest timer is not yet expired
-                if (timer.TimeRemaining > now)
+                if (timer.ExpiryTime > now)
                 {
                     break;
                 }
@@ -98,11 +98,12 @@ namespace Intersect.Server.Core
 
                 if (descriptor == null)
                 {
+                    RemoveTimer(timer);
                     continue;
                 }
                 
                 // If this timer was aborted (player logout with logout type "Cancel on Login"), fire its cancellation events
-                if (timer.TimeRemaining == TimerConstants.TimerAborted)
+                if (timer.ExpiryTime == TimerConstants.TimerAborted)
                 {
                     timer.CancelTimer();
                     RemoveTimer(timer);
@@ -209,6 +210,14 @@ namespace Intersect.Server.Core
         public static bool TimerIsActive(Guid descriptorId, Guid ownerId)
         {
             return ActiveTimers.ToList().Find(t => t.DescriptorId == descriptorId && t.OwnerId == ownerId) != default;
+        }
+
+        public static void SortTimers()
+        {
+            lock (mLock)
+            {
+                ActiveTimers.Sort();
+            }
         }
 
         /// <summary>
