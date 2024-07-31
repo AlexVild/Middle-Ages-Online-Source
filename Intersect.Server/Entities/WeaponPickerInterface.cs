@@ -44,6 +44,12 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (item.Descriptor == null)
+            {
+                Owner?.SendDialogNotice($"Failed to get a weapon at slot {invSlot}.");
+                return false;
+            }
+
             if (item.Descriptor.ItemType != ItemTypes.Equipment || item.Descriptor.EquipmentSlot != Options.WeaponIndex)
             {
                 Owner.SendDialogNotice($"The item at slot {invSlot} is not a weapon!");

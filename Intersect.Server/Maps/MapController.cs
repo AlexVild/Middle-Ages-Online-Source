@@ -408,15 +408,16 @@ namespace Intersect.Server.Maps
             newLayer = null;
             lock (GetMapLock())
             {
-                if (!mInstances.ContainsKey(instanceId))
+                if (mInstances.ContainsKey(instanceId))
                 {
-                    Log.Debug($"Creating new Map Instance {instanceId} for map {Name}");
-                    mInstances[instanceId] = new MapInstance(this, instanceId, creator);
-                    mInstances[instanceId].Initialize();
-                    newLayer = mInstances[instanceId];
-                    return true;
+                    return false;
                 }
-                return false;
+                
+                Log.Debug($"Creating new Map Instance {instanceId} for map {Name}");
+                mInstances[instanceId] = new MapInstance(this, instanceId, creator);
+                mInstances[instanceId].Initialize();
+                newLayer = mInstances[instanceId];
+                return true;
             }
         }
 

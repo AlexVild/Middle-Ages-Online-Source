@@ -45,6 +45,7 @@ using Intersect.Server.Core.Games.ClanWars;
 using Microsoft.EntityFrameworkCore.Internal;
 using Intersect.Server.DTOs;
 using Org.BouncyCastle.Bcpg;
+using Intersect.Server.Core.Instancing.Controller;
 
 namespace Intersect.Server.Entities
 {
@@ -2373,8 +2374,6 @@ namespace Intersect.Server.Entities
                 {
                     _ = TryAddToInstanceController();
                 }
-
-                AddToInstanceDungeon(MapInstanceId);
             }
 
             // An instance of the map MUST exist. Otherwise, head to spawn.
@@ -9991,17 +9990,14 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        public void AddToInstanceDungeon(Guid instanceId)
+        public void TryAddToInstanceDungeon(InstanceController controller)
         {
-            if (NextDungeonId == Guid.Empty)
+            if (NextDungeonId == Guid.Empty || controller == null)
             {
                 return;
             }
 
-            if (InstanceProcessor.TryGetInstanceController(instanceId, out var newInstController))
-            {
-                newInstController.TryInitializeOrJoinDungeon(NextDungeonId, this);
-            }
+            controller.TryInitializeOrJoinDungeon(NextDungeonId, this);
             NextDungeonId = Guid.Empty;
         }
 

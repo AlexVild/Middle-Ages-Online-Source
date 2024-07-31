@@ -180,7 +180,8 @@ namespace Intersect.Server.Maps
             Id = Guid.NewGuid();
             if (!InstanceProcessor.CurrentControllers.Contains(MapInstanceId))
             {
-                InstanceProcessor.AddInstanceController(MapInstanceId, creator);
+                var controller = InstanceProcessor.AddInstanceController(MapInstanceId, creator);
+                creator?.TryAddToInstanceDungeon(controller);
             }
         }
 

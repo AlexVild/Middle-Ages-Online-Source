@@ -46,12 +46,14 @@ namespace Intersect.Server.Core
             }
         }
 
-        public static void AddInstanceController(Guid mapInstanceId, Player creator)
+        public static InstanceController AddInstanceController(Guid mapInstanceId, Player creator)
         {
             if (!InstanceControllers.ContainsKey(mapInstanceId))
             {
-                InstanceControllers[mapInstanceId] = new InstanceController(mapInstanceId, creator);
+                InstanceControllers.Add(mapInstanceId, new InstanceController(mapInstanceId, creator));
             }
+
+            return InstanceControllers[mapInstanceId];
         }
 
         public static void UpdateInstanceControllers(List<MapInstance> activeMaps)
