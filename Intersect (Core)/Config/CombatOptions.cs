@@ -181,6 +181,8 @@ namespace Intersect.Config
 
         public long ChampionDespawnTimeSeconds { get; set; } = 600;
 
+        public long BackstabCooldown { get; set; } = 5000;
+
         // Threat levels
 
         public Dictionary<ThreatLevel, double> ThreatLevelThresholds = new Dictionary<ThreatLevel, double>()

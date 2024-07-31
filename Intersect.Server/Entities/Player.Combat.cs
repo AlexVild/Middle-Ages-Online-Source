@@ -881,9 +881,9 @@ namespace Intersect.Server.Entities
             var damageBonus = DamageBonus.None;
             if (target.Dir == Dir) // Player is hitting something from behind
             {
-                if (Backstab && canBackstab)
+                if (Backstab && canBackstab && target.TryUpdateBackstab())
                 {
-                    var backstabDamage = (int)Math.Floor(originalDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin)) - originalDamage;
+                    var backstabDamage = (int)Math.Ceiling(originalDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin)) - originalDamage;
                     baseDamage += Math.Max(0, backstabDamage);
                     damageBonus = DamageBonus.Backstab;
                 }

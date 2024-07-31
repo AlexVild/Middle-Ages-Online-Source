@@ -6302,7 +6302,7 @@ namespace Intersect.Server.Entities
         {
             if (StealthAttack && item.ProjectileId == Guid.Empty)
             {
-                return (int)Math.Floor(baseDamage * Options.Combat.SneakAttackMultiplier);
+                return (int)Math.Ceiling(baseDamage * Options.Combat.SneakAttackMultiplier);
             }
             else
             {

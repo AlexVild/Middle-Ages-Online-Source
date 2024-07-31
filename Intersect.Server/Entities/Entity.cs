@@ -2384,6 +2384,24 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public long NextAllyPruneTimestamp { get; set; } = 0L;
 
+        [NotMapped, JsonIgnore]
+        private long BackstabTimestamp { get; set; } = 0L;
+
+        /// <summary>
+        /// Tries to update the backstab timestamp and, if successed, updates the timestamp
+        /// </summary>
+        /// <returns>True if the timestamp could be updated</returns>
+        public bool TryUpdateBackstab()
+        {
+            if (Timing.Global.MillisecondsUtc < BackstabTimestamp)
+            {
+                return false;
+            }
+
+            BackstabTimestamp = Timing.Global.MillisecondsUtc + Options.Instance.CombatOpts.BackstabCooldown;
+            return true;
+        }
+
         /// <summary>
         /// Adds an entity as an ally of this entity. Allies are pruned after a configurable amount of seconds since last heal
         /// </summary>
