@@ -177,7 +177,7 @@ namespace Intersect.Client.Framework.File_Management
 
         public string[] GetTextureNames(TextureType type)
         {
-            if (mTextureAssets.TryGetValue(type, out var txtDict))
+            if (!mTextureAssets.TryGetValue(type, out var txtDict))
             {
                 return null;
             }
