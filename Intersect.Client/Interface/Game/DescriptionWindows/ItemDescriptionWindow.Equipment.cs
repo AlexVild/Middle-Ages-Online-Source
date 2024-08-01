@@ -157,7 +157,21 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 castingComponentRow.SizeToChildren(true, true);
             }
 
-            
+            var projectile = mItem.Projectile;
+            if (projectile != default && projectile.RequiresAmmo)
+            {
+                AddDivider();
+                var ammoComponent = AddRowContainer();
+
+                var ammoId = projectile.AmmoItemId;
+                if (projectile.UseAmmoOverride && mItem.AmmoOverrideId != Guid.Empty)
+                {
+                    ammoId = projectile.AmmoItemId;
+                }
+
+                var ammoName = ItemBase.GetName(ammoId);
+                ammoComponent.AddKeyValueRow("Requires Ammo:", $"{ammoName} x{projectile.AmmoRequired}", CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Special);
+            }
         }
 
         private void ApplyStats(ItemBase descriptor, ItemProperties itemProperties, int[] baseStats, ref int[] stats)

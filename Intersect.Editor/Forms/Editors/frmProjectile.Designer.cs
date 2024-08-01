@@ -39,6 +39,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpawns = new DarkUI.Controls.DarkGroupBox();
             this.picSpawns = new System.Windows.Forms.PictureBox();
             this.grpProperties = new DarkUI.Controls.DarkGroupBox();
+            this.chkAmmoDrop = new DarkUI.Controls.DarkCheckBox();
             this.cmbToolType = new DarkUI.Controls.DarkComboBox();
             this.lblToolType = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
@@ -82,6 +83,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGrappleOptions = new DarkUI.Controls.DarkGroupBox();
             this.chkGrappleEntities = new DarkUI.Controls.DarkCheckBox();
             this.grpAmmo = new DarkUI.Controls.DarkGroupBox();
+            this.chkUseAmmoOverride = new DarkUI.Controls.DarkCheckBox();
             this.nudConsume = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblAmmoItem = new System.Windows.Forms.Label();
@@ -99,7 +101,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkAmmoDrop = new DarkUI.Controls.DarkCheckBox();
             this.grpProjectiles.SuspendLayout();
             this.grpSpawns.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpawns)).BeginInit();
@@ -128,7 +129,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProjectiles.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProjectiles.Location = new System.Drawing.Point(12, 36);
             this.grpProjectiles.Name = "grpProjectiles";
-            this.grpProjectiles.Size = new System.Drawing.Size(203, 421);
+            this.grpProjectiles.Size = new System.Drawing.Size(203, 573);
             this.grpProjectiles.TabIndex = 15;
             this.grpProjectiles.TabStop = false;
             this.grpProjectiles.Text = "Projectiles";
@@ -170,7 +171,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 44);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 371);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 523);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpSpawns
@@ -228,6 +229,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.TabIndex = 18;
             this.grpProperties.TabStop = false;
             this.grpProperties.Text = "Properties";
+            // 
+            // chkAmmoDrop
+            // 
+            this.chkAmmoDrop.AutoSize = true;
+            this.chkAmmoDrop.Location = new System.Drawing.Point(11, 300);
+            this.chkAmmoDrop.Name = "chkAmmoDrop";
+            this.chkAmmoDrop.Size = new System.Drawing.Size(85, 17);
+            this.chkAmmoDrop.TabIndex = 55;
+            this.chkAmmoDrop.Text = "Ammo drop?";
+            this.chkAmmoDrop.CheckedChanged += new System.EventHandler(this.chkAmmoDrop_CheckedChanged);
             // 
             // cmbToolType
             // 
@@ -755,7 +766,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpawns);
             this.pnlContainer.Location = new System.Drawing.Point(221, 36);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(473, 531);
+            this.pnlContainer.Size = new System.Drawing.Size(473, 573);
             this.pnlContainer.TabIndex = 30;
             this.pnlContainer.Visible = false;
             // 
@@ -765,7 +776,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGrappleOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpGrappleOptions.Controls.Add(this.chkGrappleEntities);
             this.grpGrappleOptions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpGrappleOptions.Location = new System.Drawing.Point(192, 481);
+            this.grpGrappleOptions.Location = new System.Drawing.Point(192, 513);
             this.grpGrappleOptions.Name = "grpGrappleOptions";
             this.grpGrappleOptions.Size = new System.Drawing.Size(272, 43);
             this.grpGrappleOptions.TabIndex = 47;
@@ -786,6 +797,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpAmmo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAmmo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAmmo.Controls.Add(this.chkUseAmmoOverride);
             this.grpAmmo.Controls.Add(this.nudConsume);
             this.grpAmmo.Controls.Add(this.cmbItem);
             this.grpAmmo.Controls.Add(this.lblAmmoItem);
@@ -793,10 +805,20 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAmmo.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpAmmo.Location = new System.Drawing.Point(192, 398);
             this.grpAmmo.Name = "grpAmmo";
-            this.grpAmmo.Size = new System.Drawing.Size(272, 79);
+            this.grpAmmo.Size = new System.Drawing.Size(272, 109);
             this.grpAmmo.TabIndex = 30;
             this.grpAmmo.TabStop = false;
             this.grpAmmo.Text = "Ammunition Requirements: ";
+            // 
+            // chkUseAmmoOverride
+            // 
+            this.chkUseAmmoOverride.AutoSize = true;
+            this.chkUseAmmoOverride.Location = new System.Drawing.Point(13, 86);
+            this.chkUseAmmoOverride.Name = "chkUseAmmoOverride";
+            this.chkUseAmmoOverride.Size = new System.Drawing.Size(107, 17);
+            this.chkUseAmmoOverride.TabIndex = 47;
+            this.chkUseAmmoOverride.Text = "Use Item\'s Ammo";
+            this.chkUseAmmoOverride.CheckedChanged += new System.EventHandler(this.chkUseAmmoOverride_CheckedChanged);
             // 
             // nudConsume
             // 
@@ -860,7 +882,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(495, 573);
+            this.btnCancel.Location = new System.Drawing.Point(494, 615);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -870,7 +892,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(300, 573);
+            this.btnSave.Location = new System.Drawing.Point(298, 615);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -999,23 +1021,13 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkAmmoDrop
-            // 
-            this.chkAmmoDrop.AutoSize = true;
-            this.chkAmmoDrop.Location = new System.Drawing.Point(11, 300);
-            this.chkAmmoDrop.Name = "chkAmmoDrop";
-            this.chkAmmoDrop.Size = new System.Drawing.Size(85, 17);
-            this.chkAmmoDrop.TabIndex = 55;
-            this.chkAmmoDrop.Text = "Ammo drop?";
-            this.chkAmmoDrop.CheckedChanged += new System.EventHandler(this.chkAmmoDrop_CheckedChanged);
-            // 
             // FrmProjectile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(698, 612);
+            this.ClientSize = new System.Drawing.Size(698, 654);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -1126,5 +1138,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbDeathAnimation;
         private System.Windows.Forms.Label lblDeathAnim;
         private DarkCheckBox chkAmmoDrop;
+        private DarkCheckBox chkUseAmmoOverride;
     }
 }

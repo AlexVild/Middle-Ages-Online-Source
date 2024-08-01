@@ -86,24 +86,27 @@ namespace Intersect.Server.Entities
 
         public void AmmoDrop()
         {
-            if (!Parent.Base.AmmoDrop)
+            if (Parent.Base == null || !Parent.Base.AmmoDrop || !Parent.Base.RequiresAmmo || Parent.Owner == null)
             {
                 return;
             }
 
             var map = MapController.Get(MapId);
-            if (map != null && Parent.Base.AmmoItemId != Guid.Empty && Parent.Owner is Player owner)
+            if (map == null)
             {
-                if (owner != null)
+                return;
+            }
+
+            if (Parent.Owner is Player owner)
+            {
+                var ownerLuck = owner.GetLuckModifier();
+                var randomChance = Randomization.Next(1, 100001);
+                if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
                 {
-                    var ownerLuck = owner.GetLuckModifier();
-                    var randomChance = Randomization.Next(1, 100001);
-                    if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
+                    if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
                     {
-                        if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
-                        {
-                            mapInstance.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id, spawnType: MapInstance.ItemSpawnType.PlayerDeath, ownershipTimeOverride: Options.Instance.LootOpts.PlayerDeathItemDespawnTime);
-                        }
+                        var ammoId = owner.GetProjectileAmmoId(Parent.Base);
+                        mapInstance.SpawnItem((int)X, (int)Y, new Item(ammoId, 1), 1, Parent.Owner.Id, spawnType: MapInstance.ItemSpawnType.PlayerDeath, ownershipTimeOverride: Options.Instance.LootOpts.PlayerDeathItemDespawnTime);
                     }
                 }
             }

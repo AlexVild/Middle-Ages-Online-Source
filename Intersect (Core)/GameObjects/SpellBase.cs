@@ -362,8 +362,9 @@ namespace Intersect.GameObjects
         public bool RequiresAmmo => Combat != null &&
             Combat.TargetType == SpellTargetTypes.Projectile &&
             Combat.Projectile != null &&
-            Combat.Projectile.AmmoItemId != null &&
-            Combat.Projectile.AmmoItemId != Guid.Empty;
+            ((Combat.Projectile.AmmoItemId != null &&
+            Combat.Projectile.AmmoItemId != Guid.Empty) ||
+            Combat.Projectile.UseAmmoOverride);
 
         /// <summary>
         /// A mapping of some <see cref="ItemBase"/> ID mapped to its quantity

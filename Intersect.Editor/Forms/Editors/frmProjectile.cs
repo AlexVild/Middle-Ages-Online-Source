@@ -196,6 +196,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
 
                 chkAmmoDrop.Checked = mEditorItem.AmmoDrop;
+                chkUseAmmoOverride.Checked = mEditorItem.UseAmmoOverride;
 
                 Render();
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -622,7 +623,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbItem_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.Ammo = ItemBase.Get(ItemBase.IdFromList(cmbItem.SelectedIndex - 1));
+            mEditorItem.AmmoItemId = ItemBase.IdFromList(cmbItem.SelectedIndex - 1);
         }
 
         private void cmbAnimation_SelectedIndexChanged(object sender, EventArgs e)
@@ -806,6 +807,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkAmmoDrop_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.AmmoDrop = chkAmmoDrop.Checked;
+        }
+
+        private void chkUseAmmoOverride_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.UseAmmoOverride = chkUseAmmoOverride.Checked;
         }
     }
 

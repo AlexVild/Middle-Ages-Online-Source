@@ -211,6 +211,10 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFemalePaperdoll.Items.Add(paperdollnames[i]);
             }
 
+            cmbAmmoOverride.Items.Clear();
+            cmbAmmoOverride.Items.Add(Strings.General.none);
+            cmbAmmoOverride.Items.AddRange(ItemBase.Names);
+
             nudStr.Maximum = Options.MaxStatValue;
             nudMag.Maximum = Options.MaxStatValue;
             nudDef.Maximum = Options.MaxStatValue;
@@ -645,6 +649,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbStudyEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.StudyEnhancement) + 1;
                 nudStudyChance.Value = (decimal)mEditorItem.StudyChance;
+
+                cmbAmmoOverride.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoOverrideId) + 1;
 
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
@@ -2460,6 +2466,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkOnlyClanWar_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.ClanWarConsumable = chkOnlyClanWar.Checked;
+        }
+
+        private void cmbAmmoOverride_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AmmoOverrideId = ItemBase.IdFromList(cmbAmmoOverride.SelectedIndex - 1);
         }
     }
 }

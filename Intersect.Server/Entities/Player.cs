@@ -8291,9 +8291,10 @@ namespace Intersect.Server.Entities
 
                 // Auto-pickup ammo & gold
                 var currentProjectile = GetEquippedWeapon()?.Projectile;
-                if (currentProjectile != default && currentProjectile?.AmmoItemId != Guid.Empty)
+                if (currentProjectile != default && currentProjectile.RequiresAmmo)
                 {
-                    AutoPickupItem(currentProjectile.AmmoItemId, false);
+                    var ammoId = GetProjectileAmmoId(currentProjectile);
+                    AutoPickupItem(ammoId, false);
                 }
                 AutoPickupItem(Guid.Parse(Options.Player.GoldGuid), true);
                 // Angry nuts
@@ -9717,10 +9718,12 @@ namespace Intersect.Server.Entities
 
         public bool HasProjectileAmmo(ProjectileBase projectile)
         {
-            if (ItemNotInInventory(projectile.AmmoItemId, projectile.AmmoRequired))
+            var ammoId = GetProjectileAmmoId(projectile);
+
+            if (ItemNotInInventory(ammoId, projectile.AmmoRequired))
             {
                 PacketSender.SendChatMsg(
-                    this, Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
+                    this, Strings.Items.notenough.ToString(ItemBase.GetName(ammoId)),
                     ChatMessageType.Inventory,
                     CustomColors.Alerts.Error
                 );
@@ -9730,9 +9733,23 @@ namespace Intersect.Server.Entities
             return true;
         }
 
+        public Guid GetProjectileAmmoId(ProjectileBase projectile)
+        {
+            var ammoId = projectile.AmmoItemId;
+            if (projectile.UseAmmoOverride && 
+                TryGetEquippedItem(Options.WeaponIndex, out var weapon) && 
+                weapon.Descriptor != null && 
+                weapon.Descriptor.AmmoOverrideId != Guid.Empty)
+            {
+                ammoId = weapon.Descriptor.AmmoOverrideId;
+            }
+
+            return ammoId;
+        }
+
         public bool TryConsumeProjectileAmmo(ProjectileBase projectile)
         {
-            if (projectile.AmmoItemId == Guid.Empty || projectile.AmmoRequired <= 0)
+            if (!projectile.RequiresAmmo)
             {
                 return true;
             }
@@ -9742,7 +9759,9 @@ namespace Intersect.Server.Entities
             {
                 return false;
             }
-            return TryTakeItem(projectile.AmmoItemId, projectile.AmmoRequired);
+
+            var ammoId = GetProjectileAmmoId(projectile);
+            return TryTakeItem(ammoId, projectile.AmmoRequired);
         }
 
         public bool TryConsumeCastingComponents(SpellBase spell)

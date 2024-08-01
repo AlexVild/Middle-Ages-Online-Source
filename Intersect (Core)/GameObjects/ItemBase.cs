@@ -663,6 +663,11 @@ namespace Intersect.GameObjects
         public Guid ProcSpellId { get; set; }
 
         public float ProcChance { get; set; }
+
+        public Guid AmmoOverrideId { get; set; } = Guid.Empty;
+
+        [NotMapped, JsonIgnore]
+        public ItemBase AmmoOverride => Get(AmmoOverrideId);
     }
 
 }

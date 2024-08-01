@@ -661,9 +661,10 @@ namespace Intersect.Server.Entities
 
             if (!TryConsumeProjectileAmmo(projectile))
             {
+                var ammoId = GetProjectileAmmoId(projectile);
                 PacketSender.SendChatMsg(
                            this,
-                           Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
+                           Strings.Items.notenough.ToString(ItemBase.GetName(ammoId)),
                            ChatMessageType.Inventory,
                            CustomColors.General.GeneralWarning
                        );

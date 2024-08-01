@@ -25,6 +25,8 @@ namespace Intersect.GameObjects
 
         public bool AmmoDrop { get; set; } = false;
 
+        public bool UseAmmoOverride { get; set; } = false;
+
         [NotMapped] public List<ProjectileAnimation> Animations = new List<ProjectileAnimation>();
 
         [NotMapped] public Location[,] SpawnLocations = new Location[SPAWN_LOCATIONS_WIDTH, SPAWN_LOCATIONS_HEIGHT];
@@ -68,6 +70,19 @@ namespace Intersect.GameObjects
         }
 
         public int AmmoRequired { get; set; } = 1;
+
+        public bool RequiresAmmo
+        {
+            get
+            {
+                if (UseAmmoOverride)
+                {
+                    return true;
+                }
+
+                return AmmoRequired > 0 && Ammo != default;
+            }
+        }
 
         [Column("Animations")]
         [JsonIgnore]
