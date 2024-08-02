@@ -652,6 +652,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbAmmoOverride.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoOverrideId) + 1;
 
+                txtPbUnlockHint.Text = mEditorItem.Hint;
+
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
                     cmbTypeDisplayOverride.SelectedItem = mEditorItem.TypeDisplayOverride;
@@ -838,6 +840,8 @@ namespace Intersect.Editor.Forms.Editors
                 chkStackable.Checked = true;
                 chkStackable.Enabled = false;
             }
+
+            grpPermabuffOpts.Visible = mEditorItem.ItemType == ItemTypes.Permabuff;
 
             mEditorItem.ItemType = (ItemTypes) cmbType.SelectedIndex;
         }
@@ -2471,6 +2475,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbAmmoOverride_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.AmmoOverrideId = ItemBase.IdFromList(cmbAmmoOverride.SelectedIndex - 1);
+        }
+
+        private void txtPbUnlockHint_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Hint = txtPbUnlockHint.Text;
         }
     }
 }

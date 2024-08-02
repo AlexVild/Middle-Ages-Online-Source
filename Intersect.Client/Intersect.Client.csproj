@@ -133,6 +133,7 @@
     <Compile Include="General\Timers.cs" />
     <Compile Include="General\UpgradeStation\UpgradeStationInterface.cs" />
     <Compile Include="Interface\Components\GwenComponents.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterPermabuffsPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\PermabuffsPanel.cs" />
     <Compile Include="Interface\Game\ClanWars\ClanWarCompletionWindow.cs" />
     <Compile Include="Interface\Game\ClanWars\ClanWarScoreRowComponent.cs" />

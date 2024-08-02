@@ -166,11 +166,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 var ammoId = projectile.AmmoItemId;
                 if (projectile.UseAmmoOverride && mItem.AmmoOverrideId != Guid.Empty)
                 {
-                    ammoId = projectile.AmmoItemId;
+                    ammoId = mItem.AmmoOverrideId;
                 }
 
                 var ammoName = ItemBase.GetName(ammoId);
-                ammoComponent.AddKeyValueRow("Requires Ammo:", $"{ammoName} x{projectile.AmmoRequired}", CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Special);
+                ammoComponent.AddKeyValueRow("Requires Ammo:", $"{ammoName} x{projectile.AmmoRequired}", CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Notice);
             }
         }
 

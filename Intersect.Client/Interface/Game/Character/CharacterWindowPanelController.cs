@@ -36,6 +36,7 @@ namespace Intersect.Client.Interface.Game.Character
         private Button LoadoutsButton { get; set; }
         private Button EnhancementsButton { get; set; }
         private Button WishlistButton { get; set; }
+        private Button PermabuffButton { get; set; }
 
         private CharacterWindow Parent { get; set; }
 
@@ -52,6 +53,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterLoadoutsPanel LoadoutsPanel { get; set; }
         private CharacterEnhancementsPanel EnhancementsPanel { get; set; }
         private CharacterWishlistPanel WishlistPanel { get; set; }
+        private CharacterPermabuffsPanel PermabuffsPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindow parent)
         {
@@ -99,6 +101,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             WishlistPanel = new CharacterWishlistPanel(PanelContainer);
             WishlistPanel.Hide();
+
+            PermabuffsPanel = new CharacterPermabuffsPanel(PanelContainer);
+            PermabuffsPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -173,6 +178,12 @@ namespace Intersect.Client.Interface.Game.Character
             };
             WishlistButton.Clicked += WishlistButton_Clicked;
 
+            PermabuffButton = new Button(Container, "PermabuffSelector")
+            {
+                Text = "PERMABUFFS"
+            };
+            PermabuffButton.Clicked += PermabuffButton_Clicked;
+
             PanelSelectors = new List<Button>
             {
                 BonusesButton,
@@ -182,11 +193,17 @@ namespace Intersect.Client.Interface.Game.Character
                 EnhancementsButton,
                 HarvestingButton,
                 LoadoutsButton,
+                PermabuffButton,
                 SkillsButton,
                 StatsButton,
                 WishlistButton,
                 ChallengesButton
             };
+        }
+
+        private void PermabuffButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ChangePanel(CharacterPanelType.Permabuffs);
         }
 
         private void WishlistButton_Clicked(Base sender, ClickedEventArgs arguments)
@@ -305,6 +322,10 @@ namespace Intersect.Client.Interface.Game.Character
                 case CharacterPanelType.Wishlist:
                     WishlistButton.Disable();
                     CurrentPanel = WishlistPanel;
+                    break;
+                case CharacterPanelType.Permabuffs:
+                    PermabuffButton.Disable();
+                    CurrentPanel = PermabuffsPanel;
                     break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");

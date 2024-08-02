@@ -30,7 +30,8 @@ namespace Intersect.Client.Interface.Game.Character
         Challenges,
         Loadouts,
         Enhancements,
-        Wishlist
+        Wishlist,
+        Permabuffs,
     }
 
     public partial class CharacterWindow

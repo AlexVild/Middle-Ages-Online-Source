@@ -116,6 +116,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblDrops = new System.Windows.Forms.Label();
             this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.grpPermabuffOpts = new DarkUI.Controls.DarkGroupBox();
+            this.txtPbUnlockHint = new DarkUI.Controls.DarkTextBox();
+            this.lblPbUnlockHint = new System.Windows.Forms.Label();
             this.grpProc = new DarkUI.Controls.DarkGroupBox();
             this.nudProcChance = new DarkUI.Controls.DarkNumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
@@ -386,6 +389,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
+            this.grpPermabuffOpts.SuspendLayout();
             this.grpProc.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudProcChance)).BeginInit();
             this.grpUpgrades.SuspendLayout();
@@ -1572,6 +1576,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpPermabuffOpts);
             this.grpEquipment.Controls.Add(this.grpProc);
             this.grpEquipment.Controls.Add(this.grpUpgrades);
             this.grpEquipment.Controls.Add(this.grpWeaponEnhancement);
@@ -1605,6 +1610,41 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
             this.grpEquipment.Visible = false;
+            // 
+            // grpPermabuffOpts
+            // 
+            this.grpPermabuffOpts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPermabuffOpts.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPermabuffOpts.Controls.Add(this.txtPbUnlockHint);
+            this.grpPermabuffOpts.Controls.Add(this.lblPbUnlockHint);
+            this.grpPermabuffOpts.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPermabuffOpts.Location = new System.Drawing.Point(434, 530);
+            this.grpPermabuffOpts.Name = "grpPermabuffOpts";
+            this.grpPermabuffOpts.Size = new System.Drawing.Size(292, 124);
+            this.grpPermabuffOpts.TabIndex = 125;
+            this.grpPermabuffOpts.TabStop = false;
+            this.grpPermabuffOpts.Text = "Permabuff Options";
+            // 
+            // txtPbUnlockHint
+            // 
+            this.txtPbUnlockHint.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtPbUnlockHint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtPbUnlockHint.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtPbUnlockHint.Location = new System.Drawing.Point(18, 33);
+            this.txtPbUnlockHint.Multiline = true;
+            this.txtPbUnlockHint.Name = "txtPbUnlockHint";
+            this.txtPbUnlockHint.Size = new System.Drawing.Size(260, 79);
+            this.txtPbUnlockHint.TabIndex = 31;
+            this.txtPbUnlockHint.TextChanged += new System.EventHandler(this.txtPbUnlockHint_TextChanged);
+            // 
+            // lblPbUnlockHint
+            // 
+            this.lblPbUnlockHint.AutoSize = true;
+            this.lblPbUnlockHint.Location = new System.Drawing.Point(15, 16);
+            this.lblPbUnlockHint.Name = "lblPbUnlockHint";
+            this.lblPbUnlockHint.Size = new System.Drawing.Size(63, 13);
+            this.lblPbUnlockHint.TabIndex = 30;
+            this.lblPbUnlockHint.Text = "Unlock Hint";
             // 
             // grpProc
             // 
@@ -5226,6 +5266,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpEquipment.ResumeLayout(false);
             this.grpEquipment.PerformLayout();
+            this.grpPermabuffOpts.ResumeLayout(false);
+            this.grpPermabuffOpts.PerformLayout();
             this.grpProc.ResumeLayout(false);
             this.grpProc.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudProcChance)).EndInit();
@@ -5672,5 +5714,8 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkOnlyClanWar;
         private DarkComboBox cmbAmmoOverride;
         private Label lblAmmoOverride;
+        private DarkGroupBox grpPermabuffOpts;
+        private Label lblPbUnlockHint;
+        private DarkTextBox txtPbUnlockHint;
     }
 }

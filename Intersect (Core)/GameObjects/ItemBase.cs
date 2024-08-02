@@ -668,6 +668,8 @@ namespace Intersect.GameObjects
 
         [NotMapped, JsonIgnore]
         public ItemBase AmmoOverride => Get(AmmoOverrideId);
+
+        public string Hint { get; set; }
     }
 
 }

@@ -377,7 +377,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                     template.CurAlignments[0] : Alignments.Left, template.Font);
             SizeToChildren(false, true);
             Width = width;
-            
+
             SetPosition(template.X, template.Y);
             ProcessAlignments();
         }
