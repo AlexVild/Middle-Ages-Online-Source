@@ -44,7 +44,7 @@ namespace Intersect.Client.Interface.Game.Chat
         /// <summary>
         /// Contains the configuration of which message types to display in each chat tab.
         /// </summary>
-        private static Dictionary<ChatboxTab, ChatMessageType[]> sTabMessageTypes = new Dictionary<ChatboxTab, ChatMessageType[]>() {
+        public static Dictionary<ChatboxTab, ChatMessageType[]> TabMessageTypes = new Dictionary<ChatboxTab, ChatMessageType[]>() {
             // All has ALL tabs unlocked, so really we don't have to worry about that one.
             { ChatboxTab.Local, new ChatMessageType[] { ChatMessageType.Local, ChatMessageType.PM, ChatMessageType.Admin } },
             { ChatboxTab.Party, new ChatMessageType[] { ChatMessageType.Party, ChatMessageType.PM, ChatMessageType.Admin } },
@@ -57,6 +57,20 @@ namespace Intersect.Client.Interface.Game.Chat
                 ChatMessageType.Admin } },
         };
 
+        public static ChatboxTab[] MessageToTabs(ChatMessageType messageType)
+        {
+            List<ChatboxTab> tabs = new List<ChatboxTab>();
+            foreach (var kv in TabMessageTypes) 
+            { 
+                if (kv.Value.Contains(messageType))
+                {
+                    tabs.Add(kv.Key);
+                }
+            }
+
+            return tabs.ToArray();
+        }
+
         private string mMsg = "";
 
         private Color mMsgColor;
@@ -64,6 +78,8 @@ namespace Intersect.Client.Interface.Game.Chat
         private string mTarget = "";
 
         private ChatMessageType mType;
+
+        public bool Read = false;
 
         /// <summary>
         /// Creates a new instance of the <see cref="ChatboxMsg"/> class.
@@ -105,7 +121,7 @@ namespace Intersect.Client.Interface.Game.Chat
         public static void AddMessage(ChatboxMsg msg)
         {
             var toTab = ChatboxTab.All;
-            foreach (var tab in sTabMessageTypes)
+            foreach (var tab in TabMessageTypes)
             {
                 if (!tab.Value.Contains(msg.Type))
                 {

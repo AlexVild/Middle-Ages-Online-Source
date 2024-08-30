@@ -287,6 +287,8 @@ namespace Intersect.Client.Interface.Game.Chat
             }
         }
 
+        Dictionary<ChatboxTab, SizedQueue<Tuple<string, ChatboxMsg>>> TabRows = new Dictionary<ChatboxTab, SizedQueue<Tuple<string, ChatboxMsg>>>();
+
         //Update
         public void Update()
         {
@@ -338,6 +340,16 @@ namespace Intersect.Client.Interface.Game.Chat
                 mChatboxMessages.GetHorizontalScrollBar().SetScrollAmount(0);
                 mLastTab = mCurrentTab;
                 ChatboxMsg.NewMessage = true;
+
+                // Restore previous tab rows if they exist
+                mChatboxMessages.Clear();
+                if (TabRows.TryGetValue(mCurrentTab, out var tabRows))
+                {
+                    foreach (var row in tabRows)
+                    {
+                        AddChatLine(row.Item1, row.Item2);
+                    }
+                }
             }
 
             mLastCount = msgs.Length;
@@ -348,33 +360,48 @@ namespace Intersect.Client.Interface.Game.Chat
             }
 
             ChatboxMsg.NewMessage = false;
-            mChatboxMessages.Clear();
-
-            for (var i = 0; i < msgs.Length; i++)
+            var unreadMsgs = msgs.Where(msg => !msg.Read);
+            
+            if (unreadMsgs != null)
             {
-                var msg = msgs[i];
-                var myText = Interface.WrapText(
-                    msg.Message, mChatboxMessages.Width - vScrollBar.Width - 8,
-                    mChatboxText.Font
-                );
-
-                foreach (var t in myText)
+                foreach (var msg in unreadMsgs)
                 {
-                    var rw = mChatboxMessages.AddRow(t.Trim());
-                    rw.SetTextFont(mChatboxText.Font);
-                    rw.SetTextColor(msg.Color);
-                    rw.ShouldDrawBackground = false;
-                    rw.UserData = msg.Target;
-                    rw.Clicked += ChatboxRow_Clicked;
-                    rw.RightClicked += ChatboxRow_RightClicked;
+                    var myText = Interface.WrapText(
+                        msg.Message, mChatboxMessages.Width - vScrollBar.Width - 8,
+                        mChatboxText.Font
+                    );
 
-                    while (mChatboxMessages.RowCount > ClientConfiguration.Instance.ChatLines)
+                    foreach (var t in myText)
                     {
-                        mChatboxMessages.RemoveRow(0);
+                        AddChatLine(t, msg);
+
+                        while (mChatboxMessages.RowCount > ClientConfiguration.Instance.ChatLines)
+                        {
+                            mChatboxMessages.RemoveRow(0);
+                        }
+
+                        // Store the most up-to-date chat info of the current tab so we can
+                        // quickly refresh it on future tab switches
+                        var relevantTabs = new List<ChatboxTab> { ChatboxTab.All };
+                        relevantTabs.AddRange(ChatboxMsg.MessageToTabs(msg.Type));
+
+                        foreach (var tab in relevantTabs)
+                        {
+                            var tuple = new Tuple<string, ChatboxMsg>(t, msg);
+                            if (TabRows.TryGetValue(tab, out var tabRows))
+                            {
+                                tabRows.EnqueueAndDequeue(tuple);
+                            }
+                            else
+                            {
+                                TabRows[tab] = new SizedQueue<Tuple<string, ChatboxMsg>>(ClientConfiguration.Instance.ChatLines);
+                                TabRows[tab].EnqueueAndDequeue(tuple);
+                            }
+                        }
                     }
+                    msg.Read = true;
                 }
             }
-
 
             mChatboxMessages.InnerPanel.SizeToChildren(false, true);
             mChatboxMessages.UpdateScrollBars();
@@ -385,6 +412,22 @@ namespace Intersect.Client.Interface.Game.Chat
             else
             {
                 vScrollBar.SetScrollAmount(1);
+            }
+        }
+
+        private void AddChatLine(string line, ChatboxMsg msg)
+        {
+            var rw = mChatboxMessages.AddRow(line.Trim());
+            rw.SetTextFont(mChatboxText.Font);
+            rw.SetTextColor(msg.Color);
+            rw.ShouldDrawBackground = false;
+            rw.UserData = msg.Target;
+            rw.Clicked += ChatboxRow_Clicked;
+            rw.RightClicked += ChatboxRow_RightClicked;
+
+            while (mChatboxMessages.RowCount > ClientConfiguration.Instance.ChatLines)
+            {
+                mChatboxMessages.RemoveRow(0);
             }
         }
 
