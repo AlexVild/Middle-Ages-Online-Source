@@ -81,6 +81,7 @@ namespace Intersect.Client.Interface.Game.Components
 
             ItemImage.Image.HoverEnter += Image_HoverEnter;
             ItemImage.Image.HoverLeave += Image_HoverLeave;
+            ItemImage.SetImageRenderColor(Item.Color);
         }
 
         private void Image_HoverLeave(Base sender, EventArgs arguments)
