@@ -112,7 +112,7 @@ namespace Intersect.Client.Interface.Game.Character
             if (currentItemId != mCurrentItemId || !mTexLoaded)
             {
                 mCurrentItemId = currentItemId;
-                ItemProperties = itemProperties;
+                ItemProperties = new ItemProperties(itemProperties);
                 var item = ItemBase.Get(mCurrentItemId);
                 if (item != null)
                 {
