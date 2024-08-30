@@ -211,10 +211,6 @@ namespace Intersect.Editor.Forms.Editors
                 cmbFemalePaperdoll.Items.Add(paperdollnames[i]);
             }
 
-            cmbAmmoOverride.Items.Clear();
-            cmbAmmoOverride.Items.Add(Strings.General.none);
-            cmbAmmoOverride.Items.AddRange(ItemBase.Names);
-
             nudStr.Maximum = Options.MaxStatValue;
             nudMag.Maximum = Options.MaxStatValue;
             nudDef.Maximum = Options.MaxStatValue;
@@ -463,6 +459,10 @@ namespace Intersect.Editor.Forms.Editors
                 txtSortName.Text = mEditorItem.SortName;
 
                 chkRareDrop.Checked = mEditorItem.RareDrop;
+
+                cmbAmmoOverride.Items.Clear();
+                cmbAmmoOverride.Items.Add(Strings.General.none);
+                cmbAmmoOverride.Items.AddRange(ItemBase.Names);
 
                 RefreshExtendedData();
                 if (mEditorItem.ItemType == ItemTypes.Equipment && cmbEquipmentBonus.Items.Count > 0)

@@ -694,6 +694,11 @@ namespace Intersect.Server.Database.PlayerData.Players
             {
                 context.Entry(slot).State = EntityState.Detached;
             }
+
+            foreach (var variable in guild.Variables)
+            {
+                context.Entry(variable).State = EntityState.Detached;
+            }
         }
 
         /// <summary>
