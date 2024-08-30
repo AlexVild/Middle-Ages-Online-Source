@@ -410,7 +410,13 @@ namespace Intersect.GameObjects
         public bool BeastCompleted(long kc)
         {
             return BestiaryUnlocks.Values.All(reqKc => kc >= reqKc);
-        } 
+        }
+
+        /// <summary>
+        /// The amount of bestiary unlocks available for this beast
+        /// </summary>
+        [NotMapped]
+        public int BestiaryUnlockAmount => BestiaryUnlocks.Values.Where(val => val > 0).Count();
 
         [Column("BestiaryUnlocks")]
         [JsonIgnore]

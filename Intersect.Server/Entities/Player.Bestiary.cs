@@ -53,7 +53,16 @@ namespace Intersect.Server.Entities
 
             foreach (var beast in validBeasts)
             {
-                // The player has never killed this valid beast
+                // Check for event unlocks
+                var playerUnlockAmt = BestiaryUnlocks.ToList().FindAll(unlock => unlock.NpcId == beast.Id && unlock.Unlocked).Count();
+
+                if (beast.BestiaryUnlockAmount <= playerUnlockAmt)
+                {
+                    completed++;
+                    continue;
+                }
+
+                // Check for KC unlocks
                 if (!killCounts.TryGetValue(beast.Id, out var kc))
                 {
                     continue;
@@ -62,6 +71,7 @@ namespace Intersect.Server.Entities
                 if (beast.BeastCompleted(kc))
                 {
                     completed++;
+                    continue;
                 }
             }
 
@@ -75,6 +85,13 @@ namespace Intersect.Server.Entities
             {
                 Logging.Log.Error("Null beast given to check unlock for");
                 return false;
+            }
+
+            var eventUnlock = BestiaryUnlocks.ToList().Find(playerUnlock => playerUnlock.NpcId == beast.Id && playerUnlock.Unlocked && playerUnlock.UnlockType == (int)unlock);
+
+            if (eventUnlock != default)
+            {
+                return true;
             }
 
             // If the beast never had the unlock initialized, but the beast DOES exist, return true
