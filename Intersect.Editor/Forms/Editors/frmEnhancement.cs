@@ -1,5 +1,8 @@
 ﻿using DarkUI.Controls;
+using DarkUI.Forms;
+using Intersect.Collections;
 using Intersect.Editor.Forms.Helpers;
+using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
@@ -27,6 +30,8 @@ namespace Intersect.Editor.Forms.Editors
         private bool mPopulating = false;
 
         private List<string> mKnownFolders = new List<string>();
+
+        private List<string> KnownEnhancementGroups = new List<string>();
 
         private List<Guid> WeaponTypes = new List<Guid>();
 
@@ -123,6 +128,8 @@ namespace Intersect.Editor.Forms.Editors
             RefreshList(ref lstBonuses, mEditorItem.EffectMods, true, false);
             RefreshList(ref lstSpellEffects, mEditorItem.SpellEnhancements, false);
             RefreshWeaponTypes(false);
+            RefreshEnhancementGroups(mEditorItem.EnhancementGroup);
+            cmbEnGroup.Text = mEditorItem.EnhancementGroup;
 
             RefreshPrereqList();
 
@@ -501,6 +508,53 @@ namespace Intersect.Editor.Forms.Editors
         {
             AddOrReplaceSpellEnhancement(cmbSpells, mEditorItem.SpellEnhancements, SpellBase.IdFromList(cmbSpells.SelectedIndex), (int)nudMinSpell.Value, (int)nudMaxSpell.Value);
             RefreshList(ref lstSpellEffects, mEditorItem.SpellEnhancements, true);
+        }
+
+        private void btnAddEnGroup_Click(object sender, EventArgs e)
+        {
+            var enhancementGroup = "";
+            var result = DarkInputBox.ShowInformation(
+                "What is the name of the enhancement group?", "New Enhancement Group", ref enhancementGroup,
+                DarkDialogButton.OkCancel
+            );
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(enhancementGroup) && !cmbEnGroup.Items.Contains(enhancementGroup))
+            {
+                mEditorItem.EnhancementGroup = enhancementGroup;
+                RefreshEnhancementGroups(enhancementGroup);
+            }
+        }
+
+        private void RefreshEnhancementGroups(string currentGroup)
+        {
+            var enGroups = new List<string>();
+            foreach (var itm in EnhancementDescriptor.Lookup)
+            {
+                if (itm.Value is EnhancementDescriptor enhancement)
+                {
+                    if (!string.IsNullOrEmpty(enhancement.EnhancementGroup) &&
+                   !enGroups.Contains(enhancement.EnhancementGroup))
+                    {
+                        enGroups.Add(enhancement.EnhancementGroup);
+                        if (!enGroups.Contains(enhancement.EnhancementGroup))
+                        {
+                            enGroups.Add(enhancement.EnhancementGroup);
+                        }
+                    }
+                }
+            }
+
+            enGroups.Sort();
+            cmbEnGroup.Items.Clear();
+            cmbEnGroup.Items.Add("");
+            cmbEnGroup.Items.AddRange(enGroups.ToArray());
+
+            cmbEnGroup.Text = currentGroup;
+        }
+
+        private void cmbEnGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EnhancementGroup = cmbEnGroup.Text;
         }
     }
 }

@@ -195,40 +195,48 @@ namespace Intersect.Client.Interface.Game.Enhancement
         {
             EnhancementContainer.Clear();
 
-            var relevantEnhancements = KnownEhancements.Where(enhancementId =>
+            // Grab enhancements that can be applied to the selected weapon
+            var validEnhancements = KnownEhancements
+                .Select(enId => EnhancementDescriptor.Get(enId))
+                .IsNotNull()
+                .Where(en => EnhancementHelper.WeaponLevelRequirementMet(EnhancingItem.Base.MaxWeaponLevels, en.ValidWeaponTypes, out _))
+                .ToList();
+
+            // Group the enhancements by group
+            var groupedEnhancements = validEnhancements
+                .GroupBy(en => en.EnhancementGroup)
+                .ToDictionary(group => group.Key, group => group.ToList());
+
+            var relevantEnhancements = new List<EnhancementDescriptor>();
+            var currentWeaponTypes = EnhancingItem.Base.MaxWeaponLevels.Keys;
+
+            // Select the highest-level enhancement from each enhancement group to display
+            foreach (var enhancementGroup in groupedEnhancements.Values)
             {
-                var enhancement = EnhancementDescriptor.Get(enhancementId);
-                if (enhancement == default)
+                var highestLevelEnhancement = enhancementGroup.OrderByDescending((groupedEnhancement) =>
                 {
-                    return false;
-                }
+                    return groupedEnhancement.ValidWeaponTypes.Average(wepType => wepType.Value);
+                }).FirstOrDefault();
 
-                if (!EnhancementHelper.ValidEnhancementForWeaponType(EnhancingItem.Base.MaxWeaponLevels, enhancement.ValidWeaponTypes))
+                if (highestLevelEnhancement == default)
                 {
-                    return false;
+                    continue;
                 }
+                relevantEnhancements.Add(highestLevelEnhancement);
+            }
 
-                return true;
-            }).ToArray();
-
-            if (relevantEnhancements.Length <= 0)
+            if (relevantEnhancements.Count <= 0)
             {
                 NoEnhancementsLabel.Show();
                 return;
             }
 
             NoEnhancementsLabel.Hide();
-            foreach (var enhancementId in relevantEnhancements)
+            foreach (var enhancement in relevantEnhancements)
             {
-                var enhancement = EnhancementDescriptor.Get(enhancementId);
-                if (enhancement == default)
-                {
-                    continue;
-                }
+                var tmpRow = EnhancementContainer.AddRow($"{enhancement.Name}");
 
-                var tmpRow = EnhancementContainer.AddRow($"{EnhancementDescriptor.GetName(enhancementId)}");
-
-                tmpRow.UserData = enhancementId;
+                tmpRow.UserData = enhancement.Id;
 
                 if (EnhancementInterface.CanAddEnhancement(enhancement, out _))
                 {

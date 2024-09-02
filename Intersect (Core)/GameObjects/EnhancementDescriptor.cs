@@ -110,6 +110,8 @@ namespace Intersect.GameObjects
             }
             return PrerequisiteEnhancements.All(enId => knownEnhancements.Contains(enId));
         }
+
+        public string EnhancementGroup { get; set; } = string.Empty;
     }
 
     public class Enhancement<T> where T : Enum
