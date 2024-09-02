@@ -115,7 +115,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
                 else if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyEnhancement != Guid.Empty)
                 {
-                    if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
+                    if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement) && mItemProperties.CraftedById != Globals.Me.Id)
                     {
                         mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.StudyEnhancement, mItem.Icon, x - (mSpellDescWindow?.Width ?? 0), y, (float)mItem.StudyChance, isLearnable: true);
                         mEnhancementDescWindow.Show();
@@ -323,7 +323,20 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Add the actual description.
             var description = AddDescription();
-            description.AddText(Strings.ItemDescription.Description.ToString(mItem.Description), Color.White);
+            var descriptionTxt = Strings.ItemDescription.Description.ToString(mItem.Description);
+            description.AddText(descriptionTxt, Color.White);
+
+            if (!string.IsNullOrEmpty(mItemProperties.CraftedBy))
+            {
+                if (mItemProperties.CraftedById == Globals.Me.Id)
+                {
+                    description.AddText($" [Crafted by you.]", CustomColors.ItemDesc.Muted);
+                }
+                else
+                {
+                    description.AddText($" [Crafted by {mItemProperties.CraftedBy}.]", CustomColors.ItemDesc.Muted);
+                }
+            }
         }
 
         protected void SetupItemEnhancementInfo()

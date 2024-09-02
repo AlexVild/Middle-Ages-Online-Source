@@ -42,6 +42,9 @@ namespace Intersect.Network.Packets.Server
             {
                 SpellEnhancements.AddRange(other.SpellEnhancements);
             }
+
+            CraftedBy = other.CraftedBy;
+            CraftedById = other.CraftedById;
         }
         
         [Key(0)]
@@ -64,6 +67,12 @@ namespace Intersect.Network.Packets.Server
 
         [Key(6)]
         public List<SpellEnhancement> SpellEnhancements { get; set; } = new List<SpellEnhancement>();
+
+        [Key(7)]
+        public string CraftedBy { get; set; }
+
+        [Key(8)]
+        public Guid CraftedById { get; set; }
     }
 
     [MessagePackObject]

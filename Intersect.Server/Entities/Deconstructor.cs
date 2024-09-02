@@ -137,14 +137,18 @@ namespace Intersect.Server.Entities
                 }
                 deconstructedLoot.AddRange(item.DeconstructRolls);
 
-                if (item.StudySuccessful(Owner.GetLuckModifier()) && !enhancementsLearned.Contains(item.StudyEnhancement))
+                // Don't double-dip on crafted items
+                if (slot.ItemProperties.CraftedById != Owner.Id)
                 {
-                    enhancementsLearned.Add(item.StudyEnhancement);
-                }
-                
-                if (item.ArmorCosmeticUnlocked(Owner.GetLuckModifier()) && !cosmeticsEarned.Contains(item.Id))
-                {
-                    cosmeticsEarned.Add(item.Id);
+                    if (item.StudySuccessful(Owner.GetLuckModifier()) && !enhancementsLearned.Contains(item.StudyEnhancement))
+                    {
+                        enhancementsLearned.Add(item.StudyEnhancement);
+                    }
+
+                    if (item.ArmorCosmeticUnlocked(Owner.GetLuckModifier()) && !cosmeticsEarned.Contains(item.Id))
+                    {
+                        cosmeticsEarned.Add(item.Id);
+                    }
                 }
             }
 

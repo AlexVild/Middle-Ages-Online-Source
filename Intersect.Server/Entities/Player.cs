@@ -3200,7 +3200,7 @@ namespace Intersect.Server.Entities
         /// <param name="itemId">The Id for the item to be handed out to the player.</param>
         /// <param name="quantity">The quantity of items to be handed out to the player.</param>
         /// <returns>Whether the player received the item or not.</returns>
-        public bool TryGiveItem(Guid itemId, int quantity) => TryGiveItem(new Item(itemId, quantity), ItemHandling.Normal, false, true);
+        public bool TryGiveItem(Guid itemId, int quantity, Player crafter = null) => TryGiveItem(new Item(itemId, quantity), ItemHandling.Normal, false, true, crafter: crafter);
 
         /// <summary>
         /// Attempts to give the player an item. Returns whether or not it succeeds.
@@ -3232,7 +3232,7 @@ namespace Intersect.Server.Entities
         /// <param name="overflowTileX">The x coordinate of the tile in which overflow should spawn on, if the player cannot hold the full amount.</param>
         /// <param name="overflowTileY">The y coordinate of the tile in which overflow should spawn on, if the player cannot hold the full amount.</param>
         /// <returns>Whether the player received the item or not.</returns>
-        public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true, int overflowTileX = -1, int overflowTileY = -1, bool fromLootRoll = false)
+        public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true, int overflowTileX = -1, int overflowTileY = -1, bool fromLootRoll = false, Player crafter = null)
         {
             if (PlayerDead)
             {
@@ -3249,6 +3249,12 @@ namespace Intersect.Server.Entities
             if (item.Quantity <= 0)
             {
                 return true;
+            }
+
+            if (crafter != null)
+            {
+                item.ItemProperties.CraftedBy = crafter.Name;
+                item.ItemProperties.CraftedById = crafter.Id;
             }
 
             // Get this information so we can use it later.
@@ -4934,7 +4940,7 @@ namespace Intersect.Server.Entities
                 quantity = 1;
             }
 
-            if (craft.EventOnly || TryGiveItem(craft.ItemId, quantity))
+            if (craft.EventOnly || TryGiveItem(craft.ItemId, quantity, this))
             {
                 // Tell the player about their new craft!
                 string itemName = ItemBase.GetName(craft.ItemId);
