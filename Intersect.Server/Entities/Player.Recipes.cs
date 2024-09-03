@@ -25,7 +25,7 @@ namespace Intersect.Server.Entities
 
         public bool RecipeTutorialDone { get; set; } = false;
 
-        public void UnlockRecipe(Guid descriptorId, bool suppressMsg = false)
+        public void UnlockRecipe(Guid descriptorId, bool suppressMsg = false, bool fromEvent = false)
         {
             if (UnlockedRecipeIds.Contains(descriptorId))
             {
@@ -34,18 +34,19 @@ namespace Intersect.Server.Entities
 
             if (!LockedRecipeIds.Contains(descriptorId))
             {
-                UnlockedRecipes.Add(new RecipeInstance(Id, descriptorId));
+                UnlockedRecipes.Add(new RecipeInstance(Id, descriptorId, fromEvent));
             }
             else
             {
                 var lockedRecipe = UnlockedRecipes.Find(unlockedRecipe => unlockedRecipe.DescriptorId == descriptorId);
                 if (lockedRecipe == default)
                 {
-                    UnlockedRecipes.Add(new RecipeInstance(Id, descriptorId));
+                    UnlockedRecipes.Add(new RecipeInstance(Id, descriptorId, fromEvent));
                 }
                 else
                 {
                     lockedRecipe.Unlocked = true;
+                    lockedRecipe.FromEvent = fromEvent;
                 }
             }
 
@@ -70,7 +71,7 @@ namespace Intersect.Server.Entities
         /// Soft deletes recipes from a player
         /// </summary>
         /// <param name="descriptorId"></param>
-        public void RemoveRecipes(Guid descriptorId)
+        public void RemoveRecipes(Guid descriptorId, bool fromEvent = false)
         {
             if (UnlockedRecipes == null)
             {
@@ -79,7 +80,13 @@ namespace Intersect.Server.Entities
 
             foreach(var recipe in UnlockedRecipes.Where(recipe => recipe.DescriptorId == descriptorId))
             {
+                // If this recipe was unlocked via an event, continue UNLESS this removal is also from an event
+                if (recipe.FromEvent && recipe.Unlocked && !fromEvent)
+                {
+                    continue;
+                }
                 recipe.Unlocked = false;
+                recipe.FromEvent = false; // reset on remove as it was either forced or never enabled to begin with
             }
         }
 

@@ -73,13 +73,14 @@ namespace Intersect.Server.Core
         /// <param name="player"></param>
         public static void RefreshPlayer(Player player)
         {
-            foreach(var recipe in Globals.CachedRecipes.ToArray())
+            if (player == null || !player.Online)
             {
-                if (player == null)
-                {
-                    return;
-                }
-                if (!player.Online || recipe == null)
+                return;
+            }
+
+            foreach (var recipe in Globals.CachedRecipes.ToArray())
+            {
+                if (player == null || !player.Online || recipe == null)
                 {
                     return;
                 }

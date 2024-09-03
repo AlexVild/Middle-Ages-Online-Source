@@ -17,11 +17,12 @@ namespace Intersect.Server.Database.PlayerData.Players
         // EF
         public RecipeInstance() { }
 
-        public RecipeInstance(Guid playerId, Guid descriptorId, bool unlocked = true)
+        public RecipeInstance(Guid playerId, Guid descriptorId, bool unlocked = true, bool fromEvent = false)
         {
             PlayerId = playerId;
             DescriptorId = descriptorId;
             Unlocked = unlocked;
+            FromEvent = fromEvent;
         }
 
         [ForeignKey(nameof(Player))]
@@ -36,5 +37,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         public RecipeDescriptor Descriptor { get => RecipeDescriptor.Get(DescriptorId) ?? null; }
 
         public bool Unlocked { get; set; }
+
+        public bool FromEvent { get; set; }
     }
 }

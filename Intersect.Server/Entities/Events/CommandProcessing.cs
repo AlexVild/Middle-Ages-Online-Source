@@ -3255,11 +3255,12 @@ namespace Intersect.Server.Entities.Events
         {
             if (command.IsUnlocked)
             {
-                player?.UnlockRecipe(command.RecipeId);
+                player?.UnlockRecipe(command.RecipeId, fromEvent: true);
             }
             else
             {
-                player?.RemoveRecipes(command.RecipeId);
+                player?.RemoveRecipes(command.RecipeId, fromEvent: true);
+                RecipeUnlockWatcher.RefreshPlayer(player);
             }
         }
 
