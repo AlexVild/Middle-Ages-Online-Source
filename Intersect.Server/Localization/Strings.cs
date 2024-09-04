@@ -1960,6 +1960,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString ServerReset = @"The enhancements on this weapon had to be rerolled due to a game change.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ServerResetFull = @"The enhancements on this weapon had to be removed due to a game change.";
         }
     }
 }

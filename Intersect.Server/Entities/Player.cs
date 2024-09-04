@@ -479,6 +479,8 @@ namespace Intersect.Server.Entities
             {
                 BackfillHistoricalCraftingData();
             }
+
+            ReprocessEnhancements();
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -6454,15 +6456,20 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var appliedEnhancements = appliedEnhancementIds.Select(id => EnhancementDescriptor.Get(id)).ToArray();
-
             var enhanceThreshold = weapon.Descriptor.EnhancementThreshold;
             var usedEnhancementPts = 0;
 
             var reRoll = false;
 
-            foreach (var enhancement in appliedEnhancements.ToArray())
+            foreach (var enhancementId in appliedEnhancementIds.ToArray())
             {
+                if (!EnhancementDescriptor.TryGet(enhancementId, out var enhancement))
+                {
+                    appliedEnhancementIds.Remove(enhancementId);
+                    reRoll = true;
+                    continue;
+                }
+
                 usedEnhancementPts += enhancement.RequiredEnhancementPoints;
                 if (usedEnhancementPts > enhanceThreshold)
                 {

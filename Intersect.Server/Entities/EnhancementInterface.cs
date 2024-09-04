@@ -243,6 +243,13 @@ namespace Intersect.Server.Entities
 
         public void RerollWeapon(Item weapon, Guid[] appliedEnhancementIds)
         {
+            if (appliedEnhancementIds.Length == 0)
+            {
+                PacketSender.SendChatMsg(Owner, Strings.Enhancements.ServerResetFull, ChatMessageType.Notice, sendToast: true);
+                TryRemoveEnhancementsOnItem(false, true, weapon);
+                return;
+            }
+
             TryRemoveEnhancementsOnItem(false, true, weapon);
             TryApplyEnhancementsToWeapon(appliedEnhancementIds, false, weapon);
 
