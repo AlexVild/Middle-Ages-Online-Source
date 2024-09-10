@@ -3454,6 +3454,11 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
+            if (!command.IgnoreInProgressCheck && !player.ChallengesInProgress.Any(chlg => chlg.ChallengeId == command.ChallengeId))
+            {
+                return;
+            }
+
             switch (command.ChangeType)
             {
                 case ChallengeUpdate.ChangeSets:

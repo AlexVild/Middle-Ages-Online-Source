@@ -1449,6 +1449,8 @@ namespace Intersect.GameObjects.Events.Commands
         public ChallengeUpdate ChangeType { get; set; } = ChallengeUpdate.ChangeSets;
 
         public int Amount { get; set; } = 0;
+
+        public bool IgnoreInProgressCheck { get; set; }
     }
 
     public partial class ChangeDungeonCommand : EventCommand

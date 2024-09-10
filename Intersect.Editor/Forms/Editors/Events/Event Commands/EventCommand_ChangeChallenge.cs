@@ -30,6 +30,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbWeaponType.Items.AddRange(ChallengeDescriptor.Names);
             cmbWeaponType.SelectedIndex = ChallengeDescriptor.ListIndex(mMyCommand?.ChallengeId ?? Guid.Empty);
 
+            chkNotInProgress.Checked = mMyCommand.IgnoreInProgressCheck;
+
             SetRadioValues();
 
             nudAmt.Value = mMyCommand.Amount;
@@ -69,6 +71,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.ChallengeId = ChallengeDescriptor.IdFromList(cmbWeaponType.SelectedIndex);
             mMyCommand.ChangeType = GetRadioValue();
             mMyCommand.Amount = (int)nudAmt.Value;
+            mMyCommand.IgnoreInProgressCheck = chkNotInProgress.Checked;
 
             mEventEditor.FinishCommandEdit();
         }
