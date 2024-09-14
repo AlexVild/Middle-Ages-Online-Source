@@ -54,6 +54,9 @@ namespace Intersect.GameObjects
 
         [Description("Event Controlled, Y times")]
         EventControlled,
+
+        [Description("X Backstab Damage, Y times")]
+        BackstabDamage,
     }
 
     public enum ChallengeParamType
@@ -338,12 +341,19 @@ namespace Intersect.GameObjects
                     }
                 
                 case ChallengeType.EventControlled:
-                    if (Reps > 1)
+                    if (Sets > 1)
                     {
                         return $"{Description}, {Sets} times.";
                     }
-                    return Description;
-                
+                    return $"{Description}.";
+
+                case ChallengeType.BackstabDamage:
+                    if (Sets > 1)
+                    {
+                        return $"Deal {Sets} points of backstab damage.";
+                    }
+                    return $"Deal backstab damage.";
+
                 default:
                     return "No description";
             }

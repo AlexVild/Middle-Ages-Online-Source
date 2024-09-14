@@ -433,11 +433,16 @@ namespace Intersect.Editor.Forms.Editors
 
                 case ChallengeType.EventControlled:
                     nudReps.Visible = false;
-                    nudSets.Visible = false;
+                    nudSets.Visible = true;
                     lblChallengeDescription.Visible = true;
                     txtDescription.Visible = true;
                     nudMinTier.Visible = false;
                     lblMinEnemyTier.Visible = false;
+                    break;
+
+                case ChallengeType.BackstabDamage:
+                    lblReps.Text = "Damage";
+                    nudReps.Visible = false;
                     break;
 
                 default:

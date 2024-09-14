@@ -1891,6 +1891,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString ChallengeProgress = @"Challenge update: {00} ({01}/{02})!";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ChallengeProgressPercent = @"Challenge update: {00} ({01}%)!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString WeaponFinished = @"You've learned all you can from this weapon for the {00} weapon track.";

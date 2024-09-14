@@ -38,15 +38,15 @@ namespace Intersect.Network.Packets.Server
         public Guid ChallengeId { get; set; }
 
         [Key(1)]
-        public int Reps { get; set; }
+        public int Sets { get; set; }
 
         [Key(2)]
         public bool Completed { get; set; }
 
-        public ChallengeProgression(Guid challengeId, int reps, bool completed)
+        public ChallengeProgression(Guid challengeId, int sets, bool completed)
         {
             ChallengeId = challengeId;
-            Reps = reps;
+            Sets = sets;
             Completed = completed;
         }
     }

@@ -97,7 +97,7 @@ namespace Intersect.Client.Interface.Game.Components
             ProgressionDetails = progression;
 
             Unlocked = ProgressionDetails != default;
-            Progress = ProgressionDetails?.Reps ?? 0;
+            Progress = ProgressionDetails?.Sets ?? 0;
             Completed = ProgressionDetails?.Completed ?? false;
             RequiredLevel = level;
             WeaponType = weaponTypeName;

@@ -2140,5 +2140,10 @@ namespace Intersect.Server.Entities
         public NpcMovement Movement => OverrideMovement ? OverriddenMovement : (NpcMovement)(Base?.Movement);
 
         public int Range => OverriddeRange ? OverriddenRange : Base.SightRange;
+
+        public override void PlayerBackstabbed(Player player, int damage)
+        {
+            ChallengeUpdateProcesser.UpdateChallengesOf(new BackstabDamageUpdate(player, damage), Base.Level);
+        }
     }
 }

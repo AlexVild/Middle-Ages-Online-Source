@@ -3,6 +3,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
@@ -748,6 +749,12 @@ namespace Intersect.Server.Entities
         public override bool IsInvincibleTo(Entity entity)
         {
             return CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
+        }
+
+        public virtual void PlayerBackstabbed(Player player, int damage)
+        {
+            // Ignore tiers on players
+            ChallengeUpdateProcesser.UpdateChallengesOf(new BackstabDamageUpdate(player, damage), int.MaxValue);
         }
     }
 }

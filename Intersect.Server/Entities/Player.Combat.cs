@@ -887,6 +887,10 @@ namespace Intersect.Server.Entities
                     var backstabDamage = (int)Math.Ceiling(originalDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin)) - originalDamage;
                     baseDamage += Math.Max(0, backstabDamage);
                     damageBonus = DamageBonus.Backstab;
+                    if (target is AttackingEntity attackingEntity)
+                    {
+                        attackingEntity.PlayerBackstabbed(this, baseDamage);
+                    }
                 }
                 if (StealthAttack && item.ProjectileId == Guid.Empty && canStealth) // Melee weapons only for stealth attacks
                 {

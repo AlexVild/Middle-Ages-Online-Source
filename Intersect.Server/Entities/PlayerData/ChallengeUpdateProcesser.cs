@@ -73,7 +73,7 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        private void Challenge_ProgressMade(int sets, int required)
+        private void Challenge_ProgressMade(int sets, int change, int required)
         {
             ProgressMade = true;
         }
@@ -234,6 +234,19 @@ namespace Intersect.Server.Entities.PlayerData
         public AoEHitsUpdate(Player player, int enemiesHit) : base(player)
         {
             EnemiesHit = enemiesHit;
+        }
+    }
+
+    public class BackstabDamageUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.BackstabDamage;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int TotalBackstabDamage { get; set; }
+
+        public BackstabDamageUpdate(Player player, int totalBackstabDamage) : base(player)
+        {
+            TotalBackstabDamage = totalBackstabDamage;
         }
     }
 
@@ -530,6 +543,20 @@ namespace Intersect.Server.Entities.PlayerData
                     var timesComplete = (int)Math.Floor((float)update.EnemiesHit / desc.Reps);
                     challenge.Sets += timesComplete;
                 }
+            }
+        }
+
+        private static void UpdateChallenge(BackstabDamageUpdate update, int enemyTier)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var desc = challenge.Descriptor;
+                if (desc == null || enemyTier < challenge.Descriptor.MinTier)
+                {
+                    continue;
+                }
+
+                challenge.Sets += update.TotalBackstabDamage;
             }
         }
     }
