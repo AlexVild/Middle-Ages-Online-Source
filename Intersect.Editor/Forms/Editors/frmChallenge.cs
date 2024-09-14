@@ -358,6 +358,7 @@ namespace Intersect.Editor.Forms.Editors
             nudParam.Visible = true;
             cmbParamSelector.Visible = false;
             mEditorItem.ChallengeParamType = (int)ChallengeParamType.None;
+            lblParamLbl.Visible = false;
 
             switch (challengeType)
             {
@@ -445,6 +446,37 @@ namespace Intersect.Editor.Forms.Editors
                     nudReps.Visible = false;
                     break;
 
+                case ChallengeType.CriticalHits:
+                    lblReps.Text = "Crits Landed";
+                    nudReps.Visible = false;
+                    break;
+
+                case ChallengeType.StatusApply:
+                    lblReps.Text = "Applications";
+                    nudReps.Visible = false;
+                    nudParam.Enabled = true;
+                    UpdateParamLabel();
+                    break;
+
+                case ChallengeType.PierceMany:
+                    lblReps.Text = "Enemies Pierced";
+                    break;
+
+                case ChallengeType.DoTDamage:
+                    lblReps.Text = "Total DoT Damage";
+                    nudReps.Visible = false;
+                    break;
+
+                case ChallengeType.DealDamage:
+                    lblReps.Text = "Damage";
+                    nudReps.Visible = false;
+                    break;
+
+                case ChallengeType.DealManaDamage:
+                    lblReps.Text = "ManaDamage";
+                    nudReps.Visible = false;
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
@@ -488,11 +520,13 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbParamSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.ChallengeParamId = ParamType.IdFromList(cmbParamSelector.SelectedIndex - 1);
+            UpdateParamLabel();
         }
 
         private void nudParam_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Param = (int)nudParam.Value;
+            UpdateParamLabel();
         }
 
         private void DrawIcon()
@@ -629,6 +663,26 @@ namespace Intersect.Editor.Forms.Editors
 
             var val = mEditorItem.GetBonusEffectPercentage((EffectType)lstBonuses.SelectedIndex);
             nudBonusEffects.Value = val;
+        }
+
+        private void UpdateParamLabel()
+        {
+            if (mEditorItem.Type == ChallengeType.StatusApply)
+            {
+                lblParamLbl.Visible = true;
+                var statusNames = EnumExtensions.GetDescriptions(typeof(StatusTypes));
+                if (nudParam.Value >= 0 && nudParam.Value < statusNames.Length)
+                {
+                    lblParamLbl.Text = statusNames[(int)nudParam.Value];
+                }
+                else
+                {
+                    lblParamLbl.Text = "<Invalid status!>";
+                }
+                return;
+            }
+
+            lblParamLbl.Visible = false;
         }
     }
 }

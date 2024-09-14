@@ -4,6 +4,7 @@ using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
@@ -181,6 +182,10 @@ namespace Intersect.Server.Entities
             if (!spell.Combat.Friendly)
             {
                 ReactToCombat(caster);
+                if (caster is Player player)
+                {
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new StatusApplyUpdate(player, spell.Combat.Effect));
+                }
             }
         }
 

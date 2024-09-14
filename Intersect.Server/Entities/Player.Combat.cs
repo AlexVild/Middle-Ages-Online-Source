@@ -73,7 +73,12 @@ namespace Intersect.Server.Entities
                 critChance += affinity;
             }
 
-            return base.IsCriticalHit(critChance);
+            bool isCrit = base.IsCriticalHit(critChance);
+            if (isCrit)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new CriticalHitsUpdate(this, 1));
+            }
+            return isCrit;
         }
 
         public override bool TryDealDamageTo(Entity enemy,
@@ -148,6 +153,7 @@ namespace Intersect.Server.Entities
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), enemy.TierLevel);
                 ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), enemy.TierLevel);
+                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageDealtUpdate(this, damage));
 
                 // For challenges where we don't want DoT values fudging the challenge - cheap fix
                 if (LastWeaponSwitch <= Timing.Global.Milliseconds)

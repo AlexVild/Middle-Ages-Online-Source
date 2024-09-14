@@ -70,6 +70,18 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbChallengeType = new DarkUI.Controls.DarkComboBox();
             this.lblChallengeType = new System.Windows.Forms.Label();
             this.grpUnlocks = new DarkUI.Controls.DarkGroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.nudBonusEffects = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudVitals = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblValue = new System.Windows.Forms.Label();
+            this.nudStats = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblBonusEffects = new System.Windows.Forms.Label();
+            this.lstBonuses = new System.Windows.Forms.ListBox();
+            this.lstVitals = new System.Windows.Forms.ListBox();
+            this.lblVitalBonus = new System.Windows.Forms.Label();
+            this.lstStats = new System.Windows.Forms.ListBox();
+            this.lblStatBonuses = new System.Windows.Forms.Label();
             this.cmbEnhancement = new DarkUI.Controls.DarkComboBox();
             this.lblEnhancement = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -85,18 +97,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.lblStatBonuses = new System.Windows.Forms.Label();
-            this.lstStats = new System.Windows.Forms.ListBox();
-            this.lblVitalBonus = new System.Windows.Forms.Label();
-            this.lstVitals = new System.Windows.Forms.ListBox();
-            this.lstBonuses = new System.Windows.Forms.ListBox();
-            this.lblBonusEffects = new System.Windows.Forms.Label();
-            this.nudStats = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblValue = new System.Windows.Forms.Label();
-            this.nudVitals = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudBonusEffects = new DarkUI.Controls.DarkNumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.lblParamLbl = new System.Windows.Forms.Label();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -108,9 +109,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
             this.grpUnlocks.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStats)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVitals)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBonusEffects)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVitals)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStats)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -413,6 +414,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDetails.Controls.Add(this.lblParamLbl);
             this.grpDetails.Controls.Add(this.nudMinTier);
             this.grpDetails.Controls.Add(this.lblMinEnemyTier);
             this.grpDetails.Controls.Add(this.lblChallengeDescription);
@@ -656,6 +658,169 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUnlocks.TabStop = false;
             this.grpUnlocks.Text = "Unlocks";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(392, 294);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(34, 13);
+            this.label3.TabIndex = 133;
+            this.label3.Text = "Value";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(215, 294);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 132;
+            this.label2.Text = "Value";
+            // 
+            // nudBonusEffects
+            // 
+            this.nudBonusEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudBonusEffects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudBonusEffects.Location = new System.Drawing.Point(436, 292);
+            this.nudBonusEffects.Maximum = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            this.nudBonusEffects.Name = "nudBonusEffects";
+            this.nudBonusEffects.Size = new System.Drawing.Size(89, 20);
+            this.nudBonusEffects.TabIndex = 131;
+            this.nudBonusEffects.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudBonusEffects.ValueChanged += new System.EventHandler(this.nudBonusEffects_ValueChanged);
+            // 
+            // nudVitals
+            // 
+            this.nudVitals.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudVitals.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudVitals.Location = new System.Drawing.Point(261, 292);
+            this.nudVitals.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudVitals.Minimum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            -2147483648});
+            this.nudVitals.Name = "nudVitals";
+            this.nudVitals.Size = new System.Drawing.Size(89, 20);
+            this.nudVitals.TabIndex = 130;
+            this.nudVitals.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudVitals.ValueChanged += new System.EventHandler(this.nudVitals_ValueChanged);
+            // 
+            // lblValue
+            // 
+            this.lblValue.AutoSize = true;
+            this.lblValue.Location = new System.Drawing.Point(39, 294);
+            this.lblValue.Name = "lblValue";
+            this.lblValue.Size = new System.Drawing.Size(34, 13);
+            this.lblValue.TabIndex = 129;
+            this.lblValue.Text = "Value";
+            // 
+            // nudStats
+            // 
+            this.nudStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudStats.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudStats.Location = new System.Drawing.Point(86, 292);
+            this.nudStats.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudStats.Minimum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            -2147483648});
+            this.nudStats.Name = "nudStats";
+            this.nudStats.Size = new System.Drawing.Size(89, 20);
+            this.nudStats.TabIndex = 128;
+            this.nudStats.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudStats.ValueChanged += new System.EventHandler(this.nudStats_ValueChanged);
+            // 
+            // lblBonusEffects
+            // 
+            this.lblBonusEffects.AutoSize = true;
+            this.lblBonusEffects.Location = new System.Drawing.Point(353, 151);
+            this.lblBonusEffects.Name = "lblBonusEffects";
+            this.lblBonusEffects.Size = new System.Drawing.Size(73, 13);
+            this.lblBonusEffects.TabIndex = 127;
+            this.lblBonusEffects.Text = "Bonus Effects";
+            // 
+            // lstBonuses
+            // 
+            this.lstBonuses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstBonuses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstBonuses.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstBonuses.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstBonuses.FormattingEnabled = true;
+            this.lstBonuses.Location = new System.Drawing.Point(356, 167);
+            this.lstBonuses.Name = "lstBonuses";
+            this.lstBonuses.Size = new System.Drawing.Size(169, 119);
+            this.lstBonuses.TabIndex = 126;
+            this.lstBonuses.SelectedIndexChanged += new System.EventHandler(this.lstBonuses_SelectedIndexChanged);
+            // 
+            // lstVitals
+            // 
+            this.lstVitals.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstVitals.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstVitals.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstVitals.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstVitals.FormattingEnabled = true;
+            this.lstVitals.Location = new System.Drawing.Point(181, 167);
+            this.lstVitals.Name = "lstVitals";
+            this.lstVitals.Size = new System.Drawing.Size(169, 119);
+            this.lstVitals.TabIndex = 125;
+            this.lstVitals.SelectedIndexChanged += new System.EventHandler(this.lstVitals_SelectedIndexChanged);
+            // 
+            // lblVitalBonus
+            // 
+            this.lblVitalBonus.AutoSize = true;
+            this.lblVitalBonus.Location = new System.Drawing.Point(178, 151);
+            this.lblVitalBonus.Name = "lblVitalBonus";
+            this.lblVitalBonus.Size = new System.Drawing.Size(71, 13);
+            this.lblVitalBonus.TabIndex = 124;
+            this.lblVitalBonus.Text = "Vital Bonuses";
+            // 
+            // lstStats
+            // 
+            this.lstStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstStats.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstStats.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstStats.FormattingEnabled = true;
+            this.lstStats.Location = new System.Drawing.Point(6, 167);
+            this.lstStats.Name = "lstStats";
+            this.lstStats.Size = new System.Drawing.Size(169, 119);
+            this.lstStats.TabIndex = 123;
+            this.lstStats.SelectedIndexChanged += new System.EventHandler(this.lstStats_SelectedIndexChanged);
+            // 
+            // lblStatBonuses
+            // 
+            this.lblStatBonuses.AutoSize = true;
+            this.lblStatBonuses.Location = new System.Drawing.Point(3, 151);
+            this.lblStatBonuses.Name = "lblStatBonuses";
+            this.lblStatBonuses.Size = new System.Drawing.Size(70, 13);
+            this.lblStatBonuses.TabIndex = 122;
+            this.lblStatBonuses.Text = "Stat Bonuses";
+            // 
             // cmbEnhancement
             // 
             this.cmbEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -850,168 +1015,14 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblStatBonuses
+            // lblParamLbl
             // 
-            this.lblStatBonuses.AutoSize = true;
-            this.lblStatBonuses.Location = new System.Drawing.Point(3, 151);
-            this.lblStatBonuses.Name = "lblStatBonuses";
-            this.lblStatBonuses.Size = new System.Drawing.Size(70, 13);
-            this.lblStatBonuses.TabIndex = 122;
-            this.lblStatBonuses.Text = "Stat Bonuses";
-            // 
-            // lstStats
-            // 
-            this.lstStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstStats.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstStats.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstStats.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstStats.FormattingEnabled = true;
-            this.lstStats.Location = new System.Drawing.Point(6, 167);
-            this.lstStats.Name = "lstStats";
-            this.lstStats.Size = new System.Drawing.Size(169, 119);
-            this.lstStats.TabIndex = 123;
-            this.lstStats.SelectedIndexChanged += new System.EventHandler(this.lstStats_SelectedIndexChanged);
-            // 
-            // lblVitalBonus
-            // 
-            this.lblVitalBonus.AutoSize = true;
-            this.lblVitalBonus.Location = new System.Drawing.Point(178, 151);
-            this.lblVitalBonus.Name = "lblVitalBonus";
-            this.lblVitalBonus.Size = new System.Drawing.Size(71, 13);
-            this.lblVitalBonus.TabIndex = 124;
-            this.lblVitalBonus.Text = "Vital Bonuses";
-            // 
-            // lstVitals
-            // 
-            this.lstVitals.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstVitals.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstVitals.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstVitals.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstVitals.FormattingEnabled = true;
-            this.lstVitals.Location = new System.Drawing.Point(181, 167);
-            this.lstVitals.Name = "lstVitals";
-            this.lstVitals.Size = new System.Drawing.Size(169, 119);
-            this.lstVitals.TabIndex = 125;
-            this.lstVitals.SelectedIndexChanged += new System.EventHandler(this.lstVitals_SelectedIndexChanged);
-            // 
-            // lstBonuses
-            // 
-            this.lstBonuses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstBonuses.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstBonuses.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstBonuses.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstBonuses.FormattingEnabled = true;
-            this.lstBonuses.Location = new System.Drawing.Point(356, 167);
-            this.lstBonuses.Name = "lstBonuses";
-            this.lstBonuses.Size = new System.Drawing.Size(169, 119);
-            this.lstBonuses.TabIndex = 126;
-            this.lstBonuses.SelectedIndexChanged += new System.EventHandler(this.lstBonuses_SelectedIndexChanged);
-            // 
-            // lblBonusEffects
-            // 
-            this.lblBonusEffects.AutoSize = true;
-            this.lblBonusEffects.Location = new System.Drawing.Point(353, 151);
-            this.lblBonusEffects.Name = "lblBonusEffects";
-            this.lblBonusEffects.Size = new System.Drawing.Size(73, 13);
-            this.lblBonusEffects.TabIndex = 127;
-            this.lblBonusEffects.Text = "Bonus Effects";
-            // 
-            // nudStats
-            // 
-            this.nudStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudStats.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudStats.Location = new System.Drawing.Point(86, 292);
-            this.nudStats.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudStats.Minimum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            -2147483648});
-            this.nudStats.Name = "nudStats";
-            this.nudStats.Size = new System.Drawing.Size(89, 20);
-            this.nudStats.TabIndex = 128;
-            this.nudStats.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudStats.ValueChanged += new System.EventHandler(this.nudStats_ValueChanged);
-            // 
-            // lblValue
-            // 
-            this.lblValue.AutoSize = true;
-            this.lblValue.Location = new System.Drawing.Point(39, 294);
-            this.lblValue.Name = "lblValue";
-            this.lblValue.Size = new System.Drawing.Size(34, 13);
-            this.lblValue.TabIndex = 129;
-            this.lblValue.Text = "Value";
-            // 
-            // nudVitals
-            // 
-            this.nudVitals.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudVitals.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudVitals.Location = new System.Drawing.Point(261, 292);
-            this.nudVitals.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudVitals.Minimum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            -2147483648});
-            this.nudVitals.Name = "nudVitals";
-            this.nudVitals.Size = new System.Drawing.Size(89, 20);
-            this.nudVitals.TabIndex = 130;
-            this.nudVitals.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudVitals.ValueChanged += new System.EventHandler(this.nudVitals_ValueChanged);
-            // 
-            // nudBonusEffects
-            // 
-            this.nudBonusEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudBonusEffects.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudBonusEffects.Location = new System.Drawing.Point(436, 292);
-            this.nudBonusEffects.Maximum = new decimal(new int[] {
-            200,
-            0,
-            0,
-            0});
-            this.nudBonusEffects.Name = "nudBonusEffects";
-            this.nudBonusEffects.Size = new System.Drawing.Size(89, 20);
-            this.nudBonusEffects.TabIndex = 131;
-            this.nudBonusEffects.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudBonusEffects.ValueChanged += new System.EventHandler(this.nudBonusEffects_ValueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(215, 294);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 132;
-            this.label2.Text = "Value";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(392, 294);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(34, 13);
-            this.label3.TabIndex = 133;
-            this.label3.Text = "Value";
+            this.lblParamLbl.AutoSize = true;
+            this.lblParamLbl.Location = new System.Drawing.Point(408, 75);
+            this.lblParamLbl.Name = "lblParamLbl";
+            this.lblParamLbl.Size = new System.Drawing.Size(49, 13);
+            this.lblParamLbl.TabIndex = 122;
+            this.lblParamLbl.Text = "<Param>";
             // 
             // frmChallenge
             // 
@@ -1045,9 +1056,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
             this.grpUnlocks.ResumeLayout(false);
             this.grpUnlocks.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStats)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVitals)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBonusEffects)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVitals)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStats)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1120,5 +1131,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkNumericUpDown nudStats;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblParamLbl;
     }
 }

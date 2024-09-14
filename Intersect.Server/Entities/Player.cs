@@ -10329,5 +10329,21 @@ namespace Intersect.Server.Entities
             percentageStats += passiveBuffs.Item2;
             return new Tuple<int, int>(flatStats, percentageStats);
         }
+
+        public override bool TryDealManaDamageTo(Entity enemy,
+            int dmg,
+            int dmgScaling,
+            double critMultiplier,
+            bool vampire,
+            out int damage)
+        {
+            var damageDealt = base.TryDealManaDamageTo(enemy, dmg, dmg, critMultiplier, vampire, out damage);
+
+            if (damageDealt)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new ManaDamageDealtUpdate(this, damage));
+            }
+            return damageDealt;
+        }
     }
 }

@@ -1,11 +1,9 @@
-﻿using Intersect.GameObjects;
+﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities.PlayerData
 {
@@ -247,6 +245,84 @@ namespace Intersect.Server.Entities.PlayerData
         public BackstabDamageUpdate(Player player, int totalBackstabDamage) : base(player)
         {
             TotalBackstabDamage = totalBackstabDamage;
+        }
+    }
+
+    public class CriticalHitsUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.CriticalHits;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int TotalCrits { get; set; }
+
+        public CriticalHitsUpdate(Player player, int totalCrits) : base(player)
+        {
+            TotalCrits = totalCrits;
+        }
+    }
+
+    public class StatusApplyUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.StatusApply;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public StatusTypes Status { get; set; }
+
+        public StatusApplyUpdate(Player player, StatusTypes status) : base(player)
+        {
+            Status = status;
+        }
+    }
+
+    public class PierceManyUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.PierceMany;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.RepsAndSets;
+
+        public int EnemiesPierced { get; set; }
+
+        public PierceManyUpdate(Player player, int enemiesPierced) : base(player)
+        {
+            EnemiesPierced = enemiesPierced;
+        }
+    }
+
+    public class DoTUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DoTDamage;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int DoTDamage { get; set; }
+
+        public DoTUpdate(Player player, int doTDamage) : base(player)
+        {
+            DoTDamage = doTDamage;
+        }
+    }
+
+    public class DamageDealtUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DealDamage;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int Damage { get; set; }
+
+        public DamageDealtUpdate(Player player, int damage) : base(player)
+        {
+            Damage = damage;
+        }
+    }
+
+    public class ManaDamageDealtUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DealManaDamage;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int Damage { get; set; }
+
+        public ManaDamageDealtUpdate(Player player, int damage) : base(player)
+        {
+            Damage = damage;
         }
     }
 
@@ -557,6 +633,83 @@ namespace Intersect.Server.Entities.PlayerData
                 }
 
                 challenge.Sets += update.TotalBackstabDamage;
+            }
+        }
+
+        private static void UpdateChallenge(CriticalHitsUpdate update)
+        {
+            CommonChallengeHandler(update, int.MaxValue, (challenge) =>
+            {
+                challenge.Sets += update.TotalCrits;
+            });
+        }
+
+        private static void UpdateChallenge(StatusApplyUpdate update)
+        {
+            CommonChallengeHandler(update, int.MaxValue, (challenge) =>
+            {
+                var desc = challenge.Descriptor;
+                if (desc.Param == (int)update.Status)
+                {
+                    challenge.Sets++;
+                }
+            });
+        }
+
+        private static void UpdateChallenge(PierceManyUpdate update)
+        {
+            CommonChallengeHandler(update, int.MaxValue, (challenge) =>
+            {
+                var desc = challenge.Descriptor;
+                if (update.EnemiesPierced > 0 && update.EnemiesPierced >= desc.Reps)
+                {
+                    var timesComplete = (int)Math.Floor((float)update.EnemiesPierced / desc.Reps);
+                    challenge.Sets += timesComplete;
+                }
+            });
+        }
+
+        private static void UpdateChallenge(DoTUpdate update)
+        {
+            CommonChallengeHandler(update, int.MaxValue, (challenge) =>
+            {
+                challenge.Sets += update.DoTDamage;
+            });
+        }
+
+        private static void UpdateChallenge(DamageDealtUpdate update)
+        {
+            CommonChallengeHandler(update, int.MaxValue, (challenge) =>
+            {
+                challenge.Sets += update.Damage;
+            });
+        }
+
+        private static void UpdateChallenge(ManaDamageDealtUpdate update)
+        {
+            CommonChallengeHandler(update, int.MaxValue, (challenge) =>
+            {
+                challenge.Sets += update.Damage;
+            });
+        }
+
+        /// <summary>
+        /// Does standard challenge validations and calls a callback func if they pass
+        /// </summary>
+        /// <param name="update">The challenge update to check for updates</param>
+        /// <param name="enemyTier">The enemy tier</param>
+        /// <param name="handler">The handler to call if validations succeed</param>
+        private static void CommonChallengeHandler(ChallengeUpdate update, int enemyTier, Action<ChallengeProgress> handler)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var desc = challenge.Descriptor;
+                if (desc == null || enemyTier < challenge.Descriptor.MinTier)
+                {
+                    continue;
+                }
+
+                handler.Invoke(challenge);
             }
         }
     }

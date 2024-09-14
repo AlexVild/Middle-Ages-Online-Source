@@ -3,6 +3,7 @@ using Intersect.Enums;
 using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
 using Intersect.Models;
+using Intersect.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -55,8 +56,26 @@ namespace Intersect.GameObjects
         [Description("Event Controlled, Y times")]
         EventControlled,
 
-        [Description("X Backstab Damage, Y times")]
+        [Description("X Backstab Damage")]
         BackstabDamage,
+
+        [Description("X Critical Hits landed")]
+        CriticalHits,
+
+        [Description("Apply Z status X times")]
+        StatusApply,
+
+        [Description("Pierce X enemies with a single projectile, Y times")]
+        PierceMany,
+
+        [Description("Deal X DoT damage")]
+        DoTDamage,
+
+        [Description("Deal X damage")]
+        DealDamage,
+
+        [Description("Deal X mana damage")]
+        DealManaDamage,
     }
 
     public enum ChallengeParamType
@@ -353,6 +372,46 @@ namespace Intersect.GameObjects
                         return $"Deal {Sets} points of backstab damage.";
                     }
                     return $"Deal backstab damage.";
+
+                case ChallengeType.CriticalHits:
+                    if (Sets > 1)
+                    {
+                        return $"Deal {Sets} critical hits.";
+                    }
+                    return $"Deal a critical hit.";
+
+                case ChallengeType.StatusApply:
+                    try
+                    {
+                        var status = (StatusTypes)Param;
+                        var statusName = status.GetDescription();
+
+                        if (Sets > 1)
+                        {
+                            return $"Apply the {statusName} status {Sets} times.";
+                        }
+                        return $"Apply the {statusName} status.";
+                    }
+                    catch (InvalidCastException)
+                    {
+                        return "Invalid status given! Tell Daywalkr";
+                    }
+
+                case ChallengeType.PierceMany:
+                    if (Sets > 1)
+                    {
+                        return $"Pierce {Reps} enemies with a single projectile, {Sets} times.";
+                    }
+                    return $"Pierce {Reps} enemies with a single projectile.";
+
+                case ChallengeType.DoTDamage:
+                    return $"Deal {Sets} damage with damage-over-time skills.";
+
+                case ChallengeType.DealDamage:
+                    return $"Deal {Sets} damage.";
+
+                case ChallengeType.DealManaDamage:
+                    return $"Deal {Sets} mana damage.";
 
                 default:
                     return "No description";

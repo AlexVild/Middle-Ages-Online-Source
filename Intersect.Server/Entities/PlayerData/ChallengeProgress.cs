@@ -130,16 +130,21 @@ namespace Intersect.Server.Entities.PlayerData
             var challengeName = ChallengeDescriptor.GetName(ChallengeId);
             switch (Instance.Challenge.Type)
             {
+                case ChallengeType.StatusApply:
+                case ChallengeType.DoTDamage:
+                case ChallengeType.DealDamage:
+                case ChallengeType.DealManaDamage:
                 case ChallengeType.BackstabDamage:
                 {
                     // Calculate percentage progress
                     var totalSets = Instance.Challenge.Sets;
                     var percent = (int)((currSets / (float)totalSets) * 100);
+                    var prevPercent = (int)((prevSets / (float)totalSets) * 100);
 
                     // Check if we've crossed a 10% threshold (only notify at multiples of 10%)
                     if (Instance.Challenge.Sets >= 10)
                     {
-                        if (percent / 10 > prevSets / 10)
+                        if (percent / 10 > prevPercent / 10)
                         {
                             PacketSender.SendChatMsg(Player,
                                 Strings.Player.ChallengeProgressPercent.ToString(challengeName, percent.ToString("N1")),
@@ -150,7 +155,7 @@ namespace Intersect.Server.Entities.PlayerData
                     else
                     {
                         // Same thing for 25% for challenges with smaller sets
-                        if (percent / 25 > prevSets / 25)
+                        if (percent / 25 > prevPercent / 25)
                         {
                             PacketSender.SendChatMsg(Player,
                                 Strings.Player.ChallengeProgressPercent.ToString(challengeName, percent.ToString("N1")),

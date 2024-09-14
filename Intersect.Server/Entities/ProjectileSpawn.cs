@@ -10,6 +10,7 @@ using Intersect.Enums;
 using Intersect.Utilities;
 using System.Linq;
 using Intersect.Server.Networking;
+using Intersect.Server.Entities.PlayerData;
 
 namespace Intersect.Server.Entities
 {
@@ -169,6 +170,11 @@ namespace Intersect.Server.Entities
             }
             
             mEntitiesCollided.Add(targetEntity.Id);
+            if (Parent.Owner is Player playerOwner)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new PierceManyUpdate(playerOwner, mEntitiesCollided.Count));
+            }
+
             Parent.AddEntityHitOnQuantity(SpawnNumber, targetEntity.Id);
 
             if (targetEntity is Player player)
