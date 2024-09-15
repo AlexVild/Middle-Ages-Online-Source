@@ -3462,7 +3462,7 @@ namespace Intersect.Server.Entities.Events
             switch (command.ChangeType)
             {
                 case ChallengeUpdate.ChangeSets:
-                    if (challenge.Complete && command.Amount > 0)
+                    if (challenge.Complete || command.Amount <= 0)
                     {
                         break;
                     }
@@ -3476,20 +3476,7 @@ namespace Intersect.Server.Entities.Events
                     challenge.Complete = challenge.Progress >= descriptor.Sets;
                     if (challenge.Complete)
                     {
-                        if (challenge.Challenge.RequiresContract && player.ChallengeContractId == descriptor.Id)
-                        {
-                            player.ChallengeContractId = Guid.Empty;
-                        }
-
-                        if (challenge.Challenge.SpellUnlock != null)
-                        {
-                            player.TryAddSkillToBook(challenge.Challenge.SpellUnlockId);
-                        }
-
-                        PacketSender.SendChatMsg(player,
-                            $"Challenge completed: {descriptor.Name}!",
-                            ChatMessageType.Experience,
-                            sendToast: true);
+                        challenge.CompleteFor(player);
                     }
                     else
                     {
@@ -3506,27 +3493,7 @@ namespace Intersect.Server.Entities.Events
                         break;
                     }
 
-                    if (challenge.Challenge.RequiresContract && player.ChallengeContractId == challenge.ChallengeId)
-                    {
-                        player.ChallengeContractId = Guid.Empty;
-                        challenge.Complete = true;
-                        PacketSender.SendChatMsg(player,
-                                $"Challenge completed: {descriptor.Name}!",
-                                ChatMessageType.Experience,
-                                sendToast: true);
-                        if (challenge.Challenge.SpellUnlock != null)
-                        {
-                            player.TryAddSkillToBook(challenge.Challenge.SpellUnlockId);
-                        }
-                    }
-                    else if (!challenge.Challenge.RequiresContract)
-                    {
-                        challenge.Complete = true;
-                        PacketSender.SendChatMsg(player,
-                                $"Challenge completed: {descriptor.Name}!",
-                                ChatMessageType.Experience,
-                                sendToast: true);
-                    }
+                    challenge.CompleteFor(player);
                     break;
 
                 case ChallengeUpdate.Reset:

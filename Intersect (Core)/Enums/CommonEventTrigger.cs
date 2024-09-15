@@ -68,6 +68,12 @@
 
         GuildVariableChange,
 
+        BankOpened,
+
+        OpenShop,
+
+        ConsumableUsed,
+
     }
 
 }

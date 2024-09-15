@@ -1,5 +1,8 @@
-﻿using Intersect.GameObjects;
+﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Server.Entities;
+using Intersect.Server.Networking;
+using Org.BouncyCastle.Asn1.Cmp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -55,6 +58,33 @@ namespace Intersect.Server.Database.PlayerData.Players
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+        }
+
+        public void CompleteFor(Player player)
+        {
+            if (Challenge == null || player == null)
+            {
+                return;
+            }
+
+            if (Challenge.RequiresContract && player.ChallengeContractId == Challenge.Id)
+            {
+                player.ChallengeContractId = Guid.Empty;
+            }
+
+            if (Challenge.SpellUnlock != null)
+            {
+                player.TryAddSkillToBook(Challenge.SpellUnlockId);
+            }
+            if (Challenge.EnhancementUnlockId != Guid.Empty)
+            {
+                player.TryUnlockEnhancement(Challenge.EnhancementUnlockId);
+            }
+
+            PacketSender.SendChatMsg(player,
+                $"Challenge completed: {Challenge.Name}!",
+                ChatMessageType.Experience,
+                sendToast: true);
         }
     }
 }

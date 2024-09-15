@@ -3795,6 +3795,8 @@ namespace Intersect.Server.Entities
 
                         TryTakeItem(Items[slot], 1);
 
+                        StartCommonEventsWithTrigger(CommonEventTrigger.ConsumableUsed);
+
                         break;
                     case ItemTypes.Equipment:
                         if (SlotIsEquipped(slot, out var eqpSlot))
@@ -4450,6 +4452,8 @@ namespace Intersect.Server.Entities
             InShop = shop;
             PacketSender.SendOpenShop(this, shop);
 
+            StartCommonEventsWithTrigger(CommonEventTrigger.OpenShop);
+
             return true;
         }
 
@@ -5082,6 +5086,8 @@ namespace Intersect.Server.Entities
 
             GuildBank = guild;
             BankInterface.SendOpenBank();
+
+            StartCommonEventsWithTrigger(CommonEventTrigger.BankOpened);
 
             return true;
         }

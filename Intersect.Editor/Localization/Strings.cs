@@ -3101,6 +3101,9 @@ Tick timer saved in server config.json.";
                 {29, @"Clan War Started"},
                 {30, @"Clan War Ended"},
                 {31, @"Guild Variable Changed"},
+                {32, @"Bank Opened"},
+                {33, @"Store Opened"},
+                {34, @"Consumable Used"},
             };
 
             public static LocalizedString conditions = @"Conditions";
