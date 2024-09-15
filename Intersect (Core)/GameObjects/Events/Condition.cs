@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Intersect.Enums;
+using Intersect.Utilities;
 
 namespace Intersect.GameObjects.Events
 {
@@ -117,6 +118,10 @@ namespace Intersect.GameObjects.Events
         GuildOwnsTerritory,
 
         ToolHarvestLevelsAt,
+
+        MaxVitalAt,
+
+        SkillsEquipped,
 
     }
 
@@ -807,6 +812,47 @@ namespace Intersect.GameObjects.Events
 
         public string Value { get; set; }
 
+    }
+
+    public class MaxVitalAt : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.MaxVitalAt;
+
+        public Vitals Vital { get; set; }
+        
+        public int Amount { get; set; }
+
+        public string GetPrettyString()
+        {
+            var vital = Vital.GetDescription();
+            if (Negated)
+            {
+                return $"Max {vital} of less than {Amount}";
+            }
+            else
+            {
+                return $"Max {vital} of at least {Amount}";
+            }
+        }
+    }
+
+    public class SkillsEquipped : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.SkillsEquipped;
+
+        public int Amount { get; set; }
+
+        public string GetPrettyString()
+        {
+            if (Negated)
+            {
+                return $"Less than {Amount} skills equipped";
+            }
+            else
+            {
+                return $"{Amount}+ skills equipped";
+            }
+        }
     }
 
 }

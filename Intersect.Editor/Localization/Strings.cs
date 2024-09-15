@@ -437,6 +437,17 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.HarvestLevelsAt.ToString(condition.Amount, toolName, condition.Level);
         }
 
+        public static string GetEventConditionalDesc(MaxVitalAt condition)
+        {
+            var vitalName = condition.Vital.GetDescription();
+            return EventConditionDesc.MaxVitalOf.ToString(condition.Amount, vitalName);
+        }
+
+        public static string GetEventConditionalDesc(SkillsEquipped condition)
+        {
+            return EventConditionDesc.SkillsEquipped.ToString(condition.Amount);
+        }
+
         public static string GetEventConditionalDesc(MapSpawnGroupIs condition)
         {
             if (condition.OrGreater && condition.OrLess)
@@ -2588,6 +2599,8 @@ Tick timer saved in server config.json.";
                 {54, @"Clan War is active..."},
                 {55, @"Guild controls Territory X..."},
                 {56, @"Has X Harvest Levels at Y level..."},
+                {57, @"Has X Vital at least Y..."},
+                {58, @"Has X Skills Equipped..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2940,6 +2953,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString HarvestLevelsAt = @"Player has {00} {01} harvest levels of at least {02}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MaxVitalOf = @"Player has {00} Max {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SkillsEquipped = @"Player has {00} skills equipped";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapSpawnGroupIs = @"Map Spawn Group is {00}";

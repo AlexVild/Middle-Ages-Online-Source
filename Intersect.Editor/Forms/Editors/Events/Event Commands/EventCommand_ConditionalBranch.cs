@@ -292,6 +292,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbTools.Items.Clear();
             cmbTools.Items.AddRange(Options.ToolTypes.ToArray());
 
+            cmbVital.Items.Clear();
+            cmbVital.Items.AddRange(EnumExtensions.GetDescriptions(typeof(Vitals), "Vital Count"));
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -616,6 +619,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
                     break;
 
+                case ConditionTypes.MaxVitalAt:
+                    Condition = new MaxVitalAt();
+                    if (cmbVital.Items.Count > 0)
+                    {
+                        cmbVital.SelectedIndex = 0;
+                    }
+
+                    break;
+
+                case ConditionTypes.SkillsEquipped:
+                    Condition = new SkillsEquipped();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -659,6 +676,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpEnhancementOn.Hide();
             grpTerritory.Hide();
             grpHarvestLvl.Hide();
+            grpMaxVital.Hide();
+            grpSkillsActive.Hide();
 
             switch (type)
             {
@@ -978,6 +997,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                 case ConditionTypes.ToolHarvestLevelsAt:
                     grpHarvestLvl.Show();
+
+                    break;
+
+                case ConditionTypes.MaxVitalAt:
+                    grpMaxVital.Show();
+
+                    break;
+
+                case ConditionTypes.SkillsEquipped:
+                    grpSkillsActive.Show();
 
                     break;
 
@@ -2003,6 +2032,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudHarvestAmt.Value = condition?.Amount ?? 0;
         }
 
+        private void SetupFormValues(MaxVitalAt condition)
+        {
+            if (condition == null)
+            {
+                return;
+            }
+
+            cmbVital.SelectedIndex = (int)condition.Vital;
+            nudVitalAmt.Value = condition.Amount;
+        }
+
+        private void SetupFormValues(SkillsEquipped condition)
+        {
+            if (condition == null)
+            {
+                return;
+            }
+
+            nudSkillsActive.Value = condition.Amount;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2402,6 +2452,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.Tool = cmbTools.SelectedIndex;
             condition.Level = (int)nudHarvestLevel.Value;
             condition.Amount = (int)nudHarvestAmt.Value;
+        }
+
+        private void SaveFormValues(MaxVitalAt condition)
+        {
+            condition.Vital = (Vitals)cmbVital.SelectedIndex;
+            condition.Amount = (int)nudVitalAmt.Value;
+        }
+
+        private void SaveFormValues(SkillsEquipped condition)
+        {
+            condition.Amount = (int)nudSkillsActive.Value;
         }
         #endregion
 

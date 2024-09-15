@@ -1328,6 +1328,35 @@ namespace Intersect.Server.Entities.Events
             return harvestInfo.Packets.Where(pkt => pkt.HarvestLevel >= condition.Level).Count() >= condition.Amount;
         }
 
+        public static bool MeetsCondition(
+          MaxVitalAt condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            return player.GetMaxVital((int)condition.Vital) >= condition.Amount;
+        }
+
+        public static bool MeetsCondition(
+          SkillsEquipped condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            return player.SkillBook.Count((skill) => skill.Equipped) >= condition.Amount;
+        }
     }
 
 }
