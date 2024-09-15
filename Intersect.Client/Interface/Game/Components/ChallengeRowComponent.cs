@@ -218,7 +218,7 @@ namespace Intersect.Client.Interface.Game.Components
 
             var prompt = IsContracted ?
                 $"Would you like to cancel this contract? You will not earn progress toward this challenge while the contract is unaccepted, but you can always try it again later. Progress is saved." :
-                $"\"{Descriptor.RequirementsString}\".\n\nDo you accept? The challenge will be paused if you change equipment, but can be started again.";
+                $"\"{Descriptor.RequirementsString}\".\n\nDo you accept? The challenge will be paused if you break these terms, but can be started again any time.";
 
             var iBox = new InputBox(Descriptor.Name, prompt, true, InputBox.InputType.YesNo, AcceptOrCancelChallengeContract, null, null);
         }

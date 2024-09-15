@@ -3606,9 +3606,9 @@ namespace Intersect.Server.Entities
 
                 if (CraftingTableId != Guid.Empty) // Update our crafting table if we have one
                 {
-                    AddDeferredEvent(CommonEventTrigger.InventoryChanged);
                     UpdateCraftingTable(CraftingTableId);
                 }
+                AddDeferredEvent(CommonEventTrigger.InventoryChanged);
                 return true;
             } else
             {
@@ -4192,6 +4192,7 @@ namespace Intersect.Server.Entities
                 EquipmentProcessItemLoss(slot.Slot);
             }
 
+            AddDeferredEvent(CommonEventTrigger.InventoryChanged);
             if (sendUpdate)
             {
                 PacketSender.SendInventoryItemUpdate(this, slot.Slot);
@@ -6532,15 +6533,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendPlayerEquipmentToProximity(this);
                 PacketSender.SendEntityStatsToProximity(this);
             }
-            
-            if (TryVoidCurrentContract(out var currContract, true))
-            {
-                PacketSender.SendChatMsg(this,
-                    $"You have voided a challenge by changing equipment: {currContract.Name}",
-                    ChatMessageType.Experience,
-                    CustomColors.General.GeneralDisabled,
-                    sendToast: true);
-            }
+
             SetMasteryProgress();
         }
 
@@ -6603,6 +6596,9 @@ namespace Intersect.Server.Entities
                     EnqueueStartCommonEvent(eventDescriptor, trigger, command, param, val);
                 }
             }
+
+            // Run through challenge checker when these triggers are proc'd
+            CheckContractsOnEventTrigger(trigger);
         }
 
         public static void StartCommonEventsWithTriggerForAll(CommonEventTrigger trigger, string command = "", string param = "")
@@ -8202,6 +8198,7 @@ namespace Intersect.Server.Entities
                 {
                     EventLookup.AddOrUpdate(evtId, newEvent, (key, oldValue) => newEvent);
                     EventBaseIdLookup.AddOrUpdate(baseEvent.Id, newEvent, (key, oldvalue) => newEvent);
+
                     return true;
                 }
                 return false;

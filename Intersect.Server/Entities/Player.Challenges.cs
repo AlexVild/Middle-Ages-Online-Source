@@ -728,7 +728,7 @@ namespace Intersect.Server.Entities
             if (oldContract != null)
             {
                 PacketSender.SendChatMsg(this,
-                    $"You have accepted a new challenge contract: {ChallengeContract.Name}, voiding your previous contract. Changing equipment will void this new contract.",
+                    $"You have accepted a new challenge contract: {ChallengeContract.Name}, voiding your previous contract.",
                     Enums.ChatMessageType.Experience,
                     CustomColors.General.GeneralWarning,
                     sendToast: true);
@@ -736,7 +736,7 @@ namespace Intersect.Server.Entities
             else
             {
                 PacketSender.SendChatMsg(this,
-                    $"You have accepted a new challenge contract: {ChallengeContract.Name}. Changing equipment will void the contract.",
+                    $"You have accepted a new challenge contract: {ChallengeContract.Name}.",
                     Enums.ChatMessageType.Experience,
                     CustomColors.General.GeneralWarning,
                     sendToast: true);
@@ -772,6 +772,61 @@ namespace Intersect.Server.Entities
             }
 
             return false;
+        }
+
+        public void CheckChallengeContracts()
+        {
+            foreach (var challenge in ChallengesInProgress.ToArray())
+            {
+                CheckChallengeContract(challenge.Descriptor);
+            }
+        }
+
+        public bool CheckChallengeContract(ChallengeDescriptor challenge)
+        {
+            if (challenge == default || !challenge.RequiresContract)
+            {
+                return true;
+            }
+
+            if (ChallengeContract == null)
+            {
+                return false;
+            }
+
+            if (challenge.Id != ChallengeContract.Id)
+            {
+                return false;
+            }
+
+            if (!Conditions.MeetsConditionLists(challenge.ContractRequirements, this, null) && TryVoidCurrentContract(out var currContract, true))
+            {
+                PacketSender.SendChatMsg(this,
+                    $"You have voided a challenge contract: {currContract.Name}",
+                    ChatMessageType.Experience,
+                    CustomColors.General.GeneralDisabled,
+                    sendToast: true);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public void CheckContractsOnEventTrigger(CommonEventTrigger trigger)
+        {
+            switch (trigger)
+            {
+                case CommonEventTrigger.LevelUp:
+                case CommonEventTrigger.MapChanged:
+                case CommonEventTrigger.EquipChange:
+                case CommonEventTrigger.InventoryChanged:
+                case CommonEventTrigger.NpcsDefeated:
+                {
+                    CheckChallengeContracts();
+                    break;
+                }
+            }
         }
 
         private void ComboStreakEnd()

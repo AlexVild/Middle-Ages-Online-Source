@@ -1,5 +1,6 @@
 ﻿using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Server.Entities.Events;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -76,9 +77,9 @@ namespace Intersect.Server.Entities.PlayerData
             ProgressMade = true;
         }
 
-        public IEnumerable<ChallengeProgress> Challenges => ChallengeProgress.Where(c => c.Type == Type);
+        public IEnumerable<ChallengeProgress> ValidChallenges => ChallengeProgress.Where(c => c.Type == Type);
 
-        public bool NoUpdate => Player == null || Challenges.ToArray().Length == 0;
+        public bool NoUpdate => Player == null || ValidChallenges.ToArray().Length == 0;
     }
 
     public class ComboEarnedUpdate : ChallengeUpdate
@@ -380,7 +381,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(ComboEarnedUpdate update, int enemyTier)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 if (challenge.Descriptor.MinTier > enemyTier)
                 {
@@ -410,7 +411,7 @@ namespace Intersect.Server.Entities.PlayerData
             }
 
             // Now, go through the player's active challenges...
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 if (challenge.Descriptor.MinTier > enemyTier)
                 {
@@ -441,7 +442,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(MaxHitUpdate update)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 if (challenge.Descriptor.Reps <= update.LastHit)
                 {
@@ -452,7 +453,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(MissFreeUpdate update, int enemyTier)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 if (challenge.Descriptor.MinTier > enemyTier)
                 {
@@ -469,7 +470,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(HitFreeUpdate update, int enemyTier)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 if (challenge.Descriptor.MinTier > enemyTier)
                 {
@@ -497,7 +498,7 @@ namespace Intersect.Server.Entities.PlayerData
                 }
             }
 
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var expiryTime = now + challenge.Descriptor.Param;
                 var data = new KeyValuePair<long, int>(expiryTime, update.DamageDone);
@@ -530,7 +531,7 @@ namespace Intersect.Server.Entities.PlayerData
                 }
             }
 
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 if (challenge.Descriptor.MinTier > enemyTier)
                 {
@@ -557,7 +558,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(DamageAtRangeUpdate update)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var descriptor = challenge.Descriptor;
                 if (descriptor.Reps <= update.LastHit && descriptor.Param <= update.Range)
@@ -569,7 +570,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(DamageHealedAtHealthUpdate update)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var descriptor = challenge.Descriptor;
                 if (descriptor.Reps <= (update.HealAmt * -1) && descriptor.Param >= update.Percent)
@@ -581,7 +582,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(MissFreeAtRangeUpdate update, int enemyTier)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var desc = challenge.Descriptor;
                 if (desc.MinTier > enemyTier || update.Range < desc.Param)
@@ -601,7 +602,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(ComboExpEarned update)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var desc = challenge.Descriptor;
                 var timesComplete = (int)Math.Floor((float)update.ComboExp / desc.Reps);
@@ -611,7 +612,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(AoEHitsUpdate update)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var desc = challenge.Descriptor;
                 if (update.EnemiesHit > 0 && update.EnemiesHit >= desc.Reps)
@@ -624,7 +625,7 @@ namespace Intersect.Server.Entities.PlayerData
 
         private static void UpdateChallenge(BackstabDamageUpdate update, int enemyTier)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var desc = challenge.Descriptor;
                 if (desc == null || enemyTier < challenge.Descriptor.MinTier)
@@ -701,7 +702,7 @@ namespace Intersect.Server.Entities.PlayerData
         /// <param name="handler">The handler to call if validations succeed</param>
         private static void CommonChallengeHandler(ChallengeUpdate update, int enemyTier, Action<ChallengeProgress> handler)
         {
-            foreach (var challenge in update.Challenges)
+            foreach (var challenge in update.ValidChallenges)
             {
                 var desc = challenge.Descriptor;
                 if (desc == null || enemyTier < challenge.Descriptor.MinTier)
