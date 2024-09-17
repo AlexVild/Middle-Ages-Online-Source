@@ -30,15 +30,15 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public LootRollInstance() { } // EF
 
-        public LootRollInstance(Player player, Guid eventId, List<LootRoll> lootRolls)
+        public LootRollInstance(Player player, Guid eventId, List<LootRoll> lootRolls, int totalScraps = 0)
         {
             PlayerId = player?.Id ?? Guid.Empty;
             EventId = eventId;
 
-            Loot = new List<Item>(GenerateLootFor(player, lootRolls).Where(loot => loot != null));
+            Loot = new List<Item>(GenerateLootFor(player, lootRolls, totalScraps: totalScraps).Where(loot => loot != null));
         }
 
-        public static List<Item> GenerateLootFor(Player player, List<LootRoll> lootRolls)
+        public static List<Item> GenerateLootFor(Player player, List<LootRoll> lootRolls, int totalScraps = 0)
         {
             var loot = new List<Item>();
             if (lootRolls == null)
@@ -58,6 +58,11 @@ namespace Intersect.Server.Database.PlayerData.Players
                     var dropTable = LootTableServerHelpers.GenerateDropTable(table.Drops, player);
                     loot.Add(LootTableServerHelpers.GetItemFromTable(dropTable));
                 }
+            }
+
+            if (totalScraps > 0)
+            {
+                loot.Insert(0, new Item(Guid.Parse(Options.Instance.DeconstructionOpts.ScrapItemId), totalScraps));
             }
 
             return loot.Where(item => item != null).ToList();

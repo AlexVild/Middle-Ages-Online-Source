@@ -54,14 +54,6 @@ namespace Intersect.Server.Utilities
                 {
                     // Quantity modifiers
                     var quantity = item.Quantity;
-                    var scraps = item.ItemId == Guid.Parse("a85c1b15-97f5-4f2a-9dcc-070113882190");
-
-                    if (scraps) // SCRAPS
-                    {
-                        var bonus = forPlayer.GetBonusEffectPercent(Enums.EffectType.Junkrat, true);
-                        quantity = (int)Math.Ceiling(quantity * bonus);
-                    }
-
                     dropTable.Add((int)(lastWeight + item.Chance * 100), new Item(item.ItemId, quantity));
                 }
             }

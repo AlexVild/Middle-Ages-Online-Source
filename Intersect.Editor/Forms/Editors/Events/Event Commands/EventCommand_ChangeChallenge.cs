@@ -44,6 +44,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             rdoChangeReps.Checked = changeType == ChallengeUpdate.ChangeSets;
             rdoComplete.Checked = changeType == ChallengeUpdate.Complete;
             rdoReset.Checked = changeType == ChallengeUpdate.Reset;
+            rdoContract.Checked = changeType == ChallengeUpdate.VoidContract;
         }
 
         ChallengeUpdate GetRadioValue()
@@ -61,6 +62,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             if (rdoReset.Checked)
             {
                 return ChallengeUpdate.Reset;
+            }
+
+            if (rdoContract.Checked)
+            {
+                return ChallengeUpdate.VoidContract;
             }
 
             return ChallengeUpdate.ChangeSets;

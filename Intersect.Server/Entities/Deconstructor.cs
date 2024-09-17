@@ -110,6 +110,7 @@ namespace Intersect.Server.Entities
             Dictionary<Guid, long> expEarned = new Dictionary<Guid, long>();
             List<Guid> enhancementsLearned = new List<Guid>();
             List<Guid> cosmeticsEarned = new List<Guid>();
+            var totalScraps = 0;
             foreach (var slot in slotsToRemoveFrom)
             {
                 var item = ItemBase.Get(slot.ItemId);
@@ -136,6 +137,7 @@ namespace Intersect.Server.Entities
                     }
                 }
                 deconstructedLoot.AddRange(item.DeconstructRolls);
+                totalScraps += item.GetScrapAmount();
 
                 // Don't double-dip on crafted items
                 if (slot.ItemProperties.CraftedById != Owner.Id)
@@ -203,7 +205,8 @@ namespace Intersect.Server.Entities
             // We are now waiting on the loot roll instead of the deconstructor being closed
             PacketSender.SendInventory(Owner);
             Owner.SendPacket(new CloseDeconstructorPacket());
-            Owner.OpenLootRoll(Owner.DeconstructorEventId, deconstructedLoot);
+
+            Owner.OpenLootRoll(Owner.DeconstructorEventId, deconstructedLoot, totalScraps: totalScraps);
             Owner.CloseDeconstructor();
             PacketSender.SendOpenLootPacketTo(Owner, "Deconstruction", GameObjects.Events.LootAnimType.Deconstruct, BankingDisabled);
         }

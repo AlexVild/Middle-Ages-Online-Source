@@ -3504,6 +3504,13 @@ namespace Intersect.Server.Entities.Events
                             ChatMessageType.Experience,
                             sendToast: true);
                     break;
+
+                case ChallengeUpdate.VoidContract:
+                    if (player.ChallengeContract?.Id == challenge.Id && player.TryVoidCurrentContract(out var prevContract, true))
+                    {
+                        player.SendContractVoidMessage(prevContract.Id);
+                    }
+                    break;
             }
 
             // Refresh mastery progression

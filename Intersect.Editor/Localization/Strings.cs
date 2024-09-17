@@ -6436,7 +6436,16 @@ Negative values for time to flow backwards.";
             public static LocalizedString UpdateChallenge = @"{00} reps to challenge: {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ChangeChallengeStatus = @"{00} challenge: {01}";
+            public static LocalizedString ChangeChallengeStatus = @"{00} challenge: {01} [Forced: {02}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeChallengeContractStatus = @"Void challenge contract: {00} [Forced: {01}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CompleteChallenge = @"Complete Challenge: {00} [Forced: {01}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResetChallenge = @"Complete Challenge: {00} [Forced: {01}]";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ChangeDungeon = @"Change dungeon state: {00}";

@@ -443,6 +443,9 @@ namespace Intersect.GameObjects.Events
 
         [Description("Complete")]
         Complete,
+
+        [Description("Void Contract")]
+        VoidContract,
     }
 
 

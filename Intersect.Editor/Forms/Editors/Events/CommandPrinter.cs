@@ -2091,12 +2091,28 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(ChangeChallengeCommand command, MapInstance map)
         {
+            var chgName = ChallengeDescriptor.GetName(command.ChallengeId);
             if (command.ChangeType == ChallengeUpdate.ChangeSets)
             {
-                return Strings.EventCommandList.UpdateChallenge.ToString(command.Amount, ChallengeDescriptor.GetName(command.ChallengeId));
+                return Strings.EventCommandList.UpdateChallenge.ToString(command.Amount, chgName, command.IgnoreInProgressCheck);
             }
 
-            return Strings.EventCommandList.ChangeWeaponTrack.ToString(command.ChangeType.GetDescription(), ChallengeDescriptor.GetName(command.ChallengeId));
+            if (command.ChangeType == ChallengeUpdate.Reset)
+            {
+                return Strings.EventCommandList.ResetChallenge.ToString(chgName, command.IgnoreInProgressCheck);
+            }
+
+            if (command.ChangeType == ChallengeUpdate.Complete)
+            {
+                return Strings.EventCommandList.CompleteChallenge.ToString(chgName, command.IgnoreInProgressCheck);
+            }
+
+            if (command.ChangeType == ChallengeUpdate.VoidContract)
+            {
+                return Strings.EventCommandList.ChangeChallengeContractStatus.ToString(chgName, command.IgnoreInProgressCheck);
+            }
+
+            return "ERR";
         }
 
         private static string GetCommandText(ChangeDungeonCommand command, MapInstance map)

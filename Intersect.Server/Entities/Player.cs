@@ -9062,10 +9062,10 @@ namespace Intersect.Server.Entities
         }
 
         #region Rolling Loot
-        public void OpenLootRoll(Guid eventId, List<LootRoll> lootRolls)
+        public void OpenLootRoll(Guid eventId, List<LootRoll> lootRolls, int totalScraps = 0)
         {
             LootEventId = eventId;
-            GenerateCurrentLoot(eventId, lootRolls);
+            GenerateCurrentLoot(eventId, lootRolls, totalScraps: totalScraps);
         }
 
         /// <summary>
@@ -9074,13 +9074,13 @@ namespace Intersect.Server.Entities
         /// <param name="eventId">The event that is requesting a roll of loot tables</param>
         /// <param name="lootRolls">The rolls the event wants to make</param>
         /// <returns></returns>
-        private void GenerateCurrentLoot(Guid eventId, List<LootRoll> lootRolls)
+        private void GenerateCurrentLoot(Guid eventId, List<LootRoll> lootRolls, int totalScraps = 0)
         {
             // If we don't have a loot reference for the current event id...
             if (CurrentLoot == null && LootEventId != default)
             {
                 // Make one
-                var newRoll = new LootRollInstance(this, eventId, lootRolls);
+                var newRoll = new LootRollInstance(this, eventId, lootRolls, totalScraps: totalScraps);
                 LootRolls.Add(newRoll);
                 return;
             }
@@ -9088,7 +9088,7 @@ namespace Intersect.Server.Entities
             // If the current reference is out of loot
             if (CurrentLoot.Count <= 0)
             {
-                var reroll = LootRollInstance.GenerateLootFor(this, lootRolls);
+                var reroll = LootRollInstance.GenerateLootFor(this, lootRolls, totalScraps: totalScraps);
                 CurrentLoot = reroll;
             }
         }

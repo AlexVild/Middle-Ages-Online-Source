@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.GameObjects
 {
@@ -670,6 +671,65 @@ namespace Intersect.GameObjects
         public ItemBase AmmoOverride => Get(AmmoOverrideId);
 
         public string Hint { get; set; } = string.Empty;
+
+        private int GetScrapAmountBase(int? paramRarity = null)
+        {
+            if (FuelRequired == 0 || ItemType != ItemTypes.Equipment || Rarity == 0)
+            {
+                return 0;
+            }
+
+            var rarity = Rarity;
+            if (paramRarity.HasValue)
+            {
+                rarity = paramRarity.Value;
+            }
+
+            if (rarity == 1)
+            {
+                return (int)Math.Ceiling(Options.Instance.DeconstructionOpts.BaseScrapAmount * ItemScrapModifier);
+            }
+
+            return (int)Math.Ceiling(GetScrapAmountBase(rarity - 1) * Options.Instance.DeconstructionOpts.ScrapIncreasePerTier);
+        }
+
+        public int GetScrapAmount()
+        {
+            var scrapAmount = GetScrapAmountBase();
+            if (scrapAmount == 0)
+            {
+                return 0;
+            }
+
+            var low = (int)Math.Floor(scrapAmount * (1 - Options.Instance.DeconstructionOpts.ScrapVariance));
+            var high = (int)Math.Ceiling(scrapAmount * (1 + Options.Instance.DeconstructionOpts.ScrapVariance));
+
+            return Randomization.Next(low, high);
+        }
+
+        [NotMapped, JsonIgnore]
+        private float ItemScrapModifier
+        {
+            get
+            {
+                float slotMod;
+                if (EquipmentSlot == Options.Equipment.WeaponSlot)
+                {
+                    slotMod = Options.Instance.DeconstructionOpts.ScrapWeaponModifier;
+                }
+                else
+                {
+                    slotMod = Options.Instance.DeconstructionOpts.ScrapArmorModifier;
+                }
+
+                if (RareDrop)
+                {
+                    slotMod *= Options.Instance.DeconstructionOpts.ScrapRareModifier;
+                }
+
+                return slotMod;
+            }
+        }
     }
 
 }

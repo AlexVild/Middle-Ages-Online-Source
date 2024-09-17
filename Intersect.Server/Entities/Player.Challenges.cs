@@ -760,18 +760,23 @@ namespace Intersect.Server.Entities
             oldContract = ChallengeContract;
             if (ChallengeContract != null)
             {
-                ChallengeContract = null;
-                RetrackChallenges();
-
-                if (sendPacket)
-                {
-                    SendPacket(GenerateChallengeProgressPacket());
-                }
+                CancelCurrentContract(sendPacket);
 
                 return true;
             }
 
             return false;
+        }
+
+        public void CancelCurrentContract(bool sendPacket = false)
+        {
+            ChallengeContract = null;
+            RetrackChallenges();
+
+            if (sendPacket)
+            {
+                SendPacket(GenerateChallengeProgressPacket());
+            }
         }
 
         public void CheckChallengeContracts()
@@ -801,16 +806,22 @@ namespace Intersect.Server.Entities
 
             if (!Conditions.MeetsConditionLists(challenge.ContractRequirements, this, null) && TryVoidCurrentContract(out var currContract, true))
             {
-                PacketSender.SendChatMsg(this,
-                    $"You have voided a challenge contract: {currContract.Name}",
-                    ChatMessageType.Experience,
-                    CustomColors.General.GeneralDisabled,
-                    sendToast: true);
+                SendContractVoidMessage(currContract.Id);
 
                 return false;
             }
 
             return true;
+        }
+
+        public void SendContractVoidMessage(Guid voidedChallengeId)
+        {
+            var name = ChallengeDescriptor.GetName(voidedChallengeId);
+            PacketSender.SendChatMsg(this,
+                $"You have voided a challenge contract: {name}",
+                ChatMessageType.Experience,
+                CustomColors.General.GeneralDisabled,
+                sendToast: true);
         }
 
         public void CheckContractsOnEventTrigger(CommonEventTrigger trigger)

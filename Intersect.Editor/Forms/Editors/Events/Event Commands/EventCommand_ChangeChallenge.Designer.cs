@@ -30,6 +30,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpChangeItems = new DarkUI.Controls.DarkGroupBox();
+            this.chkNotInProgress = new DarkUI.Controls.DarkCheckBox();
             this.grpAction = new DarkUI.Controls.DarkGroupBox();
             this.lblAmt = new System.Windows.Forms.Label();
             this.nudAmt = new DarkUI.Controls.DarkNumericUpDown();
@@ -40,7 +41,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblChallenge = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkNotInProgress = new DarkUI.Controls.DarkCheckBox();
+            this.rdoContract = new DarkUI.Controls.DarkRadioButton();
             this.grpChangeItems.SuspendLayout();
             this.grpAction.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAmt)).BeginInit();
@@ -59,15 +60,24 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeItems.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeItems.Location = new System.Drawing.Point(3, 2);
             this.grpChangeItems.Name = "grpChangeItems";
-            this.grpChangeItems.Size = new System.Drawing.Size(214, 246);
+            this.grpChangeItems.Size = new System.Drawing.Size(214, 269);
             this.grpChangeItems.TabIndex = 19;
             this.grpChangeItems.TabStop = false;
             this.grpChangeItems.Text = "Change Player Challenges";
+            // 
+            // chkNotInProgress
+            // 
+            this.chkNotInProgress.Location = new System.Drawing.Point(8, 213);
+            this.chkNotInProgress.Name = "chkNotInProgress";
+            this.chkNotInProgress.Size = new System.Drawing.Size(185, 20);
+            this.chkNotInProgress.TabIndex = 61;
+            this.chkNotInProgress.Text = "Ignore In-Progress Check?";
             // 
             // grpAction
             // 
             this.grpAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpAction.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAction.Controls.Add(this.rdoContract);
             this.grpAction.Controls.Add(this.lblAmt);
             this.grpAction.Controls.Add(this.nudAmt);
             this.grpAction.Controls.Add(this.rdoComplete);
@@ -76,7 +86,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpAction.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpAction.Location = new System.Drawing.Point(8, 64);
             this.grpAction.Name = "grpAction";
-            this.grpAction.Size = new System.Drawing.Size(200, 121);
+            this.grpAction.Size = new System.Drawing.Size(200, 143);
             this.grpAction.TabIndex = 37;
             this.grpAction.TabStop = false;
             this.grpAction.Text = "Amount Type:";
@@ -174,7 +184,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(133, 217);
+            this.btnCancel.Location = new System.Drawing.Point(133, 239);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -184,7 +194,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(52, 217);
+            this.btnSave.Location = new System.Drawing.Point(52, 239);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -192,13 +202,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // chkNotInProgress
+            // rdoContract
             // 
-            this.chkNotInProgress.Location = new System.Drawing.Point(8, 191);
-            this.chkNotInProgress.Name = "chkNotInProgress";
-            this.chkNotInProgress.Size = new System.Drawing.Size(185, 20);
-            this.chkNotInProgress.TabIndex = 61;
-            this.chkNotInProgress.Text = "Ignore In-Progress Check?";
+            this.rdoContract.AutoSize = true;
+            this.rdoContract.Location = new System.Drawing.Point(9, 115);
+            this.rdoContract.Name = "rdoContract";
+            this.rdoContract.Size = new System.Drawing.Size(119, 17);
+            this.rdoContract.TabIndex = 42;
+            this.rdoContract.Text = "Force Contract Void";
             // 
             // EventCommand_ChangeChallenge
             // 
@@ -207,7 +218,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeItems);
             this.Name = "EventCommand_ChangeChallenge";
-            this.Size = new System.Drawing.Size(220, 254);
+            this.Size = new System.Drawing.Size(220, 277);
             this.grpChangeItems.ResumeLayout(false);
             this.grpChangeItems.PerformLayout();
             this.grpAction.ResumeLayout(false);
@@ -231,5 +242,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkUI.Controls.DarkButton btnCancel;
         private DarkUI.Controls.DarkButton btnSave;
         private DarkUI.Controls.DarkCheckBox chkNotInProgress;
+        private DarkUI.Controls.DarkRadioButton rdoContract;
     }
 }
