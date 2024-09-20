@@ -74,7 +74,7 @@ namespace Intersect.Server.Entities
             int fuelRequired = 0;
             List<InventorySlot> slotsToRemoveFrom = new List<InventorySlot>();
 
-            if (slots?.Length <= 0)
+            if (slots?.Length <= 0 || Owner == null)
             {
                 return;
             }
@@ -137,7 +137,7 @@ namespace Intersect.Server.Entities
                     }
                 }
                 deconstructedLoot.AddRange(item.DeconstructRolls);
-                totalScraps += item.GetScrapAmount();
+                totalScraps = Owner.ApplyEffectBonusToValue(item.GetScrapAmount(), Enums.EffectType.Junkrat);
 
                 // Don't double-dip on crafted items
                 if (slot.ItemProperties.CraftedById != Owner.Id)

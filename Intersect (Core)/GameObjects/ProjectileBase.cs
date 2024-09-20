@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Intersect.Models;
-
+using Intersect.Network.Packets.Server;
 using Newtonsoft.Json;
 
 namespace Intersect.GameObjects

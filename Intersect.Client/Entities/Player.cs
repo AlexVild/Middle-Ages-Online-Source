@@ -3222,35 +3222,29 @@ namespace Intersect.Client.Entities
         /// <summary>
         /// Caclulate crit chance based on the player's current affinity
         /// </summary>
-        /// <param name="amount"></param>
+        /// <param name="amountToApplyTo"></param>
         /// <param name="effect"></param>
         /// <returns></returns>
-        public int CalculateEffectBonus(int amount, EffectType effect, bool subtractive = false)
+        public override int ApplyBonusEffect(int amountToApplyTo, EffectType effect, bool subtractive = false)
         {
             int effectAmt = GetBonusEffect(effect, 0);
 
-            if (effectAmt <= 0) return amount;
+            if (effectAmt == 0) return amountToApplyTo;
 
             float effectMod = effectAmt / 100f;
             if (subtractive)
             {
-                amount -= (int)Math.Round(amount * (1 + effectMod));
+                amountToApplyTo = (int)Math.Round(amountToApplyTo * (1 - effectMod));
             }
             else
             {
-                amount = (int)Math.Round(amount * (1 + effectMod));
+                amountToApplyTo = (int)Math.Round(amountToApplyTo * (1 + effectMod));
             }
 
-            return amount;
+            return amountToApplyTo;
         }
 
-        /// <summary>
-        /// Gets the value of a bonus effect as granted by the currently equipped gear.
-        /// </summary>
-        /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
-        /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
-        /// <returns></returns>
-        public int GetBonusEffect(EffectType effect, int startValue = 0)
+        public override int GetBonusEffect(EffectType effect, int startValue = 0)
         {
             var value = startValue;
 
@@ -3290,7 +3284,7 @@ namespace Intersect.Client.Entities
             return value;
         }
 
-        public Dictionary<EffectType, int> GetAllBonusEffects()
+        public override Dictionary<EffectType, int> GetAllBonusEffects()
         {
             var effectValues = new Dictionary<EffectType, int>();
 
@@ -3372,7 +3366,7 @@ namespace Intersect.Client.Entities
                 effectValues[(EffectType)idx] += amt;
             }
 
-            return effectValues;
+            return effectValues.OrderBy(kv => kv.Key.GetDescription()).ToDictionary(pair => pair.Key, pair => pair.Value);
         }
     }
 

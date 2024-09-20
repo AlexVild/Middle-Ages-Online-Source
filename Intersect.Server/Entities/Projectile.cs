@@ -302,7 +302,7 @@ namespace Intersect.Server.Entities
                     var spawn = Spawns[i];
                     if (spawn != null)
                     {
-                        while (Timing.Global.Milliseconds > spawn.TransmittionTimer && Spawns[i] != null)
+                        while (Timing.Global.Milliseconds > spawn.TransmissionTimer && Spawns[i] != null)
                         {
                             var x = spawn.X;
                             var y = spawn.Y;
@@ -447,7 +447,7 @@ namespace Intersect.Server.Entities
             if (move)
             {
                 spawn.Distance++;
-                spawn.TransmittionTimer += (long)((float)Base.Speed / (float)Base.Range);
+                spawn.TransmissionTimer += (long)((float)GetSpeed() / Base.Range);
                 newx = spawn.X + GetRangeX(spawn.Dir, 1);
                 newy = spawn.Y + GetRangeY(spawn.Dir, 1);
             }
@@ -593,6 +593,21 @@ namespace Intersect.Server.Entities
                 return;
             }
             entitiesHit.Add(entityId);
+        }
+
+        public int GetSpeed()
+        {
+            if (Base == null)
+            {
+                return 0;
+            }
+
+            if (Owner == null)
+            {
+                return Base.Speed;
+            }
+
+            return Owner.ApplyBonusEffectInt(Base.Speed, EffectType.Swiftshot, false);
         }
     }
 

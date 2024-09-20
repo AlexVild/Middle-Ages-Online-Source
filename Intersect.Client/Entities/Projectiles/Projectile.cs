@@ -348,9 +348,19 @@ namespace Intersect.Client.Entities.Projectiles
         private float GetDisplacement(long spawnTime)
         {
             var elapsedTime = Timing.Global.Milliseconds - spawnTime;
-            var displacementPercent = elapsedTime / (float) mMyBase.Speed;
+            var displacementPercent = elapsedTime / (float)GetSpeedWithModifier();
 
             return displacementPercent * Options.TileHeight * mMyBase.Range;
+        }
+
+        public int GetSpeedWithModifier()
+        {
+            if (!Globals.Entities.TryGetValue(mOwner, out var entity))
+            {
+                return mMyBase.Speed;
+            }
+
+            return entity.ApplyBonusEffect(mMyBase.Speed, EffectType.Swiftshot, subtractive: true);
         }
 
         /// <summary>
@@ -412,7 +422,7 @@ namespace Intersect.Client.Entities.Projectiles
             {
                 for (var i = 0; i < mSpawnedAmount; i++)
                 {
-                    if (Spawns[i] != null && Timing.Global.Milliseconds > Spawns[i].TransmittionTimer)
+                    if (Spawns[i] != null && Timing.Global.Milliseconds > Spawns[i].TransmissionTimer)
                     {
                         var spawnMap = MapInstance.Get(Spawns[i].MapId);
                         if (spawnMap != null)
@@ -512,8 +522,8 @@ namespace Intersect.Client.Entities.Projectiles
                                 killSpawn = Collided(i);
                             }
 
-                            Spawns[i].TransmittionTimer = Timing.Global.Milliseconds +
-                                                          (long) ((float) mMyBase.Speed / (float) mMyBase.Range);
+                            Spawns[i].TransmissionTimer = Timing.Global.Milliseconds +
+                                                          (long) ((float) GetSpeedWithModifier() / mMyBase.Range);
 
                             if (Spawns[i].Distance >= mMyBase.Range)
                             {

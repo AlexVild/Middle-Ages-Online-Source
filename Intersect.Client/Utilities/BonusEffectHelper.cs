@@ -32,6 +32,8 @@ namespace Intersect.Client.Utilities
             {EffectType.Healer, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Healer], "Increases potency of healing spells.")}, // Healer
             {EffectType.Foodie, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Foodie], "Increases HP recovery of consumables.")}, // Foodie
             {EffectType.Manaflow, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Manaflow], "Increases MP recovery of consumables.")}, // Manaflow
+            {EffectType.Swiftshot, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Swiftshot], "Increases speed of projectiles.")}, // Swiftshot
+            {EffectType.AmmoSaver, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.AmmoSaver], "Chance to not consume ammunition.")}, // Ammo Saver
         };
 
         public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>

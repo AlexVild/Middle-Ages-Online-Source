@@ -34,13 +34,15 @@ namespace Intersect.Client.Entities.Projectiles
 
         public int SpawnY;
 
-        public long TransmittionTimer = Timing.Global.Milliseconds;
+        public long TransmissionTimer = Timing.Global.Milliseconds;
 
         public int X;
 
         public int Y;
 
         public int Z;
+
+        public Projectile Parent;
 
         public ProjectileSpawns(
             int dir,
@@ -51,7 +53,7 @@ namespace Intersect.Client.Entities.Projectiles
             AnimationBase animBase,
             bool autoRotate,
             ProjectileBase projectileBase,
-            Entity parent
+            Projectile parent
         )
         {
             X = x;
@@ -65,8 +67,9 @@ namespace Intersect.Client.Entities.Projectiles
             Anim = new Animation(animBase, true, autoRotate, Z, parent);
             AutoRotate = autoRotate;
             ProjectileBase = projectileBase;
-            TransmittionTimer = Timing.Global.Milliseconds +
-                                (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
+            Parent = parent;
+            TransmissionTimer = Timing.Global.Milliseconds +
+                                (long) ((float) parent?.GetSpeedWithModifier() / ProjectileBase.Range);
         }
 
         public void Dispose()

@@ -145,6 +145,17 @@ namespace Intersect.Utilities
 
             return Math.Sqrt(a + b);
         }
+
+        /// <summary>
+        /// Returns true if you meet a random chance
+        /// </summary>
+        /// <param name="percentChance">A percent chance value, i.e 17.5 == 17.5%, 100.0 == 100%</param>
+        /// <returns></returns>
+        public static bool LuckRoll(float percentChance)
+        {
+            var randomChance = Randomization.Next(1, 100001);
+            return randomChance < percentChance * 1000;
+        }
     }
 
 }

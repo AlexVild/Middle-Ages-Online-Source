@@ -3666,5 +3666,32 @@ namespace Intersect.Client.Entities
         }
 
         public bool InPvpSight => Globals.Me?.CalculateTileDistanceTo(this) < 17;
+
+        /// <summary>
+        /// Caclulate crit chance based on the player's current affinity
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="effect"></param>
+        /// <returns></returns>
+        public virtual int ApplyBonusEffect(int amount, EffectType effect, bool subtractive = false)
+        {
+            return amount;
+        }
+
+        /// <summary>
+        /// Gets the value of a bonus effect as granted by the currently equipped gear.
+        /// </summary>
+        /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
+        /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
+        /// <returns></returns>
+        public virtual int GetBonusEffect(EffectType effect, int startValue = 0)
+        {
+            return 0;
+        }
+
+        public virtual Dictionary<EffectType, int> GetAllBonusEffects()
+        {
+            return new Dictionary<EffectType, int>();
+        }
     }
 }

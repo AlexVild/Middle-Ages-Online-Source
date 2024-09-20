@@ -74,5 +74,11 @@ namespace Intersect.Enums
 
         [Description("Manaflow")]
         Manaflow = 22,
+
+        [Description("Swiftshot")]
+        Swiftshot = 23,
+
+        [Description("Ammo Saver")]
+        AmmoSaver = 24,
     }
 }

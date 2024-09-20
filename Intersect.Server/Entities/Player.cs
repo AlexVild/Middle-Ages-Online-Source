@@ -9776,6 +9776,12 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            // If AmmoSaver procs, don't consume ammo but say that you did.
+            if (MathHelper.LuckRoll((float)GetBonusEffectTotal(EffectType.AmmoSaver)))
+            {
+                return true;
+            }
+
             var ammoId = GetProjectileAmmoId(projectile);
             return TryTakeItem(ammoId, projectile.AmmoRequired);
         }
