@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 
@@ -25,6 +26,7 @@ using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
+using Newtonsoft.Json;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Entities
@@ -504,113 +506,34 @@ namespace Intersect.Client.Entities
             mDisposed = true;
         }
 
+        public virtual float StrafeBonus => 0.0f;
+        public virtual float BackstepBonus => 0.0f;
+
+        public virtual bool GetCombatMode()
+        {
+            return false;
+        }
+
+        public virtual int GetFaceDirection()
+        {
+            return Dir;
+        }
+
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime(int fromSpeed = -1)
         {
-            var speed = fromSpeed;
-            if (speed < 0)
-            {
-                speed = Stat[(int)Stats.Speed];
-            }
-            if (this is Player player && player.InVehicle)
-            {
-                speed = (int) player.VehicleSpeed;
-            }
-
-            // Old calc
-            //var time = 1000f / (float)(1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
-            var time = Options.BaseSpeed * Math.Exp(-1 * Options.Instance.CombatOpts.SpeedExp * speed);
-
-            if (Blocking)
-            {
-                time += time * (float) Options.BlockingSlow;
-            }
-            
-            time *= (float)Options.SpeedModifier;
-
-            if (this is Player pl && pl.CombatMode)
-            {
-                var moveDir = pl.Dir;
-                var faceDir = pl.FaceDirection;
-
-                var maximumTime = time;
-
-                var strafeBonus = 0;
-                var backstepBonus = 0;
-                if (pl.Equipment[Options.WeaponIndex] != default)
-                {
-                    var weapon = ItemBase.Get(pl.Equipment[Options.WeaponIndex]);
-                    strafeBonus = weapon?.StrafeBonus / 100 ?? 0;
-                    backstepBonus = weapon?.BackstepBonus / 100 ?? 0;
-                }
-
-                // Bonuses apply as percentages of the original speed modifiers - if backstep is 50% slower, and you have 10% backstep bonus, then backstep is now 50 - (.1 * 50) = 45% slower
-                var backstepModifier = Options.Instance.CombatOpts.CombatModeBackModifier - ((Options.Instance.CombatOpts.CombatModeBackModifier - 1) * backstepBonus);
-                var strafeModifier = Options.Instance.CombatOpts.CombatModeStrafeModifier - ((Options.Instance.CombatOpts.CombatModeStrafeModifier - 1) * strafeBonus);
-
-                if (moveDir != faceDir)
-                {
-                    switch (moveDir)
-                    {
-                        case 0:
-                            if (faceDir == 1)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-
-                            break;
-                        //down
-                        case 1:
-                            if (faceDir == 0)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-                            break;
-                        //left
-                        case 2:
-                            if (faceDir == 3)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-                            break;
-                        //right
-                        case 3:
-                            if (faceDir == 2)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-                            break;
-                    }
-                }
-            }
-            if (StatusIsActive(StatusTypes.Slowed))
-            {
-                time *= Options.Instance.CombatOpts.SlowedModifier;
-            }
-            else if (StatusIsActive(StatusTypes.Haste))
-            {
-                time /= Options.Instance.CombatOpts.HasteModifier;
-            }
-
-            return Math.Min(1000f, (float)time);
+            return MovementUtilities.GetMovementTime(fromSpeed > 0 ? fromSpeed : Speed,
+                GetCombatMode(),
+                Dir,
+                GetFaceDirection(),
+                StatusActive(StatusTypes.Haste),
+                StatusActive(StatusTypes.Slowed),
+                BackstepBonus,
+                StrafeBonus);
         }
-        
+
+        public virtual int Speed => Stat[(int)Stats.Speed];
+
         //Movement Processing
         public virtual bool Update()
         {
@@ -690,8 +613,8 @@ namespace Intersect.Client.Entities
                         }
                     }
 
-                    var speedRatio = GetMovementTime() / GetMovementTime(5); // 5 is the default speed to base walking animations off of
-                    mWalkTimer = Timing.Global.Milliseconds + (int)(175 * speedRatio); // 190 hardcoded replacement for Options.Instance.Sprites.MovingFrameDuration because I'm lazy
+                    var speedRatio = GetMovementTime() / GetMovementTime(1);
+                    mWalkTimer = Timing.Global.Milliseconds + (int)(155 * speedRatio); // 190 hardcoded replacement for Options.Instance.Sprites.MovingFrameDuration because I'm lazy
                 }
             }
 
@@ -1178,7 +1101,7 @@ namespace Intersect.Client.Entities
                 if (SpriteAnimation == SpriteAnimations.Normal)
                 {
                     bool inAction = AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking;
-                    if (inAction && !(this is Player play && play.InVehicle) && !StatusIsActive(StatusTypes.Stun) && !StatusIsActive(StatusTypes.Sleep))
+                    if (inAction && !(this is Player play && play.InVehicle) && !StatusActive(StatusTypes.Stun) && !StatusActive(StatusTypes.Sleep))
                     {
                         srcRectangle = new FloatRect(
                             Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
@@ -2083,7 +2006,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            var targetTex = Globals.Me.StatusIsActive(StatusTypes.Taunt) ?
+            var targetTex = Globals.Me.StatusActive(StatusTypes.Taunt) ?
                 Globals.ContentManager.GetTexture(TextureType.Misc, "taunt_target.png") :
                 Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");
 
@@ -2129,7 +2052,7 @@ namespace Intersect.Client.Entities
         }
 
         //Statuses
-        public bool StatusActive(Guid guid)
+        public bool SpellStatusActive(Guid guid)
         {
             foreach (var status in Status)
             {
@@ -2142,7 +2065,7 @@ namespace Intersect.Client.Entities
             return false;
         }
 
-        public bool StatusIsActive(StatusTypes status, Action action = default)
+        public bool StatusActive(StatusTypes status, Action action = default)
         {
             bool statusFound = false;
             for (var n = 0; n < Status.Count; n++)
@@ -3415,7 +3338,7 @@ namespace Intersect.Client.Entities
             List<GameTexture> statusTextures = new List<GameTexture>();
             foreach(StatusTypes status in Enum.GetValues(typeof(StatusTypes)))
             {
-                if (!StatusIsActive(status))
+                if (!StatusActive(status))
                 {
                     continue;
                 }

@@ -230,6 +230,7 @@
     <Compile Include="Config\LootOptions.cs" />
     <Compile Include="Config\LootRollOptions.cs" />
     <Compile Include="Config\MetricsOptions.cs" />
+    <Compile Include="Config\MovementOptions.cs" />
     <Compile Include="Config\NPCGuildOptions.cs" />
     <Compile Include="Config\NpcOptions.cs" />
     <Compile Include="Config\PacketOptions.cs" />
@@ -859,6 +860,7 @@
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Network\PortHelper.cs" />
+    <Compile Include="Utilities\MovementUtilities.cs" />
     <Compile Include="Utilities\NpcExperienceCalculator.cs" />
     <Compile Include="Utilities\Nullability.cs" />
     <Compile Include="Utilities\Randomization.cs" />

@@ -30,6 +30,7 @@ using Intersect.Client.General.Leaderboards;
 using Intersect.Localization;
 using Intersect.GameObjects.Events;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Intersect.Client.Entities
 {
@@ -307,7 +308,7 @@ namespace Intersect.Client.Entities
 
                 if (Controls.KeyDown(Control.AttackInteract) || ResourceLocked)
                 {
-                    if (StatusIsActive(StatusTypes.Stun) || StatusIsActive(StatusTypes.Sleep))
+                    if (StatusActive(StatusTypes.Stun) || StatusActive(StatusTypes.Sleep))
                     {
                         SendStunAlerts(true);
                     }
@@ -318,7 +319,7 @@ namespace Intersect.Client.Entities
                 }
             } else if (CanHarvest() && ResourceLocked) // Allow resource locking to persist in more situations than attacking
             {
-                if (StatusIsActive(StatusTypes.Stun) || StatusIsActive(StatusTypes.Sleep))
+                if (StatusActive(StatusTypes.Stun) || StatusActive(StatusTypes.Sleep))
                 {
                     SendStunAlerts(true);
                 }
@@ -532,7 +533,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (StatusIsActive(StatusTypes.Sleep))
+            if (StatusActive(StatusTypes.Sleep))
             {
                 SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
                 return;
@@ -1088,7 +1089,7 @@ namespace Intersect.Client.Entities
 
         public void TryUseSpell(int index)
         {
-            if (StatusIsActive(StatusTypes.Silence))
+            if (StatusActive(StatusTypes.Silence))
             {
                 SendAlert(Strings.Spells.silenced, Strings.Combat.silenced);
                 return;
@@ -1291,7 +1292,7 @@ namespace Intersect.Client.Entities
 
             if (Controls.KeyDown(Control.MoveUp))
             {
-                if (StatusIsActive(StatusTypes.Confused))
+                if (StatusActive(StatusTypes.Confused))
                 {
                     movey = -1;
                 }
@@ -1303,7 +1304,7 @@ namespace Intersect.Client.Entities
 
             if (Controls.KeyDown(Control.MoveDown))
             {
-                if (StatusIsActive(StatusTypes.Confused))
+                if (StatusActive(StatusTypes.Confused))
                 {
                     movey = 1;
                 }
@@ -1315,7 +1316,7 @@ namespace Intersect.Client.Entities
 
             if (Controls.KeyDown(Control.MoveLeft))
             {
-                if (StatusIsActive(StatusTypes.Confused))
+                if (StatusActive(StatusTypes.Confused))
                 {
                     movex = 1;
                 }
@@ -1327,7 +1328,7 @@ namespace Intersect.Client.Entities
 
             if (Controls.KeyDown(Control.MoveRight))
             {
-                if (StatusIsActive(StatusTypes.Confused))
+                if (StatusActive(StatusTypes.Confused))
                 {
                     movex = -1;
                 }
@@ -1740,14 +1741,14 @@ namespace Intersect.Client.Entities
                 return false;
             }
 
-            if (StatusIsActive(StatusTypes.Sleep) || StatusIsActive(StatusTypes.Stun))
+            if (StatusActive(StatusTypes.Sleep) || StatusActive(StatusTypes.Stun))
             {
                 SendAttackStatusAlerts();
                 return false;
             }
 
             // Can attack when confused/blinded, but at a disadvantage/miss
-            if (StatusIsActive(StatusTypes.Blind) || StatusIsActive(StatusTypes.Confused))
+            if (StatusActive(StatusTypes.Blind) || StatusActive(StatusTypes.Confused))
             {
                 SendAttackStatusAlerts();
             }
@@ -2440,7 +2441,7 @@ namespace Intersect.Client.Entities
             var swiftBonus = (100 - GetBonusEffect(EffectType.Swiftness)) / 100f;
             attackTime = (int) Math.Floor(attackTime * swiftBonus);
 
-            if (StatusIsActive(StatusTypes.Swift))
+            if (StatusActive(StatusTypes.Swift))
             {
                 attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
@@ -3123,15 +3124,15 @@ namespace Intersect.Client.Entities
         {
             if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
             {
-                if (StatusIsActive(StatusTypes.Sleep))
+                if (StatusActive(StatusTypes.Sleep))
                 {
                     SendAlert(Strings.Spells.sleep, Strings.Combat.sleep, quiet);
                 }
-                else if (StatusIsActive(StatusTypes.Stun))
+                else if (StatusActive(StatusTypes.Stun))
                 {
                     SendAlert(Strings.Spells.stunned, Strings.Combat.stunned, quiet);
                 }
-                else if (StatusIsActive(StatusTypes.Snare))
+                else if (StatusActive(StatusTypes.Snare))
                 {
                     SendAlert(Strings.Spells.snared, Strings.Combat.snared, quiet);
                 }
@@ -3158,23 +3159,23 @@ namespace Intersect.Client.Entities
         {
             if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
             {
-                if (StatusIsActive(StatusTypes.Blind))
+                if (StatusActive(StatusTypes.Blind))
                 {
                     SendAlert(Strings.Spells.blind, Strings.Combat.blind);
                 }
-                if (StatusIsActive(StatusTypes.Sleep))
+                if (StatusActive(StatusTypes.Sleep))
                 {
                     SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
                 }
-                else if (StatusIsActive(StatusTypes.Stun))
+                else if (StatusActive(StatusTypes.Stun))
                 {
                     SendAlert(Strings.Spells.stunned, Strings.Combat.stunned);
                 }
-                else if (StatusIsActive(StatusTypes.Snare))
+                else if (StatusActive(StatusTypes.Snare))
                 {
                     SendAlert(Strings.Spells.snared, Strings.Combat.snared);
                 }
-                else if (StatusIsActive(StatusTypes.Confused))
+                else if (StatusActive(StatusTypes.Confused))
                 {
                     SendAlert(Strings.Spells.confused, Strings.Combat.confused);
                 }
@@ -3518,6 +3519,44 @@ namespace Intersect.Client.Entities
         protected override bool ShouldDrawFlair()
         {
             return ClanWarWinner;
+        }
+
+        public override float StrafeBonus
+        {
+            get
+            {
+                if (!TryGetEquippedWeaponDescriptor(out var weapon))
+                {
+                    return 0.0f;
+                }
+
+                return weapon.StrafeBonus / 100f;
+            }
+        }
+
+        public override float BackstepBonus
+        {
+            get
+            {
+                if (!TryGetEquippedWeaponDescriptor(out var weapon))
+                {
+                    return 0.0f;
+                }
+
+                return weapon.BackstepBonus / 100f;
+            }
+        }
+
+        public override int Speed => InVehicle && VehicleSpeed > 0 ? (int)VehicleSpeed : base.Speed;
+
+        public override bool GetCombatMode()
+        {
+            return CombatMode;
+        }
+
+        public override int GetFaceDirection()
+        {
+            return FaceDirection;
         }
     }
 }

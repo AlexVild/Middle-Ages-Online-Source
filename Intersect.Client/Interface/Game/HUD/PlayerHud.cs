@@ -293,7 +293,7 @@ namespace Intersect.Client.Interface.Game.HUD
 
             var manaTexture = ManaTexture;
             var manaBackground = BarBackground;
-            if (CurrentRegenType == RegenType.NoMana || CurrentRegenType == RegenType.NoRegen || (Globals.Me != null && Globals.Me.StatusIsActive(StatusTypes.Enfeebled)))
+            if (CurrentRegenType == RegenType.NoMana || CurrentRegenType == RegenType.NoRegen || (Globals.Me != null && Globals.Me.StatusActive(StatusTypes.Enfeebled)))
             {
                 manaTexture = ManaTextureNoRegen;
                 manaBackground = BarBackgroundNoRegen;

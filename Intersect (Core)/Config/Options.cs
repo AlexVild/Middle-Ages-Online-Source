@@ -226,14 +226,6 @@ namespace Intersect
 
         public static int MaxAttackRate => Instance.CombatOpts.MaxAttackRate;
 
-        public static int BlockingSlow => Instance.CombatOpts.BlockingSlow;
-
-        public static float AgilityMovementSpeedModifier => Instance.CombatOpts.AgilityMovementSpeedModifier;
-        
-        public static float BaseSpeed => Instance.CombatOpts.BaseSpeed;
-
-        public static float SpeedModifier => Instance.CombatOpts.SpeedModifier;
-
         public static int MaxDashSpeed => Instance.CombatOpts.MaxDashSpeed;
 
         public static long FaceTargetPredictionTime => Instance.CombatOpts.FaceTargetPredictionTime;
@@ -475,5 +467,7 @@ namespace Intersect
         [JsonProperty("DeconstructionOptions")] public DeconstructionOptions DeconstructionOpts = new DeconstructionOptions();
 
         [JsonProperty("DuelOptions")] public DuelOptions DuelOpts = new DuelOptions();
+
+        [JsonProperty("MovementOptions")] public MovementOptions MovementOpts = new MovementOptions();
     }
 }

@@ -866,114 +866,39 @@ namespace Intersect.Server.Entities
             return Passable;
         }
 
+        [NotMapped, JsonIgnore]
+        public virtual float StrafeBonus => 0.0f;
+
+        [NotMapped, JsonIgnore]
+        public virtual float BackstepBonus => 0.0f;
+
+        [NotMapped, JsonIgnore]
+        public virtual int Speed => Stat[(int)Stats.Speed].Value();
+
+        public virtual bool GetCombatMode()
+        {
+            return false;
+        }
+
+        public virtual int GetFaceDirection()
+        {
+            return Dir;
+        }
+
+        [NotMapped, JsonIgnore]
+        public virtual int FaceDirection => Dir;
+
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime(int fromSpeed = -1)
         {
-            var speed = fromSpeed;
-            if (speed < 0)
-            {
-                speed = Stat[(int)Stats.Speed].Value();
-            }
-            if (this is Player player && player.InVehicle && player.VehicleSpeed > 0L)
-            {
-                speed = (int) player.VehicleSpeed;
-            }
-
-            // Old calc
-            //var time = 1000f / (float)(1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
-            var time = Options.BaseSpeed * Math.Exp(-1 * Options.Instance.CombatOpts.SpeedExp * speed);
-
-            if (Blocking)
-            {
-                time += time * (float)Options.BlockingSlow;
-            }
-
-            time *= (float)Options.SpeedModifier;
-
-            if (this is Player pl && pl.CombatMode)
-            {
-                var moveDir = pl.GetRealDir();
-                var faceDir = pl.FaceDirection;
-                var maximumTime = time;
-
-                var strafeBonus = 0;
-                var backstepBonus = 0;
-                if (pl.Equipment[Options.WeaponIndex] > -1)
-                {
-                    var weapon = pl.Items[pl.Equipment[Options.WeaponIndex]];
-                    strafeBonus = weapon?.Descriptor?.StrafeBonus / 100 ?? 0;
-                    backstepBonus = weapon?.Descriptor?.BackstepBonus / 100 ?? 0;
-                }
-
-                // Bonuses apply as percentages of the original speed modifiers - if backstep is 50% slower, and you have 10% backstep bonus, then backstep is now 50 - (.1 * 50) = 45% slower
-                var backstepModifier = Options.Instance.CombatOpts.CombatModeBackModifier - ((Options.Instance.CombatOpts.CombatModeBackModifier - 1) * backstepBonus);
-                var strafeModifier = Options.Instance.CombatOpts.CombatModeStrafeModifier - ((Options.Instance.CombatOpts.CombatModeStrafeModifier - 1) * strafeBonus);
-
-                if (moveDir != faceDir)
-                {
-                    switch (moveDir)
-                    {
-                        //up
-                        case 0:
-                            if (faceDir == 1)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-
-                            break;
-                        //down
-                        case 1:
-                            if (faceDir == 0)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-                            break;
-                        //left
-                        case 2:
-                            if (faceDir == 3)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-                            break;
-                        //right
-                        case 3:
-                            if (faceDir == 2)
-                            {
-                                time *= backstepModifier;
-                            }
-                            else
-                            {
-                                time *= strafeModifier;
-                            }
-                            break;
-                    }
-
-                    time = (float)MathHelper.Clamp(time, maximumTime, float.MaxValue);
-                }
-            }
-
-            if (StatusActive(StatusTypes.Slowed))
-            {
-                time *= Options.Instance.CombatOpts.SlowedModifier;
-            }
-            else if (StatusActive(StatusTypes.Haste))
-            {
-                time /= Options.Instance.CombatOpts.HasteModifier;
-            }
-
-            return Math.Min(1000f, (float)time);
+            return MovementUtilities.GetMovementTime(fromSpeed > 0 ? fromSpeed : Speed, 
+                GetCombatMode(), 
+                GetRealDir(), 
+                GetFaceDirection(), 
+                StatusActive(StatusTypes.Haste), 
+                StatusActive(StatusTypes.Slowed), 
+                BackstepBonus, 
+                StrafeBonus);
         }
 
         public virtual EntityTypes GetEntityType()

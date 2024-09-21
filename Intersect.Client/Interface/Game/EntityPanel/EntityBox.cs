@@ -652,7 +652,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             var statuses = mActiveStatuses.Keys.ToArray();
             foreach (var status in statuses)
             {
-                if (!MyEntity.StatusActive(status))
+                if (!MyEntity.SpellStatusActive(status))
                 {
                     var s = mActiveStatuses[status];
                     s.Pnl.Texture = null;

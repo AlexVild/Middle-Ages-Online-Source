@@ -10,12 +10,6 @@ namespace Intersect.Config
     public class CombatOptions
     {
 
-        public int BlockingSlow = 30; //Slow when moving with a shield. Default 30%
-
-        public float AgilityMovementSpeedModifier = 0.5f; // how much to divide the speed modification by
-
-        public float SpeedModifier = 0.95f; // Just a baseline hook into speed
-
         public int CombatTime = 10000; //10 seconds
 
         public int BaseComboTime = 3000; //3 seconds
@@ -117,10 +111,6 @@ namespace Intersect.Config
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
 
         public long ProjectileSpellMovementDelay = 250;
-        
-        public long BaseSpeed = 130;
-
-        public float SpeedExp = 0.003f;
 
         public bool InvulnerableNpcsAffectedByNonDamaging = true;
 

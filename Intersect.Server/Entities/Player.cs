@@ -10050,7 +10050,7 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public bool StatCapActive => InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController)
-            && instanceController.InstanceIsDungeon 
+            && instanceController.InstanceIsDungeon
             && instanceController.DungeonDescriptor.ApplyStatCeiling;
 
         [NotMapped, JsonIgnore]
@@ -10136,7 +10136,7 @@ namespace Intersect.Server.Entities
         public object TerritoryLock = new object();
 
         public bool DefendingTerritory => IsInGuild
-            && LastTerritory != null 
+            && LastTerritory != null
             && (TerritoryLeaveTimer < 0 || TerritoryLeaveTimer > Timing.Global.MillisecondsUtc)
             && LastTerritory.GuildId == Guild?.Id;
 
@@ -10273,7 +10273,7 @@ namespace Intersect.Server.Entities
             SilenceToasts = true;
 
             var ingredients = new Dictionary<Guid, int>();
-            
+
             foreach (var record in PlayerRecords.ToArray().Where(record => record.Type == RecordType.ItemCrafted))
             {
                 if (!CraftBase.TryGet(record.RecordId, out var craft))
@@ -10353,6 +10353,47 @@ namespace Intersect.Server.Entities
                 ChallengeUpdateProcesser.UpdateChallengesOf(new ManaDamageDealtUpdate(this, damage));
             }
             return damageDealt;
+        }
+
+        [NotMapped, JsonIgnore]
+        public override float StrafeBonus 
+        {
+            get
+            {
+                if (!TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+                {
+                    return 0.0f;
+                }
+
+                return weapon?.Descriptor?.StrafeBonus / 100f ?? 0.0f;
+            }
+        }
+
+        [NotMapped, JsonIgnore]
+        public override float BackstepBonus
+        {
+            get
+            {
+                if (!TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+                {
+                    return 0.0f;
+                }
+
+                return weapon?.Descriptor?.BackstepBonus / 100f ?? 0.0f;
+            }
+        }
+
+        [NotMapped, JsonIgnore]
+        public override int Speed => InVehicle && VehicleSpeed > 0 ? (int)VehicleSpeed : base.Speed;
+
+        public override bool GetCombatMode()
+        {
+            return CombatMode;
+        }
+
+        public override int GetFaceDirection()
+        {
+            return FaceDirection;
         }
     }
 }
