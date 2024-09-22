@@ -87,6 +87,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private Label SkillPointsRemaining;
 
+        private CheckBox ShowHideLowerSkills { get; set; }
+
         public SkillsPanel(ImagePanel characterWindow)
         {
             mParentContainer = characterWindow;
@@ -117,8 +119,22 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             SkillsScrollContainer = new ScrollControl(SkillsContainer, "SkillsScrollContainer");
 
             SkillPointsRemaining = new Label(SkillsContainer, "SkillPointsReamining");
+            ShowHideLowerSkills = new CheckBox(mBackground, "ShowHideLowerSkills")
+            {
+                Text = ""
+            };
+
+            ShowHideLowerSkills.CheckChanged += ShowHideLowerSkills_Checked;
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            ShowHideLowerSkills.SetTooltipGraphicsMAO();
+            ShowHideLowerSkills.SetToolTipText("When checked, shows all skills even if you know a better version of that skill");
+        }
+
+        private void ShowHideLowerSkills_Checked(Base sender, EventArgs arguments)
+        {
+            RefreshSkillbookDisplay();
         }
 
         public override void Show()
@@ -193,6 +209,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                     continue;
                 }
 
+                if (!ShowHideLowerSkills.IsChecked && HasHigherLevelInSkillbook(descriptor) && !skillKv.Value.Prepared)
+                {
+                    continue;
+                }
+
                 var row = new SkillRowComponent(
                     SkillsScrollContainer,
                     $"Skill_{idx}",
@@ -212,6 +233,19 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
                 idx++;
             }
+        }
+
+        private bool HasHigherLevelInSkillbook(SpellBase skill)
+        {
+            return (Globals.Me.Skillbook.Any(kv =>
+            {
+                if (!SpellBase.TryGet(kv.Key, out var compSpell))
+                {
+                    return false;
+                }
+
+                return compSpell.UpgradeOfSpellId == skill.Id;
+            }));
         }
 
         private void ClearSkills()

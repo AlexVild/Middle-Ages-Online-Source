@@ -34,6 +34,8 @@ namespace Intersect.Editor.Forms.Editors
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSpell));
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpSpellGroup = new DarkUI.Controls.DarkGroupBox();
+            this.lblSpellUpgrade = new System.Windows.Forms.Label();
+            this.cmbSpellUpgrade = new DarkUI.Controls.DarkComboBox();
             this.btnSetEmpty = new DarkUI.Controls.DarkButton();
             this.btnAddSpellGroup = new DarkUI.Controls.DarkButton();
             this.cmbSpellGroup = new DarkUI.Controls.DarkComboBox();
@@ -92,6 +94,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpSpellCost = new DarkUI.Controls.DarkGroupBox();
+            this.nudInterruptThreshold = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblInterruptThreshold = new System.Windows.Forms.Label();
             this.nudSkillPoints = new DarkUI.Controls.DarkNumericUpDown();
             this.lblSkillPts = new System.Windows.Forms.Label();
             this.chkIgnoreCdr = new DarkUI.Controls.DarkCheckBox();
@@ -269,8 +273,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.lblInterruptThreshold = new System.Windows.Forms.Label();
-            this.nudInterruptThreshold = new DarkUI.Controls.DarkNumericUpDown();
             this.pnlContainer.SuspendLayout();
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
@@ -284,6 +286,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
             this.grpSpellCost.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInterruptThreshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldownDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastDuration)).BeginInit();
@@ -345,7 +348,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudInterruptThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -371,17 +373,49 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpSpellGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpellGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpellGroup.Controls.Add(this.lblSpellUpgrade);
+            this.grpSpellGroup.Controls.Add(this.cmbSpellUpgrade);
             this.grpSpellGroup.Controls.Add(this.btnSetEmpty);
             this.grpSpellGroup.Controls.Add(this.btnAddSpellGroup);
             this.grpSpellGroup.Controls.Add(this.cmbSpellGroup);
             this.grpSpellGroup.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpellGroup.Location = new System.Drawing.Point(447, 246);
             this.grpSpellGroup.Name = "grpSpellGroup";
-            this.grpSpellGroup.Size = new System.Drawing.Size(213, 122);
+            this.grpSpellGroup.Size = new System.Drawing.Size(213, 163);
             this.grpSpellGroup.TabIndex = 111;
             this.grpSpellGroup.TabStop = false;
             this.grpSpellGroup.Text = "Spell Group Info";
             this.grpSpellGroup.Visible = false;
+            // 
+            // lblSpellUpgrade
+            // 
+            this.lblSpellUpgrade.AutoSize = true;
+            this.lblSpellUpgrade.Location = new System.Drawing.Point(5, 120);
+            this.lblSpellUpgrade.Name = "lblSpellUpgrade";
+            this.lblSpellUpgrade.Size = new System.Drawing.Size(91, 13);
+            this.lblSpellUpgrade.TabIndex = 61;
+            this.lblSpellUpgrade.Text = "Spell Upgrade Of:";
+            // 
+            // cmbSpellUpgrade
+            // 
+            this.cmbSpellUpgrade.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSpellUpgrade.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSpellUpgrade.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpellUpgrade.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpellUpgrade.DrawDropdownHoverOutline = false;
+            this.cmbSpellUpgrade.DrawFocusRectangle = false;
+            this.cmbSpellUpgrade.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpellUpgrade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSpellUpgrade.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpellUpgrade.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSpellUpgrade.FormattingEnabled = true;
+            this.cmbSpellUpgrade.Location = new System.Drawing.Point(5, 136);
+            this.cmbSpellUpgrade.Name = "cmbSpellUpgrade";
+            this.cmbSpellUpgrade.Size = new System.Drawing.Size(197, 21);
+            this.cmbSpellUpgrade.TabIndex = 60;
+            this.cmbSpellUpgrade.Text = null;
+            this.cmbSpellUpgrade.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSpellUpgrade.SelectedIndexChanged += new System.EventHandler(this.cmbSpellUpgrade_SelectedIndexChanged);
             // 
             // btnSetEmpty
             // 
@@ -1220,6 +1254,35 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpellCost.TabStop = false;
             this.grpSpellCost.Text = "Spell Cost:";
             // 
+            // nudInterruptThreshold
+            // 
+            this.nudInterruptThreshold.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudInterruptThreshold.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudInterruptThreshold.Location = new System.Drawing.Point(222, 163);
+            this.nudInterruptThreshold.Maximum = new decimal(new int[] {
+            -100,
+            49,
+            0,
+            0});
+            this.nudInterruptThreshold.Name = "nudInterruptThreshold";
+            this.nudInterruptThreshold.Size = new System.Drawing.Size(184, 20);
+            this.nudInterruptThreshold.TabIndex = 61;
+            this.nudInterruptThreshold.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudInterruptThreshold.ValueChanged += new System.EventHandler(this.nudInterruptThreshold_ValueChanged);
+            // 
+            // lblInterruptThreshold
+            // 
+            this.lblInterruptThreshold.AutoSize = true;
+            this.lblInterruptThreshold.Location = new System.Drawing.Point(220, 143);
+            this.lblInterruptThreshold.Name = "lblInterruptThreshold";
+            this.lblInterruptThreshold.Size = new System.Drawing.Size(99, 13);
+            this.lblInterruptThreshold.TabIndex = 60;
+            this.lblInterruptThreshold.Text = "Interrupt Threshold:";
+            // 
             // nudSkillPoints
             // 
             this.nudSkillPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -1438,7 +1501,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.Controls.Add(this.txtCannotCast);
             this.grpRequirements.Controls.Add(this.btnDynamicRequirements);
             this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(446, 374);
+            this.grpRequirements.Location = new System.Drawing.Point(446, 418);
             this.grpRequirements.Name = "grpRequirements";
             this.grpRequirements.Size = new System.Drawing.Size(220, 98);
             this.grpRequirements.TabIndex = 18;
@@ -1488,7 +1551,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.grpEffectDuration);
             this.grpCombat.Controls.Add(this.grpDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(3, 493);
+            this.grpCombat.Location = new System.Drawing.Point(3, 531);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(636, 598);
             this.grpCombat.TabIndex = 39;
@@ -3528,7 +3591,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(3, 494);
+            this.grpEvent.Location = new System.Drawing.Point(3, 533);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(441, 48);
             this.grpEvent.TabIndex = 40;
@@ -3571,7 +3634,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWarp.Controls.Add(this.lblX);
             this.grpWarp.Controls.Add(this.lblMap);
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(3, 495);
+            this.grpWarp.Location = new System.Drawing.Point(3, 531);
             this.grpWarp.Name = "grpWarp";
             this.grpWarp.Size = new System.Drawing.Size(247, 182);
             this.grpWarp.TabIndex = 35;
@@ -3900,35 +3963,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 601);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // lblInterruptThreshold
-            // 
-            this.lblInterruptThreshold.AutoSize = true;
-            this.lblInterruptThreshold.Location = new System.Drawing.Point(220, 143);
-            this.lblInterruptThreshold.Name = "lblInterruptThreshold";
-            this.lblInterruptThreshold.Size = new System.Drawing.Size(99, 13);
-            this.lblInterruptThreshold.TabIndex = 60;
-            this.lblInterruptThreshold.Text = "Interrupt Threshold:";
-            // 
-            // nudInterruptThreshold
-            // 
-            this.nudInterruptThreshold.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudInterruptThreshold.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudInterruptThreshold.Location = new System.Drawing.Point(222, 163);
-            this.nudInterruptThreshold.Maximum = new decimal(new int[] {
-            -100,
-            49,
-            0,
-            0});
-            this.nudInterruptThreshold.Name = "nudInterruptThreshold";
-            this.nudInterruptThreshold.Size = new System.Drawing.Size(184, 20);
-            this.nudInterruptThreshold.TabIndex = 61;
-            this.nudInterruptThreshold.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudInterruptThreshold.ValueChanged += new System.EventHandler(this.nudInterruptThreshold_ValueChanged);
-            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3953,6 +3987,7 @@ namespace Intersect.Editor.Forms.Editors
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.form_KeyDown);
             this.pnlContainer.ResumeLayout(false);
             this.grpSpellGroup.ResumeLayout(false);
+            this.grpSpellGroup.PerformLayout();
             this.grpComponents.ResumeLayout(false);
             this.grpComponents.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).EndInit();
@@ -3970,6 +4005,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).EndInit();
             this.grpSpellCost.ResumeLayout(false);
             this.grpSpellCost.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInterruptThreshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldownDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastDuration)).EndInit();
@@ -4044,7 +4080,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudInterruptThreshold)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4290,5 +4325,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblDashAnimation;
         private DarkNumericUpDown nudInterruptThreshold;
         private System.Windows.Forms.Label lblInterruptThreshold;
+        private System.Windows.Forms.Label lblSpellUpgrade;
+        private DarkComboBox cmbSpellUpgrade;
     }
 }

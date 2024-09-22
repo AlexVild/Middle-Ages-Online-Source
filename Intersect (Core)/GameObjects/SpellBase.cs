@@ -449,5 +449,23 @@ namespace Intersect.GameObjects
         }
 
         public int InterruptThreshold { get; set; }
+
+        public Guid UpgradeOfSpellId { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public SpellBase UpgradeOfSpell 
+        {
+            get => Get(UpgradeOfSpellId);
+            set
+            {
+                if (value?.Id == default)
+                {
+                    UpgradeOfSpellId = Guid.Empty;
+                    return;
+                }
+
+                UpgradeOfSpellId = value.Id;
+            }
+        }
     }
 }

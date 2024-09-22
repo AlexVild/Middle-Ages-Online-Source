@@ -149,7 +149,7 @@ namespace Intersect.Editor.Forms.Editors
 
             nudCastDuration.Maximum = Int32.MaxValue;
             nudCooldownDuration.Maximum = Int32.MaxValue;
-            
+
             InitLocalization();
             UpdateEditor();
         }
@@ -334,6 +334,11 @@ namespace Intersect.Editor.Forms.Editors
                     mChanged.Add(mEditorItem);
                     mEditorItem.MakeBackup();
                 }
+
+                cmbSpellUpgrade.Items.Clear();
+                cmbSpellUpgrade.Items.Add(Strings.General.none);
+                cmbSpellUpgrade.Items.AddRange(SpellBase.Names);
+                cmbSpellUpgrade.SelectedIndex = SpellBase.ListIndex(mEditorItem.UpgradeOfSpellId) + 1;
 
                 RefreshComponentsList();
                 RefreshBalance();
@@ -1709,6 +1714,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudInterruptThreshold_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.InterruptThreshold = (int)nudInterruptThreshold.Value;
+        }
+
+        private void cmbSpellUpgrade_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.UpgradeOfSpellId = SpellBase.IdFromList(cmbSpellUpgrade.SelectedIndex - 1);
         }
     }
 }

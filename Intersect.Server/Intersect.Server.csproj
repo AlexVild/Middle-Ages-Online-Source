@@ -1467,6 +1467,10 @@
     <Compile Include="Migrations\Game\20240902150402_AddEnhancementGroupMigration.designer.cs">
       <DependentUpon>20240902150402_AddEnhancementGroupMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240922171330_AddSpellUpgradeMigration.cs" />
+    <Compile Include="Migrations\Game\20240922171330_AddSpellUpgradeMigration.designer.cs">
+      <DependentUpon>20240922171330_AddSpellUpgradeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
