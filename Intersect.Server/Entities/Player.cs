@@ -481,6 +481,7 @@ namespace Intersect.Server.Entities
             }
 
             ReprocessEnhancements();
+            ValidateCurrentWeaponLevels();
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)

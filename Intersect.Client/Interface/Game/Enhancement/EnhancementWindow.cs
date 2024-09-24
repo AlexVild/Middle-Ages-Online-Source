@@ -198,17 +198,20 @@ namespace Intersect.Client.Interface.Game.Enhancement
             // Grab enhancements that can be applied to the selected weapon
             var validEnhancements = KnownEhancements
                 .Select(enId => EnhancementDescriptor.Get(enId))
-                .IsNotNull()
-                .Where(en => EnhancementHelper.WeaponLevelRequirementMet(EnhancingItem.Base.MaxWeaponLevels, en.ValidWeaponTypes, out _))
+                .Where(en => en != null && EnhancementHelper.WeaponLevelRequirementMet(EnhancingItem.Base.MaxWeaponLevels, en.ValidWeaponTypes, out _))
                 .ToList();
 
             // Group the enhancements by group
-            var groupedEnhancements = validEnhancements
-                .GroupBy(en => en.EnhancementGroup)
-                .ToDictionary(group => group.Key, group => group.ToList());
 
             var relevantEnhancements = new List<EnhancementDescriptor>();
-            var currentWeaponTypes = EnhancingItem.Base.MaxWeaponLevels.Keys;
+
+            var nonGroupedEnhancements = validEnhancements.Where(en => string.IsNullOrEmpty(en.EnhancementGroup)).ToArray();
+            relevantEnhancements.AddRange(nonGroupedEnhancements);
+
+            var groupedEnhancements = validEnhancements
+                .Where(en => !string.IsNullOrEmpty(en.EnhancementGroup))
+                .GroupBy(en => en.EnhancementGroup)
+                .ToDictionary(group => group.Key, group => group.ToList());
 
             // Select the highest-level enhancement from each enhancement group to display
             foreach (var enhancementGroup in groupedEnhancements.Values)

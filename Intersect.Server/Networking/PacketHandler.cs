@@ -3778,6 +3778,7 @@ namespace Intersect.Server.Networking
                 {
                     Globals.OnlineList.ForEach(player =>
                     {
+                        player.ValidateCurrentWeaponLevels();
                         player.ResetChallengeTracking();
                         player.SetMasteryProgress();
                     });

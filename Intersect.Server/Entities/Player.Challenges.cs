@@ -919,5 +919,23 @@ namespace Intersect.Server.Entities
 
             return percentage;
         }
+
+        public void ValidateCurrentWeaponLevels()
+        {
+            foreach (var mastery in WeaponMasteries)
+            {
+                var descriptor = WeaponTypeDescriptor.Get(mastery.WeaponTypeId);
+                if (descriptor == null)
+                {
+                    continue;
+                }
+
+                if (mastery.Level > descriptor.MaxLevel)
+                {
+                    mastery.Level = descriptor.MaxLevel;
+                    mastery.ExpRemaining = 1L;
+                }
+            }
+        }
     }
 }
