@@ -582,13 +582,10 @@ namespace Intersect.Server.Entities
 
             SpawnedNpcs.Clear();
 
-            lock (mEventLock)
-            {
-                EventLookup.Clear();
-                EventBaseIdLookup.Clear();
-                GlobalPageInstanceLookup.Clear();
-                EventTileLookup.Clear();
-            }
+            EventLookup.Clear();
+            EventBaseIdLookup.Clear();
+            GlobalPageInstanceLookup.Clear();
+            EventTileLookup.Clear();
 
             InGame = false;
             mSentMap = false;
@@ -6715,53 +6712,11 @@ namespace Intersect.Server.Entities
         {
             if (QuestOffers.Contains(questId))
             {
-                lock (mEventLock)
+                QuestOffers.Remove(questId);
+                var quest = QuestBase.Get(questId);
+                if (quest != null)
                 {
-                    QuestOffers.Remove(questId);
-                    var quest = QuestBase.Get(questId);
-                    if (quest != null)
-                    {
-                        StartQuest(quest);
-                        foreach (var evt in EventLookup.ToArray())
-                        {
-                            if (evt.Value.CallStack.Count <= 0)
-                            {
-                                continue;
-                            }
-
-                            var stackInfo = evt.Value.CallStack.Peek();
-                            if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Quest)
-                            {
-                                continue;
-                            }
-
-                            if (((StartQuestCommand) stackInfo.WaitingOnCommand).QuestId == questId)
-                            {
-                                var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[0]);
-                                evt.Value.CallStack.Peek().WaitingForResponse = CommandInstance.EventResponse.None;
-                                evt.Value.CallStack.Push(tmpStack);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public void DeclineQuest(Guid questId, bool fromQuestBoard)
-        {
-            if (QuestOffers.Contains(questId))
-            {
-                lock (mEventLock)
-                {
-
-                    QuestOffers.Remove(questId);
-                    if (!fromQuestBoard) // don't alert the player otherwise
-                    {
-                        PacketSender.SendChatMsg(
-                            this, Strings.Quests.declined.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, CustomColors.Quests.Declined
-                        );
-                    }
-
+                    StartQuest(quest);
                     foreach (var evt in EventLookup.ToArray())
                     {
                         if (evt.Value.CallStack.Count <= 0)
@@ -6777,12 +6732,49 @@ namespace Intersect.Server.Entities
 
                         if (((StartQuestCommand) stackInfo.WaitingOnCommand).QuestId == questId)
                         {
-                            //Run failure branch
-                            var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[1]);
-                            stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
+                            var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[0]);
+                            evt.Value.CallStack.Peek().WaitingForResponse = CommandInstance.EventResponse.None;
                             evt.Value.CallStack.Push(tmpStack);
                         }
                     }
+                }
+            }
+        }
+
+        public void DeclineQuest(Guid questId, bool fromQuestBoard)
+        {
+            if (!QuestOffers.Contains(questId))
+            {
+                return;
+            }
+
+            QuestOffers.Remove(questId);
+            if (!fromQuestBoard) // don't alert the player otherwise
+            {
+                PacketSender.SendChatMsg(
+                    this, Strings.Quests.declined.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, CustomColors.Quests.Declined
+                );
+            }
+
+            foreach (var evt in EventLookup.ToArray())
+            {
+                if (evt.Value.CallStack.Count <= 0)
+                {
+                    continue;
+                }
+
+                var stackInfo = evt.Value.CallStack.Peek();
+                if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Quest)
+                {
+                    continue;
+                }
+
+                if (((StartQuestCommand)stackInfo.WaitingOnCommand).QuestId == questId)
+                {
+                    //Run failure branch
+                    var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[1]);
+                    stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
+                    evt.Value.CallStack.Push(tmpStack);
                 }
             }
         }
@@ -7437,208 +7429,199 @@ namespace Intersect.Server.Entities
 
         public void RespondToEvent(Guid eventId, int responseId)
         {
-            lock (mEventLock)
+            foreach (var evt in EventLookup.ToArray())
             {
-                foreach (var evt in EventLookup.ToArray())
+                if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                 {
-                    if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
+                    if (evt.Value.CallStack.Count <= 0)
                     {
-                        if (evt.Value.CallStack.Count <= 0)
-                        {
-                            return;
-                        }
-
-                        var stackInfo = evt.Value.CallStack.Peek();
-                        if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Dialogue)
-                        {
-                            return;
-                        }
-
-                        stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
-                        if (stackInfo.WaitingOnCommand != null &&
-                            stackInfo.WaitingOnCommand.Type == EventCommandType.ShowOptions)
-                        {
-                            // Alex - Try this to fix Zelp crash on event dialog? Perhaps the client was sending a response before the server knew the options?
-                            if (responseId <= 0 || responseId - 1 > stackInfo.BranchIds.Length)
-                            {
-                                return;
-                            }
-
-                            var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[responseId - 1]);
-                            evt.Value.CallStack.Push(tmpStack);
-                        }
-
                         return;
                     }
+
+                    var stackInfo = evt.Value.CallStack.Peek();
+                    if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Dialogue)
+                    {
+                        return;
+                    }
+
+                    stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
+                    if (stackInfo.WaitingOnCommand != null &&
+                        stackInfo.WaitingOnCommand.Type == EventCommandType.ShowOptions)
+                    {
+                        // Alex - Try this to fix Zelp crash on event dialog? Perhaps the client was sending a response before the server knew the options?
+                        if (responseId <= 0 || responseId - 1 > stackInfo.BranchIds.Length)
+                        {
+                            return;
+                        }
+
+                        var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[responseId - 1]);
+                        evt.Value.CallStack.Push(tmpStack);
+                    }
+
+                    return;
                 }
             }
         }
 
         public void PictureClosed(Guid eventId)
         {
-            lock (mEventLock)
+            foreach (var evt in EventLookup.ToArray())
             {
-                foreach (var evt in EventLookup.ToArray())
+                if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                 {
-                    if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
+                    if (evt.Value.CallStack.Count <= 0)
                     {
-                        if (evt.Value.CallStack.Count <= 0)
-                        {
-                            return;
-                        }
-
-                        var stackInfo = evt.Value.CallStack.Peek();
-                        if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Picture)
-                        {
-                            return;
-                        }
-
-                        stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
-
                         return;
                     }
+
+                    var stackInfo = evt.Value.CallStack.Peek();
+                    if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Picture)
+                    {
+                        return;
+                    }
+
+                    stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
+
+                    return;
                 }
             }
         }
 
         public void RespondToEventInput(Guid eventId, int newValue, string newValueString, bool canceled = false)
         {
-            lock (mEventLock)
+            foreach (var evt in EventLookup.ToArray())
             {
-                foreach (var evt in EventLookup.ToArray())
+                if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                 {
-                    if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
+                    if (evt.Value.CallStack.Count <= 0)
                     {
-                        if (evt.Value.CallStack.Count <= 0)
+                        return;
+                    }
+
+                    var stackInfo = evt.Value.CallStack.Peek();
+                    if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Dialogue)
+                    {
+                        return;
+                    }
+
+                    stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
+                    if (stackInfo.WaitingOnCommand != null &&
+                        stackInfo.WaitingOnCommand.Type == EventCommandType.InputVariable)
+                    {
+                        var cmd = (InputVariableCommand)stackInfo.WaitingOnCommand;
+                        VariableValue value = null;
+                        var type = VariableDataTypes.Boolean;
+                        if (cmd.VariableType == VariableTypes.PlayerVariable)
                         {
-                            return;
+                            var variable = PlayerVariableBase.Get(cmd.VariableId);
+                            if (variable != null)
+                            {
+                                type = variable.Type;
+                            }
+
+                            value = GetVariableValue(cmd.VariableId);
+                        }
+                        else if (cmd.VariableType == VariableTypes.ServerVariable)
+                        {
+                            var variable = ServerVariableBase.Get(cmd.VariableId);
+                            if (variable != null)
+                            {
+                                type = variable.Type;
+                            }
+
+                            value = ServerVariableBase.Get(cmd.VariableId)?.Value;
                         }
 
-                        var stackInfo = evt.Value.CallStack.Peek();
-                        if (stackInfo.WaitingForResponse != CommandInstance.EventResponse.Dialogue)
+                        if (value == null)
                         {
-                            return;
+                            value = new VariableValue();
                         }
 
-                        stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
-                        if (stackInfo.WaitingOnCommand != null &&
-                            stackInfo.WaitingOnCommand.Type == EventCommandType.InputVariable)
+                        var success = false;
+                        var changed = false;
+
+                        if (!canceled)
                         {
-                            var cmd = (InputVariableCommand)stackInfo.WaitingOnCommand;
-                            VariableValue value = null;
-                            var type = VariableDataTypes.Boolean;
-                            if (cmd.VariableType == VariableTypes.PlayerVariable)
+                            switch (type)
                             {
-                                var variable = PlayerVariableBase.Get(cmd.VariableId);
-                                if (variable != null)
-                                {
-                                    type = variable.Type;
-                                }
-
-                                value = GetVariableValue(cmd.VariableId);
-                            }
-                            else if (cmd.VariableType == VariableTypes.ServerVariable)
-                            {
-                                var variable = ServerVariableBase.Get(cmd.VariableId);
-                                if (variable != null)
-                                {
-                                    type = variable.Type;
-                                }
-
-                                value = ServerVariableBase.Get(cmd.VariableId)?.Value;
-                            }
-
-                            if (value == null)
-                            {
-                                value = new VariableValue();
-                            }
-
-                            var success = false;
-                            var changed = false;
-
-                            if (!canceled)
-                            {
-                                switch (type)
-                                {
-                                    case VariableDataTypes.Integer:
-                                        if (newValue >= cmd.Minimum && newValue <= cmd.Maximum)
-                                        {
-                                            if (value.Integer != newValue)
-                                            {
-                                                changed = true;
-                                            }
-                                            value.Integer = newValue;
-                                            success = true;
-                                        }
-
-                                        break;
-                                    case VariableDataTypes.Number:
-                                        if (newValue >= cmd.Minimum && newValue <= cmd.Maximum)
-                                        {
-                                            if (value.Number != newValue)
-                                            {
-                                                changed = true;
-                                            }
-                                            value.Number = newValue;
-                                            success = true;
-                                        }
-
-                                        break;
-                                    case VariableDataTypes.String:
-                                        if (newValueString.Length >= cmd.Minimum &&
-                                            newValueString.Length <= cmd.Maximum)
-                                        {
-                                            if (value.String != newValueString)
-                                            {
-                                                changed = true;
-                                            }
-                                            value.String = newValueString;
-                                            success = true;
-                                        }
-
-                                        break;
-                                    case VariableDataTypes.Boolean:
-                                        if (value.Boolean != newValue > 0)
+                                case VariableDataTypes.Integer:
+                                    if (newValue >= cmd.Minimum && newValue <= cmd.Maximum)
+                                    {
+                                        if (value.Integer != newValue)
                                         {
                                             changed = true;
                                         }
-                                        value.Boolean = newValue > 0;
+                                        value.Integer = newValue;
                                         success = true;
+                                    }
 
-                                        break;
-                                }
+                                    break;
+                                case VariableDataTypes.Number:
+                                    if (newValue >= cmd.Minimum && newValue <= cmd.Maximum)
+                                    {
+                                        if (value.Number != newValue)
+                                        {
+                                            changed = true;
+                                        }
+                                        value.Number = newValue;
+                                        success = true;
+                                    }
+
+                                    break;
+                                case VariableDataTypes.String:
+                                    if (newValueString.Length >= cmd.Minimum &&
+                                        newValueString.Length <= cmd.Maximum)
+                                    {
+                                        if (value.String != newValueString)
+                                        {
+                                            changed = true;
+                                        }
+                                        value.String = newValueString;
+                                        success = true;
+                                    }
+
+                                    break;
+                                case VariableDataTypes.Boolean:
+                                    if (value.Boolean != newValue > 0)
+                                    {
+                                        changed = true;
+                                    }
+                                    value.Boolean = newValue > 0;
+                                    success = true;
+
+                                    break;
                             }
-
-                            //Reassign variable values in case they didnt already exist and we made them from scratch at the null check above
-                            if (cmd.VariableType == VariableTypes.PlayerVariable)
-                            {
-                                var variable = GetVariable(cmd.VariableId);
-                                if (changed)
-                                {
-                                    variable.Value = value;
-                                    StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", cmd.VariableId.ToString());
-                                }
-                            }
-                            else if (cmd.VariableType == VariableTypes.ServerVariable)
-                            {
-                                var variable = ServerVariableBase.Get(cmd.VariableId);
-                                if (changed)
-                                {
-                                    variable.Value = value;
-                                    StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", cmd.VariableId.ToString());
-                                    DbInterface.UpdatedServerVariables.AddOrUpdate(variable.Id, variable, (key, oldValue) => variable);
-                                }
-                            }
-
-                            var tmpStack = success
-                                ? new CommandInstance(stackInfo.Page, stackInfo.BranchIds[0])
-                                : new CommandInstance(stackInfo.Page, stackInfo.BranchIds[1]);
-
-                            evt.Value.CallStack.Push(tmpStack);
                         }
 
-                        return;
+                        //Reassign variable values in case they didnt already exist and we made them from scratch at the null check above
+                        if (cmd.VariableType == VariableTypes.PlayerVariable)
+                        {
+                            var variable = GetVariable(cmd.VariableId);
+                            if (changed)
+                            {
+                                variable.Value = value;
+                                StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", cmd.VariableId.ToString());
+                            }
+                        }
+                        else if (cmd.VariableType == VariableTypes.ServerVariable)
+                        {
+                            var variable = ServerVariableBase.Get(cmd.VariableId);
+                            if (changed)
+                            {
+                                variable.Value = value;
+                                StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", cmd.VariableId.ToString());
+                                DbInterface.UpdatedServerVariables.AddOrUpdate(variable.Id, variable, (key, oldValue) => variable);
+                            }
+                        }
+
+                        var tmpStack = success
+                            ? new CommandInstance(stackInfo.Page, stackInfo.BranchIds[0])
+                            : new CommandInstance(stackInfo.Page, stackInfo.BranchIds[1]);
+
+                        evt.Value.CallStack.Push(tmpStack);
                     }
+
+                    return;
                 }
             }
         }
