@@ -989,26 +989,23 @@ namespace Intersect.Server.Entities
 
         private void ProcessEvents()
         {
-            lock (mEventLock)
+            // Deferred events are fired once-a-tick. They are for events that we don't care too much about being fired
+            // at EXACTLY the right moment
+            if (DeferredEventQueue.TryDequeue(out DeferredEvent evt))
             {
-                // Deferred events are fired once-a-tick. They are for events that we don't care too much about being fired
-                // at EXACTLY the right moment
-                if (DeferredEventQueue.TryDequeue(out DeferredEvent evt))
-                {
-                    StartCommonEventsWithTrigger(evt.Trigger, evt.Command, evt.Param, evt.Value);
-                }
+                StartCommonEventsWithTrigger(evt.Trigger, evt.Command, evt.Param, evt.Value);
+            }
 
-                // Any common events that have been queued up will finally fire here
-                while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
-                {
-                    _ = UnsafeStartCommonEvent(
-                        startCommonEventMetadata.EventDescriptor,
-                        startCommonEventMetadata.Trigger,
-                        startCommonEventMetadata.Command,
-                        startCommonEventMetadata.Parameter,
-                        startCommonEventMetadata.Value
-                    );
-                }
+            // Any common events that have been queued up will finally fire here
+            while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
+            {
+                _ = UnsafeStartCommonEvent(
+                    startCommonEventMetadata.EventDescriptor,
+                    startCommonEventMetadata.Trigger,
+                    startCommonEventMetadata.Command,
+                    startCommonEventMetadata.Parameter,
+                    startCommonEventMetadata.Value
+                );
             }
         }
 
