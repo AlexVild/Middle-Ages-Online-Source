@@ -141,7 +141,7 @@ namespace Intersect.Server.Core
                                     if (Options.Instance.Metrics.Enable)
                                     {
                                         events += player.EventLookup.Count;
-                                        eventsProcessing += player.EventLookup.Values.Where(e => e.CallStack?.Count > 0).Count();
+                                        eventsProcessing += player.EventLookup.Values.ToArray().Where(e => e.CallStack?.Count > 0).Count();
                                         autorunEvents += player.CommonAutorunEvents + player.MapAutorunEvents;
                                     }
                                 }

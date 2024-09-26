@@ -248,7 +248,7 @@ namespace Intersect.Server.Entities.Events
                                 else
                                 {
                                     //Check if the exist exists && if the move route is completed.
-                                    foreach (var evt in Player.EventLookup)
+                                    foreach (var evt in Player.EventLookup.ToArray())
                                     {
                                         if (evt.Value.MapId == curStack.WaitingForRouteMap &&
                                             evt.Value.BaseEvent.Id == curStack.WaitingForRoute)

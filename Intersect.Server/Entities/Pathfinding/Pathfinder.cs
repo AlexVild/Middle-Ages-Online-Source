@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Intersect.Enums;
 using Intersect.Logging;
 using Intersect.Server.Database;
@@ -271,7 +271,7 @@ namespace Intersect.Server.Entities.Pathfinding
                                                             }
                                                             else
                                                             {
-                                                                var playerEvents = player.EventLookup.Values;
+                                                                var playerEvents = player.EventLookup.Values.ToArray();
                                                                 foreach (var evt in playerEvents)
                                                                 {
                                                                     if (evt != null &&

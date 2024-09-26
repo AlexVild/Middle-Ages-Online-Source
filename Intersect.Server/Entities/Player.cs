@@ -663,352 +663,6 @@ namespace Intersect.Server.Entities
             Dispose();
         }
 
-        private void StopCrafting()
-        {
-            CraftId = Guid.Empty;
-            CraftAmount = 0;
-            PacketSender.SendCraftingStatusPacket(this, 0);
-        }
-
-        private void ContinueCrafting()
-        {
-            CraftTimer = Timing.Global.Milliseconds;
-            PacketSender.SendCraftingStatusPacket(this, CraftAmount);
-        }
-
-        private void UpdateCrafting(long timeMs)
-        {
-            // Is it time to give the player the crafted item?
-            if (CraftTimer + CraftBase.Get(CraftId).Time < timeMs)
-            {
-                // Try to give the player the item
-                if (TryCraftItem(CraftId))
-                {
-                    // Update their craft amount
-                    CraftAmount = MathHelper.Clamp(CraftAmount - 1, 0, int.MaxValue);
-                    // If we've crafted all we've requested, we're done!
-                    if (CraftAmount == 0)
-                    {
-                        StopCrafting();
-                    }
-                    // Otherwise, start the timer again for the next craft
-                    else
-                    {
-                        ContinueCrafting();
-                    }
-                }
-                else
-                {
-                    // If we couldn't craft the item, stop crafting
-                    StopCrafting();
-                }
-            }
-            else
-            {
-                // If at any point we can't craft the item anymore, cancel crafting
-                if (!CheckCrafting(CraftId))
-                {
-                    StopCrafting();
-                }
-            }
-        }
-
-        //Update
-        public override void Update(long timeMs)
-        {
-            if (!InGame || MapId == Guid.Empty)
-            {
-                return;
-            }
-
-            var lockObtained = false;
-            try
-            {
-                Monitor.TryEnter(EntityLock, ref lockObtained);
-                if (lockObtained)
-                {
-                    if (Client == null) //Client logged out
-                    {
-                        if (CombatTimer < Timing.Global.Milliseconds)
-                        {
-                            Logout();
-
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (SaveTimer < Timing.Global.Milliseconds)
-                        {
-                            var user = User;
-                            if (user != null)
-                            {
-                                DbInterface.Pool.QueueWorkItem(user.Save, false);
-                            }
-                            SaveTimer = Timing.Global.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
-                        }
-                    }
-
-                    // Are we craftin'?
-                    if (IsCrafting)
-                    {
-                        UpdateCrafting(timeMs);
-                    }
-
-                    // Check if the resource we're locked to has died - if so, alert client
-                    if (resourceLock != null && resourceLock.IsDead())
-                    {
-                        SetResourceLock(false);
-                    }
-
-                    base.Update(timeMs);
-
-                    if (mAutorunCommonEventTimer < Timing.Global.Milliseconds)
-                    {
-                        var autorunEvents = 0;
-                        //Check for autorun common events and run them
-                        foreach (var obj in EventBase.Lookup)
-                        {
-                            var evt = obj.Value as EventBase;
-                            if (evt == null || !evt.CommonEvent)
-                            {
-                                continue;
-                            }
-                            
-                            foreach (var page in evt.Pages)
-                            {
-                                if (page.CommonTrigger != CommonEventTrigger.Autorun)
-                                {
-                                    continue;
-                                }
-
-                                if (Options.Instance.Metrics.Enable)
-                                {
-                                    autorunEvents += evt.Pages.Count(p => p.CommonTrigger == CommonEventTrigger.Autorun);
-                                }
-                                EnqueueStartCommonEvent(evt, CommonEventTrigger.Autorun);
-                            }
-                        }
-
-                        mAutorunCommonEventTimer = Timing.Global.Milliseconds + Options.Instance.Processing.CommonEventAutorunStartInterval;
-                        CommonAutorunEvents = autorunEvents;
-                    }
-
-                    //If we have a move route then let's process it....
-                    if (MoveRoute != null && MoveTimer < timeMs)
-                    {
-                        //Check to see if the event instance is still active for us... if not then let's remove this route
-                        var foundEvent = false;
-                        foreach (var evt in EventLookup)
-                        {
-                            if (evt.Value.PageInstance == MoveRouteSetter)
-                            {
-                                foundEvent = true;
-                                if (MoveRoute.ActionIndex < MoveRoute.Actions.Count)
-                                {
-                                    ProcessMoveRoute(this, timeMs);
-                                }
-                                else
-                                {
-                                    if (MoveRoute.Complete && !MoveRoute.RepeatRoute)
-                                    {
-                                        MoveRoute = null;
-                                        MoveRouteSetter = null;
-                                        PacketSender.SendMoveRouteToggle(this, false);
-                                    }
-                                }
-
-                                break;
-                            }
-                        }
-
-                        if (!foundEvent)
-                        {
-                            MoveRoute = null;
-                            MoveRouteSetter = null;
-                            PacketSender.SendMoveRouteToggle(this, false);
-                        }
-                    }
-
-                    //If we switched maps, lets update the maps
-                    if (LastMapEntered != MapId)
-                    {
-                        if (MapController.TryGetInstanceFromMap(LastMapEntered, MapInstanceId, out var oldMapInstance))
-                        {
-                            oldMapInstance.RemoveEntity(this);
-                        }
-
-                        if (MapId != Guid.Empty)
-                        {
-                            if (!MapController.Lookup.Keys.Contains(MapId))
-                            {
-                                WarpToSpawn();
-                            }
-                            else
-                            {
-                                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var newMapInstance))
-                                {
-                                    newMapInstance.PlayerEnteredMap(this);
-                                }
-                            }
-                        }
-                    }
-
-                    var map = MapController.Get(MapId);
-                    foreach (var surrMap in map.GetSurroundingMaps(true))
-                    {
-                        if (surrMap == null)
-                        {
-                            continue;
-                        }
-
-                        MapInstance mapInstance;
-                        // If the map does not yet have a MapInstance matching this player's instanceId, create one.
-                        lock (EntityLock)
-                        {
-                            if (!surrMap.TryGetInstance(MapInstanceId, out mapInstance))
-                            {
-                                surrMap.TryCreateInstance(MapInstanceId, out mapInstance, this);
-                            }
-                        }
-
-                        //Check to see if we can spawn events, if already spawned.. update them.
-                        lock (mEventLock)
-                        {
-                            if (!PlayerDead)
-                            {
-                                var autorunEvents = 0;
-                                foreach (var mapEvent in mapInstance.EventsCache)
-                                {
-                                    if (mapEvent != null)
-                                    {
-                                        //Look for event
-                                        var loc = new MapTileLoc(surrMap.Id, mapEvent.SpawnX, mapEvent.SpawnY);
-                                        var foundEvent = EventExists(loc);
-                                        if (foundEvent == null)
-                                        {
-                                            var tmpEvent = new Event(Guid.NewGuid(), surrMap, this, mapEvent)
-                                            {
-                                                Global = mapEvent.Global,
-                                                MapId = surrMap.Id,
-                                                SpawnX = mapEvent.SpawnX,
-                                                SpawnY = mapEvent.SpawnY
-                                            };
-
-                                            EventLookup.AddOrUpdate(tmpEvent.Id, tmpEvent, (key, oldValue) => tmpEvent);
-                                            EventBaseIdLookup.AddOrUpdate(mapEvent.Id, tmpEvent, (key, oldvalue) => tmpEvent);
-
-                                            EventTileLookup.AddOrUpdate(loc, tmpEvent, (key, oldvalue) => tmpEvent);
-                                        }
-                                        else
-                                        {
-                                            foundEvent.Update(timeMs, foundEvent.MapController);
-                                        }
-                                        if (Options.Instance.Metrics.Enable)
-                                        {
-                                            autorunEvents += mapEvent.Pages.Count(p => p.Trigger == EventTrigger.Autorun);
-                                        }
-                                    }
-                                }
-                                MapAutorunEvents = autorunEvents;
-
-                                ProcessEvents();
-                            }
-                        }
-                    }
-
-                    //Check to see if we can spawn events, if already spawned.. update them.
-                    lock (mEventLock)
-                    {
-                        if (!PlayerDead)
-                        {
-                            foreach (var evt in EventLookup)
-                            {
-                                if (evt.Value == null)
-                                {
-                                    continue;
-                                }
-
-                                var eventFound = false;
-                                var eventMap = map;
-
-                                if (evt.Value.MapId != Guid.Empty)
-                                {
-                                    if (evt.Value.MapId != MapId)
-                                    {
-                                        eventMap = evt.Value.MapController;
-                                        eventFound = map.SurroundingMapIds.Contains(eventMap.Id);
-                                    }
-                                    else
-                                    {
-                                        eventFound = true;
-                                    }
-                                }
-
-
-                                if (evt.Value.MapId == Guid.Empty)
-                                {
-                                    evt.Value.Update(timeMs, eventMap);
-                                    if (evt.Value.CallStack.Count > 0)
-                                    {
-                                        eventFound = true;
-                                    }
-                                }
-
-
-                                if (eventFound)
-                                {
-                                    continue;
-                                }
-
-                                RemoveEvent(evt.Value.Id);
-                            }
-                        }
-                    }
-
-                    // Check to see if combos expired
-                    if (ComboWindow >= 0)
-                    {
-                        // Detract from the window
-                        ComboWindow = (int)(ComboTimestamp - Timing.Global.Milliseconds);
-                        if (ComboWindow < 0)
-                        {
-                            EndCombo(); // This will also send a packet - this way, we're not flooding the client with packets when there's no active combo
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                if (lockObtained)
-                {
-                    Monitor.Exit(EntityLock);
-                }
-            }
-        }
-
-        private void ProcessEvents()
-        {
-            // Deferred events are fired once-a-tick. They are for events that we don't care too much about being fired
-            // at EXACTLY the right moment
-            if (DeferredEventQueue.TryDequeue(out DeferredEvent evt))
-            {
-                StartCommonEventsWithTrigger(evt.Trigger, evt.Command, evt.Param, evt.Value);
-            }
-
-            // Any common events that have been queued up will finally fire here
-            while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
-            {
-                _ = UnsafeStartCommonEvent(
-                    startCommonEventMetadata.EventDescriptor,
-                    startCommonEventMetadata.Trigger,
-                    startCommonEventMetadata.Command,
-                    startCommonEventMetadata.Parameter,
-                    startCommonEventMetadata.Value
-                );
-            }
-        }
-
         public void RemoveEvent(Guid id, bool sendLeave = true)
         {
             Event outInstance;
@@ -1228,7 +882,7 @@ namespace Intersect.Server.Entities
             PacketSender.SendPlayerDeath(this);
 
             //Event trigger
-            foreach (var evt in EventLookup)
+            foreach (var evt in EventLookup.ToArray())
             {
                 evt.Value.PlayerHasDied = true;
             }
@@ -2391,14 +2045,14 @@ namespace Intersect.Server.Entities
             {
                 SendToNewMapInstance(newMap, instanceLives);
                 // Clear all events - get fresh ones from the new instance to re-fresh event locations
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     RemoveEvent(evt.Value.Id, false);
                 }
             } else
             {
                 // Clear events that are no longer on a surrounding map.
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     // Remove events that aren't relevant (on a surrounding map) anymore
                     if (evt.Value.MapId != Guid.Empty && (!newSurroundingMaps.Contains(evt.Value.MapId) || mapSave))
@@ -7068,7 +6722,7 @@ namespace Intersect.Server.Entities
                     if (quest != null)
                     {
                         StartQuest(quest);
-                        foreach (var evt in EventLookup)
+                        foreach (var evt in EventLookup.ToArray())
                         {
                             if (evt.Value.CallStack.Count <= 0)
                             {
@@ -7108,7 +6762,7 @@ namespace Intersect.Server.Entities
                         );
                     }
 
-                    foreach (var evt in EventLookup)
+                    foreach (var evt in EventLookup.ToArray())
                     {
                         if (evt.Value.CallStack.Count <= 0)
                         {
@@ -7710,7 +7364,7 @@ namespace Intersect.Server.Entities
 
         public EventPageInstance EventAt(Guid mapId, int x, int y, int z)
         {
-            foreach (var evt in EventLookup)
+            foreach (var evt in EventLookup.ToArray())
             {
                 if (evt.Value != null && evt.Value.PageInstance != null)
                 {
@@ -7729,7 +7383,7 @@ namespace Intersect.Server.Entities
 
         public void TryActivateEvent(Guid eventId)
         {
-            foreach (var evt in EventLookup)
+            foreach (var evt in EventLookup.ToArray())
             {
                 if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                 {
@@ -7785,7 +7439,7 @@ namespace Intersect.Server.Entities
         {
             lock (mEventLock)
             {
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                     {
@@ -7824,7 +7478,7 @@ namespace Intersect.Server.Entities
         {
             lock (mEventLock)
             {
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                     {
@@ -7851,7 +7505,7 @@ namespace Intersect.Server.Entities
         {
             lock (mEventLock)
             {
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     if (evt.Value.PageInstance != null && evt.Value.PageInstance.Id == eventId)
                     {
@@ -8007,7 +7661,7 @@ namespace Intersect.Server.Entities
 
         public void SendEvents()
         {
-            foreach (var evt in EventLookup)
+            foreach (var evt in EventLookup.ToArray())
             {
                 if (evt.Value.PageInstance != null)
                 {
@@ -8228,7 +7882,7 @@ namespace Intersect.Server.Entities
 
             if (!moveRouteRequest)
             {
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     if (evt.Value.HoldingPlayer)
                     {
@@ -8249,7 +7903,7 @@ namespace Intersect.Server.Entities
         {
             if (base.IsTileWalkable(map, x, y, z) == -1)
             {
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     if (evt.Value.PageInstance != null)
                     {
@@ -8323,7 +7977,7 @@ namespace Intersect.Server.Entities
                 // Angry nuts
                 AutoPickupItem(Guid.Parse("30a323c0-211d-4fae-bf53-6f045fc726ed"), false); // This SHOULD be a property on ItemBase at this point, but currently lazy
 
-                foreach (var evt in EventLookup)
+                foreach (var evt in EventLookup.ToArray())
                 {
                     if (evt.Value.MapId == MapId)
                     {
@@ -8389,7 +8043,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            foreach (var evt in EventLookup)
+            foreach (var evt in EventLookup.ToArray())
             {
                 if (evt.Value.MapId == mapId)
                 {
@@ -8429,7 +8083,7 @@ namespace Intersect.Server.Entities
             if (evt.Player == null) //Global
             {
                 eventInstance = null;
-                foreach (var e in EventLookup)
+                foreach (var e in EventLookup.ToArray())
                 {
                     if (e.Value?.BaseEvent?.Id == evt?.BaseEvent?.Id)
                     {

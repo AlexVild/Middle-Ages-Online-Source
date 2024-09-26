@@ -903,7 +903,7 @@ namespace Intersect.Server.Entities.Events
             }
             else
             {
-                foreach (var evt in player.EventLookup)
+                foreach (var evt in player.EventLookup.ToArray())
                 {
                     if (evt.Value.BaseEvent.Id == command.Route.Target)
                     {
@@ -937,7 +937,7 @@ namespace Intersect.Server.Entities.Events
             }
             else
             {
-                foreach (var evt in player.EventLookup)
+                foreach (var evt in player.EventLookup.ToArray())
                 {
                     if (evt.Value.BaseEvent.Id == command.TargetId)
                     {
@@ -975,7 +975,7 @@ namespace Intersect.Server.Entities.Events
             {
                 if (command.EntityId != Guid.Empty)
                 {
-                    foreach (var evt in player.EventLookup)
+                    foreach (var evt in player.EventLookup.ToArray())
                     {
                         if (evt.Value.MapId != eventInstance.MapId)
                         {
@@ -1094,7 +1094,7 @@ namespace Intersect.Server.Entities.Events
             {
                 if (command.EntityId != Guid.Empty)
                 {
-                    foreach (var evt in player.EventLookup)
+                    foreach (var evt in player.EventLookup.ToArray())
                     {
                         if (evt.Value.MapId != instance.MapId)
                         {
@@ -3812,7 +3812,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            foreach (var evt in player.EventLookup)
+            foreach (var evt in player.EventLookup.ToArray())
             {
                 if (evt.Value.BaseEvent.Id != command.EventId || evt.Value.PageInstance == null)
                 {
@@ -3843,7 +3843,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            foreach (var evt in player.EventLookup)
+            foreach (var evt in player.EventLookup.ToArray())
             {
                 if (evt.Value.BaseEvent.Id != command.EventId || evt.Value.PageInstance == null)
                 {
