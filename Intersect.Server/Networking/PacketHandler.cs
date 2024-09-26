@@ -3792,6 +3792,10 @@ namespace Intersect.Server.Networking
                 {
                     Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
                 }
+                if (type == GameObjectType.Event)
+                {
+                    Globals.RefreshTriggeredEventsCache();
+                }
             }
         }
 
@@ -4060,6 +4064,10 @@ namespace Intersect.Server.Networking
                     {
                         Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
                         RecipeUnlockWatcher.QueueRefresh();
+                    }
+                    else if (type == GameObjectType.Event)
+                    {
+                        Globals.RefreshTriggeredEventsCache();
                     }
                 }
             }

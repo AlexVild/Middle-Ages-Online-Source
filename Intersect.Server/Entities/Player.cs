@@ -46,6 +46,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 using Intersect.Server.DTOs;
 using Org.BouncyCastle.Bcpg;
 using Intersect.Server.Core.Instancing.Controller;
+using MimeKit.Cryptography;
 
 namespace Intersect.Server.Entities
 {
@@ -6596,12 +6597,14 @@ namespace Intersect.Server.Entities
 
         public void StartCommonEventsWithTrigger(CommonEventTrigger trigger, string command = "", string param = "", long val = -1)
         {
-            foreach (var value in EventBase.Lookup.Values)
+            if (!Globals.CachedTriggeredEvents.TryGetValue(trigger, out var events))
             {
-                if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
-                {
-                    EnqueueStartCommonEvent(eventDescriptor, trigger, command, param, val);
-                }
+                return;
+            }
+
+            foreach (var eventDescriptor in events)
+            {
+                EnqueueStartCommonEvent(eventDescriptor, trigger, command, param, val);
             }
 
             // Run through challenge checker when these triggers are proc'd
@@ -6611,30 +6614,36 @@ namespace Intersect.Server.Entities
         public static void StartCommonEventsWithTriggerForAll(CommonEventTrigger trigger, string command = "", string param = "")
         {
             var players = OnlineList;
-            foreach (var value in EventBase.Lookup.Values)
+            if (!Globals.CachedTriggeredEvents.TryGetValue(trigger, out var events))
             {
-                if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
+                return;
+            }
+
+            foreach (var eventDescriptor in events)
+            {
+                foreach (var player in players)
                 {
-                    foreach (var player in players)
-                    {
-                        player.EnqueueStartCommonEvent(eventDescriptor, trigger, command, param);
-                    }
+                    player.EnqueueStartCommonEvent(eventDescriptor, trigger, command, param);
                 }
             }
         }
 
         public static void StartCommonEventsWithTriggerForAllOnInstance(CommonEventTrigger trigger, Guid instanceId, string command = "", string param = "")
         {
-            var relevantPlayers = Player.OnlineList.ToList().Where(player => player.MapInstanceId == instanceId);
-
-            foreach (var value in EventBase.Lookup.Values)
+            if (!InstanceProcessor.TryGetInstanceController(instanceId, out var instanceController) 
+                || instanceController.PlayerCount == 0 
+                || !Globals.CachedTriggeredEvents.TryGetValue(trigger, out var events))
             {
-                if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
+                return;
+            }
+
+            var relevantPlayers = instanceController.Players.ToArray();
+
+            foreach (var eventDescriptor in events)
+            {
+                foreach (var player in relevantPlayers)
                 {
-                    foreach (var player in relevantPlayers)
-                    {
-                        player.EnqueueStartCommonEvent(eventDescriptor, trigger, command, param);
-                    }
+                    player.EnqueueStartCommonEvent(eventDescriptor, trigger, command, param);
                 }
             }
         }

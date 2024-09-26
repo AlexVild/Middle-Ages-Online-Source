@@ -103,6 +103,7 @@ namespace Intersect.Server.Core
                     // Initialize cached list of resources (for resource group logic)
                     Globals.RefreshGameObjectCache(Enums.GameObjectType.Resource, Globals.CachedResources);
                     Globals.RefreshGameObjectCache(Enums.GameObjectType.Recipe, Globals.CachedRecipes);
+                    Globals.RefreshTriggeredEventsCache();
                     Globals.RefreshNpcSpellScalars();
 
                     if (Options.Instance.CombatOpts.UseGeneratedMobExp)

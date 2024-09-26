@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Server.Entities;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
@@ -68,6 +69,8 @@ namespace Intersect.Server.General
 
         public static List<RecipeDescriptor> CachedRecipes = new List<RecipeDescriptor>();
 
+        public static Dictionary<CommonEventTrigger, List<EventBase>> CachedTriggeredEvents = new Dictionary<CommonEventTrigger, List<EventBase>>();
+
         public static Dictionary<Guid, int> CachedNpcSpellScalar = new Dictionary<Guid, int>();
 
         public static void RefreshGameObjectCache<T>(GameObjectType type, List<T> cacheList)
@@ -80,6 +83,41 @@ namespace Intersect.Server.General
                 cacheList.Add((T)v.Value);
             }
             Logging.Log.Debug($"{objectName} objects cached");
+        }
+
+        public static void RefreshTriggeredEventsCache()
+        {
+            Logging.Log.Debug("Caching common events with triggers...");
+            CachedTriggeredEvents.Clear();
+            var count = 0;
+            foreach (var evt in EventBase.Lookup.Values.Cast<EventBase>())
+            {
+                if (!evt.CommonEvent)
+                {
+                    continue;
+                }
+
+                foreach (var page in evt.Pages)
+                {
+                    var trigger = page.CommonTrigger;
+                    if (trigger == CommonEventTrigger.None)
+                    {
+                        continue;
+                    }
+                    
+                    if (CachedTriggeredEvents.ContainsKey(trigger))
+                    {
+                        count++;
+                        CachedTriggeredEvents[trigger].Add(evt);
+                        continue;
+                    }
+
+                    count++;
+                    CachedTriggeredEvents.Add(trigger, new List<EventBase> { evt });
+                }
+            }
+
+            Logging.Log.Debug($"Cached {count} events with triggers!");
         }
 
         public static void RefreshNpcSpellScalars()
