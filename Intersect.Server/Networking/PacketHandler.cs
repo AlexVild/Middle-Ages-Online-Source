@@ -3688,7 +3688,7 @@ namespace Intersect.Server.Networking
                     obj = TimerDescriptor.Get(id);
 
                     // Remove the timer from processing
-                    foreach (var timer in TimerProcessor.ActiveTimers.Where(t => t.DescriptorId == id).ToArray())
+                    foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.DescriptorId == id))
                     {
                         TimerProcessor.RemoveTimer(timer);
                     }

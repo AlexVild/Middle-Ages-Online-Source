@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Intersect.Server.Maps;
 using Intersect.Server.Core.Instancing.Controller;
-using Intersect.GameObjects.Events;
 using Intersect.Server.Entities;
+using System.Collections.Concurrent;
 
 namespace Intersect.Server.Core
 {
     public static class InstanceProcessor
     {
-        private static Dictionary<Guid, InstanceController> InstanceControllers = new Dictionary<Guid, InstanceController>();
+        private static ConcurrentDictionary<Guid, InstanceController> InstanceControllers = new ConcurrentDictionary<Guid, InstanceController>();
 
         public static Guid[] CurrentControllers => InstanceControllers.Keys.ToArray();
 
@@ -41,7 +41,7 @@ namespace Intersect.Server.Core
                 {
                     continue;
                 }
-                InstanceControllers.Remove(id);
+                InstanceControllers.TryRemove(id, out _);
                 Logging.Log.Debug($"Removing instance controller {id}");
             }
         }
@@ -50,7 +50,7 @@ namespace Intersect.Server.Core
         {
             if (!InstanceControllers.ContainsKey(mapInstanceId))
             {
-                InstanceControllers.Add(mapInstanceId, new InstanceController(mapInstanceId, creator));
+                InstanceControllers.TryAdd(mapInstanceId, new InstanceController(mapInstanceId, creator));
             }
 
             return InstanceControllers[mapInstanceId];

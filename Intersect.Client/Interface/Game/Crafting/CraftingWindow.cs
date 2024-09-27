@@ -588,7 +588,10 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private bool CraftIsValid(Guid craftId)
         {
-            var craft = CraftBase.Get(craftId);
+            if (!CraftBase.TryGet(craftId, out var craft))
+            {
+                return false;
+            }
 
             return !Globals.ActiveCraftingTable.HiddenCrafts.Contains(craftId) && SearchHelper.IsSearchable(craft.Name, mSearch.Text);
         }

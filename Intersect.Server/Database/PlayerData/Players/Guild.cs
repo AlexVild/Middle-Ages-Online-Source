@@ -569,7 +569,9 @@ namespace Intersect.Server.Database.PlayerData.Players
             ClanWarManager.GuildDisbanded(guildId);
 
             // Remove dangling timers
-            foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Guild && timer.OwnerId == guild.Id).ToArray())
+            foreach (var timer in TimerProcessor.ActiveTimers
+                .ToArray()
+                .Where(timer => timer.Descriptor.OwnerType == TimerOwnerType.Guild && timer.OwnerId == guild.Id))
             {
                 TimerProcessor.RemoveTimer(timer);
             }

@@ -4450,7 +4450,11 @@ namespace Intersect.Server.Entities
             table.HiddenCrafts.Clear();
             foreach (Guid craftId in table.Crafts)
             {
-                CraftBase craft = CraftBase.Get(craftId);
+                if (!CraftBase.TryGet(craftId, out var craft))
+                {
+                    continue;
+                }
+
                 if (!Conditions.MeetsConditionLists(craft.Requirements, this, null))
                 {
                     table.HiddenCrafts.Add(craftId);
