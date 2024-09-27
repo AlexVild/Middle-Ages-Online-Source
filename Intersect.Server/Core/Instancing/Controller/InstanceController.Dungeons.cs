@@ -27,13 +27,13 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public int DungeonParticipants => Dungeon?.Participants?.Count ?? 0;
 
-        public bool TryInitializeOrJoinDungeon(Guid dungeonId, Player player)
+        public void InitializeAndJoinDungeon(Guid dungeonId, Player player)
         {
             InitializeDungeon(dungeonId);
-            return TryAddPlayerToDungeon(player);
+            TryAddPlayerToDungeon(player);
         }
 
-        void InitializeDungeon(Guid dungeonId)
+        public void InitializeDungeon(Guid dungeonId)
         {
             if (Dungeon.State != DungeonState.Null)
             {
@@ -47,6 +47,7 @@ namespace Intersect.Server.Core.Instancing.Controller
                 return;
             }
 
+            Logging.Log.Error($"Initializing dungeon: {DungeonDescriptor.Name}");
             Dungeon.State = DungeonState.Inactive;
             Dungeon.GnomeLocation = Randomization.Next(DungeonDescriptor.GnomeLocations);
         }
@@ -56,8 +57,16 @@ namespace Intersect.Server.Core.Instancing.Controller
             Logging.Log.Error($"Dungeon {DungeonDescriptor.GetName(Dungeon.DescriptorId)} started by {player.Name}, state is {Dungeon.State} and will become Active");
             if (!DungeonReady && DungeonDescriptor != default)
             {
-                Logging.Log.Error($"Just kidding!");
-                return;
+                if (DungeonState == DungeonState.Complete)
+                {
+                    Logging.Log.Error($"{player.Name} tried to start {DungeonDescriptor.Name} but it was completed!");
+                    return;
+                }
+                else if (DungeonState == DungeonState.Null)
+                {
+                    Logging.Log.Error($"{player.Name} tried to start {DungeonDescriptor.Name} but it wasn't initialized!");
+                    return;
+                }
             }
 
             var timer = DungeonDescriptor.Timer;
@@ -87,7 +96,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             Dungeon.State = DungeonState.Active;
         }
 
-        bool TryAddPlayerToDungeon(Player player)
+        public bool TryAddPlayerToDungeon(Player player)
         {
             if (!DungeonJoinable)
             {
@@ -96,7 +105,16 @@ namespace Intersect.Server.Core.Instancing.Controller
                 return false;
             }
 
-            Dungeon.Participants.Add(player);
+            if (!Dungeon.Participants.Contains(player))
+            {
+                Logging.Log.Error($"{player.Name} joined dungeon: {DungeonDescriptor?.Name ?? "ERR_NOT_FOUND"}");
+                Dungeon.Participants.Add(player);
+            }
+            else
+            {
+                return false;
+            }
+            
             if (DungeonParticipants == 1 && (Dungeon.Participants[0].Party == null || Dungeon.Participants[0].Party.Count < 2))
             {
                 Dungeon.IsSolo = true;
@@ -165,6 +183,17 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
         }
 
+        public void RemovePlayerFromDungeon(Guid playerId)
+        {
+            if (DungeonDescriptor == null)
+            {
+                return;
+            }
+
+            Logging.Log.Error($"Player id {playerId} has left dungeon: {DungeonDescriptor.GetName(Dungeon.DescriptorId)}");
+            Dungeon.Participants.RemoveAll(pl => pl.Id == playerId);
+        }
+
         public List<LootRoll> GetDungeonLoot()
         {
             var loot = new List<LootRoll>();
@@ -223,7 +252,8 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             var participants = Dungeon.Participants.ToArray();
             var dungeonId = Dungeon.DescriptorId;
-            
+
+            Dungeon.State = DungeonState.Null;
             InitializeDungeon(dungeonId);
             
             foreach(var participant in participants)

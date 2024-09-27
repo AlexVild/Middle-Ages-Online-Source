@@ -47,6 +47,7 @@ using Intersect.Server.DTOs;
 using Org.BouncyCastle.Bcpg;
 using Intersect.Server.Core.Instancing.Controller;
 using MimeKit.Cryptography;
+using Microsoft.Diagnostics.Runtime.ICorDebug;
 
 namespace Intersect.Server.Entities
 {
@@ -2122,7 +2123,30 @@ namespace Intersect.Server.Entities
                 ClanWarComplete = null;
             }
 
+            if (NextDungeonId != Guid.Empty)
+            {
+                JoinNextDungeon();
+            }
+
             UpdateTerritoryStatus();
+        }
+
+        public void JoinNextDungeon()
+        {
+            if (!InstanceProcessor.TryGetInstanceController(MapInstanceId, out var controller) || NextDungeonId == Guid.Empty)
+            {
+                return;
+            }
+
+            if (controller.DungeonDescriptor == null)
+            {
+                controller.InitializeAndJoinDungeon(NextDungeonId, this);
+            }
+            else
+            {
+                controller.TryAddPlayerToDungeon(this);
+            }
+            NextDungeonId = Guid.Empty;
         }
 
         /// <summary>
@@ -9677,17 +9701,6 @@ namespace Intersect.Server.Entities
             }
 
             return false;
-        }
-
-        public void TryAddToInstanceDungeon(InstanceController controller)
-        {
-            if (NextDungeonId == Guid.Empty || controller == null)
-            {
-                return;
-            }
-
-            controller.TryInitializeOrJoinDungeon(NextDungeonId, this);
-            NextDungeonId = Guid.Empty;
         }
 
         [NotMapped, JsonIgnore]
