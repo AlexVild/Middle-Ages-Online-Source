@@ -59,32 +59,5 @@ namespace Intersect.Server.Database.PlayerData.Players
                 context.SaveChanges();
             }
         }
-
-        public void CompleteFor(Player player)
-        {
-            if (Challenge == null || player == null)
-            {
-                return;
-            }
-
-            if (Challenge.RequiresContract && player.ChallengeContractId == Challenge.Id)
-            {
-                player.ChallengeContractId = Guid.Empty;
-            }
-
-            if (Challenge.SpellUnlock != null)
-            {
-                player.TryAddSkillToBook(Challenge.SpellUnlockId);
-            }
-            if (Challenge.EnhancementUnlockId != Guid.Empty)
-            {
-                player.TryUnlockEnhancement(Challenge.EnhancementUnlockId);
-            }
-
-            PacketSender.SendChatMsg(player,
-                $"Challenge completed: {Challenge.Name}!",
-                ChatMessageType.Experience,
-                sendToast: true);
-        }
     }
 }

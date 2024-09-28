@@ -8,10 +8,12 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using Org.BouncyCastle.Tls.Crypto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Entities
@@ -447,6 +449,14 @@ namespace Intersect.Server.Entities
             else
             {
                 DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, spell?.DamageOverrides, range, out damage);
+                
+                if (!spell?.Combat?.Friendly ?? true && critMultiplier >= 1.0f)
+                {
+                    if (this is Player ply)
+                    {
+                        ChallengeUpdateProcesser.UpdateChallengesOf(new CriticalHitsUpdate(ply, 1));
+                    }
+                }
             }
             var damageWasDealt = damage != 0 || manaDamage != 0;
 

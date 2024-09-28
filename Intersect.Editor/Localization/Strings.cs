@@ -448,6 +448,12 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.SkillsEquipped.ToString(condition.Amount);
         }
 
+        public static string GetEventConditionalDesc(WeaponTrackAwaitingChallenge condition)
+        {
+            var track = WeaponTypeDescriptor.GetName(condition.WeaponTrackId);
+            return EventConditionDesc.WeaponTrackAwaitingChallenge.ToString(track, condition.CurrentLevel);
+        }
+
         public static string GetEventConditionalDesc(MapSpawnGroupIs condition)
         {
             if (condition.OrGreater && condition.OrLess)
@@ -2601,6 +2607,7 @@ Tick timer saved in server config.json.";
                 {56, @"Has X Harvest Levels at Y level..."},
                 {57, @"Has X Vital at least Y..."},
                 {58, @"Has X Skills Equipped..."},
+                {59, @"Awatiting challenge for weapon track lvl X..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2959,6 +2966,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SkillsEquipped = @"Player has {00} skills equipped";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString WeaponTrackAwaitingChallenge = @"Player is {00} level {01} and awaiting challenge completion";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapSpawnGroupIs = @"Map Spawn Group is {00}";

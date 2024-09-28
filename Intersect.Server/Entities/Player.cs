@@ -9703,8 +9703,17 @@ namespace Intersect.Server.Entities
             return false;
         }
 
+        private Guid _nextDungeonId;
+
         [NotMapped, JsonIgnore]
-        public Guid NextDungeonId { get; set; }
+        public Guid NextDungeonId {
+            get => _nextDungeonId;
+            set
+            {
+                _nextDungeonId = value;
+                Logging.Log.Error($"{Name} NextDungeonId == {value}");
+            }
+        }
 
         [NotMapped, JsonIgnore]
         public int NextInstanceLives { get; set; }

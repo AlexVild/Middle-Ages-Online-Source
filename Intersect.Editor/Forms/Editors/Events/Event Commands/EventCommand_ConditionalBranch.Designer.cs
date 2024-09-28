@@ -31,6 +31,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpSkillsActive = new DarkUI.Controls.DarkGroupBox();
+            this.nudSkillsActive = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSkillsActive = new System.Windows.Forms.Label();
+            this.grpMaxVital = new DarkUI.Controls.DarkGroupBox();
+            this.nudVitalAmt = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblVitalIs = new System.Windows.Forms.Label();
+            this.lblVital = new System.Windows.Forms.Label();
+            this.cmbVital = new DarkUI.Controls.DarkComboBox();
             this.grpQuestInProgress = new DarkUI.Controls.DarkGroupBox();
             this.lblQuestTask = new System.Windows.Forms.Label();
             this.cmbQuestTask = new DarkUI.Controls.DarkComboBox();
@@ -229,15 +237,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpMaxVital = new DarkUI.Controls.DarkGroupBox();
-            this.lblVitalIs = new System.Windows.Forms.Label();
-            this.lblVital = new System.Windows.Forms.Label();
-            this.cmbVital = new DarkUI.Controls.DarkComboBox();
-            this.nudVitalAmt = new DarkUI.Controls.DarkNumericUpDown();
-            this.grpSkillsActive = new DarkUI.Controls.DarkGroupBox();
-            this.nudSkillsActive = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSkillsActive = new System.Windows.Forms.Label();
+            this.grpChallAwaiting = new DarkUI.Controls.DarkGroupBox();
+            this.nudChallAwaitLevel = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblChallAwaitLvl = new System.Windows.Forms.Label();
+            this.cmbChallAwaitTrack = new DarkUI.Controls.DarkComboBox();
+            this.blChallAwaitTrack = new System.Windows.Forms.Label();
             this.grpConditional.SuspendLayout();
+            this.grpSkillsActive.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillsActive)).BeginInit();
+            this.grpMaxVital.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVitalAmt)).BeginInit();
             this.grpQuestInProgress.SuspendLayout();
             this.grpHarvestLvl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHarvestAmt)).BeginInit();
@@ -293,16 +302,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpMaxVital.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVitalAmt)).BeginInit();
-            this.grpSkillsActive.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSkillsActive)).BeginInit();
+            this.grpChallAwaiting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChallAwaitLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpChallAwaiting);
             this.grpConditional.Controls.Add(this.grpSkillsActive);
             this.grpConditional.Controls.Add(this.grpMaxVital);
             this.grpConditional.Controls.Add(this.grpQuestInProgress);
@@ -352,6 +360,123 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpSkillsActive
+            // 
+            this.grpSkillsActive.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpSkillsActive.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSkillsActive.Controls.Add(this.nudSkillsActive);
+            this.grpSkillsActive.Controls.Add(this.lblSkillsActive);
+            this.grpSkillsActive.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpSkillsActive.Location = new System.Drawing.Point(10, 42);
+            this.grpSkillsActive.Name = "grpSkillsActive";
+            this.grpSkillsActive.Size = new System.Drawing.Size(263, 50);
+            this.grpSkillsActive.TabIndex = 39;
+            this.grpSkillsActive.TabStop = false;
+            this.grpSkillsActive.Text = "Skills Active";
+            this.grpSkillsActive.Visible = false;
+            // 
+            // nudSkillsActive
+            // 
+            this.nudSkillsActive.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSkillsActive.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSkillsActive.Location = new System.Drawing.Point(93, 20);
+            this.nudSkillsActive.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudSkillsActive.Name = "nudSkillsActive";
+            this.nudSkillsActive.Size = new System.Drawing.Size(164, 20);
+            this.nudSkillsActive.TabIndex = 38;
+            this.nudSkillsActive.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblSkillsActive
+            // 
+            this.lblSkillsActive.AutoSize = true;
+            this.lblSkillsActive.Location = new System.Drawing.Point(7, 25);
+            this.lblSkillsActive.Name = "lblSkillsActive";
+            this.lblSkillsActive.Size = new System.Drawing.Size(45, 13);
+            this.lblSkillsActive.TabIndex = 6;
+            this.lblSkillsActive.Text = "At least:";
+            // 
+            // grpMaxVital
+            // 
+            this.grpMaxVital.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpMaxVital.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpMaxVital.Controls.Add(this.nudVitalAmt);
+            this.grpMaxVital.Controls.Add(this.lblVitalIs);
+            this.grpMaxVital.Controls.Add(this.lblVital);
+            this.grpMaxVital.Controls.Add(this.cmbVital);
+            this.grpMaxVital.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpMaxVital.Location = new System.Drawing.Point(9, 42);
+            this.grpMaxVital.Name = "grpMaxVital";
+            this.grpMaxVital.Size = new System.Drawing.Size(263, 85);
+            this.grpMaxVital.TabIndex = 33;
+            this.grpMaxVital.TabStop = false;
+            this.grpMaxVital.Text = "Max Vital at Least";
+            this.grpMaxVital.Visible = false;
+            // 
+            // nudVitalAmt
+            // 
+            this.nudVitalAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudVitalAmt.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudVitalAmt.Location = new System.Drawing.Point(91, 52);
+            this.nudVitalAmt.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudVitalAmt.Name = "nudVitalAmt";
+            this.nudVitalAmt.Size = new System.Drawing.Size(164, 20);
+            this.nudVitalAmt.TabIndex = 38;
+            this.nudVitalAmt.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblVitalIs
+            // 
+            this.lblVitalIs.AutoSize = true;
+            this.lblVitalIs.Location = new System.Drawing.Point(6, 52);
+            this.lblVitalIs.Name = "lblVitalIs";
+            this.lblVitalIs.Size = new System.Drawing.Size(45, 13);
+            this.lblVitalIs.TabIndex = 6;
+            this.lblVitalIs.Text = "At least:";
+            // 
+            // lblVital
+            // 
+            this.lblVital.AutoSize = true;
+            this.lblVital.Location = new System.Drawing.Point(6, 21);
+            this.lblVital.Name = "lblVital";
+            this.lblVital.Size = new System.Drawing.Size(30, 13);
+            this.lblVital.TabIndex = 5;
+            this.lblVital.Text = "Vital:";
+            // 
+            // cmbVital
+            // 
+            this.cmbVital.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbVital.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbVital.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbVital.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbVital.DrawDropdownHoverOutline = false;
+            this.cmbVital.DrawFocusRectangle = false;
+            this.cmbVital.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbVital.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVital.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbVital.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbVital.FormattingEnabled = true;
+            this.cmbVital.Location = new System.Drawing.Point(92, 18);
+            this.cmbVital.Name = "cmbVital";
+            this.cmbVital.Size = new System.Drawing.Size(163, 21);
+            this.cmbVital.TabIndex = 3;
+            this.cmbVital.Text = null;
+            this.cmbVital.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // grpQuestInProgress
             // 
@@ -3214,122 +3339,79 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpMaxVital
+            // grpChallAwaiting
             // 
-            this.grpMaxVital.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpMaxVital.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpMaxVital.Controls.Add(this.nudVitalAmt);
-            this.grpMaxVital.Controls.Add(this.lblVitalIs);
-            this.grpMaxVital.Controls.Add(this.lblVital);
-            this.grpMaxVital.Controls.Add(this.cmbVital);
-            this.grpMaxVital.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpMaxVital.Location = new System.Drawing.Point(9, 42);
-            this.grpMaxVital.Name = "grpMaxVital";
-            this.grpMaxVital.Size = new System.Drawing.Size(263, 85);
-            this.grpMaxVital.TabIndex = 33;
-            this.grpMaxVital.TabStop = false;
-            this.grpMaxVital.Text = "Max Vital at Least";
-            this.grpMaxVital.Visible = false;
+            this.grpChallAwaiting.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpChallAwaiting.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChallAwaiting.Controls.Add(this.blChallAwaitTrack);
+            this.grpChallAwaiting.Controls.Add(this.cmbChallAwaitTrack);
+            this.grpChallAwaiting.Controls.Add(this.nudChallAwaitLevel);
+            this.grpChallAwaiting.Controls.Add(this.lblChallAwaitLvl);
+            this.grpChallAwaiting.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpChallAwaiting.Location = new System.Drawing.Point(10, 43);
+            this.grpChallAwaiting.Name = "grpChallAwaiting";
+            this.grpChallAwaiting.Size = new System.Drawing.Size(263, 98);
+            this.grpChallAwaiting.TabIndex = 40;
+            this.grpChallAwaiting.TabStop = false;
+            this.grpChallAwaiting.Text = "Challenge Awaiting";
+            this.grpChallAwaiting.Visible = false;
             // 
-            // lblVitalIs
+            // nudChallAwaitLevel
             // 
-            this.lblVitalIs.AutoSize = true;
-            this.lblVitalIs.Location = new System.Drawing.Point(6, 52);
-            this.lblVitalIs.Name = "lblVitalIs";
-            this.lblVitalIs.Size = new System.Drawing.Size(45, 13);
-            this.lblVitalIs.TabIndex = 6;
-            this.lblVitalIs.Text = "At least:";
-            // 
-            // lblVital
-            // 
-            this.lblVital.AutoSize = true;
-            this.lblVital.Location = new System.Drawing.Point(6, 21);
-            this.lblVital.Name = "lblVital";
-            this.lblVital.Size = new System.Drawing.Size(30, 13);
-            this.lblVital.TabIndex = 5;
-            this.lblVital.Text = "Vital:";
-            // 
-            // cmbVital
-            // 
-            this.cmbVital.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbVital.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbVital.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbVital.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbVital.DrawDropdownHoverOutline = false;
-            this.cmbVital.DrawFocusRectangle = false;
-            this.cmbVital.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbVital.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbVital.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbVital.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbVital.FormattingEnabled = true;
-            this.cmbVital.Location = new System.Drawing.Point(92, 18);
-            this.cmbVital.Name = "cmbVital";
-            this.cmbVital.Size = new System.Drawing.Size(163, 21);
-            this.cmbVital.TabIndex = 3;
-            this.cmbVital.Text = null;
-            this.cmbVital.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // nudVitalAmt
-            // 
-            this.nudVitalAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudVitalAmt.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudVitalAmt.Location = new System.Drawing.Point(91, 52);
-            this.nudVitalAmt.Maximum = new decimal(new int[] {
+            this.nudChallAwaitLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudChallAwaitLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudChallAwaitLevel.Location = new System.Drawing.Point(88, 68);
+            this.nudChallAwaitLevel.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
-            this.nudVitalAmt.Name = "nudVitalAmt";
-            this.nudVitalAmt.Size = new System.Drawing.Size(164, 20);
-            this.nudVitalAmt.TabIndex = 38;
-            this.nudVitalAmt.Value = new decimal(new int[] {
+            this.nudChallAwaitLevel.Name = "nudChallAwaitLevel";
+            this.nudChallAwaitLevel.Size = new System.Drawing.Size(164, 20);
+            this.nudChallAwaitLevel.TabIndex = 38;
+            this.nudChallAwaitLevel.Value = new decimal(new int[] {
             0,
             0,
             0,
             0});
             // 
-            // grpSkillsActive
+            // lblChallAwaitLvl
             // 
-            this.grpSkillsActive.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpSkillsActive.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpSkillsActive.Controls.Add(this.nudSkillsActive);
-            this.grpSkillsActive.Controls.Add(this.lblSkillsActive);
-            this.grpSkillsActive.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSkillsActive.Location = new System.Drawing.Point(10, 42);
-            this.grpSkillsActive.Name = "grpSkillsActive";
-            this.grpSkillsActive.Size = new System.Drawing.Size(263, 50);
-            this.grpSkillsActive.TabIndex = 39;
-            this.grpSkillsActive.TabStop = false;
-            this.grpSkillsActive.Text = "Skills Active";
-            this.grpSkillsActive.Visible = false;
+            this.lblChallAwaitLvl.AutoSize = true;
+            this.lblChallAwaitLvl.Location = new System.Drawing.Point(7, 72);
+            this.lblChallAwaitLvl.Name = "lblChallAwaitLvl";
+            this.lblChallAwaitLvl.Size = new System.Drawing.Size(73, 13);
+            this.lblChallAwaitLvl.TabIndex = 6;
+            this.lblChallAwaitLvl.Text = "Current Level:";
             // 
-            // nudSkillsActive
+            // cmbChallAwaitTrack
             // 
-            this.nudSkillsActive.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSkillsActive.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSkillsActive.Location = new System.Drawing.Point(93, 20);
-            this.nudSkillsActive.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudSkillsActive.Name = "nudSkillsActive";
-            this.nudSkillsActive.Size = new System.Drawing.Size(164, 20);
-            this.nudSkillsActive.TabIndex = 38;
-            this.nudSkillsActive.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
+            this.cmbChallAwaitTrack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbChallAwaitTrack.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbChallAwaitTrack.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChallAwaitTrack.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChallAwaitTrack.DrawDropdownHoverOutline = false;
+            this.cmbChallAwaitTrack.DrawFocusRectangle = false;
+            this.cmbChallAwaitTrack.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbChallAwaitTrack.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChallAwaitTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChallAwaitTrack.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbChallAwaitTrack.FormattingEnabled = true;
+            this.cmbChallAwaitTrack.Location = new System.Drawing.Point(8, 38);
+            this.cmbChallAwaitTrack.Name = "cmbChallAwaitTrack";
+            this.cmbChallAwaitTrack.Size = new System.Drawing.Size(245, 21);
+            this.cmbChallAwaitTrack.TabIndex = 52;
+            this.cmbChallAwaitTrack.Text = null;
+            this.cmbChallAwaitTrack.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // lblSkillsActive
+            // blChallAwaitTrack
             // 
-            this.lblSkillsActive.AutoSize = true;
-            this.lblSkillsActive.Location = new System.Drawing.Point(7, 25);
-            this.lblSkillsActive.Name = "lblSkillsActive";
-            this.lblSkillsActive.Size = new System.Drawing.Size(45, 13);
-            this.lblSkillsActive.TabIndex = 6;
-            this.lblSkillsActive.Text = "At least:";
+            this.blChallAwaitTrack.AutoSize = true;
+            this.blChallAwaitTrack.Location = new System.Drawing.Point(8, 18);
+            this.blChallAwaitTrack.Name = "blChallAwaitTrack";
+            this.blChallAwaitTrack.Size = new System.Drawing.Size(82, 13);
+            this.blChallAwaitTrack.TabIndex = 53;
+            this.blChallAwaitTrack.Text = "Weapon Track:";
             // 
             // EventCommandConditionalBranch
             // 
@@ -3342,6 +3424,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 511);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpSkillsActive.ResumeLayout(false);
+            this.grpSkillsActive.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillsActive)).EndInit();
+            this.grpMaxVital.ResumeLayout(false);
+            this.grpMaxVital.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVitalAmt)).EndInit();
             this.grpQuestInProgress.ResumeLayout(false);
             this.grpQuestInProgress.PerformLayout();
             this.grpHarvestLvl.ResumeLayout(false);
@@ -3436,12 +3524,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpMaxVital.ResumeLayout(false);
-            this.grpMaxVital.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVitalAmt)).EndInit();
-            this.grpSkillsActive.ResumeLayout(false);
-            this.grpSkillsActive.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSkillsActive)).EndInit();
+            this.grpChallAwaiting.ResumeLayout(false);
+            this.grpChallAwaiting.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChallAwaitLevel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3655,5 +3740,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpSkillsActive;
         private DarkNumericUpDown nudSkillsActive;
         private System.Windows.Forms.Label lblSkillsActive;
+        private DarkGroupBox grpChallAwaiting;
+        private DarkNumericUpDown nudChallAwaitLevel;
+        private System.Windows.Forms.Label lblChallAwaitLvl;
+        private System.Windows.Forms.Label blChallAwaitTrack;
+        internal DarkComboBox cmbChallAwaitTrack;
     }
 }

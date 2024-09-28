@@ -29,7 +29,8 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public int Level { get; set; }
 
-        public long ExpRemaining { get; set; }
+        [Column("ExpRemaining")]
+        public long Exp { get; set; }
 
         public bool IsActive { get; set; }
 
@@ -51,7 +52,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             Level = level;
             IsActive = isActive;
 
-            ExpRemaining = 0;
+            Exp = 0;
         }
 
         public bool TryGetCurrentWeaponLevelProperties(out WeaponLevel unlock)

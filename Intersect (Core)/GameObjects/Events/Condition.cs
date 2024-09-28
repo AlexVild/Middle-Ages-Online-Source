@@ -122,6 +122,8 @@ namespace Intersect.GameObjects.Events
         MaxVitalAt,
 
         SkillsEquipped,
+        
+        WeaponTrackAwaitingChallenge,
 
     }
 
@@ -853,6 +855,15 @@ namespace Intersect.GameObjects.Events
                 return $"{Amount}+ skills equipped";
             }
         }
+    }
+
+    public class WeaponTrackAwaitingChallenge : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.WeaponTrackAwaitingChallenge;
+
+        public Guid WeaponTrackId { get; set; }
+        
+        public int CurrentLevel { get; set; }
     }
 
 }

@@ -103,6 +103,7 @@ namespace Intersect.Server.Entities
         {
             var challenges = Challenges.Where(c => challengeIds.Contains(c.ChallengeId));
 
+            var prevChallenges = ChallengesInProgress.Select(chg => chg.ChallengeId).ToList();
             ChallengesInProgress.Clear();
             foreach (var instance in challenges) 
             {
@@ -125,6 +126,15 @@ namespace Intersect.Server.Entities
 
                 var progress = new ChallengeProgress(instance, this);
                 ChallengesInProgress.Add(progress);
+            }
+            // Don't spam the user with update messages unless a change has occured
+            var newChallenges = ChallengesInProgress
+                .Select(chg => chg.ChallengeId)
+                .Except(prevChallenges)
+                .ToList();
+            if (newChallenges.Any())
+            {
+                SendChallengeUpdate(false, newChallenges);
             }
         }
 
@@ -176,7 +186,7 @@ namespace Intersect.Server.Entities
             if (mastery.WeaponType != default && mastery.WeaponType.Unlocks.TryGetValue(mastery.Level + 1, out var nextUnlock))
             {
                 WeaponExpTnl = nextUnlock.RequiredExp;
-                CurrWeaponExp = mastery.ExpRemaining;
+                CurrWeaponExp = mastery.Exp;
                 CurrWeaponLvl = mastery.Level;
             }
         }
@@ -187,6 +197,8 @@ namespace Intersect.Server.Entities
 
             WeaponMaxedReminder = false;
 
+            var prevChallenges = ChallengesInProgress.Select(chg => chg.ChallengeId).ToArray();
+            
             DeactivateAllMasteries();
 
             // Instantiate new mastery tracks/challenges in response to this change
@@ -208,7 +220,7 @@ namespace Intersect.Server.Entities
                     continue;
                 }
                 
-                if (mastery.ExpRemaining < levelProps.RequiredExp)
+                if (mastery.Exp < levelProps.RequiredExp)
                 {
                     continue;
                 }
@@ -226,8 +238,8 @@ namespace Intersect.Server.Entities
                 }
                 challengeInstanceIds.AddRange(masteryChallenges);
             }
+
             SendNewTrack(newTracks);
-            SendChallengeUpdate(false, challengeInstanceIds);
             TrackChallenges(challengeInstanceIds);
 
             // Send weapon EXP update
@@ -335,12 +347,12 @@ namespace Intersect.Server.Entities
             mastery.Level = MathHelper.Clamp(mastery.Level + 1, 0, mastery.WeaponType?.MaxLevel ?? 0);
             if (mastery.Level == weaponType.MaxLevel)
             {
-                mastery.ExpRemaining = -1;
+                mastery.Exp = -1;
                 SendMasteryUpdate(true, weaponType.Name);
             }
             else
             {
-                mastery.ExpRemaining = 0L;
+                mastery.Exp = 0L;
                 SendMasteryUpdate(false, weaponType.Name);
 
 
@@ -396,7 +408,7 @@ namespace Intersect.Server.Entities
                 _ = TryAddSkillToBook(challenge.SpellUnlockId);
                 PacketSender.SendChatMsg(this,
                     Strings.Player.MasterySkillUnlock.ToString(SpellBase.GetName(challenge.SpellUnlockId)),
-                    Enums.ChatMessageType.Spells,
+                    ChatMessageType.Spells,
                     CustomColors.General.GeneralCompleted,
                     sendToast: true);
             }
@@ -408,7 +420,14 @@ namespace Intersect.Server.Entities
             {
                 _ = TryUnlockEnhancement(challenge.EnhancementUnlockId);
             }
-
+            if (challenge.CompletionEventId != Guid.Empty)
+            {
+                PacketSender.SendChatMsg(this,
+                    $"You've unlocked the following: \"{challenge.EventDescription}\"",
+                    ChatMessageType.Experience,
+                    CustomColors.General.GeneralCompleted,
+                    sendToast: true);
+            }
 
             SendChallengeStatUpdates(ChallengeDescriptor.Get(challengeId));
         }
@@ -436,11 +455,22 @@ namespace Intersect.Server.Entities
                     }
                 }
 
-                challenge.Complete = true;
-                if (challenge.Challenge?.RequiresContract ?? false)
-                {
-                    TryVoidCurrentContract(out _, true);
-                }
+                MarkChallengeAsComplete(challenge);
+            }
+        }
+
+        public void MarkChallengeAsComplete(ChallengeInstance challenge)
+        {
+            if (challenge == null)
+            {
+                return;
+            }
+
+            challenge.Progress = challenge.Challenge?.Sets ?? 0;
+            challenge.Complete = true;
+            if (challenge.Challenge?.RequiresContract ?? false)
+            {
+                TryVoidCurrentContract(out _, true);
             }
         }
 
@@ -470,7 +500,7 @@ namespace Intersect.Server.Entities
             }
 
             mastery.Level = MathHelper.Clamp(mastery.Level - 1, 0, int.MaxValue);
-            mastery.ExpRemaining = 0L;
+            mastery.Exp = 0L;
         }
 
         public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery)
@@ -498,9 +528,9 @@ namespace Intersect.Server.Entities
             {
                 requiredExp = unlock.RequiredExp;
             }
-            if (mastery == null || mastery.ExpRemaining >= requiredExp)
+            if (mastery == null || mastery.Exp >= requiredExp)
             {
-                mastery.ExpRemaining = requiredExp;
+                mastery.Exp = requiredExp;
                 return false;
             }
 
@@ -522,15 +552,15 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            mastery.ExpRemaining += exp;
+            mastery.Exp += exp;
 
-            if (mastery.ExpRemaining < requiredExp)
+            if (mastery.Exp < requiredExp)
             {
                 return true;
             }
 
             // We have reached our EXP threshold, and should continue progress processing
-            mastery.ExpRemaining = unlock.RequiredExp;
+            mastery.Exp = unlock.RequiredExp;
             return false;
         }
 
@@ -670,7 +700,7 @@ namespace Intersect.Server.Entities
                     challengeProgressions.Add(new ChallengeProgression(challenge, playerProgress.Progress, playerProgress.Complete));
                 }
 
-                var progress = new WeaponTypeProgress(weaponType.WeaponTypeId, weaponType.Level, weaponType.ExpRemaining, challengeProgressions);
+                var progress = new WeaponTypeProgress(weaponType.WeaponTypeId, weaponType.Level, weaponType.Exp, challengeProgressions);
                 weaponTypeProgresses.Add(progress);
             }
 
@@ -933,7 +963,7 @@ namespace Intersect.Server.Entities
                 if (mastery.Level > descriptor.MaxLevel)
                 {
                     mastery.Level = descriptor.MaxLevel;
-                    mastery.ExpRemaining = 1L;
+                    mastery.Exp = 1L;
                 }
             }
         }

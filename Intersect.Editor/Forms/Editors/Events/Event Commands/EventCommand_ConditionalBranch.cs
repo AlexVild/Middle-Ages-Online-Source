@@ -295,6 +295,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbVital.Items.Clear();
             cmbVital.Items.AddRange(EnumExtensions.GetDescriptions(typeof(Vitals), "Vital Count"));
 
+            cmbChallAwaitTrack.Items.Clear();
+            cmbChallAwaitTrack.Items.AddRange(WeaponTypeDescriptor.Names);
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -633,6 +636,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     break;
 
+                case ConditionTypes.WeaponTrackAwaitingChallenge:
+                    Condition = new WeaponTrackAwaitingChallenge();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -678,6 +686,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpHarvestLvl.Hide();
             grpMaxVital.Hide();
             grpSkillsActive.Hide();
+            grpChallAwaiting.Hide();
 
             switch (type)
             {
@@ -1007,6 +1016,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                 case ConditionTypes.SkillsEquipped:
                     grpSkillsActive.Show();
+
+                    break;
+
+                case ConditionTypes.WeaponTrackAwaitingChallenge:
+                    grpChallAwaiting.Show();
 
                     break;
 
@@ -2053,6 +2067,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudSkillsActive.Value = condition.Amount;
         }
 
+        private void SetupFormValues(WeaponTrackAwaitingChallenge condition)
+        {
+            if (condition == null)
+            {
+                return;
+            }
+
+            cmbChallAwaitTrack.SelectedIndex = WeaponTypeDescriptor.ListIndex(condition.WeaponTrackId);
+            nudChallAwaitLevel.Value = condition.CurrentLevel;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2463,6 +2488,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(SkillsEquipped condition)
         {
             condition.Amount = (int)nudSkillsActive.Value;
+        }
+
+        private void SaveFormValues(WeaponTrackAwaitingChallenge condition)
+        {
+            condition.CurrentLevel = (int)nudChallAwaitLevel.Value;
+            condition.WeaponTrackId = WeaponTypeDescriptor.IdFromList(cmbChallAwaitTrack.SelectedIndex);
         }
         #endregion
 

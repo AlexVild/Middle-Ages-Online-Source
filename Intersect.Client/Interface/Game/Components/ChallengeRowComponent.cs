@@ -96,12 +96,12 @@ namespace Intersect.Client.Interface.Game.Components
             ChallengeId = challengeId;
             ProgressionDetails = progression;
 
-            Unlocked = ProgressionDetails != default;
+            RequiredExp = requiredExp;
+            Unlocked = ProgressionDetails != default && RequiredExp <= 0;
             Progress = ProgressionDetails?.Sets ?? 0;
             Completed = ProgressionDetails?.Completed ?? false;
             RequiredLevel = level;
             WeaponType = weaponTypeName;
-            RequiredExp = requiredExp;
             CurrentLevel = currentLevel;
             WeaponTypeId = weaponTypeId;
 
@@ -185,6 +185,7 @@ namespace Intersect.Client.Interface.Game.Components
             
             if (Unlocked)
             {
+
                 Description.SetText(Descriptor.GetDescription(), DescriptionTemplate, 240);
             }
             else

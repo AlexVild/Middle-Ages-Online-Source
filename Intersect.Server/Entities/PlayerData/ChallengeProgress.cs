@@ -70,9 +70,9 @@ namespace Intersect.Server.Entities.PlayerData
 
             Sets = Instance.Progress;
 
-            if (Sets == Descriptor.Sets)
+            if (Sets == Descriptor.Sets && Player != null)
             {
-                Instance.Complete = true;
+                Player.MarkChallengeAsComplete(Instance);
             }
 
             RepsChanged += ChallengeProgress_RepsChanged;
@@ -112,11 +112,7 @@ namespace Intersect.Server.Entities.PlayerData
             // Otherwise, mark this challenge as complete, which will allow the weapon mastery track to progress on the next
             // ProgressMastery() call
             Instance.Progress = Descriptor.Sets;
-            Instance.Complete = true;
-            if (Descriptor.RequiresContract && Player.ChallengeContractId == Descriptor.Id)
-            {
-                Player.ChallengeContractId = Guid.Empty;
-            }
+            Player?.MarkChallengeAsComplete(Instance);
         }
 
         public void InformProgress(int prevSets, int currSets, int required)

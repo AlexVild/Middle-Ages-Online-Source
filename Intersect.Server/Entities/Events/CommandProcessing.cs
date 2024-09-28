@@ -858,6 +858,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null)
             {
+                Logging.Log.Error($"Stinky! No player for warp command");
                 return;
             }
 
@@ -3317,7 +3318,7 @@ namespace Intersect.Server.Entities.Events
             {
                 case WeaponTrackUpdate.SetLevel:
                     var newLevel = MathHelper.Clamp((int)command.Amount, 0, maxLevel);
-                    mastery.ExpRemaining = 0L;
+                    mastery.Exp = 0L;
 
                     var count = Math.Abs(newLevel - prevLevel);
                     if (prevLevel < newLevel)
@@ -3451,7 +3452,16 @@ namespace Intersect.Server.Entities.Events
 
             if (!player.TryGetChallenge(command.ChallengeId, out var challenge))
             {
-                return;
+                if (!player.TryAddNewChallenge(command.ChallengeId))
+                {
+                    return;
+                }
+                // Try again
+                player.TryGetChallenge(command.ChallengeId, out challenge);
+                if (challenge == null)
+                {
+                    return;
+                }
             }
 
             if (!command.IgnoreInProgressCheck && !player.ChallengesInProgress.Any(chlg => chlg.ChallengeId == command.ChallengeId))
@@ -3476,7 +3486,7 @@ namespace Intersect.Server.Entities.Events
                     challenge.Complete = challenge.Progress >= descriptor.Sets;
                     if (challenge.Complete)
                     {
-                        challenge.CompleteFor(player);
+                        player.ObtainChallengeUnlocks(command.ChallengeId);
                     }
                     else
                     {
@@ -3493,7 +3503,8 @@ namespace Intersect.Server.Entities.Events
                         break;
                     }
 
-                    challenge.CompleteFor(player);
+                    player.MarkChallengeAsComplete(challenge);
+                    player.ObtainChallengeUnlocks(command.ChallengeId);
                     break;
 
                 case ChallengeUpdate.Reset:

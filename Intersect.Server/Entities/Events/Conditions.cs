@@ -1357,6 +1357,26 @@ namespace Intersect.Server.Entities.Events
 
             return player.SkillBook.Count((skill) => skill.Equipped) >= condition.Amount;
         }
+
+        public static bool MeetsCondition(
+          WeaponTrackAwaitingChallenge condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (!player.TryGetMastery(condition.WeaponTrackId, out var mastery) || !mastery.TryGetCurrentWeaponLevelProperties(out var level))
+            {
+                return false;
+            }
+
+            return mastery.Exp >= level.RequiredExp && mastery.Level == condition.CurrentLevel;
+        }
     }
 
 }

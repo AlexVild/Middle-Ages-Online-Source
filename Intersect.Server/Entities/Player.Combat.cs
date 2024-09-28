@@ -74,10 +74,6 @@ namespace Intersect.Server.Entities
             }
 
             bool isCrit = base.IsCriticalHit(critChance);
-            if (isCrit)
-            {
-                ChallengeUpdateProcesser.UpdateChallengesOf(new CriticalHitsUpdate(this, 1));
-            }
             return isCrit;
         }
 
