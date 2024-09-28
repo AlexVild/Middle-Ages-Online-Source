@@ -641,6 +641,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     break;
 
+                case ConditionTypes.WeaponIsType:
+                    Condition = new WeaponIsType();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1021,6 +1026,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                 case ConditionTypes.WeaponTrackAwaitingChallenge:
                     grpChallAwaiting.Show();
+
+                    break;
+
+                case ConditionTypes.WeaponIsType:
+                    grpWeaponMastery.Show();
+                    cmbWeaponType.Items.Clear();
+                    cmbWeaponType.Items.AddRange(WeaponTypeDescriptor.Names);
+                    if (cmbWeaponType.Items.Count > 0)
+                    {
+                        cmbWeaponType.SelectedIndex = 0;
+                    }
 
                     break;
 
@@ -1958,6 +1974,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudWeaponTypeLvl.Value = condition.Level;
         }
 
+        private void SetupFormValues(WeaponIsType condition)
+        {
+            cmbWeaponType.SelectedIndex = WeaponTypeDescriptor.ListIndex(condition.WeaponTypeId);
+            nudWeaponTypeLvl.Value = condition.Level;
+        }
+
         private void SetupFormValues(DungeonIs condition)
         {
             darkComboBox1.SelectedIndex = (int)condition.State;
@@ -2389,6 +2411,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void SaveFormValues(WeaponTypeIs condition)
+        {
+            condition.WeaponTypeId = WeaponTypeDescriptor.IdFromList(cmbWeaponType.SelectedIndex);
+            condition.Level = (int)nudWeaponTypeLvl.Value;
+        }
+
+        private void SaveFormValues(WeaponIsType condition)
         {
             condition.WeaponTypeId = WeaponTypeDescriptor.IdFromList(cmbWeaponType.SelectedIndex);
             condition.Level = (int)nudWeaponTypeLvl.Value;

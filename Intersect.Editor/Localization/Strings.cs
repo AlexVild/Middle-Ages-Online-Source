@@ -448,6 +448,12 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.SkillsEquipped.ToString(condition.Amount);
         }
 
+        public static string GetEventConditionalDesc(WeaponIsType condition)
+        {
+            var name = WeaponTypeDescriptor.GetName(condition.WeaponTypeId);
+            return EventConditionDesc.EquippedWeaponTrack.ToString(name, condition.Level);
+        }
+
         public static string GetEventConditionalDesc(WeaponTrackAwaitingChallenge condition)
         {
             var track = WeaponTypeDescriptor.GetName(condition.WeaponTrackId);
@@ -2608,6 +2614,7 @@ Tick timer saved in server config.json.";
                 {57, @"Has X Vital at least Y..."},
                 {58, @"Has X Skills Equipped..."},
                 {59, @"Awatiting challenge for weapon track lvl X..."},
+                {60, @"Weapon equipped of track X lvl Y..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2966,6 +2973,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SkillsEquipped = @"Player has {00} skills equipped";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EquippedWeaponTrack = @"Player weapon is at least {00} lvl {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString WeaponTrackAwaitingChallenge = @"Player is {00} level {01} and awaiting challenge completion";

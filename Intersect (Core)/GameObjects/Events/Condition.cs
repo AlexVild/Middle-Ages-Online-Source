@@ -124,6 +124,8 @@ namespace Intersect.GameObjects.Events
         SkillsEquipped,
         
         WeaponTrackAwaitingChallenge,
+        
+        WeaponIsType,
 
     }
 
@@ -862,8 +864,17 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.WeaponTrackAwaitingChallenge;
 
         public Guid WeaponTrackId { get; set; }
-        
+
         public int CurrentLevel { get; set; }
+    }
+
+    public class WeaponIsType : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.WeaponIsType;
+
+        public Guid WeaponTypeId { get; set; }
+        
+        public int Level { get; set; }
     }
 
 }

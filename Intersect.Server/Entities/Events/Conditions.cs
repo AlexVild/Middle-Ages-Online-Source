@@ -1377,6 +1377,31 @@ namespace Intersect.Server.Entities.Events
 
             return mastery.Exp >= level.RequiredExp && mastery.Level == condition.CurrentLevel;
         }
+
+        public static bool MeetsCondition(
+          WeaponIsType condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var weapon) || weapon.Descriptor == null)
+            {
+                return false;
+            }
+
+            if (!weapon.Descriptor.MaxWeaponLevels.TryGetValue(condition.WeaponTypeId, out var weaponLvl))
+            {
+                return false;
+            }
+
+            return weaponLvl >= condition.Level;
+        }
     }
 
 }
