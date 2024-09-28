@@ -2137,7 +2137,7 @@ namespace Intersect.Server.Entities
             {
                 if (NextDungeonId != Guid.Empty)
                 {
-                    Log.Error($"Failed to create dungeon for {Name} -- could not get instance controller")
+                    Log.Error($"Failed to create dungeon for {Name} -- could not get instance controller");
                 }
                 return;
             }

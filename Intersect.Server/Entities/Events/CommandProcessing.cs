@@ -3517,7 +3517,7 @@ namespace Intersect.Server.Entities.Events
                     break;
 
                 case ChallengeUpdate.VoidContract:
-                    if (player.ChallengeContract?.Id == challenge.Id && player.TryVoidCurrentContract(out var prevContract, true))
+                    if (player.ChallengeContract?.Id == challenge.ChallengeId && player.TryVoidCurrentContract(out var prevContract, true))
                     {
                         player.SendContractVoidMessage(prevContract.Id);
                     }
