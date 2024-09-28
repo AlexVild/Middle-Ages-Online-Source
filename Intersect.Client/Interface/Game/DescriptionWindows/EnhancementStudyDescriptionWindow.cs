@@ -104,6 +104,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             header.SizeToChildren(true, false);
+
+            if (Item.ItemType != ItemTypes.Equipment)
+            {
+                var desc = AddDescription();
+                desc.AddText(Item.Description, Color.White);
+            }
         }
 
         protected void SetupRequirements()

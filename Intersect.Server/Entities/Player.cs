@@ -2135,6 +2135,10 @@ namespace Intersect.Server.Entities
         {
             if (!InstanceProcessor.TryGetInstanceController(MapInstanceId, out var controller) || NextDungeonId == Guid.Empty)
             {
+                if (NextDungeonId != Guid.Empty)
+                {
+                    Log.Error($"Failed to create dungeon for {Name} -- could not get instance controller")
+                }
                 return;
             }
 
@@ -9711,7 +9715,10 @@ namespace Intersect.Server.Entities
             set
             {
                 _nextDungeonId = value;
-                Logging.Log.Error($"{Name} NextDungeonId == {value}");
+                if (_nextDungeonId != Guid.Empty)
+                {
+                    Logging.Log.Error($"{Name} NextDungeonId == {value}");
+                }
             }
         }
 

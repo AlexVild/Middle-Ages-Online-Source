@@ -320,7 +320,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
                     return false;
                 })
-                .OrderByDescending(item => item.StudyChance);
+                .OrderByDescending(item => item.StudyChance)
+                .ThenByDescending(item => item.Rarity);
 
             var idx = 0;
             var x = mBackground?.Parent?.Parent.X ?? 0;
