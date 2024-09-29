@@ -46,8 +46,9 @@ namespace Intersect.Server.Web.RestApi.Configuration
             {
                 PolicyResolver = context => Task.FromResult(
                     CreatePolicy(
-                        corsConfiguration.Origin, string.Join(",", corsConfiguration.Methods ?? new List<string>()),
+                        corsConfiguration.Origin, 
                         string.Join(",", corsConfiguration.Headers ?? new List<string>()),
+                        string.Join(",", corsConfiguration.Methods ?? new List<string>()),
                         string.Join(",", corsConfiguration.ExposedHeaders ?? new List<string>())
                     )
                 )
