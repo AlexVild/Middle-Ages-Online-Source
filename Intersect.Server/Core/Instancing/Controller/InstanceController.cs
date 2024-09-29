@@ -40,7 +40,11 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             Logging.Log.Debug($"{playerId} has left instance controller {InstanceId}...");
             Players.RemoveAll(pl => pl?.Id == playerId);
-            RemovePlayerFromDungeon(playerId);
+
+            if (Dungeon != null)
+            {
+                RemovePlayerFromDungeon(playerId);
+            }
         }
 
         public void AddPlayers(List<Player> players)

@@ -25,13 +25,19 @@ namespace Intersect.Server.Entities
             if (idx == -1)
             {
                 dungeonTrack.IncrementCompletion(partySize, this);
-                dungeonTrack.TryUpdateTimeRecord(completionTime, partySize, this);
+                if (completionTime > 0)
+                {
+                    dungeonTrack.TryUpdateTimeRecord(completionTime, partySize, this);
+                }
                 DungeonsTracked.Add(dungeonTrack);
             }
             else
             {
                 DungeonsTracked[idx].IncrementCompletion(partySize, this);
-                DungeonsTracked[idx].TryUpdateTimeRecord(completionTime, partySize, this);
+                if (completionTime > 0)
+                {
+                    DungeonsTracked[idx].TryUpdateTimeRecord(completionTime, partySize, this);
+                }
             }
         }
 
@@ -53,7 +59,9 @@ namespace Intersect.Server.Entities
 
         public void VoidCurrentDungeon()
         {
-            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var controller) && controller.Dungeon != null && controller.DungeonActive)
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var controller) 
+                && controller.Dungeon != null 
+                && controller.Dungeon.State == GameObjects.Events.DungeonState.Active)
             {
                 controller.Dungeon.RecordsVoid = true;
             }

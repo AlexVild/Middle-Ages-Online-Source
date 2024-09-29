@@ -1472,7 +1472,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController) && instanceController.DungeonState == DungeonState.Complete)
+            if (InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController) && instanceController.Dungeon?.State == DungeonState.Complete)
             {
                 return false;
             }
@@ -1926,7 +1926,7 @@ namespace Intersect.Server.Entities
             if (player.MapInstanceId == MapInstanceId && player.InstanceType != MapInstanceType.Overworld
                 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
-                return instanceController.DungeonActive;
+                return instanceController.Dungeon?.State == DungeonState.Active;
             }
             return false;
         }

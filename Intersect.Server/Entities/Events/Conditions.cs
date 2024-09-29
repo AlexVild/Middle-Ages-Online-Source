@@ -834,7 +834,7 @@ namespace Intersect.Server.Entities.Events
                 return false;
             }
 
-            return instanceController.DungeonState == condition.State;
+            return instanceController.Dungeon?.State == condition.State;
         }
 
         public static bool MeetsCondition(
@@ -879,7 +879,7 @@ namespace Intersect.Server.Entities.Events
                 return false;
             }
 
-            return instanceController.Dungeon.TreasureLevel >= condition.TreasureLevel;
+            return instanceController.GetDungeonTreasureLevel() >= condition.TreasureLevel;
         }
 
         public static bool MeetsCondition(

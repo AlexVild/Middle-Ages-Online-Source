@@ -1,4 +1,5 @@
-﻿using Intersect.GameObjects.Events;
+﻿using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Server.Entities;
 using Intersect.Server.Localization;
 using Intersect.Utilities;
@@ -15,10 +16,12 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
         public Dungeon(Guid dungeonId)
         {
             DescriptorId = dungeonId;
-            State = DungeonState.Null;
+            State = DungeonState.Inactive;
         }
 
         public Guid DescriptorId { get; set; }
+
+        public DungeonDescriptor Descriptor => DungeonDescriptor.Get(DescriptorId);
 
         public int GnomeLocation { get; set; }
 
@@ -30,9 +33,7 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
 
         public bool IsSolo { get; set; }
 
-        public int TreasureLevel = 0;
-
-        public long CompletionTime { get; set; }
+        public long CompletionTime { get; set; } = 0L;
 
         public bool RecordsVoid { get; set; }
 

@@ -3544,7 +3544,7 @@ namespace Intersect.Server.Entities.Events
             switch (command.State)
             {
                 case DungeonState.Null:
-                    instanceController.RemoveDungeon();
+                    instanceController.RemoveDungeon(player);
                     break;
 
                 case DungeonState.Inactive:
@@ -3600,18 +3600,22 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            if (instanceController.InstanceIsDungeon && instanceController.Dungeon.Participants.Contains(player))
+            if (!instanceController.InstanceIsDungeon && instanceController.Dungeon.Participants.Contains(player))
             {
-                player.OpenLootRoll(instance.BaseEvent.Id, instanceController.GetDungeonLoot());
-
-                PacketSender.SendOpenLootPacketTo(player, instanceController.DungeonName, GameObjects.Events.LootAnimType.Chest);
-
-                callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
+                PacketSender.SendChatMsg(player, "You did not participate in this dungeon, and are not worthy of its spoils!", ChatMessageType.Error, CustomColors.General.GeneralWarning);
+                return;
             }
-            else
+
+            var loot = instanceController.GetDungeonLoot();
+            if (loot.Count == 0)
             {
-                PacketSender.SendChatMsg(player, "You did not participate in this dungeon, and are not worthy of its spoils!", ChatMessageType.Notice, CustomColors.General.GeneralWarning);
+                PacketSender.SendChatMsg(player, "You did not receive any dungeon loot!", ChatMessageType.Error, CustomColors.General.GeneralWarning);
+                return;
             }
+
+            player.OpenLootRoll(instance.BaseEvent.Id, loot);
+            PacketSender.SendOpenLootPacketTo(player, instanceController.DungeonName, LootAnimType.Chest);
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
         }
 
         private static void ProcessCommand(

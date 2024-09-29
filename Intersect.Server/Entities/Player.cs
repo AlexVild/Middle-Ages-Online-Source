@@ -932,12 +932,12 @@ namespace Intersect.Server.Entities
             if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instCtrl))
             {
                 // .. but only if the dungeon is active, unless...
-                if (instCtrl.Dungeon != null && instCtrl.DungeonActive)
+                if (instCtrl.Dungeon != null && instCtrl.Dungeon.State == DungeonState.Active)
                 {
                     instCtrl.LoseInstanceLife();
                 }
                 // We aren't in a dungeon but instead leveraging shared instances for a different use
-                else
+                else if (instCtrl.Dungeon == null)
                 {
                     instCtrl.LoseInstanceLife();
                 }
@@ -2137,19 +2137,17 @@ namespace Intersect.Server.Entities
             {
                 if (NextDungeonId != Guid.Empty)
                 {
-                    Log.Error($"Failed to create dungeon for {Name} -- could not get instance controller");
+                    Log.Error($"DUNGEON: Failed to create dungeon for {Name} -- could not get instance controller");
                 }
                 return;
             }
 
-            if (controller.DungeonDescriptor == null)
+            if (controller.Dungeon == null)
             {
-                controller.InitializeAndJoinDungeon(NextDungeonId, this);
+                controller.InitializeDungeon(NextDungeonId);
             }
-            else
-            {
-                controller.TryAddPlayerToDungeon(this);
-            }
+            controller.TryAddPlayerToDungeon(this);
+
             NextDungeonId = Guid.Empty;
         }
 

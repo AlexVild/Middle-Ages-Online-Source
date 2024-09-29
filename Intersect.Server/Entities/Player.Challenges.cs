@@ -858,11 +858,8 @@ namespace Intersect.Server.Entities
         {
             switch (trigger)
             {
-                case CommonEventTrigger.LevelUp:
-                case CommonEventTrigger.MapChanged:
                 case CommonEventTrigger.EquipChange:
                 case CommonEventTrigger.InventoryChanged:
-                case CommonEventTrigger.NpcsDefeated:
                 {
                     CheckChallengeContracts();
                     break;
