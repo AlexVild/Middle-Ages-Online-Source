@@ -776,6 +776,7 @@
     <Compile Include="Utilities\AlphanumComparator.cs" />
     <Compile Include="Utilities\CombatUtilities.cs" />
     <Compile Include="Utilities\DatabaseUtils.cs" />
+    <Compile Include="Utilities\Debouncer.cs" />
     <Compile Include="Utilities\DeconstructionUtils.cs" />
     <Compile Include="Utilities\EnhancementHelper.cs" />
     <Compile Include="Utilities\EnumExtensions.cs" />
