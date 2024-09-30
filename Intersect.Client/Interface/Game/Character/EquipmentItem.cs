@@ -134,6 +134,8 @@ namespace Intersect.Client.Interface.Game.Character
                 }
                 mTexLoaded = true;
             }
+
+            mDescWindow?.Update();
         }
 
     }

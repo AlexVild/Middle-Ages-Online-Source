@@ -307,6 +307,8 @@ namespace Intersect.Client.Interface.Game.Trades
                     mDragIcon.Dispose();
                 }
             }
+
+            mDescWindow?.Update();
         }
 
     }

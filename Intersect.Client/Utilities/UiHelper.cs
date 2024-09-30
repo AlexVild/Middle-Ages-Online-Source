@@ -1,9 +1,13 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.DescriptionWindows.Components;
 using Intersect.Client.Localization;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Timers;
+using Intersect.Utilities;
 using System;
 using System.Linq;
 using System.Text;
@@ -94,6 +98,28 @@ namespace Intersect.Client.Utilities
             var FontY = centerY - textHeight / 2 + 2;
 
             return new Pointf(FontX, FontY);
+        }
+
+        const long RAINBOW_UPDATE_TIME = 50L;
+        public static void RainbowifyItemTitles(ItemBase itemDesc, ref long updateTimestamp, ref HeaderComponent titleComponent)
+        {
+            if (itemDesc.Rarity != 9 || updateTimestamp >= Timing.Global.MillisecondsUtcUnsynced || titleComponent == null || itemDesc == null)
+            {
+                return;
+            }
+
+            var textColor = titleComponent.GetTitleColor();
+            var hsv = textColor.ToHsv();
+            hsv.H += 2.5f;
+            if (hsv.H > 360f)
+            {
+                hsv.H -= 360f;
+            }
+
+            updateTimestamp = RAINBOW_UPDATE_TIME + Timing.Global.MillisecondsUtcUnsynced;
+            var newColor = Util.HsvToColor(hsv.H, hsv.S, hsv.V);
+            titleComponent.SetTitleColor(newColor);
+            titleComponent.SetDescriptionColor(newColor);
         }
     }
 }

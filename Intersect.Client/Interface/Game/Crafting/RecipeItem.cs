@@ -48,6 +48,11 @@ namespace Intersect.Client.Interface.Game.Crafting
             mIngredient = ingredient;
         }
 
+        public void Update()
+        {
+            DescWindow?.Update();
+        }
+
         public void Setup(string name)
         {
             Pnl = new ImagePanel(Container, name);

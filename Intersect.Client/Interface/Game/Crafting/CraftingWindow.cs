@@ -545,6 +545,8 @@ namespace Intersect.Client.Interface.Game.Crafting
             mBar.Width = Convert.ToInt32(width);
 
             Crafting = AmountRemaining > 0;
+
+            mCombinedItem?.Update();
         }
     }
 

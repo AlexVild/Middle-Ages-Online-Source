@@ -57,6 +57,27 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows.Components
             mTitle.SetTextColor(color, Label.ControlState.Normal);
         }
 
+        public void SetTitleColor(Color color, Label.ControlState controlState = Label.ControlState.Normal)
+        {
+            mTitle.SetTextColor(color, controlState);
+        }
+
+        public void SetSubtitleColor(Color color, Label.ControlState controlState = Label.ControlState.Normal)
+        {
+            mSubtitle.SetTextColor(color, controlState);
+        }
+
+
+        public void SetDescriptionColor(Color color, Label.ControlState controlState = Label.ControlState.Normal)
+        {
+            mDescription.SetTextColor(color, controlState);
+        }
+
+        public Color GetTitleColor()
+        {
+            return mTitle.TextColor;
+        }
+
         /// <summary>
         /// Set the subtitle on this header.
         /// </summary>

@@ -168,6 +168,7 @@ namespace Intersect.Client.Interface.Game.Shop
 
         public void Update()
         {
+            mDescWindow?.Update();
         }
 
     }

@@ -493,6 +493,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 ShowBreakdownButton.SetText("Show Breakdown");
             }
 
+            EnhancementItem?.UpdateDesc();
+
             if (!EnhancementInterface.RefreshUi)
             {
                 return;

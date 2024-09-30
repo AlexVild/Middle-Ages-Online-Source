@@ -131,6 +131,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             {
                 Refresh();
             }
+
+            ItemDescription?.Update();
         }
 
         public override void Hide()

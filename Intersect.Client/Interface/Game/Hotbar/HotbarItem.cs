@@ -560,6 +560,8 @@ namespace Intersect.Client.Interface.Game.Hotbar
                     }
                 }
             }
+
+            mItemDescWindow?.Update();
         }
 
     }

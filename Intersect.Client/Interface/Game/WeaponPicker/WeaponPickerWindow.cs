@@ -53,6 +53,10 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
 
         public override void UpdateShown()
         {
+            foreach (var weapon in Weapons)
+            {
+                weapon.Update();
+            }
             return;
         }
 

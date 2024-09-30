@@ -162,6 +162,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
                             LastUpdate = Timing.Global.Milliseconds + FlashRate;
                         }
                     }
+                    mDescWindow?.Update();
                 }
                 else
                 {

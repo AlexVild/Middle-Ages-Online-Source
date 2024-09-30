@@ -547,6 +547,11 @@ namespace Intersect.Client.Interface.Game.Inventory
                     mDragIcon.Dispose();
                 }
             }
+
+            if (mDescWindow != null)
+            {
+                mDescWindow.Update();
+            }
         }
     }
 }

@@ -10,6 +10,10 @@ using Intersect.Client.Items;
 using Intersect.Localization;
 using System.Linq;
 using Intersect.Network.Packets.Server;
+using Intersect.Client.Interface.Game.DescriptionWindows.Components;
+using Intersect.Utilities;
+using Intersect.Client.Framework.Gwen;
+using Intersect.Client.Utilities;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -44,6 +48,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         public bool ShowEnhancementBreakdown = false;
 
         public bool FromEnhancementWindow = false;
+
+        public HeaderComponent Title;
 
         public ItemDescriptionWindow(
             ItemBase item,
@@ -205,13 +211,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Resize the container, correct the display and position our window.
             FinalizeWindow();
+
+            NextColorUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
         }
 
         protected void SetupHeader()
         {
             // Create our header, but do not load our layout yet since we're adding components manually.
-            var header = AddHeader();
+            Title = AddHeader();
 
+            var header = Title;
+            
             // Set up the icon, if we can load it.
             var tex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, mItem.Icon);
             if (tex != null)
@@ -644,6 +654,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             base.Dispose();
             mSpellDescWindow?.Dispose();
             mEnhancementDescWindow?.Dispose();
+        }
+
+        private long NextColorUpdateTime;
+
+        public void Update()
+        {
+            UiHelper.RainbowifyItemTitles(mItem, ref NextColorUpdateTime, ref Title);
         }
     }
 }

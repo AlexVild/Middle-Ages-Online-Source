@@ -12,6 +12,7 @@ using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen;
 using Intersect.Client.General;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
@@ -116,6 +117,16 @@ namespace Intersect.Client.Maps
             {
                 mTileBufferDict.Add(layer, new Dictionary<object, GameTileBuffer[]>());
                 mTileBuffers.Add(layer, new GameTileBuffer[3][]); //3 autotile frames per layer
+            }
+            NextRainbowUpdate = Timing.Global.MillisecondsUtcUnsynced;
+            NextFlashUpdate = Timing.Global.MillisecondsUtcUnsynced;
+            if (CustomColors.Items.MapRarities.TryGetValue(9, out var rare9Color))
+            {
+                Rainbow = new Color(rare9Color.Name.R, rare9Color.Name.G, rare9Color.Name.B);
+            }
+            else
+            {
+                Rainbow = Color.White;
             }
         }
 
@@ -791,6 +802,13 @@ namespace Intersect.Client.Maps
             }
         }
 
+        Color Rainbow;
+        long NextRainbowUpdate;
+        const long RAINBOW_UPDATE = 50L;
+        bool FlashName = false;
+        long NextFlashUpdate;
+        const long FLASH_UPDATE = 200L;
+
         /// <summary>
         /// Draws all names of the items on the tile the user is hovering over.
         /// </summary>
@@ -816,6 +834,25 @@ namespace Intersect.Client.Maps
                 var tileItems = new List<MapItemInstance>();
                 if (MapItems.TryGetValue(y * Options.MapWidth + x, out tileItems))
                 {
+                    // Update the rainbow effect for rarity 9 items
+                    if (NextRainbowUpdate < Timing.Global.MillisecondsUtcUnsynced)
+                    {
+                        var hsv = Rainbow.ToHsv();
+                        hsv.H += 1.5f;
+                        if (hsv.H >= 360f)
+                        {
+                            hsv.H -= 360f;
+                        }
+                        Rainbow = Util.HsvToColor(hsv.H, hsv.S, hsv.V);
+                        NextRainbowUpdate = Timing.Global.MillisecondsUtcUnsynced + RAINBOW_UPDATE;
+                    }
+
+                    if (NextFlashUpdate < Timing.Global.MillisecondsUtcUnsynced)
+                    {
+                        FlashName = !FlashName;
+                        NextFlashUpdate = Timing.Global.MillisecondsUtcUnsynced + FLASH_UPDATE;
+                    }
+
                     var baseOffset = 0;
                     // Loop through this in reverse to match client/server display and pick-up order.
                     for (var index = tileItems.Count - 1; index >= 0; index--)
@@ -827,7 +864,7 @@ namespace Intersect.Client.Maps
                         var rarity = itemBase.Rarity;
                         if (tileItems[index].Quantity > 1)
                         {
-                            name = Localization.Strings.General.MapItemStackable.ToString(name, Strings.FormatQuantityAbbreviated(quantity));
+                            name = Strings.General.MapItemStackable.ToString(name, Strings.FormatQuantityAbbreviated(quantity));
                         }
                         var color = CustomColors.Items.MapRarities.ContainsKey(rarity)
                             ? CustomColors.Items.MapRarities[rarity]
@@ -846,8 +883,16 @@ namespace Intersect.Client.Maps
                             );
                         }
 
+                        var textColor = rarity == 9 ? Rainbow : color.Name;
+                        var outline = color.Outline;
+                        if (itemBase.RareDrop && FlashName)
+                        {
+                            outline = Color.White;
+                            outline.A = 100;
+                        }
+
                         // Finaly, draw the actual name!
-                        Graphics.Renderer.DrawString(name, Graphics.EntityNameFont, destX, destY, 1, color.Name, true, null, color.Outline);
+                        Graphics.Renderer.DrawString(name, Graphics.EntityNameFont, destX, destY, 1, textColor, true, null, outline);
 
                         baseOffset++;
                     }

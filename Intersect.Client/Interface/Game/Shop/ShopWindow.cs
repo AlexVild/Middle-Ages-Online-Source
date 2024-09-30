@@ -37,6 +37,14 @@ namespace Intersect.Client.Interface.Game.Shop
             InitItemContainer();
         }
 
+        public void Update()
+        {
+            foreach (var item in Items)
+            {
+                item.Update();
+            }
+        }
+
         //Location
         public int X => mShopWindow.X;
 

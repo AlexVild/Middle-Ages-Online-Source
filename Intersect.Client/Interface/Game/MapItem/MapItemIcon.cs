@@ -166,15 +166,9 @@ namespace Intersect.Client.Interface.Game.Inventory
                 {
                     Pnl.Texture = null;
                 }
-
             }
 
-            if (mDescWindow != null)
-            {
-                mDescWindow.Dispose();
-                mDescWindow = null;
-                pnl_HoverEnter(null, null);
-            }
+            mDescWindow?.Update();
         }
     }
 

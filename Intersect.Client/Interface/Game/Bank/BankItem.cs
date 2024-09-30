@@ -283,6 +283,8 @@ namespace Intersect.Client.Interface.Game.Bank
                     mDragIcon.Dispose();
                 }
             }
+
+            mDescWindow?.Update();
         }
 
     }

@@ -289,6 +289,8 @@ namespace Intersect.Client.Interface.Game.Bag
                     mDragIcon.Dispose();
                 }
             }
+
+            mDescWindow?.Update();
         }
 
     }

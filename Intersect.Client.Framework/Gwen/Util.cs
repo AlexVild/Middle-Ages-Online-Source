@@ -2,6 +2,8 @@
 using System.Text.RegularExpressions;
 
 using Intersect.Client.Framework.GenericClasses;
+using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Framework.Gwen
 {
@@ -102,16 +104,45 @@ namespace Intersect.Client.Framework.Gwen
             return inside;
         }
 
-        // from http://stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv
         public static Hsv ToHsv(this Color color)
         {
             var hsv = new Hsv();
             int max = Math.Max(color.R, Math.Max(color.G, color.B));
             int min = Math.Min(color.R, Math.Min(color.G, color.B));
 
-            hsv.H = 0;
-            hsv.s = max == 0 ? 0 : 1f - 1f * min / max;
+            float delta = max - min;
+
+            // Value (V) is the maximum RGB component scaled to [0, 1]
             hsv.V = max / 255f;
+
+            // Saturation (S)
+            hsv.S = max == 0 ? 0 : delta / (float)max;
+
+            // Hue (H) calculation
+            if (delta == 0)
+            {
+                hsv.H = 0; // undefined, default to 0 for grayscale colors
+            }
+            else
+            {
+                if (max == color.R)
+                {
+                    hsv.H = 60f * (((color.G - color.B) / delta) % 6);
+                }
+                else if (max == color.G)
+                {
+                    hsv.H = 60f * (((color.B - color.R) / delta) + 2);
+                }
+                else if (max == color.B)
+                {
+                    hsv.H = 60f * (((color.R - color.G) / delta) + 4);
+                }
+
+                if (hsv.H < 0)
+                {
+                    hsv.H += 360f; // Ensure hue is positive
+                }
+            }
 
             return hsv;
         }

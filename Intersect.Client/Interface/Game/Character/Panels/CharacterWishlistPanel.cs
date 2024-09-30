@@ -161,6 +161,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             CraftBg.IsHidden = SelectedCraft == null;
             RemoveFromWishlistButton.IsHidden = SelectedCraft == null;
 
+            CraftItemDescription?.Update();
+
             CharacterWishlistController.ServerUpdate = false;
         }
 

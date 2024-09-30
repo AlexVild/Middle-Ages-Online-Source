@@ -124,6 +124,11 @@ namespace Intersect.Client.Interface.Game
             return rect;
         }
 
+        public void UpdateDesc()
+        {
+            mDescWindow?.Update();
+        }
+
         public void Update(Guid currentItemId, ItemProperties itemProperties, int quantity = 1)
         {
             mCurrentItemId = currentItemId;

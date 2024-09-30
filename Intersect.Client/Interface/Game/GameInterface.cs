@@ -462,6 +462,7 @@ namespace Intersect.Client.Interface.Game
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
+            mShopWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

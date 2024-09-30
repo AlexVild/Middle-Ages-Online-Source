@@ -140,6 +140,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             {
                 ContentPanel.Hide();
             }
+
+            DescWindow?.Update();
         }
     }
 }

@@ -64,8 +64,6 @@ namespace Intersect.Client.Entities
 
         public Dictionary<Guid, long> ItemCooldowns = new Dictionary<Guid, long>();
 
-        private ItemDescriptionWindow mItemTargetBox;
-
         private Entity mLastBumpedEvent = null;
 
         private List<PartyMember> mParty;

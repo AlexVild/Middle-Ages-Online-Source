@@ -54,6 +54,11 @@ namespace Intersect.Client.Interface.Game.Components
             Image.Clicked += Image_Clicked;
         }
 
+        public void Update()
+        {
+            HoverWindow?.Update();
+        }
+
         private void Image_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
         {
             Audio.AddGameSound("ui_press.wav", false);

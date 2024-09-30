@@ -6,7 +6,7 @@
 
         public float H;
 
-        public float s;
+        public float S;
 
         public float V;
 

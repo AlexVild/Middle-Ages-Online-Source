@@ -73,7 +73,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
             if (!onlyHue)
             {
-                mCursorPos.X = (int) (hsv.s * Width);
+                mCursorPos.X = (int) (hsv.S * Width);
                 mCursorPos.Y = (int) ((1 - hsv.V) * Height);
             }
 
