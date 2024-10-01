@@ -111,12 +111,11 @@ namespace Intersect.Server.Core.Instancing.Controller
 
                 // Complete the dungeon timer & fire its events
                 var timer = DungeonDescriptor.Timer;
-                TimerProcessor.TryGetOwnerId(timer.OwnerType, timer.Id, player, out var ownerId);
-                TimerProcessor.TryGetActiveTimer(timer.Id, ownerId, out var activeTimer);
-                var isTimed = timer != default && ownerId != default && activeTimer != default;
-
-                if (isTimed)
+                
+                if (timer != null)
                 {
+                    TimerProcessor.TryGetOwnerId(timer.OwnerType, timer.Id, player, out var ownerId);
+                    TimerProcessor.TryGetActiveTimer(timer.Id, ownerId, out var activeTimer);
                     SetCompletionTime(activeTimer);
                 }
 
@@ -136,7 +135,7 @@ namespace Intersect.Server.Core.Instancing.Controller
                         pl.TrackDungeonCompletion(Dungeon.DescriptorId, DungeonParticipants, Dungeon.CompletionTime);
                     }
 
-                    if (!isTimed)
+                    if (timer == null)
                     {
                         continue;
                     }
