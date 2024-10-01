@@ -3570,16 +3570,72 @@ namespace Intersect.Server.Entities
                         {
                             break;
                         }
-                        
+
+                        ApplyPermabuffsToStats(itemBase);
+
                         if (itemBase.SkillPoints > 0)
                         {
-                            ItemSkillPoints += itemBase.SkillPoints;
                             PacketSender.SendChatMsg(this, Strings.Player.PermabuffSkillpoint.ToString(itemBase.SkillPoints), ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
                             // Send skill point update to client
                             PacketSender.SendSkillbookToClient(this);
                         }
+                        var idx = 0;
 
-                        ApplyPermabuffsToStats(itemBase);
+                        #region Messaging
+                        foreach (var statVal in itemBase.StatsGiven)
+                        {
+                            if (statVal > 0)
+                            {
+                                var stat = (Stats)idx;
+                                
+                                if (statVal < 0)
+                                {
+                                    PacketSender.SendChatMsg(this,
+                                        $"You've gained a permanent stat loss: {statVal} {stat.GetDescription()}!",
+                                        ChatMessageType.Experience,
+                                        CustomColors.General.GeneralCompleted,
+                                        sendToast: true);
+                                }
+                                else
+                                {
+                                    PacketSender.SendChatMsg(this, 
+                                        $"You've gained a permanent boost: +{statVal} {stat.GetDescription()}!", 
+                                        ChatMessageType.Experience, 
+                                        CustomColors.General.GeneralCompleted, 
+                                        sendToast: true);
+                                }
+                            }
+                            idx++;
+                        }
+
+                        idx = 0;
+                        foreach (var vitalVal in itemBase.VitalsGiven)
+                        {
+                            if (vitalVal > 0)
+                            {
+                                var vital = (Vitals)idx;
+
+                                if (vitalVal < 0)
+                                {
+                                    PacketSender.SendChatMsg(this,
+                                        $"You've gained a permanent stat loss: {vitalVal} {vital.GetDescription()}!",
+                                        ChatMessageType.Experience,
+                                        CustomColors.General.GeneralCompleted,
+                                        sendToast: true);
+                                }
+                                else
+                                {
+                                    PacketSender.SendChatMsg(this,
+                                        $"You've gained a permanent boost: +{vitalVal} {vital.GetDescription()}!",
+                                        ChatMessageType.Experience,
+                                        CustomColors.General.GeneralCompleted,
+                                        sendToast: true);
+                                }
+                            }
+                            idx++;
+                        }
+                        #endregion
+
                         PacketSender.SendAnimationToProximity(new Guid(Options.Instance.CombatOpts.SpellLearnedAnimGuid), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
                         PacketSender.SendUsedPermabuffs(this);
                         break;
