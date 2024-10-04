@@ -1278,8 +1278,8 @@ namespace Intersect.Client.Localization
                 {5, @"Tier 4"},
                 {6, @"Tier 5"},
                 {7, @"Tier 6"},
-                {8, @"Tier 7"},
-                {9, @"Tier 8"},
+                {8, @"Epic"},
+                {9, @"Finale"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

@@ -864,7 +864,7 @@ namespace Intersect.Server.Entities.Events
                 return false;
             }
 
-            return instanceController.Dungeon.GnomeObtained;
+            return instanceController.Dungeon?.GnomeObtained ?? false;
         }
 
         public static bool MeetsCondition(
@@ -890,6 +890,11 @@ namespace Intersect.Server.Entities.Events
         )
         {
             if (player == null || condition == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return false;
+            }
+
+            if (instanceController.Dungeon == null)
             {
                 return false;
             }
