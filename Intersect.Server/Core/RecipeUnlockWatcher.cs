@@ -123,7 +123,7 @@ namespace Intersect.Server.Core
 
             if (recipe == null || RecipeIdx >= Globals.CachedRecipes.Count || !currentPlayer.Player.Online)
             {
-                Logging.Log.Debug("Recipe loop completed");
+                Logging.Log.Trace("Recipe loop completed");
                 Dequeue();
                 return;
             }

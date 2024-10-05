@@ -2,6 +2,7 @@
 using Intersect.Server.Entities;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,12 @@ namespace Intersect.Server.Core.Instancing.Controller
     {
         public List<Guid> PlayerIds => Players.Select(pl => pl.Id).ToList();
 
+        public long CreationTime { get; private set; }
+
         public InstanceController(Guid instanceId, Player creator)
         {
             InstanceId = instanceId;
+            CreationTime = Timing.Global.Milliseconds;
             AddPlayer(creator);
 
             InitializeInstanceVariables();

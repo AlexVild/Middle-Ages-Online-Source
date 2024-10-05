@@ -171,7 +171,6 @@ namespace Intersect.Server.Core
                             }
 
                             //Refresh list of active maps & their instances
-                            //Refresh list of active maps & their instances
                             foreach (var kv in ActiveMapInstances.ToArray())
                             {
                                 var instanceId = kv.Key;

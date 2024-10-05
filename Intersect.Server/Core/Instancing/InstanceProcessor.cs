@@ -5,6 +5,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Core.Instancing.Controller;
 using Intersect.Server.Entities;
 using System.Collections.Concurrent;
+using Intersect.Utilities;
 
 namespace Intersect.Server.Core
 {
@@ -36,8 +37,13 @@ namespace Intersect.Server.Core
 
             foreach (var id in processingInstances.ToArray().Except(processingMaps))
             {
-                // Never cleanup the overworld controller
-                if (id == Guid.Empty)
+                if (!InstanceControllers.TryGetValue(id, out var controller))
+                {
+                    continue;
+                }
+
+                // Never cleanup the overworld controller or controllers that are fresh (Dungeon Bug fix)
+                if (id == Guid.Empty || controller.CreationTime + 5000 > Timing.Global.Milliseconds)
                 {
                     continue;
                 }

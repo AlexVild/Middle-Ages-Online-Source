@@ -9769,10 +9769,6 @@ namespace Intersect.Server.Entities
             set
             {
                 _nextDungeonId = value;
-                if (_nextDungeonId != Guid.Empty)
-                {
-                    Logging.Log.Error($"{Name} NextDungeonId == {value}");
-                }
             }
         }
 

@@ -199,6 +199,7 @@ namespace Intersect.Server.Maps
             lock (GetLock())
             {
                 mIsProcessing = true;
+                mLastUpdateTime = Timing.Global.Milliseconds;
 
                 CacheMapBlocks();
                 CacheTerritorySpawners();
