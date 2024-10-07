@@ -1541,7 +1541,7 @@ namespace Intersect.Client.Entities
             }
 
             // Don't draw if non-aggressive NPC, IF namefading is off
-            if (!Globals.Database.NameFading && !(this is Event) && !(this is Player) && !IsTargeted && Type != -1)
+            if (!(this is Event) && !(this is Player) && !IsTargeted && Type != -1)
             {
                 return;
             }
