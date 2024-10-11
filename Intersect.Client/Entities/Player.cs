@@ -2419,7 +2419,7 @@ namespace Intersect.Client.Entities
                         var statusCount = StatusCount(relevantStatus);
                         if (statusCount > 0)
                         {
-                            harvestBonusValue += (bonus * statusCount) * 0.01;
+                            harvestBonusValue += bonus * 0.01;
                         };
 
                         var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * harvestBonusValue);

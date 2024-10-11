@@ -1685,7 +1685,7 @@ namespace Intersect.Server.Entities
                         var statusCount = StatusCount(relevantStatus);
                         if (statusCount > 0)
                         {
-                            harvestBonus += (bonus * statusCount) * 0.01;
+                            harvestBonus += bonus * 0.01;
                         };
 
                         harvestBonus = Math.Min(harvestBonus, 0.8);
