@@ -10073,7 +10073,7 @@ namespace Intersect.Server.Entities
             bool vampire,
             out int damage)
         {
-            var damageDealt = base.TryDealManaDamageTo(enemy, dmg, dmg, critMultiplier, vampire, out damage);
+            var damageDealt = base.TryDealManaDamageTo(enemy, dmg, dmgScaling, critMultiplier, vampire, out damage);
 
             if (damageDealt)
             {
