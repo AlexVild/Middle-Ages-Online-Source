@@ -1913,15 +1913,73 @@ namespace Intersect.Editor.Forms
 
             Globals.PackingProgressForm.SetProgress(Strings.AssetPacking.done, 100, false);
             Application.DoEvents();
-            System.Threading.Thread.Sleep(1000);
+            System.Threading.Thread.Sleep(800);
 
             Globals.PackingProgressForm.NotifyClose();
         }
 
         private void packageUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var selectedPath = @"E:\Alex Vild\Documents\Game Dev\Intersect\Projects\Middle Ages Online\updates";
+            Uri baseDir = new Uri(Directory.GetCurrentDirectory() + "\\");
+            Uri selectedDir = new Uri(selectedPath + "\\");
+            if (baseDir.IsBaseOf(selectedDir))
+            {
+                //Error, cannot be put within editor folder else it would try to include itself?
+                MessageBox.Show(
+                    Strings.UpdatePacking.InvalidBase, Strings.UpdatePacking.Error, MessageBoxButtons.OK
+                );
+                return;
+            }
+
+            Update existingUpdate = null;
+            if (Directory.Exists(selectedPath) && File.Exists(Path.Combine(selectedPath, "update.json")))
+            {
+                //Existing update! Offer to create a differential folder where the only files within will be those that have changed
+                if (MessageBox.Show(
+                        Strings.UpdatePacking.Differential, Strings.UpdatePacking.DifferentialTitle,
+                        MessageBoxButtons.YesNo
+                    ) ==
+                    DialogResult.Yes)
+                {
+                    existingUpdate = JsonConvert.DeserializeObject<Update>(File.ReadAllText(Path.Combine(selectedPath, "update.json")));
+                }
+            }
+            else
+            {
+                if (Directory.EnumerateFileSystemEntries(selectedPath).Any())
+                {
+                    //Folder must be empty!
+                    MessageBox.Show(
+                        Strings.UpdatePacking.Empty, Strings.UpdatePacking.Error, MessageBoxButtons.OK
+                    );
+                    return;
+                }
+            }
+
+            // Are we configured to package up our assets for an update?
+            var packageUpdateAssets = Preferences.LoadPreference("PackageUpdateAssets");
+            if (packageUpdateAssets != "" && Convert.ToBoolean(packageUpdateAssets))
+            {
+                Globals.PackingProgressForm = new FrmProgress();
+                Globals.PackingProgressForm.SetTitle(Strings.AssetPacking.title);
+                var assetThread = new Thread(() => packAssets());
+                assetThread.Start();
+                Globals.PackingProgressForm.ShowDialog();
+            }
+
+            Globals.UpdateCreationProgressForm = new FrmProgress();
+            Globals.UpdateCreationProgressForm.SetTitle(Strings.UpdatePacking.Title);
+            Globals.UpdateCreationProgressForm.SetProgress(Strings.UpdatePacking.Deleting, 10, false);
+            var packingthread = new Thread(() => createUpdate(selectedPath, existingUpdate));
+            packingthread.Start();
+            Globals.UpdateCreationProgressForm.ShowDialog();
+
+            /* AVild - Commenting this out as I don't really ever need to change the updater file location
             using(var fbd = new FolderBrowserDialog())
             {
+                // MAO default update path
+                fbd.SelectedPath = @"E:\Alex Vild\Documents\Game Dev\Intersect\Projects\Middle Ages Online\updates";
                 DialogResult result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
@@ -1981,6 +2039,7 @@ namespace Intersect.Editor.Forms
                     Globals.UpdateCreationProgressForm.ShowDialog();
                 }
             }
+            */
         }
 
         private void createUpdate(string path, Update existingUpdate)
@@ -2005,7 +2064,7 @@ namespace Intersect.Editor.Forms
                 }
 
                 //Intersect excluded files
-                var excludeFiles = new string[] {"resources/mapcache.db", "update.json", "version.json"};
+                var excludeFiles = new string[] {"resources/mapcache.db", "update.json", "version.json", "resources/update_config.json"};
                 var clientExcludeFiles = new List<string>(){"intersect editor.exe", "intersect editor.pdb"};
                 var excludeExtensions = new string[] {".dll", ".xml", ".config", ".php"};
                 var excludeDirectories = new string[] {"logs", "screenshots"};
@@ -2070,16 +2129,38 @@ namespace Intersect.Editor.Forms
                 string relativePath = Uri.UnescapeDataString(workingDir.MakeRelativeUri(new Uri(Path.Combine(path, file.Name))).ToString().Replace('\\', '/'));
                 if (!excludeFiles.Contains(relativePath) && !excludeExtensions.Contains(file.Extension))
                 {
+                    // Check if the file is config.json
+                    FileInfo fileToProcess = file;
+
+                    if (file.Name.Equals("config.json", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Try to find update_config.json in the same directory
+                        FileInfo updateConfigFile = new FileInfo(Path.Combine(file.DirectoryName, "update_config.json"));
+
+                        if (updateConfigFile.Exists)
+                        {
+                            // Replace config.json with update_config.json for processing
+                            fileToProcess = updateConfigFile;
+
+                            relativePath = "config.json";
+                        }
+                        else
+                        {
+                            // If update_config.json does not exist, continue with config.json as usual
+                            fileToProcess = file;
+                        }
+                    }
+
                     var md5Hash = "";
                     using (var md5 = MD5.Create())
                     {
-                        using (var stream = new BufferedStream(File.OpenRead(file.FullName), 1200000))
+                        using (var stream = new BufferedStream(File.OpenRead(fileToProcess.FullName), 1200000))
                         {
                             md5Hash = BitConverter.ToString(md5.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
                         }
                     }
 
-                    var updateFile = new UpdateFile(relativePath, md5Hash, file.Length);
+                    var updateFile = new UpdateFile(relativePath, md5Hash, fileToProcess.Length);
 
                     if (clientExcludeFiles.Contains(relativePath.ToLower()))
                     {
@@ -2095,16 +2176,21 @@ namespace Intersect.Editor.Forms
                         existingFile = existingUpdate.Files.FirstOrDefault(f => f.Path == updateFile.Path);
                     }
 
-                    if (existingFile == null || existingFile.Size != updateFile.Size || existingFile.Hash != updateFile.Hash) { 
-                        var relativeFolder = Uri.UnescapeDataString(workingDir.MakeRelativeUri(new Uri(path + "/")).ToString().Replace('\\','/'));
+                    if (existingFile == null || existingFile.Size != updateFile.Size || existingFile.Hash != updateFile.Hash)
+                    {
+                        var relativeFolder = Uri.UnescapeDataString(workingDir.MakeRelativeUri(new Uri(path + "/")).ToString().Replace('\\', '/'));
                         if (!string.IsNullOrEmpty(relativeFolder))
                         {
                             Directory.CreateDirectory(Path.Combine(updatePath, relativeFolder));
-                            File.Copy(file.FullName, Path.Combine(updatePath, relativeFolder, file.Name));
+                            File.Copy(fileToProcess.FullName, Path.Combine(updatePath, 
+                                relativeFolder, 
+                                fileToProcess.Name.Equals("update_config.json", StringComparison.OrdinalIgnoreCase) ? "config.json" : fileToProcess.Name));
                         }
                         else
                         {
-                            File.Copy(file.FullName, Path.Combine(updatePath, file.Name));
+                            File.Copy(
+                                fileToProcess.FullName, 
+                                Path.Combine(updatePath, fileToProcess.Name.Equals("update_config.json", StringComparison.OrdinalIgnoreCase) ? "config.json" : fileToProcess.Name));
                         }
                     }
                 }
