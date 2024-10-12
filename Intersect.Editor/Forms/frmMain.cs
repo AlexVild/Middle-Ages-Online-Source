@@ -2142,7 +2142,7 @@ namespace Intersect.Editor.Forms
                             // Replace config.json with update_config.json for processing
                             fileToProcess = updateConfigFile;
 
-                            relativePath = "config.json";
+                            relativePath = "resources/config.json";
                         }
                         else
                         {
@@ -2194,10 +2194,6 @@ namespace Intersect.Editor.Forms
                         }
                     }
                 }
-                else
-                {
-                    //MessageBox.Show("File not added to update! " + relativePath);
-                }
 
                 filesProcessed++;
 
@@ -2234,6 +2230,16 @@ namespace Intersect.Editor.Forms
                 File.WriteAllText(Path.Combine(updatePath, "update.json"), JsonConvert.SerializeObject(update, Formatting.Indented, new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore }));
 
                 Globals.UpdateCreationProgressForm.NotifyClose();
+
+                DialogResult result = MessageBox.Show("Update complete! Do you want to transfer the update files to the updater server?",
+                "Update Complete",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+                // Handle the user's response
+                if (result == DialogResult.Yes)
+                {
+                    PythonExecutor.ExecutePythonScript(@"E:\Alex Vild\Documents\Game Dev\Intersect\Projects\Middle Ages Online\Tools\Transfer Update\transfer_update.py");
+                }
             }
 
             return filesProcessed;
