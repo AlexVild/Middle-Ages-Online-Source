@@ -26,7 +26,7 @@ namespace Intersect.Client.Interface.Game.Components
         private int CurrentLevel { get; set; }
         private int NextLevel { get; set; }
         private long HarvestsRemaining { get; set; }
-        private int MaxLevel => Options.Combat.HarvestBonuses.Count - 1;
+        private int MaxLevel => Options.Combat.HarvestBonuses.Count;
         private bool IsMaxed => CurrentLevel >= MaxLevel;
 
         private float _Percent;

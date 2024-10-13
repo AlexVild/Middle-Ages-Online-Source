@@ -567,7 +567,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 show = true;
             }
 
-            if (MyEntity.GetEntityType() == EntityTypes.Player && !TradeLabel.IsVisible)
+            if (MyEntity.GetEntityType() == EntityTypes.Player && !TradeLabel.IsVisible && MyEntity.Id != Globals.Me.Id)
             {
                 show = true;
             }
