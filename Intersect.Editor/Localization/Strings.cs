@@ -519,6 +519,11 @@ namespace Intersect.Editor.Localization
             return $"Dungeon gnome is in location {condition.GnomeLocation}";
         }
 
+        public static string GetEventConditionalDesc(PlayerIsDashing condition)
+        {
+            return $"Player is actively dashing/grappling";
+        }
+
         public static string GetEventConditionalDesc(EnhancementKnown condition)
         {
             return $"Enhancement known: {EnhancementDescriptor.GetName(condition.EnhancementId)}";
@@ -2615,6 +2620,7 @@ Tick timer saved in server config.json.";
                 {58, @"Has X Skills Equipped..."},
                 {59, @"Awatiting challenge for weapon track lvl X..."},
                 {60, @"Weapon equipped of track X lvl Y..."},
+                {61, @"Player is Dashing/Grappling..."},
             };
 
             public static LocalizedString endrange = @"End Range:";

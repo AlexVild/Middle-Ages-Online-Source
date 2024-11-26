@@ -646,6 +646,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     break;
 
+                case ConditionTypes.PlayerIsDashing:
+                    Condition = new PlayerIsDashing();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1038,6 +1043,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         cmbWeaponType.SelectedIndex = 0;
                     }
 
+                    break;
+
+                case ConditionTypes.PlayerIsDashing:
                     break;
 
                 default:
@@ -1980,6 +1988,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudWeaponTypeLvl.Value = condition.Level;
         }
 
+        private void SetupFormValues(PlayerIsDashing condition)
+        {
+            // There are no additional parameters for this guy
+        }
+
         private void SetupFormValues(DungeonIs condition)
         {
             darkComboBox1.SelectedIndex = (int)condition.State;
@@ -2420,6 +2433,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             condition.WeaponTypeId = WeaponTypeDescriptor.IdFromList(cmbWeaponType.SelectedIndex);
             condition.Level = (int)nudWeaponTypeLvl.Value;
+        }
+
+        private void SaveFormValues(PlayerIsDashing condition)
+        {
         }
 
         private void SaveFormValues(DungeonIs condition)

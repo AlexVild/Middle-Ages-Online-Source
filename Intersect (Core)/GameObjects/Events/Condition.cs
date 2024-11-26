@@ -127,6 +127,8 @@ namespace Intersect.GameObjects.Events
         
         WeaponIsType,
 
+        PlayerIsDashing,
+
     }
 
     public class Condition
@@ -877,4 +879,8 @@ namespace Intersect.GameObjects.Events
         public int Level { get; set; }
     }
 
+    public class PlayerIsDashing : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.WeaponIsType;
+    }
 }

@@ -1384,7 +1384,7 @@ namespace Intersect.Server.Entities.Events
         }
 
         public static bool MeetsCondition(
-          WeaponIsType condition,
+          PlayerIsDashing condition,
           Player player,
           Event eventInstance,
           QuestBase questBase
@@ -1395,17 +1395,8 @@ namespace Intersect.Server.Entities.Events
                 return false;
             }
 
-            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var weapon) || weapon.Descriptor == null)
-            {
-                return false;
-            }
-
-            if (!weapon.Descriptor.MaxWeaponLevels.TryGetValue(condition.WeaponTypeId, out var weaponLvl))
-            {
-                return false;
-            }
-
-            return weaponLvl >= condition.Level;
+            var now = Timing.Global.Milliseconds;
+            return player.DashTransmissionTimer > now;
         }
     }
 
