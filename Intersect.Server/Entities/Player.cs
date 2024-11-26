@@ -1037,31 +1037,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
-            {
-                if (vital == Vitals.Mana)
-                {
-                    continue; // We process mana regen differently in MAO, see "ProcessManaRegen"
-                }
-                if (vital >= Vitals.VitalCount)
-                {
-                    continue;
-                }
-
-                var vitalId = (int) vital;
-                var vitalValue = GetVital(vital);
-                var maxVitalValue = GetMaxVital(vital);
-                if (vitalValue >= maxVitalValue)
-                {
-                    continue;
-                }
-
-                var vitalRegenRate = GetVitalRegenRate(vitalId);
-                var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
-                                 Math.Abs(Math.Sign(vitalRegenRate));
-
-                AddVital(vital, regenValue);
-            }
+            base.ProcessRegen();
         }
 
         public override void ProcessManaRegen(long timeMs)
