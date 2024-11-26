@@ -1262,6 +1262,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
             txtDesc.Text = CurrentPage.Description;
             chkIdleAnim.Checked = CurrentPage.IdleAnimation;
+            chkIgnoreBlocked.Checked = CurrentPage.IgnoreBlocked;
 
             if (!MyEvent.CommonEvent && !QuestEvent)
             {
@@ -2420,6 +2421,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkParallelRun_CheckedChanged(object sender, EventArgs e)
         {
             MyEvent.CanRunInParallel = chkParallelRun.Checked;
+        }
+
+        private void chkIgnoreBlocked_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.IgnoreBlocked = chkIgnoreBlocked.Checked;
         }
     }
 

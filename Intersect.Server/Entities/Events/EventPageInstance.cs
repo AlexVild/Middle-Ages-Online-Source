@@ -65,6 +65,8 @@ namespace Intersect.Server.Entities.Events
         public string LastGraphic { get; set; }
         public bool LastHideName { get; set; }
 
+        public bool IgnoreBlocked { get; set; }
+
         public EventPageInstance(
             EventBase myEvent,
             EventPage myPage,
@@ -109,6 +111,7 @@ namespace Intersect.Server.Entities.Events
             mIdleAnimation = MyPage.IdleAnimation;
             mWalkingAnim = MyPage.WalkingAnimation;
             mRenderLayer = MyPage.Layer;
+            IgnoreBlocked = MyPage.IgnoreBlocked;
             if (MyGraphic.Type == EventGraphicType.Sprite)
             {
                 switch (MyGraphic.Y)
@@ -186,6 +189,7 @@ namespace Intersect.Server.Entities.Events
             mIdleAnimation = MyPage.IdleAnimation;
             mWalkingAnim = MyPage.WalkingAnimation;
             mRenderLayer = MyPage.Layer;
+            IgnoreBlocked = globalClone.IgnoreBlocked;
             if (globalClone.MyGraphic.Type == EventGraphicType.Sprite)
             {
                 switch (MyPage.Graphic.Y)
@@ -226,29 +230,7 @@ namespace Intersect.Server.Entities.Events
             set
             {
                 mMovementSpeed = value;
-                switch (mMovementSpeed)
-                {
-                    case EventMovementSpeed.Slowest:
-                        Speed = 2;
-
-                        break;
-                    case EventMovementSpeed.Slower:
-                        Speed = 5;
-
-                        break;
-                    case EventMovementSpeed.Normal:
-                        Speed = 20;
-
-                        break;
-                    case EventMovementSpeed.Faster:
-                        Speed = 30;
-
-                        break;
-                    case EventMovementSpeed.Fastest:
-                        Speed = 40;
-
-                        break;
-                }
+                SetMovementSpeed(mMovementSpeed);
             }
         }
 
@@ -330,7 +312,7 @@ namespace Intersect.Server.Entities.Events
             switch (speed)
             {
                 case EventMovementSpeed.Slowest:
-                    Speed = 5;
+                    Speed = 1;
 
                     break;
                 case EventMovementSpeed.Slower:
@@ -342,11 +324,11 @@ namespace Intersect.Server.Entities.Events
 
                     break;
                 case EventMovementSpeed.Faster:
-                    Speed = 30;
+                    Speed = 50;
 
                     break;
                 case EventMovementSpeed.Fastest:
-                    Speed = 40;
+                    Speed = 99;
 
                     break;
             }
@@ -881,7 +863,14 @@ namespace Intersect.Server.Entities.Events
 
                     break;
             }
-            return base.CanMove(moveDir);
+
+            var canMove = base.CanMove(moveDir);
+            if (canMove == -2 && IgnoreBlocked)
+            {
+                return -1;
+            }
+
+            return canMove;
         }
 
         public void TurnTowardsPlayer()

@@ -39,7 +39,9 @@ namespace Intersect.GameObjects.Events
         public string Description { get; set; } = "";
 
         public bool DirectionFix { get; set; }
-        
+
+        public bool IgnoreBlocked { get; set; }
+
         public bool IdleAnimation { get; set; }
 
         public bool DisablePreview { get; set; } = true;
