@@ -201,6 +201,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAdd = new DarkUI.Controls.DarkButton();
             this.lstSpells = new System.Windows.Forms.ListBox();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.chkAnimated = new DarkUI.Controls.DarkCheckBox();
             this.chkHideName = new DarkUI.Controls.DarkCheckBox();
             this.lblTier = new System.Windows.Forms.Label();
             this.nudTier = new DarkUI.Controls.DarkNumericUpDown();
@@ -282,7 +283,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkAnimated = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -2386,7 +2386,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.Controls.Add(this.chkAttackAllies);
             this.grpNpcVsNpc.Controls.Add(this.chkEnabled);
             this.grpNpcVsNpc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNpcVsNpc.Location = new System.Drawing.Point(4, 1018);
+            this.grpNpcVsNpc.Location = new System.Drawing.Point(4, 1060);
             this.grpNpcVsNpc.Name = "grpNpcVsNpc";
             this.grpNpcVsNpc.Size = new System.Drawing.Size(206, 308);
             this.grpNpcVsNpc.TabIndex = 29;
@@ -2644,6 +2644,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 14;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // chkAnimated
+            // 
+            this.chkAnimated.AutoSize = true;
+            this.chkAnimated.Location = new System.Drawing.Point(7, 218);
+            this.chkAnimated.Name = "chkAnimated";
+            this.chkAnimated.Size = new System.Drawing.Size(76, 17);
+            this.chkAnimated.TabIndex = 82;
+            this.chkAnimated.Text = "Animated?";
+            this.chkAnimated.CheckedChanged += new System.EventHandler(this.chkAnimated_CheckedChanged);
             // 
             // chkHideName
             // 
@@ -3727,16 +3737,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.Size = new System.Drawing.Size(58, 13);
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
-            // 
-            // chkAnimated
-            // 
-            this.chkAnimated.AutoSize = true;
-            this.chkAnimated.Location = new System.Drawing.Point(7, 218);
-            this.chkAnimated.Name = "chkAnimated";
-            this.chkAnimated.Size = new System.Drawing.Size(76, 17);
-            this.chkAnimated.TabIndex = 82;
-            this.chkAnimated.Text = "Animated?";
-            this.chkAnimated.CheckedChanged += new System.EventHandler(this.chkAnimated_CheckedChanged);
             // 
             // FrmNpc
             // 

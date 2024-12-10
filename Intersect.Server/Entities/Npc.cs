@@ -797,8 +797,8 @@ namespace Intersect.Server.Entities
             InterruptThreshold = -1;
             if (spellBase.InterruptThreshold > 0 && spellBase.CastDuration > 0)
             {
-                InterruptThreshold = spellBase.InterruptThreshold;
-                PacketSender.SendCombatNumber(CombatNumberType.Interrupt, this, 0, threshold: spellBase.InterruptThreshold);
+                InterruptThreshold = (int)Math.Floor(spellBase.InterruptThreshold * ScaleFactor);
+                PacketSender.SendCombatNumber(CombatNumberType.Interrupt, this, 0, threshold: InterruptThreshold);
             }
 
             PacketSender.SendEntityCastTime(this, spellId);
@@ -2005,25 +2005,33 @@ namespace Intersect.Server.Entities
         /// </summary>
         private void ScaleToAggressors()
         {
-            LastAggressorCount = AggressorCount;
             if (Base.NpcScaleType == (int)NpcScaleType.None || Base.ScaledTo <= 0)
             {
                 return;
             }
 
             // Reset to default values if we're not currently in need of scaling
-            if (AggressorCount <= Base.ScaledTo)
+            if (!ShouldScale)
             {
                 ScaleVitals(1.0f);
             }
             // Scale values according to aggressor count (attackers & attacker allies - the amount of players the content is scaled to)
             else
             {
-                var scalingAggressors = Math.Min(AggressorCount - Base.ScaledTo, Base.MaxScaledTo);
-
-                ScaleVitals(1.0f + (scalingAggressors * Base.VitalScaleModifier));
+                ScaleVitals(ScaleFactor);
             }
         }
+
+        private float ScaleFactor
+        {
+            get
+            {
+                var scalingAggressors = Math.Min(AggressorCount - Base.ScaledTo, Base.MaxScaledTo);
+                return 1.0f + (scalingAggressors * Base.VitalScaleModifier);
+            }
+        }
+
+        private bool ShouldScale => AggressorCount > Base.ScaledTo
 
         private void ScaleVitals(float factor)
         {
