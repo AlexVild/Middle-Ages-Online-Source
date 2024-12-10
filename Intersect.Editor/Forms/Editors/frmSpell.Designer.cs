@@ -47,19 +47,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblComponent = new System.Windows.Forms.Label();
             this.cmbComponents = new DarkUI.Controls.DarkComboBox();
             this.lstComponents = new System.Windows.Forms.ListBox();
-            this.grpDash = new DarkUI.Controls.DarkGroupBox();
-            this.cmbDashAnimation = new DarkUI.Controls.DarkComboBox();
-            this.lblDashAnimation = new System.Windows.Forms.Label();
-            this.cmbDashSpell = new DarkUI.Controls.DarkComboBox();
-            this.lblDashSpell = new System.Windows.Forms.Label();
-            this.grpDashCollisions = new DarkUI.Controls.DarkGroupBox();
-            this.chkEntities = new DarkUI.Controls.DarkCheckBox();
-            this.chkIgnoreInactiveResources = new DarkUI.Controls.DarkCheckBox();
-            this.chkIgnoreZDimensionBlocks = new DarkUI.Controls.DarkCheckBox();
-            this.chkIgnoreMapBlocks = new DarkUI.Controls.DarkCheckBox();
-            this.chkIgnoreActiveResources = new DarkUI.Controls.DarkCheckBox();
-            this.lblRange = new System.Windows.Forms.Label();
-            this.scrlRange = new DarkUI.Controls.DarkScrollBar();
             this.grpTargetInfo = new DarkUI.Controls.DarkGroupBox();
             this.chkPersistMissedAttack = new DarkUI.Controls.DarkCheckBox();
             this.chkPersistSwap = new DarkUI.Controls.DarkCheckBox();
@@ -75,6 +62,19 @@ namespace Intersect.Editor.Forms.Editors
             this.lblCastRange = new System.Windows.Forms.Label();
             this.lblTargetType = new System.Windows.Forms.Label();
             this.nudCastRange = new DarkUI.Controls.DarkNumericUpDown();
+            this.grpDash = new DarkUI.Controls.DarkGroupBox();
+            this.cmbDashAnimation = new DarkUI.Controls.DarkComboBox();
+            this.lblDashAnimation = new System.Windows.Forms.Label();
+            this.cmbDashSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblDashSpell = new System.Windows.Forms.Label();
+            this.grpDashCollisions = new DarkUI.Controls.DarkGroupBox();
+            this.chkEntities = new DarkUI.Controls.DarkCheckBox();
+            this.chkIgnoreInactiveResources = new DarkUI.Controls.DarkCheckBox();
+            this.chkIgnoreZDimensionBlocks = new DarkUI.Controls.DarkCheckBox();
+            this.chkIgnoreMapBlocks = new DarkUI.Controls.DarkCheckBox();
+            this.chkIgnoreActiveResources = new DarkUI.Controls.DarkCheckBox();
+            this.lblRange = new System.Windows.Forms.Label();
+            this.scrlRange = new DarkUI.Controls.DarkScrollBar();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
@@ -116,6 +116,9 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotCast = new DarkUI.Controls.DarkTextBox();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
+            this.grpAdvAoe = new DarkUI.Controls.DarkGroupBox();
+            this.lblAoeShape = new System.Windows.Forms.Label();
+            this.cmbAoeShape = new DarkUI.Controls.DarkComboBox();
             this.grpBalanceHelp = new DarkUI.Controls.DarkGroupBox();
             this.lblMaxHitVal = new System.Windows.Forms.Label();
             this.lblMaxHit = new System.Windows.Forms.Label();
@@ -277,12 +280,12 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).BeginInit();
-            this.grpDash.SuspendLayout();
-            this.grpDashCollisions.SuspendLayout();
             this.grpTargetInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).BeginInit();
+            this.grpDash.SuspendLayout();
+            this.grpDashCollisions.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
             this.grpSpellCost.SuspendLayout();
@@ -294,6 +297,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHPCost)).BeginInit();
             this.grpRequirements.SuspendLayout();
             this.grpCombat.SuspendLayout();
+            this.grpAdvAoe.SuspendLayout();
             this.grpBalanceHelp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMockMagic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMockPierce)).BeginInit();
@@ -355,8 +359,8 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.AutoScroll = true;
             this.pnlContainer.Controls.Add(this.grpSpellGroup);
             this.pnlContainer.Controls.Add(this.grpComponents);
-            this.pnlContainer.Controls.Add(this.grpDash);
             this.pnlContainer.Controls.Add(this.grpTargetInfo);
+            this.pnlContainer.Controls.Add(this.grpDash);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpSpellCost);
             this.pnlContainer.Controls.Add(this.grpRequirements);
@@ -572,172 +576,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstComponents.Size = new System.Drawing.Size(201, 80);
             this.lstComponents.TabIndex = 108;
             this.lstComponents.SelectedIndexChanged += new System.EventHandler(this.lstComponents_SelectedIndexChanged);
-            // 
-            // grpDash
-            // 
-            this.grpDash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpDash.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDash.Controls.Add(this.cmbDashAnimation);
-            this.grpDash.Controls.Add(this.lblDashAnimation);
-            this.grpDash.Controls.Add(this.cmbDashSpell);
-            this.grpDash.Controls.Add(this.lblDashSpell);
-            this.grpDash.Controls.Add(this.grpDashCollisions);
-            this.grpDash.Controls.Add(this.lblRange);
-            this.grpDash.Controls.Add(this.scrlRange);
-            this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDash.Location = new System.Drawing.Point(215, 2);
-            this.grpDash.Name = "grpDash";
-            this.grpDash.Size = new System.Drawing.Size(220, 297);
-            this.grpDash.TabIndex = 38;
-            this.grpDash.TabStop = false;
-            this.grpDash.Text = "Dash";
-            this.grpDash.Visible = false;
-            // 
-            // cmbDashAnimation
-            // 
-            this.cmbDashAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDashAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDashAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDashAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDashAnimation.DrawDropdownHoverOutline = false;
-            this.cmbDashAnimation.DrawFocusRectangle = false;
-            this.cmbDashAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDashAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDashAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDashAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDashAnimation.FormattingEnabled = true;
-            this.cmbDashAnimation.Location = new System.Drawing.Point(12, 266);
-            this.cmbDashAnimation.Name = "cmbDashAnimation";
-            this.cmbDashAnimation.Size = new System.Drawing.Size(200, 21);
-            this.cmbDashAnimation.TabIndex = 59;
-            this.cmbDashAnimation.Text = null;
-            this.cmbDashAnimation.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbDashAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbDashAnimation_SelectedIndexChanged);
-            // 
-            // lblDashAnimation
-            // 
-            this.lblDashAnimation.AutoSize = true;
-            this.lblDashAnimation.Location = new System.Drawing.Point(11, 248);
-            this.lblDashAnimation.Name = "lblDashAnimation";
-            this.lblDashAnimation.Size = new System.Drawing.Size(81, 13);
-            this.lblDashAnimation.TabIndex = 58;
-            this.lblDashAnimation.Text = "Dash Animation";
-            // 
-            // cmbDashSpell
-            // 
-            this.cmbDashSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDashSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDashSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDashSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDashSpell.DrawDropdownHoverOutline = false;
-            this.cmbDashSpell.DrawFocusRectangle = false;
-            this.cmbDashSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDashSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDashSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDashSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDashSpell.FormattingEnabled = true;
-            this.cmbDashSpell.Location = new System.Drawing.Point(14, 224);
-            this.cmbDashSpell.Name = "cmbDashSpell";
-            this.cmbDashSpell.Size = new System.Drawing.Size(200, 21);
-            this.cmbDashSpell.TabIndex = 18;
-            this.cmbDashSpell.Text = null;
-            this.cmbDashSpell.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbDashSpell.SelectedIndexChanged += new System.EventHandler(this.cmbDashSpell_SelectedIndexChanged);
-            // 
-            // lblDashSpell
-            // 
-            this.lblDashSpell.AutoSize = true;
-            this.lblDashSpell.Location = new System.Drawing.Point(11, 208);
-            this.lblDashSpell.Name = "lblDashSpell";
-            this.lblDashSpell.Size = new System.Drawing.Size(58, 13);
-            this.lblDashSpell.TabIndex = 57;
-            this.lblDashSpell.Text = "Dash Spell";
-            // 
-            // grpDashCollisions
-            // 
-            this.grpDashCollisions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpDashCollisions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDashCollisions.Controls.Add(this.chkEntities);
-            this.grpDashCollisions.Controls.Add(this.chkIgnoreInactiveResources);
-            this.grpDashCollisions.Controls.Add(this.chkIgnoreZDimensionBlocks);
-            this.grpDashCollisions.Controls.Add(this.chkIgnoreMapBlocks);
-            this.grpDashCollisions.Controls.Add(this.chkIgnoreActiveResources);
-            this.grpDashCollisions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDashCollisions.Location = new System.Drawing.Point(12, 62);
-            this.grpDashCollisions.Name = "grpDashCollisions";
-            this.grpDashCollisions.Size = new System.Drawing.Size(202, 143);
-            this.grpDashCollisions.TabIndex = 41;
-            this.grpDashCollisions.TabStop = false;
-            this.grpDashCollisions.Text = "Ignore Collision:";
-            // 
-            // chkEntities
-            // 
-            this.chkEntities.AutoSize = true;
-            this.chkEntities.Location = new System.Drawing.Point(6, 108);
-            this.chkEntities.Name = "chkEntities";
-            this.chkEntities.Size = new System.Drawing.Size(60, 17);
-            this.chkEntities.TabIndex = 39;
-            this.chkEntities.Text = "Entities";
-            this.chkEntities.CheckedChanged += new System.EventHandler(this.chkEntities_CheckedChanged);
-            // 
-            // chkIgnoreInactiveResources
-            // 
-            this.chkIgnoreInactiveResources.AutoSize = true;
-            this.chkIgnoreInactiveResources.Location = new System.Drawing.Point(6, 62);
-            this.chkIgnoreInactiveResources.Name = "chkIgnoreInactiveResources";
-            this.chkIgnoreInactiveResources.Size = new System.Drawing.Size(118, 17);
-            this.chkIgnoreInactiveResources.TabIndex = 38;
-            this.chkIgnoreInactiveResources.Text = "Inactive Resources";
-            this.chkIgnoreInactiveResources.CheckedChanged += new System.EventHandler(this.chkIgnoreInactiveResources_CheckedChanged);
-            // 
-            // chkIgnoreZDimensionBlocks
-            // 
-            this.chkIgnoreZDimensionBlocks.AutoSize = true;
-            this.chkIgnoreZDimensionBlocks.Location = new System.Drawing.Point(6, 85);
-            this.chkIgnoreZDimensionBlocks.Name = "chkIgnoreZDimensionBlocks";
-            this.chkIgnoreZDimensionBlocks.Size = new System.Drawing.Size(120, 17);
-            this.chkIgnoreZDimensionBlocks.TabIndex = 37;
-            this.chkIgnoreZDimensionBlocks.Text = "Z-Dimension Blocks";
-            this.chkIgnoreZDimensionBlocks.CheckedChanged += new System.EventHandler(this.chkIgnoreZDimensionBlocks_CheckedChanged);
-            // 
-            // chkIgnoreMapBlocks
-            // 
-            this.chkIgnoreMapBlocks.AutoSize = true;
-            this.chkIgnoreMapBlocks.Location = new System.Drawing.Point(6, 16);
-            this.chkIgnoreMapBlocks.Name = "chkIgnoreMapBlocks";
-            this.chkIgnoreMapBlocks.Size = new System.Drawing.Size(82, 17);
-            this.chkIgnoreMapBlocks.TabIndex = 33;
-            this.chkIgnoreMapBlocks.Text = "Map Blocks";
-            this.chkIgnoreMapBlocks.CheckedChanged += new System.EventHandler(this.chkIgnoreMapBlocks_CheckedChanged);
-            // 
-            // chkIgnoreActiveResources
-            // 
-            this.chkIgnoreActiveResources.AutoSize = true;
-            this.chkIgnoreActiveResources.Location = new System.Drawing.Point(6, 39);
-            this.chkIgnoreActiveResources.Name = "chkIgnoreActiveResources";
-            this.chkIgnoreActiveResources.Size = new System.Drawing.Size(110, 17);
-            this.chkIgnoreActiveResources.TabIndex = 36;
-            this.chkIgnoreActiveResources.Text = "Active Resources";
-            this.chkIgnoreActiveResources.CheckedChanged += new System.EventHandler(this.chkIgnoreActiveResources_CheckedChanged);
-            // 
-            // lblRange
-            // 
-            this.lblRange.AutoSize = true;
-            this.lblRange.Location = new System.Drawing.Point(11, 25);
-            this.lblRange.Name = "lblRange";
-            this.lblRange.Size = new System.Drawing.Size(51, 13);
-            this.lblRange.TabIndex = 40;
-            this.lblRange.Text = "Range: 0";
-            // 
-            // scrlRange
-            // 
-            this.scrlRange.Location = new System.Drawing.Point(14, 38);
-            this.scrlRange.Maximum = 10;
-            this.scrlRange.Name = "scrlRange";
-            this.scrlRange.ScrollOrientation = DarkUI.Controls.DarkScrollOrientation.Horizontal;
-            this.scrlRange.Size = new System.Drawing.Size(168, 18);
-            this.scrlRange.TabIndex = 39;
-            this.scrlRange.ValueChanged += new System.EventHandler<DarkUI.Controls.ScrollValueEventArgs>(this.scrlRange_Scroll);
             // 
             // grpTargetInfo
             // 
@@ -965,6 +803,172 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudCastRange.ValueChanged += new System.EventHandler(this.nudCastRange_ValueChanged);
+            // 
+            // grpDash
+            // 
+            this.grpDash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDash.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDash.Controls.Add(this.cmbDashAnimation);
+            this.grpDash.Controls.Add(this.lblDashAnimation);
+            this.grpDash.Controls.Add(this.cmbDashSpell);
+            this.grpDash.Controls.Add(this.lblDashSpell);
+            this.grpDash.Controls.Add(this.grpDashCollisions);
+            this.grpDash.Controls.Add(this.lblRange);
+            this.grpDash.Controls.Add(this.scrlRange);
+            this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDash.Location = new System.Drawing.Point(215, 2);
+            this.grpDash.Name = "grpDash";
+            this.grpDash.Size = new System.Drawing.Size(220, 297);
+            this.grpDash.TabIndex = 38;
+            this.grpDash.TabStop = false;
+            this.grpDash.Text = "Dash";
+            this.grpDash.Visible = false;
+            // 
+            // cmbDashAnimation
+            // 
+            this.cmbDashAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDashAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDashAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDashAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDashAnimation.DrawDropdownHoverOutline = false;
+            this.cmbDashAnimation.DrawFocusRectangle = false;
+            this.cmbDashAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDashAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDashAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDashAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDashAnimation.FormattingEnabled = true;
+            this.cmbDashAnimation.Location = new System.Drawing.Point(12, 266);
+            this.cmbDashAnimation.Name = "cmbDashAnimation";
+            this.cmbDashAnimation.Size = new System.Drawing.Size(200, 21);
+            this.cmbDashAnimation.TabIndex = 59;
+            this.cmbDashAnimation.Text = null;
+            this.cmbDashAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDashAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbDashAnimation_SelectedIndexChanged);
+            // 
+            // lblDashAnimation
+            // 
+            this.lblDashAnimation.AutoSize = true;
+            this.lblDashAnimation.Location = new System.Drawing.Point(11, 248);
+            this.lblDashAnimation.Name = "lblDashAnimation";
+            this.lblDashAnimation.Size = new System.Drawing.Size(81, 13);
+            this.lblDashAnimation.TabIndex = 58;
+            this.lblDashAnimation.Text = "Dash Animation";
+            // 
+            // cmbDashSpell
+            // 
+            this.cmbDashSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDashSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDashSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDashSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDashSpell.DrawDropdownHoverOutline = false;
+            this.cmbDashSpell.DrawFocusRectangle = false;
+            this.cmbDashSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDashSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDashSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDashSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDashSpell.FormattingEnabled = true;
+            this.cmbDashSpell.Location = new System.Drawing.Point(14, 224);
+            this.cmbDashSpell.Name = "cmbDashSpell";
+            this.cmbDashSpell.Size = new System.Drawing.Size(200, 21);
+            this.cmbDashSpell.TabIndex = 18;
+            this.cmbDashSpell.Text = null;
+            this.cmbDashSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDashSpell.SelectedIndexChanged += new System.EventHandler(this.cmbDashSpell_SelectedIndexChanged);
+            // 
+            // lblDashSpell
+            // 
+            this.lblDashSpell.AutoSize = true;
+            this.lblDashSpell.Location = new System.Drawing.Point(11, 208);
+            this.lblDashSpell.Name = "lblDashSpell";
+            this.lblDashSpell.Size = new System.Drawing.Size(58, 13);
+            this.lblDashSpell.TabIndex = 57;
+            this.lblDashSpell.Text = "Dash Spell";
+            // 
+            // grpDashCollisions
+            // 
+            this.grpDashCollisions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDashCollisions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDashCollisions.Controls.Add(this.chkEntities);
+            this.grpDashCollisions.Controls.Add(this.chkIgnoreInactiveResources);
+            this.grpDashCollisions.Controls.Add(this.chkIgnoreZDimensionBlocks);
+            this.grpDashCollisions.Controls.Add(this.chkIgnoreMapBlocks);
+            this.grpDashCollisions.Controls.Add(this.chkIgnoreActiveResources);
+            this.grpDashCollisions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDashCollisions.Location = new System.Drawing.Point(12, 62);
+            this.grpDashCollisions.Name = "grpDashCollisions";
+            this.grpDashCollisions.Size = new System.Drawing.Size(202, 143);
+            this.grpDashCollisions.TabIndex = 41;
+            this.grpDashCollisions.TabStop = false;
+            this.grpDashCollisions.Text = "Ignore Collision:";
+            // 
+            // chkEntities
+            // 
+            this.chkEntities.AutoSize = true;
+            this.chkEntities.Location = new System.Drawing.Point(6, 108);
+            this.chkEntities.Name = "chkEntities";
+            this.chkEntities.Size = new System.Drawing.Size(60, 17);
+            this.chkEntities.TabIndex = 39;
+            this.chkEntities.Text = "Entities";
+            this.chkEntities.CheckedChanged += new System.EventHandler(this.chkEntities_CheckedChanged);
+            // 
+            // chkIgnoreInactiveResources
+            // 
+            this.chkIgnoreInactiveResources.AutoSize = true;
+            this.chkIgnoreInactiveResources.Location = new System.Drawing.Point(6, 62);
+            this.chkIgnoreInactiveResources.Name = "chkIgnoreInactiveResources";
+            this.chkIgnoreInactiveResources.Size = new System.Drawing.Size(118, 17);
+            this.chkIgnoreInactiveResources.TabIndex = 38;
+            this.chkIgnoreInactiveResources.Text = "Inactive Resources";
+            this.chkIgnoreInactiveResources.CheckedChanged += new System.EventHandler(this.chkIgnoreInactiveResources_CheckedChanged);
+            // 
+            // chkIgnoreZDimensionBlocks
+            // 
+            this.chkIgnoreZDimensionBlocks.AutoSize = true;
+            this.chkIgnoreZDimensionBlocks.Location = new System.Drawing.Point(6, 85);
+            this.chkIgnoreZDimensionBlocks.Name = "chkIgnoreZDimensionBlocks";
+            this.chkIgnoreZDimensionBlocks.Size = new System.Drawing.Size(120, 17);
+            this.chkIgnoreZDimensionBlocks.TabIndex = 37;
+            this.chkIgnoreZDimensionBlocks.Text = "Z-Dimension Blocks";
+            this.chkIgnoreZDimensionBlocks.CheckedChanged += new System.EventHandler(this.chkIgnoreZDimensionBlocks_CheckedChanged);
+            // 
+            // chkIgnoreMapBlocks
+            // 
+            this.chkIgnoreMapBlocks.AutoSize = true;
+            this.chkIgnoreMapBlocks.Location = new System.Drawing.Point(6, 16);
+            this.chkIgnoreMapBlocks.Name = "chkIgnoreMapBlocks";
+            this.chkIgnoreMapBlocks.Size = new System.Drawing.Size(82, 17);
+            this.chkIgnoreMapBlocks.TabIndex = 33;
+            this.chkIgnoreMapBlocks.Text = "Map Blocks";
+            this.chkIgnoreMapBlocks.CheckedChanged += new System.EventHandler(this.chkIgnoreMapBlocks_CheckedChanged);
+            // 
+            // chkIgnoreActiveResources
+            // 
+            this.chkIgnoreActiveResources.AutoSize = true;
+            this.chkIgnoreActiveResources.Location = new System.Drawing.Point(6, 39);
+            this.chkIgnoreActiveResources.Name = "chkIgnoreActiveResources";
+            this.chkIgnoreActiveResources.Size = new System.Drawing.Size(110, 17);
+            this.chkIgnoreActiveResources.TabIndex = 36;
+            this.chkIgnoreActiveResources.Text = "Active Resources";
+            this.chkIgnoreActiveResources.CheckedChanged += new System.EventHandler(this.chkIgnoreActiveResources_CheckedChanged);
+            // 
+            // lblRange
+            // 
+            this.lblRange.AutoSize = true;
+            this.lblRange.Location = new System.Drawing.Point(11, 25);
+            this.lblRange.Name = "lblRange";
+            this.lblRange.Size = new System.Drawing.Size(51, 13);
+            this.lblRange.TabIndex = 40;
+            this.lblRange.Text = "Range: 0";
+            // 
+            // scrlRange
+            // 
+            this.scrlRange.Location = new System.Drawing.Point(14, 38);
+            this.scrlRange.Maximum = 10;
+            this.scrlRange.Name = "scrlRange";
+            this.scrlRange.ScrollOrientation = DarkUI.Controls.DarkScrollOrientation.Horizontal;
+            this.scrlRange.Size = new System.Drawing.Size(168, 18);
+            this.scrlRange.TabIndex = 39;
+            this.scrlRange.ValueChanged += new System.EventHandler<DarkUI.Controls.ScrollValueEventArgs>(this.scrlRange_Scroll);
             // 
             // grpGeneral
             // 
@@ -1542,6 +1546,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.grpAdvAoe);
             this.grpCombat.Controls.Add(this.grpBalanceHelp);
             this.grpCombat.Controls.Add(this.grpBonusEffects);
             this.grpCombat.Controls.Add(this.grpDamageTypes);
@@ -1553,11 +1558,57 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCombat.Location = new System.Drawing.Point(3, 531);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(636, 598);
+            this.grpCombat.Size = new System.Drawing.Size(636, 651);
             this.grpCombat.TabIndex = 39;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
             this.grpCombat.Visible = false;
+            // 
+            // grpAdvAoe
+            // 
+            this.grpAdvAoe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAdvAoe.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdvAoe.Controls.Add(this.lblAoeShape);
+            this.grpAdvAoe.Controls.Add(this.cmbAoeShape);
+            this.grpAdvAoe.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAdvAoe.Location = new System.Drawing.Point(6, 505);
+            this.grpAdvAoe.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAdvAoe.Name = "grpAdvAoe";
+            this.grpAdvAoe.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAdvAoe.Size = new System.Drawing.Size(195, 131);
+            this.grpAdvAoe.TabIndex = 125;
+            this.grpAdvAoe.TabStop = false;
+            this.grpAdvAoe.Text = "Advanced AoE Settings";
+            // 
+            // lblAoeShape
+            // 
+            this.lblAoeShape.AutoSize = true;
+            this.lblAoeShape.Location = new System.Drawing.Point(9, 19);
+            this.lblAoeShape.Name = "lblAoeShape";
+            this.lblAoeShape.Size = new System.Drawing.Size(38, 13);
+            this.lblAoeShape.TabIndex = 53;
+            this.lblAoeShape.Text = "Shape";
+            // 
+            // cmbAoeShape
+            // 
+            this.cmbAoeShape.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbAoeShape.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbAoeShape.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbAoeShape.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbAoeShape.DrawDropdownHoverOutline = false;
+            this.cmbAoeShape.DrawFocusRectangle = false;
+            this.cmbAoeShape.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbAoeShape.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAoeShape.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbAoeShape.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbAoeShape.FormattingEnabled = true;
+            this.cmbAoeShape.Location = new System.Drawing.Point(9, 35);
+            this.cmbAoeShape.Name = "cmbAoeShape";
+            this.cmbAoeShape.Size = new System.Drawing.Size(179, 21);
+            this.cmbAoeShape.TabIndex = 52;
+            this.cmbAoeShape.Text = null;
+            this.cmbAoeShape.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbAoeShape.SelectedIndexChanged += new System.EventHandler(this.cmbAoeShape_SelectedIndexChanged);
             // 
             // grpBalanceHelp
             // 
@@ -3991,15 +4042,15 @@ namespace Intersect.Editor.Forms.Editors
             this.grpComponents.ResumeLayout(false);
             this.grpComponents.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).EndInit();
-            this.grpDash.ResumeLayout(false);
-            this.grpDash.PerformLayout();
-            this.grpDashCollisions.ResumeLayout(false);
-            this.grpDashCollisions.PerformLayout();
             this.grpTargetInfo.ResumeLayout(false);
             this.grpTargetInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).EndInit();
+            this.grpDash.ResumeLayout(false);
+            this.grpDash.PerformLayout();
+            this.grpDashCollisions.ResumeLayout(false);
+            this.grpDashCollisions.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).EndInit();
@@ -4014,6 +4065,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.ResumeLayout(false);
             this.grpRequirements.PerformLayout();
             this.grpCombat.ResumeLayout(false);
+            this.grpAdvAoe.ResumeLayout(false);
+            this.grpAdvAoe.PerformLayout();
             this.grpBalanceHelp.ResumeLayout(false);
             this.grpBalanceHelp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMockMagic)).EndInit();
@@ -4327,5 +4380,8 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblInterruptThreshold;
         private System.Windows.Forms.Label lblSpellUpgrade;
         private DarkComboBox cmbSpellUpgrade;
+        private DarkGroupBox grpAdvAoe;
+        private System.Windows.Forms.Label lblAoeShape;
+        private DarkComboBox cmbAoeShape;
     }
 }

@@ -1833,24 +1833,46 @@ namespace Intersect.Server.Entities
             return GetDistanceBetween(Map, targetMap, X, targetX, Y, targetY);
         }
 
-        public int GetDistanceBetween(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB)
+        public static int GetDistanceBetween(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB)
         {
-            if (mapA != null && mapB != null && mapA.MapGrid == mapB.MapGrid
-            ) //Make sure both maps exist and that they are in the same dimension
+            if (mapA == null ||  mapB == null || mapA.MapGrid != mapB.MapGrid)
             {
-                //Calculate World Tile of Me
-                var x1 = xTileA + mapA.MapGridX * Options.MapWidth;
-                var y1 = yTileA + mapA.MapGridY * Options.MapHeight;
-
-                //Calculate world tile of target
-                var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
-                var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
-
-                return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+                return int.MaxValue;
             }
 
-            //Something is null.. return a value that is out of range :) 
-            return 9999;
+            //Calculate World Tile of Me
+            var x1 = xTileA + mapA.MapGridX * Options.MapWidth;
+            var y1 = yTileA + mapA.MapGridY * Options.MapHeight;
+
+            //Calculate world tile of target
+            var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
+            var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
+
+            return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+        }
+
+        public bool IsInBoundingBox(MapController targetMap, int targetX, int targetY, int range)
+        {
+            return BoundingBoxCheck(Map, targetMap, X, targetX, Y, targetY, range);
+        }
+
+        public static bool BoundingBoxCheck(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB, int range)
+        {
+            if (mapA == null || mapB == null || mapA.MapGrid != mapB.MapGrid)
+            {
+                return false;
+            }
+
+            // Calculate World Tile of Me
+            var x1 = xTileA + mapA.MapGridX * Options.MapWidth;
+            var y1 = yTileA + mapA.MapGridY * Options.MapHeight;
+
+            // Calculate World Tile of Target
+            var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
+            var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
+
+            // Check if the target is within the square region
+            return Math.Abs(x1 - x2) <= range && Math.Abs(y1 - y2) <= range;
         }
 
         public bool InRangeOf(Entity target, int range)

@@ -2031,7 +2031,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private bool ShouldScale => AggressorCount > Base.ScaledTo
+        private bool ShouldScale => AggressorCount > Base.ScaledTo;
 
         private void ScaleVitals(float factor)
         {

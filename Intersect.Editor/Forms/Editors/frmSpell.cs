@@ -129,8 +129,8 @@ namespace Intersect.Editor.Forms.Editors
             var spriteNames = GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Entity);
             cmbTransform.Items.AddRange(spriteNames);
 
-            nudWarpX.Maximum = (int) Options.MapWidth;
-            nudWarpY.Maximum = (int) Options.MapHeight;
+            nudWarpX.Maximum = Options.MapWidth;
+            nudWarpY.Maximum = Options.MapHeight;
 
             cmbWarpMap.Items.Clear();
             cmbWarpMap.Items.AddRange(MapList.OrderedMaps.Select(map => map?.Name).ToArray());
@@ -147,8 +147,11 @@ namespace Intersect.Editor.Forms.Editors
             nudMR.Minimum = -Options.MaxStatValue;
             nudSpd.Minimum = -Options.MaxStatValue;
 
-            nudCastDuration.Maximum = Int32.MaxValue;
-            nudCooldownDuration.Maximum = Int32.MaxValue;
+            cmbAoeShape.Items.Clear();
+            cmbAoeShape.Items.AddRange(EnumExtensions.GetDescriptions(typeof(AoeShape)));
+
+            nudCastDuration.Maximum = int.MaxValue;
+            nudCooldownDuration.Maximum = int.MaxValue;
 
             InitLocalization();
             UpdateEditor();
@@ -462,6 +465,8 @@ namespace Intersect.Editor.Forms.Editors
                 chkLifesteal.Checked = mEditorItem.Combat.LifeSteal;
                 chkManaSteal.Checked = mEditorItem.Combat.ManaSteal;
 
+                cmbAoeShape.SelectedIndex = (int) mEditorItem.Combat.AoeShape;
+
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
                 PopulateDamageTypes();
@@ -564,6 +569,7 @@ namespace Intersect.Editor.Forms.Editors
             chkPersistSwap.Hide();
             lblTrapAnimation.Hide();
             cmbTrapAnimation.Hide();
+            grpAdvAoe.Hide();
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Single)
             {
@@ -574,6 +580,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     lblHitRadius.Show();
                     nudHitRadius.Show();
+                    grpAdvAoe.Show();
                     nudHitRadius.Value = mEditorItem.Combat.HitRadius;
                 }
             }
@@ -583,6 +590,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lblHitRadius.Show();
                 nudHitRadius.Show();
+                grpAdvAoe.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
             }
 
@@ -1719,6 +1727,16 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbSpellUpgrade_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.UpgradeOfSpellId = SpellBase.IdFromList(cmbSpellUpgrade.SelectedIndex - 1);
+        }
+
+        private void cmbAoeShape_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mEditorItem.Combat == null)
+            {
+                return;
+            }
+
+            mEditorItem.Combat.AoeShape = (AoeShape) cmbAoeShape.SelectedIndex;
         }
     }
 }

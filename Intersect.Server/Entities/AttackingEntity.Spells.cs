@@ -1,5 +1,4 @@
-﻿using Antlr.Runtime.Misc;
-using Intersect.Enums;
+﻿using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
@@ -764,7 +763,7 @@ namespace Intersect.Server.Entities
                     {
                         if (spellTarget != null)
                         {
-                            //Spelltarget used to be Target. I don't know if this is correct or not.
+                            // spellTarget used to be Target. I don't know if this is correct or not.
                             int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
                             Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
                             ChangeDir(DirToEnemy(spellTarget));
@@ -804,9 +803,9 @@ namespace Intersect.Server.Entities
             switch (shape)
             {
                 case AoeShape.Circle:
-                    return target.GetDistanceTo(startMap, startX, startY) > spell.Combat.CastRange;
+                    return target.GetDistanceTo(startMap, startX, startY) <= spell.Combat.HitRadius;
                 case AoeShape.Rectangle:
-                    return true;
+                    return target.IsInBoundingBox(startMap, startX, startY, spell.Combat.HitRadius);
                 default:
                     Logging.Log.Warn($"Spell has invalid AoE range: {shape}");
 #if DEBUG

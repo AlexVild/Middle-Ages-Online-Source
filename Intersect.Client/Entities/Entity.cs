@@ -2847,10 +2847,13 @@ namespace Intersect.Client.Entities
                 {
                     for (int x = left; x <= right; x++)
                     {
-                        var distanceFromCaster = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y);
-                        if (!inRange(distanceFromCaster))
+                        if (spell.Combat.AoeShape == AoeShape.Circle)
                         {
-                            continue;
+                            var distanceFromCaster = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                            if (!inRange(distanceFromCaster))
+                            {
+                                continue;
+                            }
                         }
 
                         if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Intersect.Enums
 {
@@ -45,7 +46,10 @@ namespace Intersect.Enums
 
     public enum AoeShape
     {
+        [Description("Circle")]
         Circle,
+
+        [Description("Rectangle")]
         Rectangle,
     }
 
