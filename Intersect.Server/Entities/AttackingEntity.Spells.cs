@@ -1,4 +1,5 @@
-﻿using Intersect.Enums;
+﻿using Antlr.Runtime.Misc;
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
@@ -695,96 +696,122 @@ namespace Intersect.Server.Entities
             int tool = -1)
         {
             var spellBase = SpellBase.Get(spellId);
-            if (spellBase != null)
+            if (spellBase == null || spellBase.Combat == null)
             {
-                int entitiesHit = 0;
-                var startMap = MapController.Get(startMapId);
-                foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
+                return;
+            }
+
+            int entitiesHit = 0;
+            var startMap = MapController.Get(startMapId);
+            foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
+            {
+                foreach (var entity in instance.GetCachedEntities())
                 {
-                    foreach (var entity in instance.GetCachedEntities())
+                    if (entity == null)
                     {
-                        if (!isProjectileTool)
-                        {
-                            if (entity == null || (!(entity is Player) && !(entity is Npc)))
-                            {
-                                continue;
-                            }
-                        }
-                        else if (entity is Resource resource)
-                        {
-                            if (resource.Base.Tool != tool)
-                            {
-                                continue;
-                            }
-                        }
-
-                        if (spellTarget != null && spellTarget != entity)
-                        {
-                            continue;
-                        }
-
-                        if (entity.GetDistanceTo(startMap, startX, startY) > range)
-                        {
-                            continue;
-                        }
-
-                        if (entity.Id == Id && !spellBase.Combat.Friendly)
-                        {
-                            continue;
-                        }
-
-                        if ((spellBase.Combat.Friendly && !IsAllyOf(entity)) || (!spellBase.Combat.Friendly && IsAllyOf(entity)))
-                        {
-                            continue;
-                        }
-
-                        if (spellBase.Combat.Friendly && entity.Id != Id && entity is Player dueler && dueler.InDuel)
-                        {
-                            continue;
-                        }
-
-                        if (entity.IsImmuneTo(Immunities.Spellcasting))
-                        {
-                            continue;
-                        }
-
-                        if (!spellBase.Combat.Friendly && entity.IsInvincibleTo(this))
-                        {
-                            entity.ReactToCombat(this);
-                            SendBlockedAttackMessage(this);
-                            continue;
-                        }
-
-                        //Check to handle a warp to spell
-                        if (spellBase.SpellType == SpellTypes.WarpTo)
-                        {
-                            if (spellTarget != null)
-                            {
-                                //Spelltarget used to be Target. I don't know if this is correct or not.
-                                int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
-                                Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
-                                ChangeDir(DirToEnemy(spellTarget));
-                            }
-                        }
-
-                        SpellAttack(entity, spellBase, (sbyte)Directions.Up, null, ignoreEvasion); //Handle damage
-                        SendSpellHitAnimation(spellBase, entity, entity.Id);
-                        entitiesHit++;
+                        continue;
                     }
-                }
-                if (entitiesHit < 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
-                {
-                    if (this is Player)
+
+                    if (isProjectileTool && entity is Resource resource && resource.Base.Tool != tool)
                     {
-                        PacketSender.SendChatMsg((Player)this, "There weren't any targets in your spell's AoE range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
+                        continue;
                     }
-                    SendMissedAttackMessage(this, DamageType.True);
-                    AttackMissed.Invoke(null);
+
+                    if (!isProjectileTool && !(entity is AttackingEntity))
+                    {
+                        continue;
+                    }
+
+                    if (spellTarget != null && spellTarget != entity)
+                    {
+                        continue;
+                    }
+
+                    if (!IsInAoeRange(spellBase, entity, startMap, startX, startY))
+                    {
+                        continue;
+                    }
+
+                    if (entity.Id == Id && !spellBase.Combat.Friendly)
+                    {
+                        continue;
+                    }
+
+                    if ((spellBase.Combat.Friendly && !IsAllyOf(entity)) || (!spellBase.Combat.Friendly && IsAllyOf(entity)))
+                    {
+                        continue;
+                    }
+
+                    if (spellBase.Combat.Friendly && entity.Id != Id && entity is Player dueler && dueler.InDuel)
+                    {
+                        continue;
+                    }
+
+                    if (entity.IsImmuneTo(Immunities.Spellcasting))
+                    {
+                        continue;
+                    }
+
+                    if (!spellBase.Combat.Friendly && entity.IsInvincibleTo(this))
+                    {
+                        entity.ReactToCombat(this);
+                        SendBlockedAttackMessage(this);
+                        continue;
+                    }
+
+                    //Check to handle a warp to spell
+                    if (spellBase.SpellType == SpellTypes.WarpTo)
+                    {
+                        if (spellTarget != null)
+                        {
+                            //Spelltarget used to be Target. I don't know if this is correct or not.
+                            int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
+                            Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                            ChangeDir(DirToEnemy(spellTarget));
+                        }
+                    }
+
+                    SpellAttack(entity, spellBase, (sbyte)Directions.Up, null, ignoreEvasion); //Handle damage
+                    SendSpellHitAnimation(spellBase, entity, entity.Id);
+                    entitiesHit++;
                 }
-                if (this is Player && entitiesHit > 1)
+            }
+            
+            if (entitiesHit < 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
+            {
+                if (this is Player)
                 {
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new AoEHitsUpdate((Player)this, entitiesHit));
+                    PacketSender.SendChatMsg((Player)this, "There weren't any targets in your spell's AoE range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
                 }
+                SendMissedAttackMessage(this, DamageType.True);
+                AttackMissed.Invoke(null);
+            }
+            
+            if (this is Player && entitiesHit > 1 && !spellBase.Combat.Friendly)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new AoEHitsUpdate((Player)this, entitiesHit));
+            }
+        }
+
+        public bool IsInAoeRange(SpellBase spell, Entity target, MapController startMap, int startX, int startY)
+        {
+            if (spell == null || spell.Combat == null || target == null)
+            {
+                return false;
+            }
+
+            var shape = spell.Combat.AoeShape;
+            switch (shape)
+            {
+                case AoeShape.Circle:
+                    return target.GetDistanceTo(startMap, startX, startY) > spell.Combat.CastRange;
+                case AoeShape.Rectangle:
+                    return true;
+                default:
+                    Logging.Log.Warn($"Spell has invalid AoE range: {shape}");
+#if DEBUG
+                    throw new ArgumentOutOfRangeException(nameof(shape));
+#endif
             }
         }
 

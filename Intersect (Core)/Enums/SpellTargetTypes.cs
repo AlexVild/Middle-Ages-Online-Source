@@ -43,4 +43,10 @@ namespace Intersect.Enums
         };
     }
 
+    public enum AoeShape
+    {
+        Circle,
+        Rectangle,
+    }
+
 }

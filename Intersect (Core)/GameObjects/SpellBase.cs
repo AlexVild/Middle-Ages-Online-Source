@@ -199,7 +199,7 @@ namespace Intersect.GameObjects
     public class SpellCombatData
     {
 
-        [NotMapped] public int[] VitalDiff = new int[(int) Vitals.VitalCount];
+        [NotMapped] public int[] VitalDiff = new int[(int)Vitals.VitalCount];
 
         [NotMapped, JsonIgnore]
         public bool IsDamaging => VitalDiff[(int)Vitals.Health] > 0 || VitalDiff[(int)Vitals.Mana] > 0;
@@ -247,8 +247,8 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string VitalDiffJson
         {
-            get => DatabaseUtils.SaveIntArray(VitalDiff, (int) Vitals.VitalCount);
-            set => VitalDiff = DatabaseUtils.LoadIntArray(value, (int) Vitals.VitalCount);
+            get => DatabaseUtils.SaveIntArray(VitalDiff, (int)Vitals.VitalCount);
+            set => VitalDiff = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
         }
 
         //Buff/Debuff Data
@@ -256,30 +256,32 @@ namespace Intersect.GameObjects
         [JsonIgnore]
         public string StatDiffJson
         {
-            get => DatabaseUtils.SaveIntArray(StatDiff, (int) Stats.StatCount);
-            set => StatDiff = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
+            get => DatabaseUtils.SaveIntArray(StatDiff, (int)Stats.StatCount);
+            set => StatDiff = DatabaseUtils.LoadIntArray(value, (int)Stats.StatCount);
         }
 
         [NotMapped]
-        public int[] StatDiff { get; set; } = new int[(int) Stats.StatCount];
+        public int[] StatDiff { get; set; } = new int[(int)Stats.StatCount];
 
         //Buff/Debuff Data
         [Column("PercentageStatDiff")]
         [JsonIgnore]
         public string PercentageStatDiffJson
         {
-            get => DatabaseUtils.SaveIntArray(PercentageStatDiff, (int) Stats.StatCount);
-            set => PercentageStatDiff = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
+            get => DatabaseUtils.SaveIntArray(PercentageStatDiff, (int)Stats.StatCount);
+            set => PercentageStatDiff = DatabaseUtils.LoadIntArray(value, (int)Stats.StatCount);
         }
 
         [NotMapped]
-        public int[] PercentageStatDiff { get; set; } = new int[(int) Stats.StatCount];
+        public int[] PercentageStatDiff { get; set; } = new int[(int)Stats.StatCount];
 
         public int Scaling { get; set; } = 100;
 
         public int ScalingStat { get; set; }
 
         public SpellTargetTypes TargetType { get; set; }
+
+        public AoeShape AoeShape { get; set; }
 
         public bool HoTDoT { get; set; }
 
