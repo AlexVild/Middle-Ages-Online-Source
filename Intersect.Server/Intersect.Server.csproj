@@ -1476,6 +1476,10 @@
     <Compile Include="Migrations\Game\20241210181123_AoeShapeMigration.designer.cs">
       <DependentUpon>20241210181123_AoeShapeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241210203648_AoeOffsetMigration.cs" />
+    <Compile Include="Migrations\Game\20241210203648_AoeOffsetMigration.designer.cs">
+      <DependentUpon>20241210203648_AoeOffsetMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

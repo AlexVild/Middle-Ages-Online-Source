@@ -695,13 +695,32 @@ namespace Intersect.Server.Entities
             int tool = -1)
         {
             var spellBase = SpellBase.Get(spellId);
-            if (spellBase == null || spellBase.Combat == null)
+            var startMap = MapController.Get(startMapId);
+
+            if (spellBase == null || spellBase.Combat == null || startMap == null)
+            {
+                return;
+            }
+
+            // First, calculate the relative offset positions
+            var offsetX = spellBase.Combat.AoeXOffset;
+            var offsetY = spellBase.Combat.AoeYOffset;
+
+            if (spellBase.Combat.AoeRelativeOffset)
+            {
+                var rotatedStart = PositionUtilities.RotateXYToDirection(GetFaceDirection(), offsetX, offsetY);
+                offsetX = rotatedStart.X;
+                offsetY = rotatedStart.Y;
+            }
+
+            // Then, translate these offsets from our spell's starting position
+            var castingTile = new TileHelper(startMapId, startX, startY);
+            if (!castingTile.Translate(offsetX, offsetY))
             {
                 return;
             }
 
             int entitiesHit = 0;
-            var startMap = MapController.Get(startMapId);
             foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
             {
                 foreach (var entity in instance.GetCachedEntities())
@@ -726,7 +745,7 @@ namespace Intersect.Server.Entities
                         continue;
                     }
 
-                    if (!IsInAoeRange(spellBase, entity, startMap, startX, startY))
+                    if (!IsInAoeRange(spellBase, entity, castingTile.GetMap(), castingTile.GetX(), castingTile.GetY()))
                     {
                         continue;
                     }

@@ -2805,12 +2805,29 @@ namespace Intersect.Client.Entities
                 AoeAlpha = MathHelper.Clamp(AoeAlpha + (AOE_UPDATE_AMT * AoeAlphaDir), MIN_AOE_ALPHA, MAX_AOE_ALPHA);
             }
 
-            // The start coordinates are calculated knowing that the AoE spawn is always the center
-            int left = spawnX - size;
-            int right = spawnX + size;
-            int top = spawnY - size;
-            int bottom = spawnY + size;
+            // First, calculate the relative offset positions
+            var offsetX = spell.Combat.AoeXOffset;
+            var offsetY = spell.Combat.AoeYOffset;
 
+            if (spell.Combat.AoeRelativeOffset)
+            {
+                var rotatedStart = PositionUtilities.RotateXYToDirection(GetFaceDirection(), offsetX, offsetY);
+                offsetX = rotatedStart.X;
+                offsetY = rotatedStart.Y;
+            }
+            
+            // Then, translate these offsets from our spell's starting position
+            MapInstance.TryGetMapInstanceFromCoords(spawnMap.Id, spawnX + offsetX, spawnY + offsetY, out var offsettedSpawnMap, out var offsettedSpawnX, out var offsettedSpawnY);
+            if (offsettedSpawnMap == null || !offsettedSpawnX.HasValue || !offsettedSpawnY.HasValue)
+            {
+                return;
+            }
+
+            int left = offsettedSpawnX.Value - size;
+            int right = offsettedSpawnX.Value + size;
+            int top = offsettedSpawnY.Value - size;
+            int bottom = offsettedSpawnY.Value + size;
+            
             GameTexture texture = null;
 
             Func<double, bool> inRange = new Func<double, bool>((double distance) =>
@@ -2849,14 +2866,14 @@ namespace Intersect.Client.Entities
                     {
                         if (spell.Combat.AoeShape == AoeShape.Circle)
                         {
-                            var distanceFromCaster = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                            var distanceFromCaster = MathHelper.CalculateDistanceToPoint(offsettedSpawnX.Value, offsettedSpawnY.Value, x, y);
                             if (!inRange(distanceFromCaster))
                             {
                                 continue;
                             }
                         }
 
-                        if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                        if (!MapInstance.TryGetMapInstanceFromCoords(offsettedSpawnMap.Id, x, y, out var currMap, out var mapX, out var mapY))
                         {
                             continue;
                         }
@@ -2895,13 +2912,13 @@ namespace Intersect.Client.Entities
                         var edgeY = y - top;
                         edges[edgeX, edgeY] = new Edge();
 
-                        var distanceFromCaster = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                        var distanceFromCaster = MathHelper.CalculateDistanceToPoint(offsettedSpawnX.Value, offsettedSpawnY.Value, x, y);
                         if (!inRange(distanceFromCaster))
                         {
                             continue;
                         }
 
-                        if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                        if (!MapInstance.TryGetMapInstanceFromCoords(offsettedSpawnMap.Id, x, y, out var currMap, out var mapX, out var mapY))
                         {
                             continue;
                         }

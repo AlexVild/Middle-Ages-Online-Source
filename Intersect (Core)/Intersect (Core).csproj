@@ -864,6 +864,7 @@
     <Compile Include="Utilities\MovementUtilities.cs" />
     <Compile Include="Utilities\NpcExperienceCalculator.cs" />
     <Compile Include="Utilities\Nullability.cs" />
+    <Compile Include="Utilities\PositionUtilities.cs" />
     <Compile Include="Utilities\PythonExecutor.cs" />
     <Compile Include="Utilities\Randomization.cs" />
     <Compile Include="Utilities\Retry.cs" />

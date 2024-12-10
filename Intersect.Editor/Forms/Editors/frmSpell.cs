@@ -466,6 +466,9 @@ namespace Intersect.Editor.Forms.Editors
                 chkManaSteal.Checked = mEditorItem.Combat.ManaSteal;
 
                 cmbAoeShape.SelectedIndex = (int) mEditorItem.Combat.AoeShape;
+                nudAoeXOffset.Value = mEditorItem.Combat.AoeXOffset;
+                nudAoeYOffset.Value = mEditorItem.Combat.AoeYOffset;
+                chkAoeRelativeDir.Checked = mEditorItem.Combat.AoeRelativeOffset;
 
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
@@ -1737,6 +1740,21 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.Combat.AoeShape = (AoeShape) cmbAoeShape.SelectedIndex;
+        }
+
+        private void nudAoeXOffset_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeXOffset = (int)nudAoeXOffset.Value;
+        }
+
+        private void nudAoeYOffset_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeYOffset = (int)nudAoeYOffset.Value;
+        }
+
+        private void chkAoeRelativeDir_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeRelativeOffset = chkAoeRelativeDir.Checked;
         }
     }
 }
