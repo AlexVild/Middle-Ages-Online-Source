@@ -1893,7 +1893,7 @@ namespace Intersect.Server.Entities
             return new Point(x1, y1);
         }
 
-        public bool InRangeOf(Entity target, int range)
+        public bool InRangeOf(Entity target, int range, int? minRange = null)
         {
             if (target == null || target is Player player && player.PlayerDead)
             {
@@ -1904,6 +1904,11 @@ namespace Intersect.Server.Entities
             if (dist == 9999)
             {
                 return false;
+            }
+
+            if (minRange.HasValue)
+            {
+                return dist <= range && dist > minRange.Value;
             }
 
             return dist <= range;

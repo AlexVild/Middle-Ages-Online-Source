@@ -1484,6 +1484,10 @@
     <Compile Include="Migrations\Game\20241211031049_AoeRectangleSizeMigration.designer.cs">
       <DependentUpon>20241211031049_AoeRectangleSizeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241211190936_MinRangeSpellMigration.cs" />
+    <Compile Include="Migrations\Game\20241211190936_MinRangeSpellMigration.designer.cs">
+      <DependentUpon>20241211190936_MinRangeSpellMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

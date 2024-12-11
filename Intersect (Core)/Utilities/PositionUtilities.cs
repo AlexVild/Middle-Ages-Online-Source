@@ -124,5 +124,27 @@ namespace Intersect.Utilities
             return new Point(xOffset, yOffset);
         }
 
+        public static int RotateProjectileDir(byte entityDir, int projectileDir)
+        {
+            // Define a mapping for the directions
+            // For each dirId, we determine what happens when we rotate it 90 degrees clockwise.
+            int[,] rotationMap = new int[4, 8]
+            {
+                //Up     Down   Left   Right  UpLeft  UpRight  DownLeft DownRight
+                { 0,     1,     2,     3,     4,      5,       6,       7 }, // No rotation (dir == 0)
+                { 1,     0,     3,     2,     7,      6,       5,       4 }, // 180 degrees (dir == 1)
+                { 2,     3,     1,     0,     6,      4,       7,       5 }, // 90 degrees counter-clockwise (dir == 2)
+                { 3,     2,     0,     1,     5,      7,       4,       6 }  // 90 degrees clockwise (dir == 3)
+            };
+
+            // Ensure the dir and dirId are valid
+            if (entityDir < 0 || entityDir > 3 || projectileDir < 0 || projectileDir > 7)
+            {
+                throw new ArgumentOutOfRangeException("Invalid direction or direction ID");
+            }
+
+            // Return the rotated direction ID
+            return rotationMap[entityDir, projectileDir];
+        }
     }
 }

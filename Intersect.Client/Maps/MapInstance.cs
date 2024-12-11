@@ -1642,5 +1642,41 @@ namespace Intersect.Client.Maps
             }
             MapRequests.Add(mapId, Timing.Global.MillisecondsUtcUnsynced + 2000);
         }
+
+        public bool TileIsBlocking(byte x, byte y, bool grounded = true)
+        {
+            // Check if the coordinates are out of bounds
+            if (x < 0 || x >= Attributes.GetLength(0) || y < 0 || y >= Attributes.GetLength(1))
+            {
+                return false; // Exit early with false
+            }
+
+            var attribute = Attributes[x, y];
+            if (attribute is MapBlockedAttribute blockedAttribute)
+            {
+                if (grounded)
+                {
+                    return true;
+                }
+                else if (!blockedAttribute.GroundLevel)
+                {
+                    return true;
+                }
+            }
+            if (attribute is MapResourceAttribute resourceTile && ResourceBase.TryGet(resourceTile.ResourceId, out var resource))
+            {
+                return !(resource.WalkableBefore || resource.WalkableAfter);
+            }
+            if (attribute is MapItemAttribute itemAttr && itemAttr.IsBlock)
+            {
+                return true;
+            }
+            if (attribute is MapAnimationAttribute animAttr && animAttr.IsBlock)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

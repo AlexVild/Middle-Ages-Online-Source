@@ -48,6 +48,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbComponents = new DarkUI.Controls.DarkComboBox();
             this.lstComponents = new System.Windows.Forms.ListBox();
             this.grpTargetInfo = new DarkUI.Controls.DarkGroupBox();
+            this.nudMinRange = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMinRange = new System.Windows.Forms.Label();
             this.chkPersistMissedAttack = new DarkUI.Controls.DarkCheckBox();
             this.chkPersistSwap = new DarkUI.Controls.DarkCheckBox();
             this.cmbProjectile = new DarkUI.Controls.DarkComboBox();
@@ -118,6 +120,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
             this.grpAdvAoe = new DarkUI.Controls.DarkGroupBox();
             this.grpRectangleSettings = new DarkUI.Controls.DarkGroupBox();
+            this.lblRectLbl = new System.Windows.Forms.Label();
             this.lblAoeRectWidth = new System.Windows.Forms.Label();
             this.lblAoeRectHeight = new System.Windows.Forms.Label();
             this.nudAoeHeight = new DarkUI.Controls.DarkNumericUpDown();
@@ -286,12 +289,12 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.lblRectLbl = new System.Windows.Forms.Label();
             this.pnlContainer.SuspendLayout();
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).BeginInit();
             this.grpTargetInfo.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinRange)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).BeginInit();
@@ -597,6 +600,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTargetInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTargetInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTargetInfo.Controls.Add(this.nudMinRange);
+            this.grpTargetInfo.Controls.Add(this.lblMinRange);
             this.grpTargetInfo.Controls.Add(this.chkPersistMissedAttack);
             this.grpTargetInfo.Controls.Add(this.chkPersistSwap);
             this.grpTargetInfo.Controls.Add(this.cmbProjectile);
@@ -614,11 +619,40 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTargetInfo.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTargetInfo.Location = new System.Drawing.Point(213, 3);
             this.grpTargetInfo.Name = "grpTargetInfo";
-            this.grpTargetInfo.Size = new System.Drawing.Size(225, 192);
+            this.grpTargetInfo.Size = new System.Drawing.Size(225, 226);
             this.grpTargetInfo.TabIndex = 19;
             this.grpTargetInfo.TabStop = false;
             this.grpTargetInfo.Text = "Targetting Info";
             this.grpTargetInfo.Visible = false;
+            // 
+            // nudMinRange
+            // 
+            this.nudMinRange.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMinRange.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMinRange.Location = new System.Drawing.Point(8, 197);
+            this.nudMinRange.Maximum = new decimal(new int[] {
+            -100,
+            49,
+            0,
+            0});
+            this.nudMinRange.Name = "nudMinRange";
+            this.nudMinRange.Size = new System.Drawing.Size(206, 20);
+            this.nudMinRange.TabIndex = 68;
+            this.nudMinRange.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMinRange.ValueChanged += new System.EventHandler(this.darkNumericUpDown1_ValueChanged);
+            // 
+            // lblMinRange
+            // 
+            this.lblMinRange.AutoSize = true;
+            this.lblMinRange.Location = new System.Drawing.Point(9, 182);
+            this.lblMinRange.Name = "lblMinRange";
+            this.lblMinRange.Size = new System.Drawing.Size(62, 13);
+            this.lblMinRange.TabIndex = 67;
+            this.lblMinRange.Text = "Min Range:";
             // 
             // chkPersistMissedAttack
             // 
@@ -1620,6 +1654,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRectangleSettings.TabIndex = 126;
             this.grpRectangleSettings.TabStop = false;
             this.grpRectangleSettings.Text = "Rectangle Settings";
+            // 
+            // lblRectLbl
+            // 
+            this.lblRectLbl.AutoSize = true;
+            this.lblRectLbl.ForeColor = System.Drawing.Color.LightSlateGray;
+            this.lblRectLbl.Location = new System.Drawing.Point(5, 58);
+            this.lblRectLbl.Name = "lblRectLbl";
+            this.lblRectLbl.Size = new System.Drawing.Size(137, 13);
+            this.lblRectLbl.TabIndex = 130;
+            this.lblRectLbl.Text = "*Bottom-Left North Oriented";
             // 
             // lblAoeRectWidth
             // 
@@ -4181,16 +4225,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 601);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // lblRectLbl
-            // 
-            this.lblRectLbl.AutoSize = true;
-            this.lblRectLbl.ForeColor = System.Drawing.Color.LightSlateGray;
-            this.lblRectLbl.Location = new System.Drawing.Point(5, 58);
-            this.lblRectLbl.Name = "lblRectLbl";
-            this.lblRectLbl.Size = new System.Drawing.Size(137, 13);
-            this.lblRectLbl.TabIndex = 130;
-            this.lblRectLbl.Text = "*Bottom-Left North Oriented";
-            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4221,6 +4255,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).EndInit();
             this.grpTargetInfo.ResumeLayout(false);
             this.grpTargetInfo.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinRange)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).EndInit();
@@ -4577,5 +4612,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudAoeHeight;
         private DarkNumericUpDown nudAoeWidth;
         private System.Windows.Forms.Label lblRectLbl;
+        private DarkNumericUpDown nudMinRange;
+        private System.Windows.Forms.Label lblMinRange;
     }
 }

@@ -26,6 +26,7 @@ using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
+using Microsoft.Xna.Framework.Input;
 using Newtonsoft.Json;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
 
@@ -2661,6 +2662,7 @@ namespace Intersect.Client.Entities
         private GameTexture SINGLE_TARGET_FRIENDLY_OUTLINE = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target-ol_friendly.png");
         private GameTexture SINGLE_TARGET_OUTLINE = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target-ol_hostile.png");
         private GameTexture SINGLE_TARGET_NEUTRAL_OUTLINE = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target-ol_neutral.png");
+        private GameTexture PROJECTILE_TEXTURES = Globals.ContentManager.GetTexture(TextureType.Misc, "projectile_dir_markers.png");
         public bool IsDead;
 
         public void DrawAggroIndicator(int maxRange, bool friendly)
@@ -2860,6 +2862,10 @@ namespace Intersect.Client.Entities
 
             Func<double, bool> inRange = new Func<double, bool>((double distance) =>
             {
+                if (spell.Combat.TargetType == SpellTargetTypes.Single && spell.Combat.MinRange > 0)
+                {
+                    return Math.Floor(distance) <= size && Math.Floor(distance) > spell.Combat.MinRange;
+                }
                 return Math.Floor(distance) <= size;
             });
 
@@ -2892,9 +2898,9 @@ namespace Intersect.Client.Entities
                 {
                     for (int x = left; x <= right; x++)
                     {
+                        var distanceFromCaster = MathHelper.CalculateDistanceToPoint(offsettedSpawnX.Value, offsettedSpawnY.Value, x, y);
                         if (spell.Combat.AoeShape == AoeShape.Circle)
                         {
-                            var distanceFromCaster = MathHelper.CalculateDistanceToPoint(offsettedSpawnX.Value, offsettedSpawnY.Value, x, y);
                             if (!inRange(distanceFromCaster))
                             {
                                 continue;
@@ -2907,6 +2913,10 @@ namespace Intersect.Client.Entities
                         }
 
                         var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
+                        if (currMap.TileIsBlocking((byte)mapX, (byte)mapY))
+                        {
+                            continue;
+                        }
 
                         if (texture == COMBAT_TILE_AOE || texture == SINGLE_TARGET || texture == SINGLE_TARGET_OUTLINE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
                         {
@@ -2952,6 +2962,10 @@ namespace Intersect.Client.Entities
                         }
 
                         var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
+                        if (currMap.TileIsBlocking((byte)mapX, (byte)mapY))
+                        {
+                            continue;
+                        }
                         edges[edgeX, edgeY].Tile = tile;
 
                         if (texture == SINGLE_TARGET) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
@@ -3055,11 +3069,7 @@ namespace Intersect.Client.Entities
                 AoeAlpha = MathHelper.Clamp(AoeAlpha + (AOE_UPDATE_AMT * AoeAlphaDir), MIN_AOE_ALPHA, MAX_AOE_ALPHA);
             }
 
-            var dir = Dir;
-            if (this is Player player && player.CombatMode)
-            {
-                dir = player.FaceDirection;
-            }
+            var dir = (byte)GetFaceDirection();
 
             // Get our information
             var projectile = spell.Combat.Projectile;
@@ -3104,9 +3114,10 @@ namespace Intersect.Client.Entities
                 for (int x = left; x <= right; x++, projectileX++)
                 {
                     var directions = rotatedLocations[projectileX, projectileY].Directions;
+                    var totalDirections = directions.Count((dirVal) => dirVal == true);
 
                     // If this projectile spawn location doesn't have anything to show, don't bother
-                    if (!directions.Contains(true))
+                    if (totalDirections == 0)
                     {
                         continue;
                     }
@@ -3122,14 +3133,15 @@ namespace Intersect.Client.Entities
                         {
                             continue;
                         }
-                        DrawProjectilePath(dir, dirId, range, (int)mapX, (int)mapY, currMap, ref tilesDrawn, friendly, spell.Combat.Friendly);
+                        DrawProjectilePath(dir, dirId, range, (int)mapX, (int)mapY, currMap, ref tilesDrawn, friendly, spell.Combat.Friendly, projectile);
                     }
                 }
             }
         }
 
-        private void DrawProjectilePath(byte dir, int dirId, int range, int x, int y, MapInstance map, ref List<FloatRect> tilesDrawn, bool friendly, bool combatFriendly)
+        private void DrawProjectilePath(byte dir, int projectileDir, int range, int x, int y, MapInstance map, ref List<FloatRect> tilesDrawn, bool friendly, bool combatFriendly, ProjectileBase projectile)
         {
+            var pathBroken = false;
             for (var pathIdx = 0; pathIdx < range; pathIdx++)
             {
                 var right = x + pathIdx;
@@ -3137,23 +3149,23 @@ namespace Intersect.Client.Entities
                 var up = y - pathIdx;
                 var down = y + pathIdx;
 
-                switch (dirId)
+                switch (projectileDir)
                 {
                     // Up
                     case 0:
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3162,16 +3174,16 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3180,16 +3192,16 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3198,16 +3210,16 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, y, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), x, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3216,16 +3228,16 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3234,16 +3246,16 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3252,16 +3264,16 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
@@ -3270,56 +3282,77 @@ namespace Intersect.Client.Entities
                         switch (dir)
                         {
                             case 0:
-                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 1:
-                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), right, up, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, PositionUtilities.RotateProjectileDir(dir, projectileDir), left, down, ref tilesDrawn, friendly, combatFriendly, projectile, out pathBroken);
                                 break;
                         }
                         break;
                 }
+
+                if (pathBroken)
+                {
+                    return;
+                }
             }
         }
 
-        private void DrawProjectileTile(Guid mapId, int x, int y, ref List<FloatRect> tilesDrawn, bool friendly, bool combatFriendly)
+        private void DrawProjectileTile(Guid mapId, int dirId, int x, int y, ref List<FloatRect> tilesDrawn, bool friendly, bool combatFriendly, ProjectileBase projectile, out bool pathBroken)
         {
-            if (!MapInstance.TryGetMapInstanceFromCoords(mapId, x, y, out var currMap, out var mapX, out var mapY))
+            pathBroken = false;
+
+            if (!MapInstance.TryGetMapInstanceFromCoords(mapId, x, y, out var currMap, out var mapX, out var mapY) || projectile == null)
             {
                 return;
             }
+
+            if (currMap.TileIsBlocking((byte)mapX, (byte)mapY, projectile.Grounded) && !projectile.IgnoreMapBlocks)
+            {
+                pathBroken = true;
+                return;
+            }
+
             var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
 
-            if (tilesDrawn.Any(t => t.X == tile.X && t.Y == tile.Y))
-            {
-                return;
-            }
-            tilesDrawn.Add(tile);
-
-            GameTexture texture;
-            if (friendly)
-            {
-                texture = combatFriendly ? COMBAT_TILE_FRIENDLY : COMBAT_TILE_NEUTRAL;
-            }
-            else
-            {
-                texture = combatFriendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE_AOE;
-            }
-
-            if (texture == COMBAT_TILE_AOE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+            // Add a light if we haven't previously drawn on this tile & it's hostile
+            if (!tilesDrawn.Any(t => t.X == tile.X && t.Y == tile.Y) && !friendly && !combatFriendly)
             {
                 Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
             }
+            tilesDrawn.Add(tile);
+
+            var srcRect = GetProjectileTextureSource(dirId, friendly, combatFriendly);
 
             Graphics.DrawGameTexture(
-                texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
+                PROJECTILE_TEXTURES, srcRect,
                 tile, new Color(AoeAlpha, 255, 255, 255)
             );
+        }
+
+        private FloatRect GetProjectileTextureSource(int dirId, bool friendly, bool combatFriendly)
+        {
+            var srcX = dirId * 16;
+            var srcY = 0;
+
+            if (friendly)
+            {
+                srcY = combatFriendly ? 32 : 16;
+            }
+            else if (combatFriendly)
+            {
+                srcY = 16;
+            }
+
+            var width = PROJECTILE_TEXTURES.Width / 8; // There are 8 projectile directions
+            var height = PROJECTILE_TEXTURES.Height / 3; // There are 3 potential styles to draw (hostile, neutral, friendly)
+            return new FloatRect(srcX, srcY, width, height);
         }
 
         private void DrawSpellIcon(int x, int y, string icon, Color color)

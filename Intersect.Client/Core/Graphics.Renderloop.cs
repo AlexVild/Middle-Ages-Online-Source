@@ -80,7 +80,8 @@ namespace Intersect.Client.Core
                         var targetY = target.GetCurrentTileRectangle().CenterY;
 
                         var distance = Math.Floor(MathHelper.CalculateDistanceToPoint(entityX, entityY, targetX, targetY) / Options.TileWidth);
-                        if (distance > castSpell.Combat.CastRange)
+                        var minRange = castSpell.Combat.MinRange;
+                        if (distance > castSpell.Combat.CastRange || (minRange > 0 && distance < minRange))
                         {
                             break;
                         }

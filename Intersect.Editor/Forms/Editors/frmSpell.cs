@@ -574,12 +574,15 @@ namespace Intersect.Editor.Forms.Editors
             lblTrapAnimation.Hide();
             cmbTrapAnimation.Hide();
             grpAdvAoe.Hide();
+            nudMinRange.Hide();
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Single)
             {
                 lblCastRange.Show();
                 nudCastRange.Show();
                 nudCastRange.Value = mEditorItem.Combat.CastRange;
+                nudMinRange.Value = mEditorItem.Combat.MinRange;
+                nudMinRange.Show();
                 if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell)
                 {
                     lblHitRadius.Show();
@@ -1781,6 +1784,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAoeHeight_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.AoeRectHeight = (int)nudAoeHeight.Value;
+        }
+
+        private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.MinRange = (int)nudMinRange.Value;
         }
     }
 }

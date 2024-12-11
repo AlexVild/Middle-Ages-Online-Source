@@ -523,7 +523,17 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Single:
-                            if (!InRangeOf(CastTarget, spell.Combat.CastRange))
+                            bool inRange;
+                            if (spell.Combat.MinRange > 0)
+                            {
+                                inRange = InRangeOf(CastTarget, spell.Combat.CastRange, spell.Combat.MinRange);
+                            }
+                            else
+                            {
+                                inRange = InRangeOf(CastTarget, spell.Combat.CastRange);
+                            }
+
+                            if (!inRange)
                             {
                                 SendMissedAttackMessage(CastTarget, DamageType.Physical);
                             }

@@ -293,6 +293,8 @@ namespace Intersect.GameObjects
 
         public bool AoeRelativeOffset { get; set; }
 
+        public int MinRange { get; set; }
+
         public bool HoTDoT { get; set; }
 
         public int HotDotInterval { get; set; }
