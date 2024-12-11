@@ -701,24 +701,22 @@ namespace Intersect.Server.Entities
             }
 
             // Pick a random spell
-            var spellIndex = Randomization.Next(0, Spells.Count);
-            var spellId = Base.Spells[spellIndex];
-            var spellBase = SpellBase.Get(spellId);
-            if (spellBase == null)
+            if (!TrySelectSpell(out var spellDescriptor, out var spellSlotIdx))
             {
                 return;
             }
 
-            if (spellBase.Combat == null)
+            if (spellDescriptor.Combat == null)
             {
-                Log.Warn($"Combat data missing for {spellBase.Id}.");
+                Log.Warn($"Combat data missing for {spellDescriptor.Id}.");
             }
 
-            var range = spellBase.Combat?.CastRange ?? 0;
-            var targetType = spellBase.Combat?.TargetType ?? SpellTargetTypes.Single;
-            var projectileBase = spellBase.Combat?.Projectile;
+            var range = spellDescriptor.Combat?.CastRange ?? 0;
+            var targetType = spellDescriptor.Combat?.TargetType ?? SpellTargetTypes.Single;
+            var projectileBase = spellDescriptor.Combat?.Projectile;
 
-            if (spellBase.SpellType == SpellTypes.CombatSpell &&
+            // Aim at the target if casting a projectile spell
+            if (spellDescriptor.SpellType == SpellTypes.CombatSpell &&
                 targetType == SpellTargetTypes.Projectile &&
                 projectileBase != null &&
                 InRangeOf(target, projectileBase.Range))
@@ -740,22 +738,22 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (spellBase.VitalCost == null)
+            if (spellDescriptor.VitalCost == null)
             {
                 return;
             }
 
-            if (spellBase.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
+            if (spellDescriptor.VitalCost[(int) Vitals.Mana] > GetVital(Vitals.Mana))
             {
                 return;
             }
 
-            if (spellBase.VitalCost[(int) Vitals.Health] > GetVital(Vitals.Health))
+            if (spellDescriptor.VitalCost[(int) Vitals.Health] > GetVital(Vitals.Health))
             {
                 return;
             }
 
-            var spell = Spells[spellIndex];
+            var spell = Spells[spellSlotIdx];
             if (spell == null)
             {
                 return;
@@ -772,9 +770,9 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            CastTime = Timing.Global.Milliseconds + spellBase.CastDuration;
+            CastTime = Timing.Global.Milliseconds + spellDescriptor.CastDuration;
 
-            if ((spellBase.Combat?.Friendly ?? false) && spellBase.SpellType != SpellTypes.WarpTo)
+            if ((spellDescriptor.Combat?.Friendly ?? false) && spellDescriptor.SpellType != SpellTypes.WarpTo)
             {
                 CastTarget = this;
             }
@@ -784,24 +782,82 @@ namespace Intersect.Server.Entities
             }
 
             ProgressCastFrequency();
+            ProgressCastIndex();
 
-            SpellCastSlot = spellIndex;
+            SpellCastSlot = spellSlotIdx;
 
-            if (spellBase.CastAnimationId != Guid.Empty)
+            if (spellDescriptor.CastAnimationId != Guid.Empty)
             {
-                PacketSender.SendAnimationToProximity(spellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir, MapInstanceId);
+                PacketSender.SendAnimationToProximity(spellDescriptor.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir, MapInstanceId);
 
                 //Target Type 1 will be global entity
             }
 
             InterruptThreshold = -1;
-            if (spellBase.InterruptThreshold > 0 && spellBase.CastDuration > 0)
+            if (spellDescriptor.InterruptThreshold > 0 && spellDescriptor.CastDuration > 0)
             {
-                InterruptThreshold = (int)Math.Floor(spellBase.InterruptThreshold * ScaleFactor);
+                InterruptThreshold = (int)Math.Floor(spellDescriptor.InterruptThreshold * ScaleFactor);
                 PacketSender.SendCombatNumber(CombatNumberType.Interrupt, this, 0, threshold: InterruptThreshold);
             }
 
-            PacketSender.SendEntityCastTime(this, spellId);
+            PacketSender.SendEntityCastTime(this, spellDescriptor.Id);
+        }
+
+        public void ProgressCastIndex()
+        {
+            if (!Base.SequentialCasting)
+            {
+                return;
+            }
+
+            CastIndex++;
+            if (CastIndex >= Base.Spells.Count)
+            {
+                CastIndex = 0;
+            }
+        }
+
+        public bool TrySelectSpell(out SpellBase spellDescriptor, out int spellSlotIdx)
+        {
+            spellDescriptor = null;
+            spellSlotIdx = 0;
+
+            if (!Base.SequentialCasting)
+            {
+                // Pick a random spell
+                spellSlotIdx = Randomization.Next(0, Spells.Count);
+                var spellId = Base.Spells[spellSlotIdx];
+                if (!SpellBase.TryGet(spellId, out spellDescriptor))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (Base.Spells.Count <= 0)
+                {
+                    return false;
+                }
+
+                if (CastIndex >= Base.Spells.Count)
+                {
+                    CastIndex = 0;
+                }
+                var spellId = Base.Spells[CastIndex];
+                if (!SpellBase.TryGet(spellId, out spellDescriptor))
+                {
+                    return false;
+                }
+                spellSlotIdx = CastIndex;
+            }
+
+            // Not sure why this doesn't short-circuit but just leaving for now
+            if (spellDescriptor?.Combat == null)
+            {
+                Log.Warn($"Combat data missing for {spellDescriptor.Id}.");
+            }
+
+            return true;
         }
 
         public void ProgressCastFrequency()

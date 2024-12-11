@@ -217,6 +217,9 @@ namespace Intersect.Server.Entities
         public bool CanCast => CastTime == 0;
 
         [NotMapped, JsonIgnore]
+        public int CastIndex { get; set; }
+
+        [NotMapped, JsonIgnore]
         public long AttackTimer { get; set; }
 
         [NotMapped, JsonIgnore]

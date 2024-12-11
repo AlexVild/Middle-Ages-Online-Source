@@ -436,6 +436,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkNeverSkip.Checked = mEditorItem.NeverSkipSpellCasting;
                 chkHideName.Checked = mEditorItem.HideName;
                 chkAnimated.Checked = mEditorItem.AnimatedSprite;
+                chkSequentialCasting.Checked = mEditorItem.SequentialCasting;
             }
             else
             {
@@ -1886,6 +1887,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkAnimated_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.AnimatedSprite = chkAnimated.Checked;
+        }
+
+        private void chkSequentialCasting_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SequentialCasting = chkSequentialCasting.Checked;
         }
     }
 

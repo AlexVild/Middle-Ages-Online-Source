@@ -504,6 +504,8 @@ namespace Intersect.GameObjects
         public bool HideName { get; set; }
 
         public bool AnimatedSprite { get; set; }
+
+        public bool SequentialCasting { get; set; }
     }
 
 }

@@ -283,6 +283,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
+            this.chkSequentialCasting = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -2489,6 +2490,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpSpells.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpells.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpells.Controls.Add(this.chkSequentialCasting);
             this.grpSpells.Controls.Add(this.chkNeverSkip);
             this.grpSpells.Controls.Add(this.cmbSpell);
             this.grpSpells.Controls.Add(this.cmbFreq);
@@ -2500,7 +2502,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpells.Location = new System.Drawing.Point(3, 739);
             this.grpSpells.Name = "grpSpells";
-            this.grpSpells.Size = new System.Drawing.Size(207, 273);
+            this.grpSpells.Size = new System.Drawing.Size(207, 309);
             this.grpSpells.TabIndex = 28;
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
@@ -3738,6 +3740,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
+            // chkSequentialCasting
+            // 
+            this.chkSequentialCasting.AutoSize = true;
+            this.chkSequentialCasting.Location = new System.Drawing.Point(12, 264);
+            this.chkSequentialCasting.Name = "chkSequentialCasting";
+            this.chkSequentialCasting.Size = new System.Drawing.Size(119, 17);
+            this.chkSequentialCasting.TabIndex = 97;
+            this.chkSequentialCasting.Text = "Sequential casting?";
+            this.chkSequentialCasting.CheckedChanged += new System.EventHandler(this.chkSequentialCasting_CheckedChanged);
+            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4106,5 +4118,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkSpellCasting;
         private DarkCheckBox chkHideName;
         private DarkCheckBox chkAnimated;
+        private DarkCheckBox chkSequentialCasting;
     }
 }
