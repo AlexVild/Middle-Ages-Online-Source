@@ -1851,28 +1851,46 @@ namespace Intersect.Server.Entities
             return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
         }
 
-        public bool IsInBoundingBox(MapController targetMap, int targetX, int targetY, int range)
+        /// <summary>
+        /// Returns whether or not this entity is within the bounding box who's bottom-left position
+        /// is (targetX, targetY)
+        /// </summary>
+        /// <param name="targetMap">The map at which the bounding box starts</param>
+        /// <param name="targetX">The bottom-left X coordinate of the box</param>
+        /// <param name="targetY">The bottom-left Y coordinate the box</param>
+        /// <param name="width">The width of the BBox</param>
+        /// <param name="height">The height of the BBox</param>
+        /// <returns></returns>
+        public bool IsInBoundingBox(MapController targetMap, int targetX, int targetY, int width, int height)
         {
-            return BoundingBoxCheck(Map, targetMap, X, targetX, Y, targetY, range);
+            return BoundingBoxCheck(targetMap, Map, targetX, X, targetY, Y, width, height);
         }
 
-        public static bool BoundingBoxCheck(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB, int range)
+        public static bool BoundingBoxCheck(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB, int width, int height)
         {
             if (mapA == null || mapB == null || mapA.MapGrid != mapB.MapGrid)
             {
                 return false;
             }
 
-            // Calculate World Tile of Me
-            var x1 = xTileA + mapA.MapGridX * Options.MapWidth;
-            var y1 = yTileA + mapA.MapGridY * Options.MapHeight;
+            // Bottom-left of bounding box
+            var startPos = GetWorldTile(xTileA, yTileA, mapA);
+            var targetPos = GetWorldTile(xTileB, yTileB, mapB);
 
-            // Calculate World Tile of Target
-            var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
-            var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
+            var leftBound = startPos.X;
+            var rightBound = startPos.X + (width - 1);
+            var topBound = startPos.Y - (height - 1); // Plus because Y is down in top-down worlds
+            var bottomBound = startPos.Y;
 
-            // Check if the target is within the square region
-            return Math.Abs(x1 - x2) <= range && Math.Abs(y1 - y2) <= range;
+            return targetPos.X >= leftBound && targetPos.X <= rightBound && targetPos.Y >= topBound && targetPos.Y <= bottomBound;
+        }
+
+        public static Point GetWorldTile(int x, int y, MapController map)
+        {
+            var x1 = x + map.MapGridX * Options.MapWidth;
+            var y1 = y + map.MapGridY * Options.MapHeight;
+
+            return new Point(x1, y1);
         }
 
         public bool InRangeOf(Entity target, int range)

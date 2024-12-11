@@ -466,6 +466,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkManaSteal.Checked = mEditorItem.Combat.ManaSteal;
 
                 cmbAoeShape.SelectedIndex = (int) mEditorItem.Combat.AoeShape;
+                SetupAoeRectangleValues();
                 nudAoeXOffset.Value = mEditorItem.Combat.AoeXOffset;
                 nudAoeYOffset.Value = mEditorItem.Combat.AoeYOffset;
                 chkAoeRelativeDir.Checked = mEditorItem.Combat.AoeRelativeOffset;
@@ -1740,6 +1741,21 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.Combat.AoeShape = (AoeShape) cmbAoeShape.SelectedIndex;
+            SetupAoeRectangleValues();
+        }
+
+        private void SetupAoeRectangleValues()
+        {
+            if (mEditorItem.Combat.AoeShape == AoeShape.Rectangle)
+            {
+                grpRectangleSettings.Visible = true;
+                nudAoeHeight.Value = mEditorItem.Combat.AoeRectHeight == 0 ? mEditorItem.Combat.HitRadius + 2 : mEditorItem.Combat.AoeRectHeight;
+                nudAoeWidth.Value = mEditorItem.Combat.AoeRectWidth == 0 ? mEditorItem.Combat.HitRadius + 2 : mEditorItem.Combat.AoeRectWidth;
+            }
+            else
+            {
+                grpRectangleSettings.Visible = false;
+            }
         }
 
         private void nudAoeXOffset_ValueChanged(object sender, EventArgs e)
@@ -1755,6 +1771,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkAoeRelativeDir_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.AoeRelativeOffset = chkAoeRelativeDir.Checked;
+        }
+
+        private void nudAoeWidth_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeRectWidth = (int)nudAoeWidth.Value;
+        }
+
+        private void nudAoeHeight_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeRectHeight = (int)nudAoeHeight.Value;
         }
     }
 }

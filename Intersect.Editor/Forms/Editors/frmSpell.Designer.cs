@@ -117,6 +117,11 @@ namespace Intersect.Editor.Forms.Editors
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
             this.grpAdvAoe = new DarkUI.Controls.DarkGroupBox();
+            this.grpRectangleSettings = new DarkUI.Controls.DarkGroupBox();
+            this.lblAoeRectWidth = new System.Windows.Forms.Label();
+            this.lblAoeRectHeight = new System.Windows.Forms.Label();
+            this.nudAoeHeight = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudAoeWidth = new DarkUI.Controls.DarkNumericUpDown();
             this.chkAoeRelativeDir = new DarkUI.Controls.DarkCheckBox();
             this.lblAoeYOffset = new System.Windows.Forms.Label();
             this.nudAoeYOffset = new DarkUI.Controls.DarkNumericUpDown();
@@ -303,6 +308,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.SuspendLayout();
             this.grpCombat.SuspendLayout();
             this.grpAdvAoe.SuspendLayout();
+            this.grpRectangleSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAoeHeight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAoeWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeYOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeXOffset)).BeginInit();
             this.grpBalanceHelp.SuspendLayout();
@@ -1565,7 +1573,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCombat.Location = new System.Drawing.Point(3, 531);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(636, 674);
+            this.grpCombat.Size = new System.Drawing.Size(636, 715);
             this.grpCombat.TabIndex = 39;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
@@ -1575,6 +1583,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpAdvAoe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAdvAoe.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdvAoe.Controls.Add(this.grpRectangleSettings);
             this.grpAdvAoe.Controls.Add(this.chkAoeRelativeDir);
             this.grpAdvAoe.Controls.Add(this.lblAoeYOffset);
             this.grpAdvAoe.Controls.Add(this.nudAoeYOffset);
@@ -1587,15 +1596,91 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAdvAoe.Margin = new System.Windows.Forms.Padding(2);
             this.grpAdvAoe.Name = "grpAdvAoe";
             this.grpAdvAoe.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdvAoe.Size = new System.Drawing.Size(195, 164);
+            this.grpAdvAoe.Size = new System.Drawing.Size(195, 198);
             this.grpAdvAoe.TabIndex = 125;
             this.grpAdvAoe.TabStop = false;
             this.grpAdvAoe.Text = "Advanced AoE Settings";
             // 
+            // grpRectangleSettings
+            // 
+            this.grpRectangleSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpRectangleSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpRectangleSettings.Controls.Add(this.lblAoeRectWidth);
+            this.grpRectangleSettings.Controls.Add(this.lblAoeRectHeight);
+            this.grpRectangleSettings.Controls.Add(this.nudAoeHeight);
+            this.grpRectangleSettings.Controls.Add(this.nudAoeWidth);
+            this.grpRectangleSettings.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpRectangleSettings.Location = new System.Drawing.Point(8, 65);
+            this.grpRectangleSettings.Margin = new System.Windows.Forms.Padding(2);
+            this.grpRectangleSettings.Name = "grpRectangleSettings";
+            this.grpRectangleSettings.Padding = new System.Windows.Forms.Padding(2);
+            this.grpRectangleSettings.Size = new System.Drawing.Size(181, 57);
+            this.grpRectangleSettings.TabIndex = 126;
+            this.grpRectangleSettings.TabStop = false;
+            this.grpRectangleSettings.Text = "Rectangle Settings";
+            // 
+            // lblAoeRectWidth
+            // 
+            this.lblAoeRectWidth.AutoSize = true;
+            this.lblAoeRectWidth.Location = new System.Drawing.Point(8, 15);
+            this.lblAoeRectWidth.Name = "lblAoeRectWidth";
+            this.lblAoeRectWidth.Size = new System.Drawing.Size(35, 13);
+            this.lblAoeRectWidth.TabIndex = 129;
+            this.lblAoeRectWidth.Text = "Width";
+            // 
+            // lblAoeRectHeight
+            // 
+            this.lblAoeRectHeight.AutoSize = true;
+            this.lblAoeRectHeight.Location = new System.Drawing.Point(95, 15);
+            this.lblAoeRectHeight.Name = "lblAoeRectHeight";
+            this.lblAoeRectHeight.Size = new System.Drawing.Size(38, 13);
+            this.lblAoeRectHeight.TabIndex = 128;
+            this.lblAoeRectHeight.Text = "Height";
+            // 
+            // nudAoeHeight
+            // 
+            this.nudAoeHeight.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAoeHeight.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAoeHeight.Location = new System.Drawing.Point(92, 32);
+            this.nudAoeHeight.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAoeHeight.Name = "nudAoeHeight";
+            this.nudAoeHeight.Size = new System.Drawing.Size(80, 20);
+            this.nudAoeHeight.TabIndex = 127;
+            this.nudAoeHeight.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAoeHeight.ValueChanged += new System.EventHandler(this.nudAoeHeight_ValueChanged);
+            // 
+            // nudAoeWidth
+            // 
+            this.nudAoeWidth.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAoeWidth.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAoeWidth.Location = new System.Drawing.Point(6, 32);
+            this.nudAoeWidth.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAoeWidth.Name = "nudAoeWidth";
+            this.nudAoeWidth.Size = new System.Drawing.Size(80, 20);
+            this.nudAoeWidth.TabIndex = 127;
+            this.nudAoeWidth.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudAoeWidth.ValueChanged += new System.EventHandler(this.nudAoeWidth_ValueChanged);
+            // 
             // chkAoeRelativeDir
             // 
             this.chkAoeRelativeDir.AutoSize = true;
-            this.chkAoeRelativeDir.Location = new System.Drawing.Point(8, 135);
+            this.chkAoeRelativeDir.Location = new System.Drawing.Point(8, 171);
             this.chkAoeRelativeDir.Name = "chkAoeRelativeDir";
             this.chkAoeRelativeDir.Size = new System.Drawing.Size(128, 17);
             this.chkAoeRelativeDir.TabIndex = 60;
@@ -1605,7 +1690,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAoeYOffset
             // 
             this.lblAoeYOffset.AutoSize = true;
-            this.lblAoeYOffset.Location = new System.Drawing.Point(108, 93);
+            this.lblAoeYOffset.Location = new System.Drawing.Point(108, 129);
             this.lblAoeYOffset.Name = "lblAoeYOffset";
             this.lblAoeYOffset.Size = new System.Drawing.Size(45, 13);
             this.lblAoeYOffset.TabIndex = 59;
@@ -1615,7 +1700,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudAoeYOffset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAoeYOffset.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAoeYOffset.Location = new System.Drawing.Point(108, 109);
+            this.nudAoeYOffset.Location = new System.Drawing.Point(109, 145);
             this.nudAoeYOffset.Minimum = new decimal(new int[] {
             100,
             0,
@@ -1634,7 +1719,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAoeXOffset
             // 
             this.lblAoeXOffset.AutoSize = true;
-            this.lblAoeXOffset.Location = new System.Drawing.Point(9, 93);
+            this.lblAoeXOffset.Location = new System.Drawing.Point(9, 129);
             this.lblAoeXOffset.Name = "lblAoeXOffset";
             this.lblAoeXOffset.Size = new System.Drawing.Size(45, 13);
             this.lblAoeXOffset.TabIndex = 57;
@@ -1644,7 +1729,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudAoeXOffset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAoeXOffset.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAoeXOffset.Location = new System.Drawing.Point(8, 109);
+            this.nudAoeXOffset.Location = new System.Drawing.Point(8, 145);
             this.nudAoeXOffset.Minimum = new decimal(new int[] {
             100,
             0,
@@ -4147,6 +4232,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ResumeLayout(false);
             this.grpAdvAoe.ResumeLayout(false);
             this.grpAdvAoe.PerformLayout();
+            this.grpRectangleSettings.ResumeLayout(false);
+            this.grpRectangleSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAoeHeight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAoeWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeYOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeXOffset)).EndInit();
             this.grpBalanceHelp.ResumeLayout(false);
@@ -4470,5 +4559,10 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblAoeXOffset;
         private DarkNumericUpDown nudAoeXOffset;
         private DarkCheckBox chkAoeRelativeDir;
+        private DarkGroupBox grpRectangleSettings;
+        private System.Windows.Forms.Label lblAoeRectWidth;
+        private System.Windows.Forms.Label lblAoeRectHeight;
+        private DarkNumericUpDown nudAoeHeight;
+        private DarkNumericUpDown nudAoeWidth;
     }
 }

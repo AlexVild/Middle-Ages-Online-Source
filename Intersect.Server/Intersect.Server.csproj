@@ -1480,6 +1480,10 @@
     <Compile Include="Migrations\Game\20241210203648_AoeOffsetMigration.designer.cs">
       <DependentUpon>20241210203648_AoeOffsetMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241211031049_AoeRectangleSizeMigration.cs" />
+    <Compile Include="Migrations\Game\20241211031049_AoeRectangleSizeMigration.designer.cs">
+      <DependentUpon>20241211031049_AoeRectangleSizeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

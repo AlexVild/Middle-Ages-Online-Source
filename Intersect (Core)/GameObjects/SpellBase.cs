@@ -287,6 +287,10 @@ namespace Intersect.GameObjects
 
         public int AoeYOffset { get; set; }
 
+        public int AoeRectWidth { get; set; }
+
+        public int AoeRectHeight { get; set; }
+
         public bool AoeRelativeOffset { get; set; }
 
         public bool HoTDoT { get; set; }
