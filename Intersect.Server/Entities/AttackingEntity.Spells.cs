@@ -705,40 +705,18 @@ namespace Intersect.Server.Entities
             // First, calculate the relative offset positions
             var offsetX = spellBase.Combat.AoeXOffset;
             var offsetY = spellBase.Combat.AoeYOffset;
-
             if (spellBase.Combat.AoeRelativeOffset)
             {
-                // Offset such that our position is the bottom-right of the rectangle
-                if (spellBase.Combat.AoeShape == AoeShape.Rectangle)
-                {
-                    /*if ((Directions)Dir == Directions.Right)
-                    {
-                        offsetY += spellBase.Combat.AoeRectWidth - 1;
-                    }
-                    if ((Directions)Dir == Directions.Left)
-                    {
-                        offsetX -= spellBase.Combat.AoeRectWidth;
-                    }
-                    if ((Directions)Dir == Directions.Down)
-                    {
-                        offsetX -= spellBase.Combat.AoeRectWidth;
-                    }*/
-                    var bottomLeftRect = PositionUtilities.GetFlippedBottomLeftCorner(
-                        (Directions)Dir, 
-                        offsetX, 
-                        offsetY, 
-                        spellBase.Combat.AoeRectWidth, 
-                        spellBase.Combat.AoeRectHeight);
+                var aoeOffset = PositionUtilities.GetAoeOffset(
+                    Dir, 
+                    offsetX, 
+                    offsetY, 
+                    spellBase.Combat.AoeShape, 
+                    spellBase.Combat.AoeRectWidth, 
+                    spellBase.Combat.AoeRectHeight);
 
-                    offsetX = bottomLeftRect.X;
-                    offsetY = bottomLeftRect.Y;
-                }
-                else if (spellBase.Combat.AoeShape == AoeShape.Circle)
-                {
-                    var rotatedStart = PositionUtilities.RotateXYToDirection(Dir, offsetX, offsetY);
-                    offsetX = rotatedStart.X;
-                    offsetY = rotatedStart.Y;
-                }
+                offsetX = aoeOffset.X;
+                offsetY = aoeOffset.Y;
             }
 
             // Then, translate these offsets from our spell's starting position

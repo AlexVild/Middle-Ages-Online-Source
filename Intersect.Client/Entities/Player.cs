@@ -3554,7 +3554,12 @@ namespace Intersect.Client.Entities
 
         public override int GetFaceDirection()
         {
-            return FaceDirection;
+            if (CombatMode)
+            {
+                return FaceDirection;
+            }
+
+            return Dir;
         }
     }
 }

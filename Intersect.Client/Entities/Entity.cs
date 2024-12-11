@@ -2808,12 +2808,18 @@ namespace Intersect.Client.Entities
             // First, calculate the relative offset positions
             var offsetX = spell.Combat.AoeXOffset;
             var offsetY = spell.Combat.AoeYOffset;
-
             if (spell.Combat.AoeRelativeOffset)
             {
-                var rotatedStart = PositionUtilities.RotateXYToDirection(GetFaceDirection(), offsetX, offsetY);
-                offsetX = rotatedStart.X;
-                offsetY = rotatedStart.Y;
+                var aoeOffset = PositionUtilities.GetAoeOffset(
+                   GetFaceDirection(),
+                   offsetX,
+                   offsetY,
+                   spell.Combat.AoeShape,
+                   spell.Combat.AoeRectWidth,
+                   spell.Combat.AoeRectHeight);
+
+                offsetX = aoeOffset.X;
+                offsetY = aoeOffset.Y;
             }
             
             // Then, translate these offsets from our spell's starting position
@@ -2827,6 +2833,28 @@ namespace Intersect.Client.Entities
             int right = offsettedSpawnX.Value + size;
             int top = offsettedSpawnY.Value - size;
             int bottom = offsettedSpawnY.Value + size;
+            if (spell.Combat.AoeShape == AoeShape.Rectangle)
+            {
+                var width = spell.Combat.AoeRectWidth - 1;
+                var height = spell.Combat.AoeRectHeight - 1;
+                // Check for swapping width/height if we're turned and relative dir is enabled
+                if (spell.Combat.AoeRelativeOffset)
+                {
+                    var faceDir = (Directions)GetFaceDirection();
+                    if (faceDir == Directions.Right || faceDir == Directions.Left)
+                    {
+                        var tmpWidth = width;
+                        width = height;
+                        height = tmpWidth;
+                    }
+                }
+
+                // Rectangle positions are bottom-left oriented
+                left = offsettedSpawnX.Value;
+                right = offsettedSpawnX.Value + width;
+                top = offsettedSpawnY.Value - height;
+                bottom = offsettedSpawnY.Value;
+            }
             
             GameTexture texture = null;
 

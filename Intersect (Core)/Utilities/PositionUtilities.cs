@@ -1,5 +1,6 @@
 ﻿
 using Intersect.Enums;
+using Intersect.GameObjects;
 using System;
 
 namespace Intersect.Utilities
@@ -26,6 +27,17 @@ namespace Intersect.Utilities
                 default:
                     throw new ArgumentOutOfRangeException($"Invalid direction passed when translating points: {direction}");
             }
+        }
+
+        public static Point GetFlippedBottomLeftCorner(
+           int direction,
+           int bottomLeftX,
+           int bottomLeftY,
+           int width,
+           int height
+       )
+        {
+            return GetFlippedBottomLeftCorner((Directions) direction, bottomLeftX, bottomLeftY, width, height);
         }
 
         public static Point GetFlippedBottomLeftCorner(
@@ -59,6 +71,57 @@ namespace Intersect.Utilities
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), "Invalid direction provided.");
             }
+        }
+
+        public static Point GetAoeOffset(
+            int dir,
+            int xOffset,
+            int yOffset,
+            AoeShape shape,
+            int width,
+            int height
+        )
+        {
+            return GetAoeOffset(
+                (Directions)dir,
+                xOffset,
+                yOffset,
+                shape,
+                width,
+                height
+            );
+        }
+
+        public static Point GetAoeOffset(
+            Directions dir,
+            int xOffset,
+            int yOffset,
+            AoeShape shape,
+            int width,
+            int height
+        )
+        {
+            // Offset such that our position is the bottom-right of the rectangle
+            if (shape == AoeShape.Rectangle)
+            {
+                var bottomLeftRect = GetFlippedBottomLeftCorner(
+                    dir,
+                    xOffset,
+                    yOffset,
+                    width,
+                    height);
+
+                xOffset = bottomLeftRect.X;
+                yOffset = bottomLeftRect.Y;
+            }
+            else if (shape == AoeShape.Circle)
+            {
+                var rotatedStart = RotateXYToDirection(dir, xOffset, yOffset);
+                xOffset = rotatedStart.X;
+                yOffset = rotatedStart.Y;
+            }
+
+            return new Point(xOffset, yOffset);
         }
 
     }
