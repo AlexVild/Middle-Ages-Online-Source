@@ -658,9 +658,12 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            
+
+            // If we are in the middle of a casting chain, nothing can stop us!
+            var forced = ChainedSpell != Guid.Empty;
+
             // Add some randomness to spellcasting - especially at first cast
-            if (!Base.NeverSkipSpellCasting)
+            if (!Base.NeverSkipSpellCasting && !forced)
             {
                 var upperBound = CastFreq == default ? 3 : 11;
                 if (Randomization.Next(1, upperBound) == 1)
@@ -674,12 +677,14 @@ namespace Intersect.Server.Entities
 
             if (target == null || mPathFinder.GetTarget() == null)
             {
+                CancelSpellChain();
                 return;
             }
 
             // Check if NPC is stunned/sleeping
             if (IsStunnedOrSleeping)
             {
+                CancelSpellChain();
                 return;
             }
 
@@ -692,6 +697,7 @@ namespace Intersect.Server.Entities
             // Check if the NPC is able to cast spells
             if (IsUnableToCastSpells)
             {
+                CancelSpellChain();
                 return;
             }
 
@@ -701,9 +707,13 @@ namespace Intersect.Server.Entities
             }
 
             // Pick a random spell
-            if (!TrySelectSpell(out var spellDescriptor, out var spellSlotIdx))
+            var spellSlotIdx = -1;
+            if (!SpellBase.TryGet(ChainedSpell, out var spellDescriptor))
             {
-                return;
+                if (!TrySelectSpell(out spellDescriptor, out spellSlotIdx))
+                {
+                    return;
+                }
             }
 
             if (spellDescriptor.Combat == null)
@@ -711,17 +721,13 @@ namespace Intersect.Server.Entities
                 Log.Warn($"Combat data missing for {spellDescriptor.Id}.");
             }
 
-            var range = spellDescriptor.Combat?.CastRange ?? 0;
+            var range = spellDescriptor.GetRange();
             var targetType = spellDescriptor.Combat?.TargetType ?? SpellTargetTypes.Single;
             var projectileBase = spellDescriptor.Combat?.Projectile;
 
             // Aim at the target if casting a projectile spell
-            if (spellDescriptor.SpellType == SpellTypes.CombatSpell &&
-                targetType == SpellTargetTypes.Projectile &&
-                projectileBase != null &&
-                InRangeOf(target, projectileBase.Range))
+            if (SpellIsAimableAt(spellDescriptor, target))
             {
-                range = projectileBase.Range;
                 var dirToEnemy = DirToEnemy(target);
                 if (dirToEnemy != Dir)
                 {
@@ -753,18 +759,22 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var spell = Spells[spellSlotIdx];
-            if (spell == null)
+            // Check cooldown status if we're not within a spell chain
+            if (!forced)
             {
-                return;
+                var spell = Spells[spellSlotIdx];
+                if (spell == null)
+                {
+                    return;
+                }
+
+                if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Timing.Global.MillisecondsUtc)
+                {
+                    return;
+                }
             }
 
-            if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Timing.Global.MillisecondsUtc)
-            {
-                return;
-            }
-
-            if (!InRangeOf(target, range) && targetType == SpellTargetTypes.Single)
+            if (!forced && !InRangeOf(target, range) && targetType == SpellTargetTypes.Single)
             {
                 // ReSharper disable once SwitchStatementMissingSomeCases
                 return;
@@ -781,9 +791,8 @@ namespace Intersect.Server.Entities
                 CastTarget = target;
             }
 
-            ProgressCastFrequency();
-            ProgressCastIndex();
-
+            PrepNextSpell(spellDescriptor);
+            NextSpell = spellDescriptor;
             SpellCastSlot = spellSlotIdx;
 
             if (spellDescriptor.CastAnimationId != Guid.Empty)
@@ -2208,6 +2217,33 @@ namespace Intersect.Server.Entities
         public override void PlayerBackstabbed(Player player, int damage)
         {
             ChallengeUpdateProcesser.UpdateChallengesOf(new BackstabDamageUpdate(player, damage), Base.Level);
+        }
+
+        [NotMapped, JsonIgnore]
+        public Guid ChainedSpell { get; set; } = Guid.Empty;
+
+        public void PrepNextSpell(SpellBase currentSpell)
+        {
+            // Last check prevents infinite recursion
+            if (currentSpell == null || currentSpell.ChainSpellId == Guid.Empty || currentSpell.ChainSpellId == currentSpell.Id)
+            {
+                ChainedSpell = Guid.Empty;
+                ProgressCastFrequency();
+                ProgressCastIndex();
+                return;
+            }
+
+            ChainedSpell = currentSpell.ChainSpellId;
+            CastFreq = Timing.Global.Milliseconds + currentSpell.ChainDelayMs;
+        }
+
+        /// <summary>
+        /// Used to force cancel a spell chain
+        /// </summary>
+        public void CancelSpellChain()
+        {
+            ChainedSpell = Guid.Empty;
+            ProgressCastFrequency();
         }
     }
 }

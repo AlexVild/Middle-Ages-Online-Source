@@ -481,5 +481,27 @@ namespace Intersect.GameObjects
                 UpgradeOfSpellId = value.Id;
             }
         }
+
+        public Guid ChainSpellId { get; set; }
+
+        public long ChainDelayMs { get; set; }
+
+        public int GetRange()
+        {
+            if (Combat == null)
+            {
+                return 0;
+            }
+
+            switch (Combat.TargetType)
+            {
+                case SpellTargetTypes.AoE:
+                    return Combat.HitRadius;
+                case SpellTargetTypes.Projectile:
+                    return Combat.Projectile?.Range ?? 0;
+                default:
+                    return Combat.CastRange;
+            }
+        }
     }
 }

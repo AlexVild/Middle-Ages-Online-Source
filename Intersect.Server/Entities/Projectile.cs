@@ -564,7 +564,6 @@ namespace Intersect.Server.Entities
             }
 
             Owner.HandleAoESpell(Base.SpellId,
-                        Base.Spell.Combat?.HitRadius ?? 0,
                         enemy.MapId,
                         enemy.X,
                         enemy.Y,

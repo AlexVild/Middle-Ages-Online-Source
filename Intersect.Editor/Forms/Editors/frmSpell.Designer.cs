@@ -119,6 +119,10 @@ namespace Intersect.Editor.Forms.Editors
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
             this.grpAdvAoe = new DarkUI.Controls.DarkGroupBox();
+            this.nudAoeChainDelay = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblAoeChainDelay = new System.Windows.Forms.Label();
+            this.cmbAoeChain = new DarkUI.Controls.DarkComboBox();
+            this.lblChain = new System.Windows.Forms.Label();
             this.grpRectangleSettings = new DarkUI.Controls.DarkGroupBox();
             this.lblRectLbl = new System.Windows.Forms.Label();
             this.lblAoeRectWidth = new System.Windows.Forms.Label();
@@ -289,6 +293,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
+            this.grpNpcSpellChain = new DarkUI.Controls.DarkGroupBox();
             this.pnlContainer.SuspendLayout();
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
@@ -312,6 +317,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.SuspendLayout();
             this.grpCombat.SuspendLayout();
             this.grpAdvAoe.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAoeChainDelay)).BeginInit();
             this.grpRectangleSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeHeight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeWidth)).BeginInit();
@@ -371,11 +377,13 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
+            this.grpNpcSpellChain.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpNpcSpellChain);
             this.pnlContainer.Controls.Add(this.grpSpellGroup);
             this.pnlContainer.Controls.Add(this.grpComponents);
             this.pnlContainer.Controls.Add(this.grpTargetInfo);
@@ -1606,9 +1614,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.grpEffectDuration);
             this.grpCombat.Controls.Add(this.grpDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(3, 531);
+            this.grpCombat.Location = new System.Drawing.Point(3, 559);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(636, 740);
+            this.grpCombat.Size = new System.Drawing.Size(636, 730);
             this.grpCombat.TabIndex = 39;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
@@ -1631,10 +1639,69 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAdvAoe.Margin = new System.Windows.Forms.Padding(2);
             this.grpAdvAoe.Name = "grpAdvAoe";
             this.grpAdvAoe.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdvAoe.Size = new System.Drawing.Size(195, 220);
+            this.grpAdvAoe.Size = new System.Drawing.Size(195, 213);
             this.grpAdvAoe.TabIndex = 125;
             this.grpAdvAoe.TabStop = false;
             this.grpAdvAoe.Text = "Advanced AoE Settings";
+            // 
+            // nudAoeChainDelay
+            // 
+            this.nudAoeChainDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAoeChainDelay.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAoeChainDelay.Location = new System.Drawing.Point(294, 35);
+            this.nudAoeChainDelay.Maximum = new decimal(new int[] {
+            -727379968,
+            232,
+            0,
+            0});
+            this.nudAoeChainDelay.Name = "nudAoeChainDelay";
+            this.nudAoeChainDelay.Size = new System.Drawing.Size(111, 20);
+            this.nudAoeChainDelay.TabIndex = 130;
+            this.nudAoeChainDelay.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAoeChainDelay.ValueChanged += new System.EventHandler(this.nudAoeChainDelay_ValueChanged);
+            // 
+            // lblAoeChainDelay
+            // 
+            this.lblAoeChainDelay.AutoSize = true;
+            this.lblAoeChainDelay.Location = new System.Drawing.Point(219, 38);
+            this.lblAoeChainDelay.Name = "lblAoeChainDelay";
+            this.lblAoeChainDelay.Size = new System.Drawing.Size(59, 13);
+            this.lblAoeChainDelay.TabIndex = 129;
+            this.lblAoeChainDelay.Text = "Delay (ms):";
+            // 
+            // cmbAoeChain
+            // 
+            this.cmbAoeChain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbAoeChain.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbAoeChain.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbAoeChain.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbAoeChain.DrawDropdownHoverOutline = false;
+            this.cmbAoeChain.DrawFocusRectangle = false;
+            this.cmbAoeChain.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbAoeChain.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAoeChain.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbAoeChain.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbAoeChain.FormattingEnabled = true;
+            this.cmbAoeChain.Location = new System.Drawing.Point(5, 35);
+            this.cmbAoeChain.Name = "cmbAoeChain";
+            this.cmbAoeChain.Size = new System.Drawing.Size(193, 21);
+            this.cmbAoeChain.TabIndex = 128;
+            this.cmbAoeChain.Text = null;
+            this.cmbAoeChain.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbAoeChain.SelectedIndexChanged += new System.EventHandler(this.cmbAoeChain_SelectedIndexChanged);
+            // 
+            // lblChain
+            // 
+            this.lblChain.AutoSize = true;
+            this.lblChain.Location = new System.Drawing.Point(10, 19);
+            this.lblChain.Name = "lblChain";
+            this.lblChain.Size = new System.Drawing.Size(58, 13);
+            this.lblChain.TabIndex = 127;
+            this.lblChain.Text = "Next Spell:";
             // 
             // grpRectangleSettings
             // 
@@ -3853,7 +3920,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(3, 533);
+            this.grpEvent.Location = new System.Drawing.Point(3, 563);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(441, 48);
             this.grpEvent.TabIndex = 40;
@@ -3896,7 +3963,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWarp.Controls.Add(this.lblX);
             this.grpWarp.Controls.Add(this.lblMap);
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(3, 531);
+            this.grpWarp.Location = new System.Drawing.Point(3, 561);
             this.grpWarp.Name = "grpWarp";
             this.grpWarp.Size = new System.Drawing.Size(247, 182);
             this.grpWarp.TabIndex = 35;
@@ -4225,6 +4292,24 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 601);
             this.lstGameObjects.TabIndex = 32;
             // 
+            // grpNpcSpellChain
+            // 
+            this.grpNpcSpellChain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpNpcSpellChain.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNpcSpellChain.Controls.Add(this.lblAoeChainDelay);
+            this.grpNpcSpellChain.Controls.Add(this.nudAoeChainDelay);
+            this.grpNpcSpellChain.Controls.Add(this.lblChain);
+            this.grpNpcSpellChain.Controls.Add(this.cmbAoeChain);
+            this.grpNpcSpellChain.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNpcSpellChain.Location = new System.Drawing.Point(4, 494);
+            this.grpNpcSpellChain.Margin = new System.Windows.Forms.Padding(2);
+            this.grpNpcSpellChain.Name = "grpNpcSpellChain";
+            this.grpNpcSpellChain.Padding = new System.Windows.Forms.Padding(2);
+            this.grpNpcSpellChain.Size = new System.Drawing.Size(438, 64);
+            this.grpNpcSpellChain.TabIndex = 125;
+            this.grpNpcSpellChain.TabStop = false;
+            this.grpNpcSpellChain.Text = "NPC Spell Chaining";
+            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4279,6 +4364,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ResumeLayout(false);
             this.grpAdvAoe.ResumeLayout(false);
             this.grpAdvAoe.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAoeChainDelay)).EndInit();
             this.grpRectangleSettings.ResumeLayout(false);
             this.grpRectangleSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeHeight)).EndInit();
@@ -4351,6 +4437,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
+            this.grpNpcSpellChain.ResumeLayout(false);
+            this.grpNpcSpellChain.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -4614,5 +4702,10 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblRectLbl;
         private DarkNumericUpDown nudMinRange;
         private System.Windows.Forms.Label lblMinRange;
+        private DarkComboBox cmbAoeChain;
+        private System.Windows.Forms.Label lblChain;
+        private DarkNumericUpDown nudAoeChainDelay;
+        private System.Windows.Forms.Label lblAoeChainDelay;
+        private DarkGroupBox grpNpcSpellChain;
     }
 }

@@ -99,6 +99,26 @@ namespace Intersect.Server.Entities
             // Blank
         }
 
+        public bool SpellIsAimableAt(SpellBase spell, Entity target)
+        {
+            var validTargetTypes = new List<SpellTargetTypes>() { SpellTargetTypes.AoE, SpellTargetTypes.Projectile };
+            if (spell == null || spell.Combat == null || !validTargetTypes.Contains(spell.Combat.TargetType))
+            {
+                return false;
+            }
+
+            if (spell.Combat.TargetType == SpellTargetTypes.Projectile && spell.Combat.Projectile != null)
+            {
+                return InRangeOf(target, spell.Combat.Projectile.Range);
+            }
+            if (spell.Combat.TargetType == SpellTargetTypes.AoE)
+            {
+                return spell.Combat.AoeRelativeOffset;
+            }
+
+            return false;
+        }
+
         protected bool IsStunnedOrSleeping => CachedStatuses.Any(PredicateStunnedOrSleeping);
 
         protected bool IsImmobile => CachedStatuses.Any(PredicateCantMove);

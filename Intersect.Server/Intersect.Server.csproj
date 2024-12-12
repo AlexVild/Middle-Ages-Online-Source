@@ -1492,6 +1492,10 @@
     <Compile Include="Migrations\Game\20241211205235_SequentialCastingNPCMigration.designer.cs">
       <DependentUpon>20241211205235_SequentialCastingNPCMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241212151632_SpellChainMigration.cs" />
+    <Compile Include="Migrations\Game\20241212151632_SpellChainMigration.designer.cs">
+      <DependentUpon>20241212151632_SpellChainMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

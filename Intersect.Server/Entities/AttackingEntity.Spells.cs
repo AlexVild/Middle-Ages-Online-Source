@@ -11,6 +11,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -542,7 +543,7 @@ namespace Intersect.Server.Entities
                                 if (spell.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
                                 {
                                     HandleAoESpell(
-                                        spell.Id, spell.Combat.HitRadius, CastTarget?.MapId ?? Guid.Empty, CastTarget?.X ?? 0, CastTarget?.Y ?? 0,
+                                        spell.Id, CastTarget?.MapId ?? Guid.Empty, CastTarget?.X ?? 0, CastTarget?.Y ?? 0,
                                         null, false, false, true
                                     );
                                 }
@@ -557,7 +558,7 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.AoE:
-                            HandleAoESpell(spell.Id, spell.Combat.HitRadius, MapId, X, Y, null);
+                            HandleAoESpell(spell.Id, MapId, X, Y, null);
                             break;
                         case SpellTargetTypes.Projectile:
                             var projectileBase = spell.Combat.Projectile;
@@ -632,7 +633,7 @@ namespace Intersect.Server.Entities
                 case SpellTypes.WarpTo:
                     if (CastTarget != null)
                     {
-                        HandleAoESpell(spell.Id, spell.Combat.CastRange, MapId, X, Y, CastTarget, false, false, true);
+                        HandleAoESpell(spell.Id, MapId, X, Y, CastTarget, false, false, true);
                     }
                     break;
                 case SpellTypes.Dash:
@@ -694,7 +695,6 @@ namespace Intersect.Server.Entities
         /// </summary>
         public void HandleAoESpell(
             Guid spellId,
-            int range,
             Guid startMapId,
             int startX,
             int startY,

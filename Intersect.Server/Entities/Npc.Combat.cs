@@ -35,10 +35,9 @@ namespace Intersect.Server.Entities
 
         public override void CheckForSpellCast(long timeMs)
         {
-            if (CastTime != 0 && !IsCasting && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
+            if (CastTime != 0 && !IsCasting && NextSpell != null)
             {
-                var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
-                UseSpell(spell, SpellCastSlot, CastTarget);
+                UseSpell(NextSpell, SpellCastSlot, CastTarget);
             }
         }
 
@@ -247,5 +246,7 @@ namespace Intersect.Server.Entities
 
             base.HealVital(vital, amount);
         }
+
+        public SpellBase NextSpell { get; set; }
     }
 }

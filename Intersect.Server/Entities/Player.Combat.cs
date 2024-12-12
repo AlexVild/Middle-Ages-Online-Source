@@ -983,7 +983,7 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                HandleAoESpell(spellId, procSpell.Combat?.HitRadius ?? 0, enemy.MapId, enemy.X, enemy.Y, null, true);
+                HandleAoESpell(spellId, enemy.MapId, enemy.X, enemy.Y, null, true);
             }
             return true;
         }

@@ -119,6 +119,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbDashAnimation.Items.Add(Strings.General.none);
             cmbDashAnimation.Items.AddRange(AnimationBase.Names);
 
+            cmbAoeChain.Items.Clear();
+            cmbAoeChain.Items.Add(Strings.General.none);
+            cmbAoeChain.Items.AddRange(SpellBase.Names);
+
             cmbSprite.Items.Clear();
             cmbSprite.Items.Add(Strings.General.none);
             var spellNames = GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Spell);
@@ -466,6 +470,8 @@ namespace Intersect.Editor.Forms.Editors
                 chkManaSteal.Checked = mEditorItem.Combat.ManaSteal;
 
                 cmbAoeShape.SelectedIndex = (int) mEditorItem.Combat.AoeShape;
+                cmbAoeChain.SelectedIndex = SpellBase.ListIndex(mEditorItem.ChainSpellId) + 1;
+                nudAoeChainDelay.Value = mEditorItem.ChainDelayMs;
                 SetupAoeRectangleValues();
                 nudAoeXOffset.Value = mEditorItem.Combat.AoeXOffset;
                 nudAoeYOffset.Value = mEditorItem.Combat.AoeYOffset;
@@ -1789,6 +1795,16 @@ namespace Intersect.Editor.Forms.Editors
         private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.MinRange = (int)nudMinRange.Value;
+        }
+
+        private void cmbAoeChain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ChainSpellId = SpellBase.IdFromList(cmbAoeChain.SelectedIndex - 1);
+        }
+
+        private void nudAoeChainDelay_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ChainDelayMs = (int)nudAoeChainDelay.Value;
         }
     }
 }
