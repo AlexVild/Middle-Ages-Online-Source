@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Data.SqlTypes;
+using System.Web.UI.WebControls;
 using Intersect.Enums;
 using Intersect.Server.Database;
 
@@ -15,6 +16,10 @@ namespace Intersect.Server.Maps
 
         private int mTileY;
 
+        public int X => mTileX;
+        public int Y => mTileY;
+        public Guid MapId => mMapId;
+
         /// <summary>
         ///     Creates a new tile helper instance in a position given.
         /// </summary>
@@ -26,6 +31,13 @@ namespace Intersect.Server.Maps
             mMapId = mapId;
             mTileX = tileX;
             mTileY = tileY;
+        }
+
+        public TileHelper(TileHelper copyingHelper)
+        {
+            mMapId = copyingHelper.GetMapId();
+            mTileX = copyingHelper.GetX();
+            mTileY = copyingHelper.GetY();
         }
 
         /// <summary>
@@ -41,6 +53,20 @@ namespace Intersect.Server.Maps
             mTileY += yOffset;
 
             return TryFix();
+        }
+
+        public void Set(Guid mapId, int x, int y)
+        {
+            mMapId = mapId;
+            mTileX = x;
+            mTileY = y;
+        }
+
+        public void Set(TileHelper helper)
+        {
+            mMapId = helper.MapId;
+            mTileX = helper.X;
+            mTileY = helper.Y;
         }
 
         public bool TryFix()
@@ -217,6 +243,11 @@ namespace Intersect.Server.Maps
             }
 
             return true;
+        }
+
+        public bool IsValid()
+        {
+            return IsTileValid(MapId, X, Y);
         }
 
     }

@@ -477,6 +477,11 @@ namespace Intersect.Editor.Forms.Editors
                 nudAoeYOffset.Value = mEditorItem.Combat.AoeYOffset;
                 chkAoeRelativeDir.Checked = mEditorItem.Combat.AoeRelativeOffset;
 
+                chkAreaDenial.Checked = mEditorItem.Combat.AoeTrapSpawner;
+                nudAreaDenialRadius.Value = mEditorItem.Combat.AoeTrapRadiusOverride;
+                nudAreaSpawnIntensity.Value = mEditorItem.Combat.AoeTrapIntensity;
+                UpdateAreaDenialSettings();
+
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
                 PopulateDamageTypes();
@@ -580,6 +585,7 @@ namespace Intersect.Editor.Forms.Editors
             lblTrapAnimation.Hide();
             cmbTrapAnimation.Hide();
             grpAdvAoe.Hide();
+            grpAreaDenial.Hide();
             nudMinRange.Hide();
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Single)
@@ -604,6 +610,7 @@ namespace Intersect.Editor.Forms.Editors
                 lblHitRadius.Show();
                 nudHitRadius.Show();
                 grpAdvAoe.Show();
+                grpAreaDenial.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
             }
 
@@ -1805,6 +1812,32 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAoeChainDelay_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.ChainDelayMs = (int)nudAoeChainDelay.Value;
+        }
+
+        private void chkAreaDenial_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeTrapSpawner = chkAreaDenial.Checked;
+            UpdateAreaDenialSettings();
+        }
+
+        private void UpdateAreaDenialSettings()
+        {
+            if (mEditorItem?.Combat == null)
+            {
+                return;
+            }
+            
+            grpAreaDenial.Visible = mEditorItem.Combat.AoeTrapSpawner;
+        }
+
+        private void nudAreaDenialRadius_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeTrapRadiusOverride = (int)nudAreaDenialRadius.Value;
+        }
+
+        private void nudAreaSpawnIntensity_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.AoeTrapIntensity = (int)nudAreaSpawnIntensity.Value;
         }
     }
 }

@@ -1265,6 +1265,11 @@ namespace Intersect.Server.Maps
 
         public void SpawnTrap(AttackingEntity owner, SpellBase parentSpell, byte x, byte y, byte z)
         {
+            if (TileBlocked(x, y, true))
+            {
+                return;
+            }
+
             var trap = new MapTrapInstance(owner, parentSpell, mMapController.Id, MapInstanceId, x, y, z);
             foreach(var player in GetPlayers(true))
             {
@@ -1378,7 +1383,7 @@ namespace Intersect.Server.Maps
         #endregion
 
         #region Collision
-        public bool TileBlocked(int x, int y)
+        public bool TileBlocked(int x, int y, bool ignoreEntities = false)
         {
             if (mMapController.Attributes == null ||
                 x < 0 || x >= mMapController.Attributes.GetLength(0) ||
@@ -1394,6 +1399,11 @@ namespace Intersect.Server.Maps
                 (mMapController.Attributes[x, y].Type == MapAttributes.Item && ((MapItemAttribute)mMapController.Attributes[x, y]).IsBlock)))
             {
                 return true;
+            }
+
+            if (ignoreEntities)
+            {
+                return false;
             }
 
             //See if there are any entities in the way

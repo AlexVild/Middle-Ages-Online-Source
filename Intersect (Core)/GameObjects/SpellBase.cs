@@ -293,6 +293,12 @@ namespace Intersect.GameObjects
 
         public bool AoeRelativeOffset { get; set; }
 
+        public bool AoeTrapSpawner { get; set; }
+
+        public int AoeTrapIntensity { get; set; }
+        
+        public int AoeTrapRadiusOverride { get; set; }
+
         public int MinRange { get; set; }
 
         public bool HoTDoT { get; set; }

@@ -10,6 +10,7 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 namespace Intersect.Server.Entities
 {
@@ -702,7 +704,8 @@ namespace Intersect.Server.Entities
             bool ignoreEvasion = false,
             bool isProjectileTool = false,
             bool ignoreMissMessage = false,
-            int tool = -1)
+            int tool = -1,
+            bool detonation = false)
         {
             var spellBase = SpellBase.Get(spellId);
             var startMap = MapController.Get(startMapId);
@@ -736,8 +739,23 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            var isTrap = spellBase.Combat.AoeTrapSpawner;
+            // AoE attacks either attack outright...
+            if (!isTrap || detonation) 
+            {
+                ProcessAoeTargets(spellBase, spellTarget, castingTile, tool, isProjectileTool, ignoreMissMessage, ignoreEvasion);
+            }
+            // ... or spawn traps within an area at a given intensity
+            else if (isTrap)
+            {
+                SpawnAreaTraps(spellBase, castingTile);
+            }
+        }
+
+        private void ProcessAoeTargets(SpellBase spellBase, Entity spellTarget, TileHelper castingTile, int tool, bool isProjectileTool, bool ignoreMissMessage, bool ignoreEvasion)
+        {
             int entitiesHit = 0;
-            foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
+            foreach (var instance in MapController.GetSurroundingMapInstances(castingTile.MapId, MapInstanceId, true))
             {
                 foreach (var entity in instance.GetCachedEntities())
                 {
@@ -810,7 +828,7 @@ namespace Intersect.Server.Entities
                     entitiesHit++;
                 }
             }
-            
+
             if (entitiesHit < 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
             {
                 if (this is Player)
@@ -820,10 +838,104 @@ namespace Intersect.Server.Entities
                 SendMissedAttackMessage(this, DamageType.True);
                 AttackMissed.Invoke(null);
             }
-            
+
             if (this is Player && entitiesHit > 1 && !spellBase.Combat.Friendly)
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new AoEHitsUpdate((Player)this, entitiesHit));
+            }
+        }
+
+        public void SpawnAreaTraps(SpellBase spell, TileHelper startTile)
+        {
+            if (spell == null || startTile == null || !startTile.IsValid() || spell.Combat == null)
+            {
+                return;
+            }
+
+            var faceDir = (Directions)Dir;
+            var originalTile = new TileHelper(startTile); // Offsetted spawn tile
+
+            var leftBound = new TileHelper(originalTile); // Bottom-left of AoE region
+            var rightBound = new TileHelper(originalTile); // Top-right of AoE region
+
+            // Figure out where our bounds should be based on the AoE shape
+            if (spell.Combat.AoeShape == AoeShape.Circle)
+            {
+                leftBound.Translate(-spell.Combat.HitRadius, spell.Combat.HitRadius);
+                rightBound.Translate(spell.Combat.HitRadius, -spell.Combat.HitRadius);
+            }
+            else if (spell.Combat.AoeShape == AoeShape.Rectangle)
+            {
+                if (faceDir == Directions.Right || faceDir == Directions.Left)
+                {
+                    // -1 because we are inclusive with tile size
+                    rightBound.Translate(spell.Combat.AoeRectHeight - 1, -(spell.Combat.AoeRectWidth - 1));
+                }
+                else
+                {
+                    // -1 because we are inclusive with tile size
+                    rightBound.Translate(spell.Combat.AoeRectWidth - 1, -(spell.Combat.AoeRectHeight - 1));
+                }
+            }
+
+            // We're gonna traverse the possible trap tiles starting from the bottom left and ending at the top right.
+            var spawnTile = new TileHelper(leftBound);
+            var done = false;
+            while (!done && spawnTile.IsValid())
+            {
+                if (!MapController.TryGet(spawnTile.MapId, out var currMap) || !MapController.TryGetInstanceFromMap(spawnTile.MapId, MapInstanceId, out var mapInstance))
+                {
+                    done = true;
+                    continue;
+                }
+
+                if (spell.Combat.AoeShape != AoeShape.Circle ||
+                    GetDistanceBetween(
+                        MapController.Get(originalTile.MapId),
+                        MapController.Get(spawnTile.MapId),
+                        originalTile.X,
+                        spawnTile.X,
+                        originalTile.Y,
+                        spawnTile.Y) <= spell.Combat.HitRadius)
+                {
+                    // Spawn a trap if the intensity allows it
+                    if (spell.Combat.AoeTrapIntensity > 0 && Randomization.Next(0, 100) < spell.Combat.AoeTrapIntensity - 1)
+                    {
+                        mapInstance.SpawnTrap(this, spell, (byte)spawnTile.X, (byte)spawnTile.Y, (byte)Z);
+                    }
+                }
+
+                var spawnWorld = GetWorldTile(spawnTile.X, spawnTile.Y, MapController.Get(spawnTile.MapId));
+                var rightBoundWorld = GetWorldTile(rightBound.X, rightBound.Y, MapController.Get(rightBound.MapId));
+                // If we've reached the right bound's X value, go back to the start X and up 1 Y
+                if (spawnWorld.X == rightBoundWorld.X)
+                {
+                    if (spell.Combat.AoeShape == AoeShape.Circle)
+                    {
+                        spawnTile.Translate(-(spell.Combat.HitRadius * 2), -1);
+                    }
+                    else
+                    {
+                        if (faceDir == Directions.Right || faceDir == Directions.Left)
+                        {
+                            spawnTile.Translate(-(spell.Combat.AoeRectHeight - 1), -1);
+                        }
+                        else
+                        {
+                            spawnTile.Translate(-(spell.Combat.AoeRectWidth - 1), -1);
+                        }
+                    }
+                }
+                // Otherwise, just move one to the right
+                else
+                {
+                    spawnTile.Translate(1, 0);
+                }
+
+                if (spawnWorld.X == rightBoundWorld.X && spawnWorld.Y == rightBoundWorld.Y)
+                {
+                    done = true;
+                }
             }
         }
 
@@ -832,6 +944,13 @@ namespace Intersect.Server.Entities
             if (spell == null || spell.Combat == null || target == null)
             {
                 return false;
+            }
+
+            // If this is coming from a trap spawned by an AoE Area Denial spell, use the trap radius override
+            // instead of the spell's AoE radius. Hacky
+            if (spell.Combat.AoeTrapSpawner)
+            {
+                return target.GetDistanceTo(startMap, startX, startY) <= spell.Combat.AoeTrapRadiusOverride;
             }
 
             var shape = spell.Combat.AoeShape;

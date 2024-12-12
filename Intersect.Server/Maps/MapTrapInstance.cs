@@ -72,7 +72,7 @@ namespace Intersect.Server.Classes.Maps
                 return;
             }
 
-            Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null);
+            Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
             Triggered = true;
         }
 
