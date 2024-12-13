@@ -36,10 +36,18 @@ namespace Intersect.Server.Classes.Maps
 
         public Dictionary<Guid, long> EntitiesHit { get; set; }
 
+        public long StartTime { get; set; }
+
+        /// <summary>
+        /// Exists to provide a buffer for when a trap spawns and when it starts doing damage.
+        /// </summary>
+        public bool IsActive => StartTime < Timing.Global.Milliseconds + 500;
+
         public MapTrapInstance(AttackingEntity owner, SpellBase parentSpell, Guid mapId, Guid mapInstanceId, byte x, byte y, byte z)
         {
             Owner = owner;
             ParentSpell = parentSpell;
+            StartTime = Timing.Global.Milliseconds;
             Duration = Timing.Global.Milliseconds + ParentSpell.Combat.TrapDuration;
             MapId = mapId;
             MapInstanceId = mapInstanceId;
@@ -90,8 +98,8 @@ namespace Intersect.Server.Classes.Maps
             
             if (!ParentSpell.Combat.TrapMultiUse)
             {
-                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
                 Triggered = true;
+                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
             }
             else
             {

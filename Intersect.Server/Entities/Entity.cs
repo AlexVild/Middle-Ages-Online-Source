@@ -10,6 +10,7 @@ using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
+using Intersect.Server.Classes.Maps;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Combat;
@@ -1088,15 +1089,6 @@ namespace Intersect.Server.Entities
                     if (TryToChangeDimension() && doNotUpdate == true)
                     {
                         PacketSender.UpdateEntityZDimension(this, (byte)Z);
-                    }
-
-                    //Check for traps
-                    if (MapController.TryGetInstanceFromMap(currentMap.Id, MapInstanceId, out var mapInstance))
-                    {
-                        foreach (var trap in mapInstance.MapTrapsCached)
-                        {
-                            trap.CheckEntityHasDetonatedTrap(this);
-                        }
                     }
 
                     // TODO: Why was this scoped to only Event entities?
@@ -2418,6 +2410,32 @@ namespace Intersect.Server.Entities
         public virtual Tuple<int, int> GetStatBonuses(Stats stat)
         {
             return new Tuple<int, int>(0, 0);
+        }
+
+        public bool IsOnTileOf(Entity other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            return MapId == other.MapId && 
+                MapInstanceId == other.MapInstanceId && 
+                X == other.X && 
+                Y == other.Y && 
+                Z == other.Z;
+        }
+
+        public bool IsOnTileOf(MapTrapInstance trap)
+        {
+            if (trap == null)
+            {
+                return false;
+            }
+            return MapId == trap.MapId && 
+                MapInstanceId == trap.MapInstanceId && 
+                X == trap.X && 
+                Y == trap.Y && 
+                Z == trap.Z;
         }
     }
 }

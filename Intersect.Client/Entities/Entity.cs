@@ -2654,6 +2654,7 @@ namespace Intersect.Client.Entities
         private int AoeAlphaDir = -1;
         private long AoeAlphaUpdate;
         private GameTexture COMBAT_TILE_AOE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
+        private GameTexture COMBAT_TILE_AOE_TRAP = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_trap.png");
         private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
         private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
         private GameTexture SINGLE_TARGET = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target_hostile.png");
@@ -2862,7 +2863,7 @@ namespace Intersect.Client.Entities
 
             Func<double, bool> inRange = new Func<double, bool>((double distance) =>
             {
-                if (spell.Combat.TargetType == SpellTargetTypes.Single && spell.Combat.MinRange > 0)
+                if (spell.Combat.MinRange > 0)
                 {
                     return Math.Floor(distance) <= size && Math.Floor(distance) > spell.Combat.MinRange;
                 }
@@ -2922,6 +2923,13 @@ namespace Intersect.Client.Entities
                         {
                             Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
                         }
+
+                        // If this is an offensive AoE trap spell
+                        if (texture == COMBAT_TILE_AOE && spell.Combat.AoeTrapSpawner)
+                        {
+                            texture = COMBAT_TILE_AOE_TRAP;
+                        }
+
                         Graphics.DrawGameTexture(
                             texture, new FloatRect(0, 0, texture.Width, texture.Height),
                             tile, new Color(AoeAlpha, 255, 255, 255)

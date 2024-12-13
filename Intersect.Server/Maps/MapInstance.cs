@@ -325,6 +325,7 @@ namespace Intersect.Server.Maps
                     ProcessResourceRespawns();
                     UpdateGlobalEvents(timeMs);
                     UpdateTerritories();
+                    UpdateTraps(timeMs);
 
                     SendBatchedPacketsToPlayers();
                     mLastUpdateTime = timeMs;
@@ -1303,6 +1304,24 @@ namespace Intersect.Server.Maps
                 }
             }
             MapTrapsCached = MapTraps.Values.ToArray();
+        }
+
+        public void UpdateTraps(long timeMs)
+        {
+            var cachedEntities = GetCachedEntities();
+            foreach (var trap in MapTrapsCached.ToArray())
+            {
+                if (trap.Triggered || !trap.IsActive)
+                {
+                    continue;
+                }
+                
+                var entities = cachedEntities.Where(en => en.IsOnTileOf(trap));
+                foreach (var entity in entities)
+                {
+                    trap.CheckEntityHasDetonatedTrap(entity);
+                }
+            }
         }
 
         #endregion

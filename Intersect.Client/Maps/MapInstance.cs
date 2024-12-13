@@ -255,11 +255,18 @@ namespace Intersect.Client.Maps
                     if (ZoneType != MapZones.Safe)
                     {
                         var isNpc = !(trap.Owner is Player);
-                        var inGuild = ((Player)trap.Owner).Guild == Globals.Me.Guild;
-                        var inParty = Globals.Me.Party.FindIndex(member => member.Id == ((Player)trap.Owner).Id) >= 0;
 
-                        // Hide trap if it's an unfriendly player's
-                        trap.TrapAnimation.Hidden = !isNpc && !inGuild && !inParty;
+                        // Hide trap if it's an unfriendly player's -- never hide NPC traps
+                        trap.TrapAnimation.Hidden = !isNpc && !trap.Owner.IsAllyOf(Globals.Me);
+                    }
+
+                    if (trap.Owner.IsAllyOf(Globals.Me))
+                    {
+                        trap.TrapAnimation.Opacity = 120;
+                    }
+                    else
+                    {
+                        trap.TrapAnimation.Opacity = 255;
                     }
 
                     trap.TrapAnimation.Update();

@@ -957,7 +957,12 @@ namespace Intersect.Server.Entities
             switch (shape)
             {
                 case AoeShape.Circle:
-                    return target.GetDistanceTo(startMap, startX, startY) <= spell.Combat.HitRadius;
+                    if (spell.Combat.MinRange > 0)
+                    {
+                        return InRangeOf(target, spell.Combat.HitRadius, spell.Combat.MinRange);
+                    }
+                    return InRangeOf(target, spell.Combat.HitRadius);
+
                 case AoeShape.Rectangle:
                     var faceDir = (Directions)Dir;
                     if (faceDir == Directions.Right || faceDir == Directions.Left)
@@ -968,6 +973,7 @@ namespace Intersect.Server.Entities
                     {
                         return target.IsInBoundingBox(startMap, startX, startY, spell.Combat.AoeRectWidth, spell.Combat.AoeRectHeight);
                     }
+
                 default:
                     Logging.Log.Warn($"Spell has invalid AoE range: {shape}");
 #if DEBUG

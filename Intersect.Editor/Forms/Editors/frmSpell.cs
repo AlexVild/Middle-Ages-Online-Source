@@ -589,6 +589,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbTrapAnimation.Hide();
             grpAdvAoe.Hide();
             grpAreaDenial.Hide();
+            lblMinRange.Hide();
             nudMinRange.Hide();
             grpAdvTrapSettings.Hide();
 
@@ -598,6 +599,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudCastRange.Show();
                 nudCastRange.Value = mEditorItem.Combat.CastRange;
                 nudMinRange.Value = mEditorItem.Combat.MinRange;
+                lblMinRange.Show();
                 nudMinRange.Show();
                 if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell)
                 {
@@ -613,10 +615,18 @@ namespace Intersect.Editor.Forms.Editors
             {
                 lblHitRadius.Show();
                 nudHitRadius.Show();
+                lblDuration.Show();
+                nudDuration.Show();
+                lblTrapAnimation.Show();
+                cmbTrapAnimation.Show();
+                cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
+                lblTrapAnimation.Text = Strings.SpellEditor.TrapAnimation;
                 grpAdvAoe.Show();
                 grpAreaDenial.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
-                grpAdvTrapSettings.Show();
+                UpdateAreaDenialSettings();
+                lblMinRange.Show();
+                nudMinRange.Show();
             }
 
             if (cmbTargetType.SelectedIndex < (int) SpellTargetTypes.Self)
@@ -1833,7 +1843,7 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
             
-            grpAreaDenial.Visible = mEditorItem.Combat.AoeTrapSpawner;
+            grpAdvTrapSettings.Visible = mEditorItem.Combat.AoeTrapSpawner;
         }
 
         private void nudAreaDenialRadius_ValueChanged(object sender, EventArgs e)

@@ -58,6 +58,8 @@ namespace Intersect.Client.Entities
 
         private int mZDimension = -1;
 
+        public int Opacity = 255;
+
         public Animation(
             AnimationBase animBase,
             bool loopForever,
@@ -111,6 +113,7 @@ namespace Intersect.Client.Entities
 
             var rotationDegrees = 0f;
             var dontRotate = upper && MyBase.Upper.DisableRotations || !upper && MyBase.Lower.DisableRotations;
+            var drawColor = new Color(Opacity, 255, 255, 255);
             if ((AutoRotate || mRenderDir != -1) && !dontRotate)
             {
                 switch (mRenderDir)
@@ -174,7 +177,7 @@ namespace Intersect.Client.Entities
                             ),
                             new FloatRect(
                                 mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
-                            ), Intersect.Color.White, null, GameBlendModes.None, null, rotationDegrees
+                            ), drawColor, null, GameBlendModes.None, null, rotationDegrees
                         );
                     }
                 }
@@ -217,7 +220,7 @@ namespace Intersect.Client.Entities
                             ),
                             new FloatRect(
                                 mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
-                            ), Intersect.Color.White, null, GameBlendModes.None, null, rotationDegrees
+                            ), drawColor, null, GameBlendModes.None, null, rotationDegrees
                         );
                     }
                 }
