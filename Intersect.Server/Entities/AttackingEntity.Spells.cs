@@ -946,6 +946,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (spell.SpellType == SpellTypes.WarpTo || spell.SpellType == SpellTypes.Dash)
+            {
+                return true;
+            }
+
             // If this is coming from a trap spawned by an AoE Area Denial spell, use the trap radius override
             // instead of the spell's AoE radius. Hacky
             if (spell.Combat.AoeTrapSpawner)
