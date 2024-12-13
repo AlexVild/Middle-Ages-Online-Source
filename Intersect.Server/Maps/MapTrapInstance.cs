@@ -7,6 +7,7 @@ using Intersect.Server.General;
 using Intersect.Enums;
 using Intersect.Server.Maps;
 using Intersect.Utilities;
+using System.Collections.Generic;
 
 namespace Intersect.Server.Classes.Maps
 {
@@ -33,6 +34,8 @@ namespace Intersect.Server.Classes.Maps
 
         public byte Z;
 
+        public Dictionary<Guid, long> EntitiesHit { get; set; }
+
         public MapTrapInstance(AttackingEntity owner, SpellBase parentSpell, Guid mapId, Guid mapInstanceId, byte x, byte y, byte z)
         {
             Owner = owner;
@@ -43,26 +46,39 @@ namespace Intersect.Server.Classes.Maps
             X = x;
             Y = y;
             Z = z;
+            EntitiesHit = new Dictionary<Guid, long>();
         }
 
         public void CheckEntityHasDetonatedTrap(Entity entity)
         {
-            if (!Triggered)
+            if (Triggered)
             {
-                if (entity.MapId == MapId && entity.X == X && entity.Y == Y && entity.Z == Z)
-                {
-                    if (entity is Player player && Owner is Player)
-                    {
-                        //Don't detonate on yourself and party members on non-friendly spells!
-                        if (!ParentSpell.Combat.Friendly && (player.IsAllyOf(Owner) || MapController.Get(MapId).ZoneType == MapZones.Safe))
-                        {
-                            return;
-                        }
-                    }
-
-                    Detonate(entity);
-                }
+                return;
             }
+
+            if (entity == null || entity.MapId != MapId || entity.X != X || entity.Y != Y || entity.Z != Z)
+            {
+                return;
+            }
+
+            if (entity.Id == Owner.Id)
+            {
+                return;
+            }
+
+            var isAlly = entity.IsAllyOf(Owner);
+
+            if (isAlly && !ParentSpell.Combat.Friendly)
+            {
+                return;
+            }
+
+            if (!isAlly && ParentSpell.Combat.Friendly)
+            {
+                return;
+            }
+
+            Detonate(entity);
         }
 
         protected void Detonate(Entity target)
@@ -71,24 +87,44 @@ namespace Intersect.Server.Classes.Maps
             {
                 return;
             }
+            
+            if (!ParentSpell.Combat.TrapMultiUse)
+            {
+                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
+                Triggered = true;
+            }
+            else
+            {
+                if (EntitiesHit.TryGetValue(target.Id, out var lastHitTimestamp))
+                {
+                    if (Timing.Global.Milliseconds < lastHitTimestamp)
+                    {
+                        return;
+                    }
 
-            Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
-            Triggered = true;
+                    EntitiesHit[target.Id] = Timing.Global.Milliseconds + ParentSpell.Combat.TrapDamageCooldown;
+                    Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
+                    return;
+                }
+
+                EntitiesHit.Add(target.Id, Timing.Global.Milliseconds + ParentSpell.Combat.TrapDamageCooldown);
+                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
+            }
         }
 
         public void Update()
         {
-            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
+            if (!MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
             {
-                if (Triggered)
-                {
-                    mapInstance.RemoveTrap(this);
-                }
+                return;
+            }
 
-                if (Timing.Global.Milliseconds > Duration)
-                {
-                    mapInstance.RemoveTrap(this);
-                }
+            if (ParentSpell == null || 
+                ParentSpell.Combat == null ||
+                Triggered || 
+                Timing.Global.Milliseconds > Duration)
+            {
+                mapInstance.RemoveTrap(this);
             }
         }
 

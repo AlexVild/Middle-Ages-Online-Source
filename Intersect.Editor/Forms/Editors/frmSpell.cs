@@ -482,6 +482,9 @@ namespace Intersect.Editor.Forms.Editors
                 nudAreaSpawnIntensity.Value = mEditorItem.Combat.AoeTrapIntensity;
                 UpdateAreaDenialSettings();
 
+                chkNotSingleUseTrap.Checked = mEditorItem.Combat.TrapMultiUse;
+                nudTrapCooldown.Value = mEditorItem.Combat.TrapDamageCooldown;
+
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
                 PopulateDamageTypes();
@@ -587,6 +590,7 @@ namespace Intersect.Editor.Forms.Editors
             grpAdvAoe.Hide();
             grpAreaDenial.Hide();
             nudMinRange.Hide();
+            grpAdvTrapSettings.Hide();
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Single)
             {
@@ -612,6 +616,7 @@ namespace Intersect.Editor.Forms.Editors
                 grpAdvAoe.Show();
                 grpAreaDenial.Show();
                 nudHitRadius.Value = mEditorItem.Combat.HitRadius;
+                grpAdvTrapSettings.Show();
             }
 
             if (cmbTargetType.SelectedIndex < (int) SpellTargetTypes.Self)
@@ -651,6 +656,7 @@ namespace Intersect.Editor.Forms.Editors
                 lblHitRadius.Show();
                 lblTrapAnimation.Show();
                 cmbTrapAnimation.Show();
+                grpAdvTrapSettings.Show();
                 cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
                 lblTrapAnimation.Text = Strings.SpellEditor.TrapAnimation;
             }
@@ -1838,6 +1844,16 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAreaSpawnIntensity_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.AoeTrapIntensity = (int)nudAreaSpawnIntensity.Value;
+        }
+
+        private void chkNotSingleUseTrap_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.TrapMultiUse = chkNotSingleUseTrap.Checked;
+        }
+
+        private void nudTrapCooldown_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.TrapDamageCooldown = (int)nudTrapCooldown.Value;
         }
     }
 }

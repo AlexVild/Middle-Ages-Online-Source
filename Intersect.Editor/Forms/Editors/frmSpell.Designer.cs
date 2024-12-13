@@ -123,8 +123,13 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotCast = new DarkUI.Controls.DarkTextBox();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
+            this.grpAdvTrapSettings = new DarkUI.Controls.DarkGroupBox();
+            this.nudTrapCooldown = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblTrapCooldown = new System.Windows.Forms.Label();
+            this.chkNotSingleUseTrap = new DarkUI.Controls.DarkCheckBox();
             this.grpAreaDenial = new DarkUI.Controls.DarkGroupBox();
             this.grpAreaDenialSettings = new DarkUI.Controls.DarkGroupBox();
+            this.nudAreaSpawnIntensity = new DarkUI.Controls.DarkNumericUpDown();
             this.lblAreaDenialRadius = new System.Windows.Forms.Label();
             this.lblAreaDenialSpawnIntensity = new System.Windows.Forms.Label();
             this.nudAreaDenialRadius = new DarkUI.Controls.DarkNumericUpDown();
@@ -300,7 +305,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.nudAreaSpawnIntensity = new DarkUI.Controls.DarkNumericUpDown();
             this.pnlContainer.SuspendLayout();
             this.grpNpcSpellChain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeChainDelay)).BeginInit();
@@ -325,8 +329,11 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHPCost)).BeginInit();
             this.grpRequirements.SuspendLayout();
             this.grpCombat.SuspendLayout();
+            this.grpAdvTrapSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTrapCooldown)).BeginInit();
             this.grpAreaDenial.SuspendLayout();
             this.grpAreaDenialSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAreaSpawnIntensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAreaDenialRadius)).BeginInit();
             this.grpAdvAoe.SuspendLayout();
             this.grpRectangleSettings.SuspendLayout();
@@ -388,7 +395,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAreaSpawnIntensity)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -1692,6 +1698,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.grpAdvTrapSettings);
             this.grpCombat.Controls.Add(this.grpAreaDenial);
             this.grpCombat.Controls.Add(this.grpAdvAoe);
             this.grpCombat.Controls.Add(this.grpBalanceHelp);
@@ -1710,6 +1717,62 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
             this.grpCombat.Visible = false;
+            // 
+            // grpAdvTrapSettings
+            // 
+            this.grpAdvTrapSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAdvTrapSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdvTrapSettings.Controls.Add(this.nudTrapCooldown);
+            this.grpAdvTrapSettings.Controls.Add(this.lblTrapCooldown);
+            this.grpAdvTrapSettings.Controls.Add(this.chkNotSingleUseTrap);
+            this.grpAdvTrapSettings.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAdvTrapSettings.Location = new System.Drawing.Point(444, 461);
+            this.grpAdvTrapSettings.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAdvTrapSettings.Name = "grpAdvTrapSettings";
+            this.grpAdvTrapSettings.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAdvTrapSettings.Size = new System.Drawing.Size(184, 100);
+            this.grpAdvTrapSettings.TabIndex = 128;
+            this.grpAdvTrapSettings.TabStop = false;
+            this.grpAdvTrapSettings.Text = "Advanced Trap Settings";
+            // 
+            // nudTrapCooldown
+            // 
+            this.nudTrapCooldown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudTrapCooldown.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudTrapCooldown.Location = new System.Drawing.Point(5, 63);
+            this.nudTrapCooldown.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.nudTrapCooldown.Name = "nudTrapCooldown";
+            this.nudTrapCooldown.Size = new System.Drawing.Size(169, 20);
+            this.nudTrapCooldown.TabIndex = 71;
+            this.nudTrapCooldown.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudTrapCooldown.ValueChanged += new System.EventHandler(this.nudTrapCooldown_ValueChanged);
+            // 
+            // lblTrapCooldown
+            // 
+            this.lblTrapCooldown.AutoSize = true;
+            this.lblTrapCooldown.Location = new System.Drawing.Point(3, 44);
+            this.lblTrapCooldown.Name = "lblTrapCooldown";
+            this.lblTrapCooldown.Size = new System.Drawing.Size(76, 13);
+            this.lblTrapCooldown.TabIndex = 70;
+            this.lblTrapCooldown.Text = "Cooldown (ms)";
+            // 
+            // chkNotSingleUseTrap
+            // 
+            this.chkNotSingleUseTrap.AutoSize = true;
+            this.chkNotSingleUseTrap.Location = new System.Drawing.Point(5, 22);
+            this.chkNotSingleUseTrap.Name = "chkNotSingleUseTrap";
+            this.chkNotSingleUseTrap.Size = new System.Drawing.Size(147, 17);
+            this.chkNotSingleUseTrap.TabIndex = 69;
+            this.chkNotSingleUseTrap.Text = "Continue after activation?";
+            this.chkNotSingleUseTrap.CheckedChanged += new System.EventHandler(this.chkNotSingleUseTrap_CheckedChanged);
             // 
             // grpAreaDenial
             // 
@@ -1744,6 +1807,21 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAreaDenialSettings.TabIndex = 127;
             this.grpAreaDenialSettings.TabStop = false;
             this.grpAreaDenialSettings.Text = "Area Denial Settings";
+            // 
+            // nudAreaSpawnIntensity
+            // 
+            this.nudAreaSpawnIntensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAreaSpawnIntensity.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAreaSpawnIntensity.Location = new System.Drawing.Point(106, 45);
+            this.nudAreaSpawnIntensity.Name = "nudAreaSpawnIntensity";
+            this.nudAreaSpawnIntensity.Size = new System.Drawing.Size(116, 20);
+            this.nudAreaSpawnIntensity.TabIndex = 66;
+            this.nudAreaSpawnIntensity.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAreaSpawnIntensity.ValueChanged += new System.EventHandler(this.nudAreaSpawnIntensity_ValueChanged);
             // 
             // lblAreaDenialRadius
             // 
@@ -4399,21 +4477,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 601);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // nudAreaSpawnIntensity
-            // 
-            this.nudAreaSpawnIntensity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAreaSpawnIntensity.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAreaSpawnIntensity.Location = new System.Drawing.Point(106, 45);
-            this.nudAreaSpawnIntensity.Name = "nudAreaSpawnIntensity";
-            this.nudAreaSpawnIntensity.Size = new System.Drawing.Size(116, 20);
-            this.nudAreaSpawnIntensity.TabIndex = 66;
-            this.nudAreaSpawnIntensity.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudAreaSpawnIntensity.ValueChanged += new System.EventHandler(this.nudAreaSpawnIntensity_ValueChanged);
-            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4469,10 +4532,14 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.ResumeLayout(false);
             this.grpRequirements.PerformLayout();
             this.grpCombat.ResumeLayout(false);
+            this.grpAdvTrapSettings.ResumeLayout(false);
+            this.grpAdvTrapSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTrapCooldown)).EndInit();
             this.grpAreaDenial.ResumeLayout(false);
             this.grpAreaDenial.PerformLayout();
             this.grpAreaDenialSettings.ResumeLayout(false);
             this.grpAreaDenialSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAreaSpawnIntensity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAreaDenialRadius)).EndInit();
             this.grpAdvAoe.ResumeLayout(false);
             this.grpAdvAoe.PerformLayout();
@@ -4548,7 +4615,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAreaSpawnIntensity)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4824,5 +4890,9 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblAreaDenialRadius;
         private DarkNumericUpDown nudAreaDenialRadius;
         private DarkNumericUpDown nudAreaSpawnIntensity;
+        private DarkCheckBox chkNotSingleUseTrap;
+        private DarkGroupBox grpAdvTrapSettings;
+        private DarkNumericUpDown nudTrapCooldown;
+        private System.Windows.Forms.Label lblTrapCooldown;
     }
 }
