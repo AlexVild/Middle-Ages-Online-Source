@@ -35,10 +35,13 @@ namespace Intersect.Server.Entities
 
         public override void CheckForSpellCast(long timeMs)
         {
-            if (CastTime != 0 && !IsCasting && NextSpell != null)
+            if (CastTime == 0 || IsCasting || NextSpell == null)
             {
-                UseSpell(NextSpell, SpellCastSlot, CastTarget);
+                return;
             }
+            
+            UseSpell(NextSpell, SpellCastSlot, CastTarget);
+            ProcExhaustion(NextSpell);
         }
 
         public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
@@ -172,6 +175,7 @@ namespace Intersect.Server.Entities
                 }
 
                 IncrementAttackTimer();
+                ProcMeleeExhaustion();
                 PacketSender.SendEntityAttack(this, CalculateAttackTime());
                 return;
             }
@@ -204,7 +208,8 @@ namespace Intersect.Server.Entities
                 PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, (int)manaRecovered);
                 PacketSender.SendCombatNumber(CombatNumberType.DamageMana, enemy, (int)manaRecovered);
             }
-            
+
+            ProcMeleeExhaustion();
             CheckForOnhitAttack(enemy);
         }
 
