@@ -998,6 +998,27 @@ namespace Intersect.Server.Entities
             }
         }
 
+        private sbyte GetFleeDirection(sbyte dir)
+        {
+            switch (dir)
+            {
+                case 0:
+                    return 1;
+
+                case 1:
+                    return 0;
+
+                case 2:
+                    return 2;
+
+                case 3:
+                    return 3;
+
+                default: 
+                    return 0;
+            }
+        }
+
         private void MoveNpc(long timeMs)
         {
             var curMapLink = MapId;
@@ -1011,7 +1032,7 @@ namespace Intersect.Server.Entities
                 var targetZ = 0;
 
                 //TODO Clear Damage Map if out of combat (target is null and combat timer is to the point that regen has started)
-                if (tempTarget != null && (Options.Instance.NpcOpts.ResetIfCombatTimerExceeded && Timing.Global.Milliseconds > CombatTimer))
+                if (tempTarget != null && Options.Instance.NpcOpts.ResetIfCombatTimerExceeded && Timing.Global.Milliseconds > CombatTimer)
                 {
                     if (CheckForResetLocation(true))
                     {
@@ -1138,12 +1159,10 @@ namespace Intersect.Server.Entities
                 {
                     TryCastSpells();
                     // TODO: Make resetting mobs actually return to their starting location.
-                    if ((!mResetting && !IsOneBlockAway(
-                        mPathFinder.GetTarget().TargetMapId, mPathFinder.GetTarget().TargetX,
-                        mPathFinder.GetTarget().TargetY, mPathFinder.GetTarget().TargetZ
-                    )) ||
-                    (mResetting && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) != 0)
-                    )
+                    var isPursuing = !mResetting && !PathIsOneBlockAway();
+                    var isResetting = mResetting && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) != 0;
+
+                    if (isPursuing || isResetting)
                     {
                         switch (mPathFinder.Update(timeMs))
                         {
@@ -1154,25 +1173,7 @@ namespace Intersect.Server.Entities
                                 {
                                     if (fleeing)
                                     {
-                                        switch (dir)
-                                        {
-                                            case 0:
-                                                dir = 1;
-
-                                                break;
-                                            case 1:
-                                                dir = 0;
-
-                                                break;
-                                            case 2:
-                                                dir = 3;
-
-                                                break;
-                                            case 3:
-                                                dir = 2;
-
-                                                break;
-                                        }
+                                        dir = GetFleeDirection(dir);
                                     }
 
                                     if (CanMove(dir) == -1 || CanMove(dir) == -4)
@@ -1230,23 +1231,13 @@ namespace Intersect.Server.Entities
 
                                 break;
                             case PathfinderResult.OutOfRange:
-                                TryFindNewTarget(timeMs, tempTarget?.Id ?? Guid.Empty, true);
-                                tempTarget = Target;
-                                targetMap = Guid.Empty;
-
-                                break;
                             case PathfinderResult.NoPathToTarget:
-                                TryFindNewTarget(timeMs, tempTarget?.Id ?? Guid.Empty, true);
-                                tempTarget = Target;
-                                targetMap = Guid.Empty;
-
-                                break;
                             case PathfinderResult.Failure:
-                                targetMap = Guid.Empty;
                                 TryFindNewTarget(timeMs, tempTarget?.Id ?? Guid.Empty, true);
-                                tempTarget = Target;
+                                targetMap = Guid.Empty;
 
                                 break;
+
                             case PathfinderResult.Wait:
                                 targetMap = Guid.Empty;
 
@@ -1261,25 +1252,7 @@ namespace Intersect.Server.Entities
                         if (tempTarget != null && fleeing)
                         {
                             var dir = DirToEnemy(tempTarget);
-                            switch (dir)
-                            {
-                                case 0:
-                                    dir = 1;
-
-                                    break;
-                                case 1:
-                                    dir = 0;
-
-                                    break;
-                                case 2:
-                                    dir = 3;
-
-                                    break;
-                                case 3:
-                                    dir = 2;
-
-                                    break;
-                            }
+                            dir = (byte)GetFleeDirection((sbyte)dir);
 
                             if (CanMove(dir) == -1 || CanMove(dir) == -4)
                             {
@@ -1411,6 +1384,22 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+        }
+
+        private bool PathIsOneBlockAway()
+        {
+            if (mPathFinder == null)
+            {
+                return false;
+            }
+
+            var target = mPathFinder.GetTarget();
+            if (target == null)
+            {
+                return false;
+            }
+
+            return IsOneBlockAway(target.TargetMapId, target.TargetX, target.TargetY, target.TargetZ);
         }
 
         /// <summary>
