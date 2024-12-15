@@ -315,7 +315,7 @@ namespace Intersect.Client.MonoGame.Graphics
                 Effect useEffect = null;
 
                 switch (mode)
-                {
+                {   
                     case GameBlendModes.None:
                         blend = mNormalState;
 

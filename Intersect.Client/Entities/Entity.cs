@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
-
+using System.Net;
 using Intersect.Client.Core;
 using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Entities.Events;
@@ -22,6 +22,7 @@ using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
@@ -207,6 +208,8 @@ namespace Intersect.Client.Entities
 
         public Color FlashColor = null; // What color to flash the entity
 
+        public Color ExhaustedColor;
+
         public long FlashEndTime = 0L;
 
         public Entity(Guid id, EntityPacket packet, bool isEvent = false)
@@ -344,6 +347,7 @@ namespace Intersect.Client.Entities
             Name = packet.Name;
             MySprite = packet.Sprite;
             Color = packet.Color;
+            ExhaustedColor = new Color(Color.A, 128, 0, 128);
             Face = packet.Face;
             Level = packet.Level;
             X = packet.X;
@@ -472,6 +476,53 @@ namespace Intersect.Client.Entities
             {
                 Animations.Add(new Animation(anim, true, false, -1, this));
             }
+        }
+
+        public void AddExhaustionAnimation()
+        {
+            if (!AnimationBase.TryGet(Guid.Parse(Options.Instance.CombatOpts.ExhaustionAnimationId), out var exhaustionAnimation))
+            {
+                return;
+            }
+
+            ExhaustionInterpVal = 1.0f;
+            ExhaustionInterpSign = 1.0f;
+            NextExhaustionInterpUpdate = Timing.Global.MillisecondsUtcUnsynced + EXHAUST_INTERP_UPDATE_SPEED;
+            Animations.Add(new Animation(exhaustionAnimation, true, false, -1, this));
+        }
+
+        public void UpdateExhaustionInterpValues()
+        {
+            if (NextExhaustionInterpUpdate > Timing.Global.MillisecondsUtcUnsynced)
+            {
+                return;
+            }
+
+            NextExhaustionInterpUpdate = Timing.Global.MillisecondsUtcUnsynced + EXHAUST_INTERP_UPDATE_SPEED;
+            ExhaustionInterpVal = ExhaustionInterpVal - 0.1f * ExhaustionInterpSign;
+            
+            if (ExhaustionInterpVal - 0.1 <= 0.0)
+            {
+                ExhaustionInterpSign = -1f;
+            }
+            else if (ExhaustionInterpVal + 0.1 >= 1.0)
+            {
+                ExhaustionInterpSign = 1f;
+            }
+        }
+
+        public void RemoveExhaustionAnimation()
+        {
+            Animations.RemoveAll((anim) =>
+            {
+                if (anim.MyBase.Id != Guid.Parse(Options.Instance.CombatOpts.ExhaustionAnimationId))
+                {
+                    return false;
+                }
+
+                anim.Dispose();
+                return true;
+            });
         }
 
         public void ClearAnimations(List<Animation> anims)
@@ -832,6 +883,11 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            if (!IsExhausted)
+            {
+                RemoveExhaustionAnimation();
+            }
+
             mLastUpdate = Timing.Global.Milliseconds;
 
             UpdateSpriteAnimation();
@@ -1000,10 +1056,16 @@ namespace Intersect.Client.Entities
 
             var sprite = "";
             // Copy the actual render color, because we'll be editing it later and don't want to overwrite it.
-            var renderColor = new Color(Color.A, Color.R, Color.G, Color. B);
+            var renderColor = new Color(Color.A, Color.R, Color.G, Color.B);
             if (Flash && FlashColor != null) // Flash the sprite some color for some duration
             {
                 renderColor = FlashColor;
+            }
+            else if (IsExhausted)
+            {
+                renderColor = Color.InterpolateColor(Color, ExhaustedColor, ExhaustionInterpVal);
+                renderColor.A = Color.A;
+                UpdateExhaustionInterpValues();
             }
 
             string transformedSprite = "";
@@ -3704,6 +3766,76 @@ namespace Intersect.Client.Entities
         public virtual Dictionary<EffectType, int> GetAllBonusEffects()
         {
             return new Dictionary<EffectType, int>();
+        }
+
+        public long ExhaustionEndTime { get; set; }
+
+        public long ExhaustionStartTime { get; set; }
+
+        public bool IsExhausted => ExhaustionEndTime >= Timing.Global.MillisecondsUtc;
+
+        public float ExhaustionInterpVal { get; set; } = 1.0f;
+
+        public float ExhaustionInterpSign { get; set; } = 1.0f;
+
+        public long NextExhaustionInterpUpdate { get; set; }
+
+        const long EXHAUST_INTERP_UPDATE_SPEED = 50;
+
+        public void DrawExhaustionIndicator()
+        {
+            if (!IsExhausted)
+            {
+                return;
+            }
+
+            var bgTxt = Globals.ContentManager.GetTexture(TextureType.Misc, "cooldown_bar_bg.png");
+            var fgTxt = Globals.ContentManager.GetTexture(TextureType.Misc, "cooldown_bar_fg.png");
+
+            var width = bgTxt.GetWidth();
+
+            var durationTotal = ExhaustionEndTime - ExhaustionStartTime;
+            var durationRemaining = ExhaustionEndTime - Timing.Global.MillisecondsUtc;
+
+            var fillratio = durationRemaining /
+                            (float)durationTotal;
+            fillratio = (float)MathHelper.Clamp(fillratio, 0f, 1f);
+            var castFillWidth = MathHelper.RoundNearestMultiple((int)(fillratio * fgTxt.GetWidth()), 4);
+
+            var y = (int)Math.Ceiling(GetCenterPos().Y);
+            var x = (int)Math.Ceiling(GetCenterPos().X);
+            var entityTex = Globals.ContentManager.GetTexture(TextureType.Entity, MySprite);
+            if (entityTex != null)
+            {
+                y = y + (int)(entityTex.ScaledHeight / (Options.Instance.Sprites.Directions * 2));
+                y += 19;
+            }
+
+            var centerX = x - width / 2;
+            y -= 1;
+
+            var color = Color.White;
+            if (this != Globals.Me && Globals.Me.TargetIndex != Id)
+            {
+                color.A = 150;
+            }
+
+            if (bgTxt != null)
+            {
+                Graphics.DrawGameTexture(
+                    bgTxt, new FloatRect(0, 0, bgTxt.GetWidth(), bgTxt.GetHeight()),
+                    new FloatRect(centerX, y, width, bgTxt.GetHeight()), color
+                );
+            }
+
+            if (fgTxt != null)
+            {
+                Graphics.DrawGameTexture(
+                    fgTxt,
+                    new FloatRect(0, 0, fgTxt.GetWidth(), fgTxt.GetHeight()),
+                    new FloatRect(centerX + 4, y + 4, castFillWidth, fgTxt.GetHeight()), color
+                );
+            }
         }
     }
 }

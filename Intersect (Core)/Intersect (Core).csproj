@@ -507,6 +507,7 @@
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\EnhancementEndPacket.cs" />
+    <Compile Include="Network\Packets\Server\ExhaustionUpdatePacket.cs" />
     <Compile Include="Network\Packets\Server\ExpToastPacket.cs" />
     <Compile Include="Network\Packets\Server\ItemProperties.cs" />
     <Compile Include="Network\Packets\Server\KillCountPacket.cs" />

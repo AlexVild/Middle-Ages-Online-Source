@@ -2343,6 +2343,9 @@ namespace Intersect.Server.Entities
 
     public partial class Entity : IDisposable
     {
+        [NotMapped, JsonIgnore]
+        public bool IsMoving => MoveTimer >= Timing.Global.Milliseconds;
+
         [NotMapped]
         public Dictionary<Guid, long> RecentAllies { get; set; } = new Dictionary<Guid, long>();
 
@@ -2437,5 +2440,6 @@ namespace Intersect.Server.Entities
                 Y == trap.Y && 
                 Z == trap.Z;
         }
+
     }
 }

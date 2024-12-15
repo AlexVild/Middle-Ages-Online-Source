@@ -2,6 +2,7 @@
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
+using Intersect.Server.General;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
@@ -40,8 +41,10 @@ namespace Intersect.Server.Entities
                 return;
             }
             
-            UseSpell(NextSpell, SpellCastSlot, CastTarget);
-            ProcExhaustion(NextSpell);
+            var tmpSpell = NextSpell;
+            UseSpell(tmpSpell, SpellCastSlot, CastTarget);
+            ProcSpellExhaustion(tmpSpell);
+            IncrementAttackTimer();
         }
 
         public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
@@ -221,10 +224,21 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            PacketSender.SendAnimationToProximity(
-                Base.AttackAnimationId, -1, Guid.Empty, enemy.MapId, (byte)enemy.X, (byte)enemy.Y,
-                (sbyte)Dir, enemy.MapInstanceId
-            );
+            if (enemy != null)
+            {
+                PacketSender.SendAnimationToProximity(
+                    Base.AttackAnimationId, -1, Guid.Empty, enemy.MapId, (byte)enemy.X, (byte)enemy.Y,
+                    (sbyte)Dir, enemy.MapInstanceId
+                );
+            }
+            else
+            {
+                var attackingTile = GetMeleeAttackTile();
+                PacketSender.SendAnimationToProximity(
+                    Base.AttackAnimationId, -1, Guid.Empty, attackingTile.MapId, (byte)attackingTile.X, (byte)attackingTile.Y,
+                    (sbyte)Dir, MapInstanceId
+                );
+            }
         }
 
         public override void ApplyStatus(SpellBase spell, Entity caster, int statBuffTime)

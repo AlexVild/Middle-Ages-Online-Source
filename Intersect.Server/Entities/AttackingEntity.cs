@@ -679,6 +679,10 @@ namespace Intersect.Server.Entities
                     if (InterruptThreshold <= 0)
                     {
                         PacketSender.SendActionMsg(this, "INTERRUPT!", CustomColors.Combat.MagicDamage);
+                        if (this is Npc npc)
+                        {
+                            npc.ProcSpellInterruptExhaustion();
+                        }
                         CancelCast();
                     }
                 }

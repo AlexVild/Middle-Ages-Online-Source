@@ -3106,6 +3106,18 @@ namespace Intersect.Client.Networking
             Globals.Me.ChallengeBonusEffects = packet.Bonuses.ToList();
             CharacterBonusesPanelController.Refresh = true;
         }
+
+        public void HandlePacket(IPacketSender packetSender, ExhaustionUpdatePacket packet)
+        {
+            if (!Globals.Entities.TryGetValue(packet.EntityId, out var entity))
+            {
+                return;
+            }
+
+            entity.ExhaustionStartTime = Timing.Global.MillisecondsUtc;
+            entity.ExhaustionEndTime = packet.ExhaustionEndTime;
+            entity.AddExhaustionAnimation();
+        }
     }
 }
  

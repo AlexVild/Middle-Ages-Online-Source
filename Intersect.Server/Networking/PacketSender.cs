@@ -2945,5 +2945,18 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new CraftingWishlistPacket(player?.CraftingWishlist));
         }
+
+        public static void SendEntityExhaustedPacketToAll(Entity en, long endTimestamp)
+        {
+            if (en == null)
+            {
+                return;
+            }
+
+            SendDataToProximityOnMapInstance(
+                en.MapId, en.MapInstanceId,
+                new ExhaustionUpdatePacket(en.Id, endTimestamp)
+            );
+        }
     }
 }

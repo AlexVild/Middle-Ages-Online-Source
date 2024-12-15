@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-
+using System.Web.UI;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
@@ -731,7 +731,7 @@ namespace Intersect.Server.Entities
             var projectileBase = spellDescriptor.Combat?.Projectile;
 
             // Aim at the target if casting a projectile spell
-            if (SpellIsAimableAt(spellDescriptor, target))
+            if (Options.Instance.CombatOpts.NpcSpellAiming && SpellIsAimableAt(spellDescriptor, target))
             {
                 var dirToEnemy = DirToEnemy(target);
                 if (dirToEnemy != Dir)
@@ -743,7 +743,7 @@ namespace Intersect.Server.Entities
 
                     //Face the target -- next frame fire -- then go on with life
                     ChangeDir(dirToEnemy); // Gotta get dir to enemy
-                    LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
+                    IncrementRandomMoveTimer();
 
                     return;
                 }
@@ -815,6 +815,11 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendEntityCastTime(this, spellDescriptor.Id);
+        }
+
+        private void IncrementRandomMoveTimer()
+        {
+            LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
         }
 
         public void ProgressCastIndex()
@@ -981,6 +986,13 @@ namespace Intersect.Server.Entities
                 if (IsStunnedOrSleeping || IsExhausted)
                 {
                     return;
+                }
+
+                // If we don't have a target, keep the attack timer at bay. This prevents unfair insta-attacking when aggro is received
+                if (Target == null)
+                {
+                    IncrementAttackTimer();
+                    CastFreq = timeMs + 1000;
                 }
 
                 TryRefreshThreatLevels(timeMs);
@@ -1158,7 +1170,7 @@ namespace Intersect.Server.Entities
                 if (mPathFinder.GetTarget() != null && Movement != NpcMovement.Static)
                 {
                     TryCastSpells();
-                    // TODO: Make resetting mobs actually return to their starting location.
+
                     var isPursuing = !mResetting && !PathIsOneBlockAway();
                     var isResetting = mResetting && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) != 0;
 
@@ -1324,14 +1336,14 @@ namespace Intersect.Server.Entities
 
                 if (Movement == NpcMovement.StandStill)
                 {
-                    LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
+                    IncrementRandomMoveTimer();
 
                     return;
                 }
                 else if (Movement == NpcMovement.TurnRandomly)
                 {
                     ChangeDir((byte)Randomization.Next(0, 4));
-                    LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
+                    IncrementRandomMoveTimer();
 
                     return;
                 }
@@ -1357,7 +1369,7 @@ namespace Intersect.Server.Entities
                     }
                 }
 
-                LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
+                IncrementRandomMoveTimer();
 
                 if (fleeing)
                 {
@@ -2272,23 +2284,76 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public long ExhaustionEndTime { get; set; } = 0L;
 
-        public void ProcExhaustion(SpellBase spell)
+        public void ProcSpellExhaustion(SpellBase spell)
         {
-            // Don't proc exhaustion during a spell chain
-            if (spell == null || ChainedSpell != Guid.Empty)
+            if (spell == null)
             {
                 return;
             }
 
-            ExhaustionEndTime = Timing.Global.Milliseconds + 1200L;
+            var customExhaustion = spell.ExhaustionCastTime > 0;
+            if (!Options.Instance.CombatOpts.NpcSpellExhaustion && !customExhaustion)
+            {
+                return;
+            }
+
+            // Don't proc exhaustion during a spell chain
+            if (ChainedSpell != Guid.Empty)
+            {
+                return;
+            }
+
+            if (customExhaustion)
+            {
+                ExhaustionEndTime = Timing.Global.MillisecondsUtc + spell.ExhaustionCastTime;
+                SendExhaustion(ExhaustionEndTime);
+            }
+            else
+            {
+                ExhaustionEndTime = Timing.Global.MillisecondsUtc + Options.Instance.CombatOpts.NpcSpellExhaustionTime;
+            }
+        }
+
+        public void ProcSpellInterruptExhaustion()
+        {
+            foreach (var entity in DamageMap.Keys)
+            {
+                if (entity is Player player)
+                {
+                    PacketSender.SendFlashScreenPacket(player.Client, 750, Color.White, 200f);
+                    PacketSender.SendShakeScreenPacket(player.Client, 6.0f);
+                }
+            }
+
+            var spell = NextSpell;
+            if (spell == null)
+            {
+                return;
+            }
+            CancelSpellChain();
+            ExhaustionEndTime = Timing.Global.MillisecondsUtc + spell.ExhaustionInterruptTime;
+            SendExhaustion(ExhaustionEndTime);
         }
 
         public void ProcMeleeExhaustion()
         {
-            ExhaustionEndTime = Timing.Global.Milliseconds + 1000L;
+            if (!Options.Instance.CombatOpts.NpcMeleeExhaustion)
+            {
+                return;
+            }
+
+            ExhaustionEndTime = Timing.Global.MillisecondsUtc + MeleeExhaustionTime;
+        }
+
+        public void SendExhaustion(long endTimestamp)
+        {
+            PacketSender.SendEntityExhaustedPacketToAll(this, endTimestamp);
         }
 
         [NotMapped, JsonIgnore]
-        public bool IsExhausted => Timing.Global.Milliseconds < ExhaustionEndTime;
+        public bool IsExhausted => Timing.Global.MillisecondsUtc < ExhaustionEndTime;
+
+        [NotMapped, JsonIgnore]
+        public long MeleeExhaustionTime => Math.Min(CalculateAttackTime(), Options.Instance.CombatOpts.NpcMeleeExhaustionTime);
     }
 }

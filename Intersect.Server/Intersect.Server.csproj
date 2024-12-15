@@ -1504,6 +1504,10 @@
     <Compile Include="Migrations\Game\20241213031249_TrapSingleUseMigration.designer.cs">
       <DependentUpon>20241213031249_TrapSingleUseMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241215153355_NpcExhaustionMigration.cs" />
+    <Compile Include="Migrations\Game\20241215153355_NpcExhaustionMigration.designer.cs">
+      <DependentUpon>20241215153355_NpcExhaustionMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

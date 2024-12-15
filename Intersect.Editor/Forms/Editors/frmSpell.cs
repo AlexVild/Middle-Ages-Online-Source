@@ -332,6 +332,9 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudInterruptThreshold.Value = mEditorItem.InterruptThreshold;
 
+                nudCastExhaustion.Value = mEditorItem.ExhaustionCastTime;
+                nudInterruptExhaustion.Value = mEditorItem.ExhaustionInterruptTime;
+
                 UpdateSpellTypePanels();
 
                 RefreshBonusEffects(true);
@@ -1864,6 +1867,16 @@ namespace Intersect.Editor.Forms.Editors
         private void nudTrapCooldown_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.TrapDamageCooldown = (int)nudTrapCooldown.Value;
+        }
+
+        private void nudCastExhaustion_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ExhaustionCastTime = (int)nudCastExhaustion.Value;
+        }
+
+        private void nudInterruptExhaustion_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ExhaustionInterruptTime = (int)nudInterruptExhaustion.Value;
         }
     }
 }

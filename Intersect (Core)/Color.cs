@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Intersect.Localization;
+using Intersect.Utilities;
 using MessagePack;
 
 namespace Intersect
@@ -386,6 +387,18 @@ namespace Intersect
         public static implicit operator Color(string colorString)
         {
             return FromString(colorString);
+        }
+
+        public static Color InterpolateColor(Color from, Color to, float factor)
+        {
+            factor = (float)MathHelper.Clamp(factor, 0.0f, 1.0f); // Ensure the factor is between 0 and 1
+
+            byte a = (byte)(from.A + (to.A - from.A) * factor);
+            byte r = (byte)(from.R + (to.R - from.R) * factor);
+            byte g = (byte)(from.G + (to.G - from.G) * factor);
+            byte b = (byte)(from.B + (to.B - from.B) * factor);
+
+            return new Color(r, g, b, a);
         }
 
     }
