@@ -3811,7 +3811,7 @@ namespace Intersect.Client.Entities
                 y += 19;
             }
 
-            var centerX = x - width / 2;
+            var centerX = (x - width / 2) + 12;
             y -= 1;
 
             var color = Color.White;
@@ -3833,7 +3833,7 @@ namespace Intersect.Client.Entities
                 Graphics.DrawGameTexture(
                     fgTxt,
                     new FloatRect(0, 0, fgTxt.GetWidth(), fgTxt.GetHeight()),
-                    new FloatRect(centerX + 4, y + 4, castFillWidth, fgTxt.GetHeight()), color
+                    new FloatRect(centerX + 24, y + 8, castFillWidth, fgTxt.GetHeight()), color
                 );
             }
         }

@@ -161,6 +161,11 @@ namespace Intersect.Server.Entities
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
         {
+            if (Base.DisableAutoAttack)
+            {
+                return;
+            }
+
             enemy?.ReactToCombat(this);
             Unstealth();
             var spellOverride = Base?.SpellAttackOverrideId ?? default;

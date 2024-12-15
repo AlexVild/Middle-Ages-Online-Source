@@ -272,6 +272,8 @@ namespace Intersect.Config
 
         public string ExhaustionAnimationId { get; set; } = "85fedc65-4460-4e44-945b-11969c4e56fc";
 
+        public string InterruptSound { get; set; } = "al_interrupt.wav";
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {

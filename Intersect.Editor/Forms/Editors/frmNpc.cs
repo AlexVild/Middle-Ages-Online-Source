@@ -188,7 +188,6 @@ namespace Intersect.Editor.Forms.Editors
             btnPlayerFriendProtectorCond.Text = Strings.NpcEditor.playerfriendprotectorconditions;
             btnAttackOnSightCond.Text = Strings.NpcEditor.attackonsightconditions;
             btnPlayerCanAttackCond.Text = Strings.NpcEditor.playercanattackconditions;
-            lblFocusDamageDealer.Text = Strings.NpcEditor.focusdamagedealer;
 
             grpCommonEvents.Text = Strings.NpcEditor.commonevents;
             lblOnDeathEventKiller.Text = Strings.NpcEditor.ondeathevent;
@@ -349,6 +348,10 @@ namespace Intersect.Editor.Forms.Editors
                 //Melee vital steasls
                 nudLifesteal.Value = mEditorItem.MeleeLifesteal;
                 nudManasteal.Value = mEditorItem.MeleeManasteal;
+
+                // New behavioral stuff
+                chkDisableAutoAttack.Checked = mEditorItem.DisableAutoAttack;
+                chkDisableExhaustion.Checked = mEditorItem.DisableAutoExhaustion;
 
                 // Add the spells to the list
                 lstSpells.Items.Clear();
@@ -1892,6 +1895,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkSequentialCasting_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.SequentialCasting = chkSequentialCasting.Checked;
+        }
+
+        private void chkDisableExhaustion_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DisableAutoExhaustion = chkDisableExhaustion.Checked;
+        }
+
+        private void chkDisableAutoAttack_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DisableAutoAttack = chkDisableAutoAttack.Checked;
         }
     }
 

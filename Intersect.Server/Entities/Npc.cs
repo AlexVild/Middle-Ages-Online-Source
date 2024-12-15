@@ -2308,7 +2308,7 @@ namespace Intersect.Server.Entities
                 ExhaustionEndTime = Timing.Global.MillisecondsUtc + spell.ExhaustionCastTime;
                 SendExhaustion(ExhaustionEndTime);
             }
-            else
+            else if (!Base.DisableAutoExhaustion)
             {
                 ExhaustionEndTime = Timing.Global.MillisecondsUtc + Options.Instance.CombatOpts.NpcSpellExhaustionTime;
             }
@@ -2320,8 +2320,14 @@ namespace Intersect.Server.Entities
             {
                 if (entity is Player player)
                 {
-                    PacketSender.SendFlashScreenPacket(player.Client, 750, Color.White, 200f);
-                    PacketSender.SendShakeScreenPacket(player.Client, 6.0f);
+                    PacketSender.SendCombatEffectPacket(player.Client,
+                        Id,
+                        7.0f,
+                        CustomColors.Combat.DamageTakenFlashColor,
+                        Options.Instance.CombatOpts.InterruptSound,
+                        200f,
+                        750,
+                        Color.White);
                 }
             }
 
@@ -2337,7 +2343,7 @@ namespace Intersect.Server.Entities
 
         public void ProcMeleeExhaustion()
         {
-            if (!Options.Instance.CombatOpts.NpcMeleeExhaustion)
+            if (!Options.Instance.CombatOpts.NpcMeleeExhaustion || Base.DisableAutoExhaustion)
             {
                 return;
             }

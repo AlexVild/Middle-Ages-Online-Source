@@ -138,7 +138,6 @@ namespace Intersect.Editor.Forms.Editors
             this.chkStandStill = new DarkUI.Controls.DarkCheckBox();
             this.nudResetRadius = new DarkUI.Controls.DarkNumericUpDown();
             this.lblResetRadius = new System.Windows.Forms.Label();
-            this.lblFocusDamageDealer = new System.Windows.Forms.Label();
             this.chkFocusDamageDealer = new DarkUI.Controls.DarkCheckBox();
             this.nudSpawnDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblSpawnDuration = new System.Windows.Forms.Label();
@@ -192,6 +191,7 @@ namespace Intersect.Editor.Forms.Editors
             this.chkAttackAllies = new DarkUI.Controls.DarkCheckBox();
             this.chkEnabled = new DarkUI.Controls.DarkCheckBox();
             this.grpSpells = new DarkUI.Controls.DarkGroupBox();
+            this.chkSequentialCasting = new DarkUI.Controls.DarkCheckBox();
             this.chkNeverSkip = new DarkUI.Controls.DarkCheckBox();
             this.cmbSpell = new DarkUI.Controls.DarkComboBox();
             this.cmbFreq = new DarkUI.Controls.DarkComboBox();
@@ -283,7 +283,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkSequentialCasting = new DarkUI.Controls.DarkCheckBox();
+            this.chkDisableAutoAttack = new DarkUI.Controls.DarkCheckBox();
+            this.chkDisableExhaustion = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -585,7 +586,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpChampionSettings.Controls.Add(this.cmbChampion);
             this.grpChampionSettings.Controls.Add(this.label12);
             this.grpChampionSettings.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpChampionSettings.Location = new System.Drawing.Point(212, 1207);
+            this.grpChampionSettings.Location = new System.Drawing.Point(212, 1291);
             this.grpChampionSettings.Margin = new System.Windows.Forms.Padding(2);
             this.grpChampionSettings.Name = "grpChampionSettings";
             this.grpChampionSettings.Padding = new System.Windows.Forms.Padding(2);
@@ -706,7 +707,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDynamicScaling.Controls.Add(this.cmbScalingType);
             this.grpDynamicScaling.Controls.Add(this.lblScalingType);
             this.grpDynamicScaling.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDynamicScaling.Location = new System.Drawing.Point(212, 1053);
+            this.grpDynamicScaling.Location = new System.Drawing.Point(212, 1135);
             this.grpDynamicScaling.Margin = new System.Windows.Forms.Padding(2);
             this.grpDynamicScaling.Name = "grpDynamicScaling";
             this.grpDynamicScaling.Padding = new System.Windows.Forms.Padding(2);
@@ -965,7 +966,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackOverrides.Controls.Add(this.cmbSpellAttackOverride);
             this.grpAttackOverrides.Controls.Add(this.lblAttackOverride);
             this.grpAttackOverrides.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackOverrides.Location = new System.Drawing.Point(215, 730);
+            this.grpAttackOverrides.Location = new System.Drawing.Point(215, 803);
             this.grpAttackOverrides.Margin = new System.Windows.Forms.Padding(2);
             this.grpAttackOverrides.Name = "grpAttackOverrides";
             this.grpAttackOverrides.Padding = new System.Windows.Forms.Padding(2);
@@ -1000,9 +1001,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblAttackOverride.AutoSize = true;
             this.lblAttackOverride.Location = new System.Drawing.Point(9, 20);
             this.lblAttackOverride.Name = "lblAttackOverride";
-            this.lblAttackOverride.Size = new System.Drawing.Size(110, 13);
+            this.lblAttackOverride.Size = new System.Drawing.Size(92, 13);
             this.lblAttackOverride.TabIndex = 18;
-            this.lblAttackOverride.Text = "Spell Attack Override:";
+            this.lblAttackOverride.Text = "Spell Auto Attack:";
             // 
             // grpDeathTransform
             // 
@@ -1011,7 +1012,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDeathTransform.Controls.Add(this.cmbTransformIntoNpc);
             this.grpDeathTransform.Controls.Add(this.lblDeathTransform);
             this.grpDeathTransform.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDeathTransform.Location = new System.Drawing.Point(212, 980);
+            this.grpDeathTransform.Location = new System.Drawing.Point(212, 1059);
             this.grpDeathTransform.Margin = new System.Windows.Forms.Padding(2);
             this.grpDeathTransform.Name = "grpDeathTransform";
             this.grpDeathTransform.Padding = new System.Windows.Forms.Padding(2);
@@ -1057,7 +1058,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAnimation.Controls.Add(this.cmbDeathAnimation);
             this.grpAnimation.Controls.Add(this.lblDeathAnimation);
             this.grpAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAnimation.Location = new System.Drawing.Point(212, 907);
+            this.grpAnimation.Location = new System.Drawing.Point(212, 984);
             this.grpAnimation.Margin = new System.Windows.Forms.Padding(2);
             this.grpAnimation.Name = "grpAnimation";
             this.grpAnimation.Padding = new System.Windows.Forms.Padding(2);
@@ -1315,7 +1316,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.cmbAttackAnimation);
             this.grpCombat.Controls.Add(this.lblAttackAnimation);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(215, 309);
+            this.grpCombat.Location = new System.Drawing.Point(215, 380);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(226, 416);
             this.grpCombat.TabIndex = 17;
@@ -1665,7 +1666,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventKiller);
             this.grpCommonEvents.Controls.Add(this.lblOnDeathEventKiller);
             this.grpCommonEvents.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCommonEvents.Location = new System.Drawing.Point(212, 797);
+            this.grpCommonEvents.Location = new System.Drawing.Point(212, 873);
             this.grpCommonEvents.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvents.Name = "grpCommonEvents";
             this.grpCommonEvents.Padding = new System.Windows.Forms.Padding(2);
@@ -1738,10 +1739,11 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBehavior.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBehavior.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBehavior.Controls.Add(this.chkDisableExhaustion);
+            this.grpBehavior.Controls.Add(this.chkDisableAutoAttack);
             this.grpBehavior.Controls.Add(this.chkStandStill);
             this.grpBehavior.Controls.Add(this.nudResetRadius);
             this.grpBehavior.Controls.Add(this.lblResetRadius);
-            this.grpBehavior.Controls.Add(this.lblFocusDamageDealer);
             this.grpBehavior.Controls.Add(this.chkFocusDamageDealer);
             this.grpBehavior.Controls.Add(this.nudSpawnDuration);
             this.grpBehavior.Controls.Add(this.lblSpawnDuration);
@@ -1757,7 +1759,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpBehavior.Location = new System.Drawing.Point(215, 1);
             this.grpBehavior.Name = "grpBehavior";
-            this.grpBehavior.Size = new System.Drawing.Size(226, 302);
+            this.grpBehavior.Size = new System.Drawing.Size(226, 373);
             this.grpBehavior.TabIndex = 32;
             this.grpBehavior.TabStop = false;
             this.grpBehavior.Text = "Behavior:";
@@ -1801,22 +1803,14 @@ namespace Intersect.Editor.Forms.Editors
             this.lblResetRadius.TabIndex = 75;
             this.lblResetRadius.Text = "Reset Radius:";
             // 
-            // lblFocusDamageDealer
-            // 
-            this.lblFocusDamageDealer.AutoSize = true;
-            this.lblFocusDamageDealer.Location = new System.Drawing.Point(10, 171);
-            this.lblFocusDamageDealer.Name = "lblFocusDamageDealer";
-            this.lblFocusDamageDealer.Size = new System.Drawing.Size(155, 13);
-            this.lblFocusDamageDealer.TabIndex = 72;
-            this.lblFocusDamageDealer.Text = "Focus Highest Damage Dealer:";
-            // 
             // chkFocusDamageDealer
             // 
             this.chkFocusDamageDealer.AutoSize = true;
-            this.chkFocusDamageDealer.Location = new System.Drawing.Point(171, 171);
+            this.chkFocusDamageDealer.Location = new System.Drawing.Point(13, 169);
             this.chkFocusDamageDealer.Name = "chkFocusDamageDealer";
-            this.chkFocusDamageDealer.Size = new System.Drawing.Size(15, 14);
+            this.chkFocusDamageDealer.Size = new System.Drawing.Size(177, 17);
             this.chkFocusDamageDealer.TabIndex = 71;
+            this.chkFocusDamageDealer.Text = "Focus Highest Damage Dealer?";
             this.chkFocusDamageDealer.CheckedChanged += new System.EventHandler(this.chkFocusDamageDealer_CheckedChanged);
             // 
             // nudSpawnDuration
@@ -1890,7 +1884,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConditions.Controls.Add(this.btnPlayerCanAttackCond);
             this.grpConditions.Controls.Add(this.btnPlayerFriendProtectorCond);
             this.grpConditions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpConditions.Location = new System.Drawing.Point(13, 189);
+            this.grpConditions.Location = new System.Drawing.Point(13, 251);
             this.grpConditions.Name = "grpConditions";
             this.grpConditions.Size = new System.Drawing.Size(207, 108);
             this.grpConditions.TabIndex = 66;
@@ -2506,6 +2500,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.TabIndex = 28;
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
+            // 
+            // chkSequentialCasting
+            // 
+            this.chkSequentialCasting.AutoSize = true;
+            this.chkSequentialCasting.Location = new System.Drawing.Point(12, 264);
+            this.chkSequentialCasting.Name = "chkSequentialCasting";
+            this.chkSequentialCasting.Size = new System.Drawing.Size(119, 17);
+            this.chkSequentialCasting.TabIndex = 97;
+            this.chkSequentialCasting.Text = "Sequential casting?";
+            this.chkSequentialCasting.CheckedChanged += new System.EventHandler(this.chkSequentialCasting_CheckedChanged);
             // 
             // chkNeverSkip
             // 
@@ -3740,15 +3744,25 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkSequentialCasting
+            // chkDisableAutoAttack
             // 
-            this.chkSequentialCasting.AutoSize = true;
-            this.chkSequentialCasting.Location = new System.Drawing.Point(12, 264);
-            this.chkSequentialCasting.Name = "chkSequentialCasting";
-            this.chkSequentialCasting.Size = new System.Drawing.Size(119, 17);
-            this.chkSequentialCasting.TabIndex = 97;
-            this.chkSequentialCasting.Text = "Sequential casting?";
-            this.chkSequentialCasting.CheckedChanged += new System.EventHandler(this.chkSequentialCasting_CheckedChanged);
+            this.chkDisableAutoAttack.AutoSize = true;
+            this.chkDisableAutoAttack.Location = new System.Drawing.Point(13, 193);
+            this.chkDisableAutoAttack.Name = "chkDisableAutoAttack";
+            this.chkDisableAutoAttack.Size = new System.Drawing.Size(126, 17);
+            this.chkDisableAutoAttack.TabIndex = 78;
+            this.chkDisableAutoAttack.Text = "Disable Auto Attack?";
+            this.chkDisableAutoAttack.CheckedChanged += new System.EventHandler(this.chkDisableAutoAttack_CheckedChanged);
+            // 
+            // chkDisableExhaustion
+            // 
+            this.chkDisableExhaustion.AutoSize = true;
+            this.chkDisableExhaustion.Location = new System.Drawing.Point(13, 216);
+            this.chkDisableExhaustion.Name = "chkDisableExhaustion";
+            this.chkDisableExhaustion.Size = new System.Drawing.Size(147, 17);
+            this.chkDisableExhaustion.TabIndex = 79;
+            this.chkDisableExhaustion.Text = "Disable Auto Exhaustion?";
+            this.chkDisableExhaustion.CheckedChanged += new System.EventHandler(this.chkDisableExhaustion_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -3960,7 +3974,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblOnDeathEventKiller;
         private DarkNumericUpDown nudFlee;
         private System.Windows.Forms.Label lblFlee;
-        private System.Windows.Forms.Label lblFocusDamageDealer;
         private DarkCheckBox chkFocusDamageDealer;
         private DarkNumericUpDown nudCritMultiplier;
         private System.Windows.Forms.Label lblCritMultiplier;
@@ -4119,5 +4132,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkHideName;
         private DarkCheckBox chkAnimated;
         private DarkCheckBox chkSequentialCasting;
+        private DarkCheckBox chkDisableAutoAttack;
+        private DarkCheckBox chkDisableExhaustion;
     }
 }
