@@ -353,6 +353,8 @@ namespace Intersect.Editor.Forms.Editors
                 chkDisableAutoAttack.Checked = mEditorItem.DisableAutoAttack;
                 chkDisableExhaustion.Checked = mEditorItem.DisableAutoExhaustion;
 
+                chkVulnWhenExhausted.Checked = mEditorItem.VulnerableOnlyWhenExhausted;
+
                 // Add the spells to the list
                 lstSpells.Items.Clear();
                 for (var i = 0; i < mEditorItem.Spells.Count; i++)
@@ -1905,6 +1907,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkDisableAutoAttack_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.DisableAutoAttack = chkDisableAutoAttack.Checked;
+        }
+
+        private void chkVulnWhenExhausted_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.VulnerableOnlyWhenExhausted = chkVulnWhenExhausted.Checked;
         }
     }
 

@@ -480,7 +480,8 @@ namespace Intersect.Client.Entities
 
         public void AddExhaustionAnimation()
         {
-            if (!AnimationBase.TryGet(Guid.Parse(Options.Instance.CombatOpts.ExhaustionAnimationId), out var exhaustionAnimation))
+            var animationId = Guid.Parse(Options.Instance.CombatOpts.ExhaustionAnimationId);
+            if (!AnimationBase.TryGet(animationId, out var exhaustionAnimation))
             {
                 return;
             }
@@ -488,6 +489,11 @@ namespace Intersect.Client.Entities
             ExhaustionInterpVal = 1.0f;
             ExhaustionInterpSign = 1.0f;
             NextExhaustionInterpUpdate = Timing.Global.MillisecondsUtcUnsynced + EXHAUST_INTERP_UPDATE_SPEED;
+
+            if (Animations.Any((anim) => anim.MyBase?.Id == animationId))
+            {
+                return;
+            }
             Animations.Add(new Animation(exhaustionAnimation, true, false, -1, this));
         }
 

@@ -3937,5 +3937,38 @@ namespace Intersect.Server.Entities.Events
 
             player?.CloseCraftingTable();
         }
+
+        private static void ProcessCommand(
+         ForceNpcExhaustion command,
+         Player player,
+         Event instance,
+         CommandInstance stackInfo,
+         Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null || !player.Online)
+            {
+                return;
+            }
+
+            if (!MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                return;
+            }
+
+            foreach (var entity in mapInstance.GetEntities(true))
+            {
+                if (!(entity is Npc npc) || npc.Base == null)
+                {
+                    continue;
+                }
+
+                if (npc.Base.Id == command.NpcId)
+                {
+                    npc.CancelCast();
+                    npc.ProcSpellInterruptExhaustion(command.DurationMs);
+                }
+            }
+        }
     }
 }

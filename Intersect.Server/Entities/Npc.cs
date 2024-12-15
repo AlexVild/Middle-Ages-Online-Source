@@ -1528,14 +1528,18 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            //If not then check and see if player meets the conditions to attack the npc...
-            if (Base.PlayerCanAttackConditions.Lists.Count == 0 ||
-                Conditions.MeetsConditionLists(Base.PlayerCanAttackConditions, en, null))
+            if (Base.VulnerableOnlyWhenExhausted && !IsExhausted)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            //If not then check and see if player meets the conditions to attack the npc...
+            if (Base.PlayerCanAttackConditions.Lists.Count != 0 && !Conditions.MeetsConditionLists(Base.PlayerCanAttackConditions, en, null))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public override bool IsAllyOf(Entity otherEntity)
@@ -2314,7 +2318,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void ProcSpellInterruptExhaustion()
+        public void ProcSpellInterruptExhaustion(long duration = 0L)
         {
             foreach (var entity in DamageMap.Keys)
             {
@@ -2331,13 +2335,21 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            var spell = NextSpell;
-            if (spell == null)
+            if (duration > 0)
             {
-                return;
+                ExhaustionEndTime = Timing.Global.MillisecondsUtc + duration;
             }
+            else
+            {
+                var spell = NextSpell;
+                if (spell == null)
+                {
+                    return;
+                }
+                ExhaustionEndTime = Timing.Global.MillisecondsUtc + spell.ExhaustionInterruptTime;
+            }
+
             CancelSpellChain();
-            ExhaustionEndTime = Timing.Global.MillisecondsUtc + spell.ExhaustionInterruptTime;
             SendExhaustion(ExhaustionEndTime);
         }
 

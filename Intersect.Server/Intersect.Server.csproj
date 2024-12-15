@@ -1512,6 +1512,10 @@
     <Compile Include="Migrations\Game\20241215184634_NpcBehaviorExtensionMigration.designer.cs">
       <DependentUpon>20241215184634_NpcBehaviorExtensionMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241215225214_NpcVulnerabilityExtensionMigration.cs" />
+    <Compile Include="Migrations\Game\20241215225214_NpcVulnerabilityExtensionMigration.designer.cs">
+      <DependentUpon>20241215225214_NpcVulnerabilityExtensionMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -1593,4 +1593,13 @@ namespace Intersect.GameObjects.Events.Commands
     {
         public override EventCommandType Type { get; } = EventCommandType.CloseCraftingTable;
     }
+
+    public partial class ForceNpcExhaustion : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ForceNpcExhaustion;
+
+        public Guid NpcId { get; set; }
+
+        public long DurationMs { get; set; }
+    }
 }

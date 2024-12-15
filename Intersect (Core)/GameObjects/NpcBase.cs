@@ -510,6 +510,8 @@ namespace Intersect.GameObjects
         public bool DisableAutoAttack { get; set; }
 
         public bool DisableAutoExhaustion { get; set; }
+
+        public bool VulnerableOnlyWhenExhausted { get; set; }
     }
 
 }
