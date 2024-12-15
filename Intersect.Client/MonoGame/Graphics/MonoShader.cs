@@ -6,7 +6,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace Intersect.Client.MonoGame.Graphics
 {
@@ -83,6 +85,16 @@ namespace Intersect.Client.MonoGame.Graphics
         public override void ResetChanged()
         {
             mValuesChanged = false;
+
+            if (mShader == null)
+            {
+                Debugger.Break();
+            }
+            else if (_shaderName.StartsWith("color"))
+            {
+                var parameters = mShader.Parameters.ToArray();
+                Debugger.Break();
+            }
 
             //Set Pending
             foreach (var clr in Colors)

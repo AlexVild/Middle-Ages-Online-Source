@@ -1190,6 +1190,8 @@ namespace Intersect.Client.Core
             }
         }
 
+        public static GameShader FlashShader => Globals.ContentManager.GetShader("color_replacement");
+
         public static void AddLight(int x, int y, int size, byte intensity, float expand, Color color)
         {
             if (!Globals.Database.DisplayLighting)

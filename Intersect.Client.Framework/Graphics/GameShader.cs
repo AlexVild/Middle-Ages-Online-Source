@@ -6,8 +6,11 @@ namespace Intersect.Client.Framework.Graphics
     public abstract class GameShader
     {
 
+        protected readonly string _shaderName;
+        
         public GameShader(string shaderName)
         {
+            _shaderName = shaderName;
         }
 
         public abstract void SetFloat(string key, float val);
