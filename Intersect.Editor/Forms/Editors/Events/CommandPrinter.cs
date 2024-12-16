@@ -2235,5 +2235,12 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return "Close Crafting Table";
         }
+
+        private static string GetCommandText(ForceNpcExhaustion command, MapInstance map)
+        {
+            var npcName = NpcBase.GetName(command.NpcId);
+
+            return $"Force NPC Exhaustion: {npcName}s for {command.DurationMs}ms";
+        }
     }
 }

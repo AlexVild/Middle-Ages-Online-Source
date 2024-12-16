@@ -54,6 +54,11 @@ namespace Intersect.Utilities
         {
             return Math.Min(Math.Max(value, minimum), maximum);
         }
+
+        public static float Lerp(float a, float b, float t)
+        {
+            return a + (b - a) * t;
+        }
     }
 
     public static partial class MathHelper

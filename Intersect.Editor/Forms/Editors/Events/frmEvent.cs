@@ -922,6 +922,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new CloseCraftingTable();
                     break;
 
+                case EventCommandType.ForceNpcExhaustion:
+                    tmpCommand = new ForceNpcExhaustion();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1723,6 +1727,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.CloseCraftingTable:
                     // No editor
+                    break;
+
+                case EventCommandType.ForceNpcExhaustion:
+                    cmdWindow = new EventCommand_ForceNpcExhaustion((ForceNpcExhaustion)command, this);
                     break;
 
                 default:

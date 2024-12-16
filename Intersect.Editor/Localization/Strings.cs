@@ -2466,6 +2466,7 @@ Tick timer saved in server config.json.";
                 {"showevent", @"Show Event"},
                 {"castspellon", @"Cast Spell On"},
                 {"closecraftingtable", @"Close Crafting Table"},
+                {"forcenpcexhaustion", @"Force NPC Exhaustion State"},
             };
 
         }

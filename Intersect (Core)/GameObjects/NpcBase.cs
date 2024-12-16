@@ -506,6 +506,12 @@ namespace Intersect.GameObjects
         public bool AnimatedSprite { get; set; }
 
         public bool SequentialCasting { get; set; }
+
+        public bool DisableAutoAttack { get; set; }
+
+        public bool DisableAutoExhaustion { get; set; }
+
+        public bool VulnerableOnlyWhenExhausted { get; set; }
     }
 
 }

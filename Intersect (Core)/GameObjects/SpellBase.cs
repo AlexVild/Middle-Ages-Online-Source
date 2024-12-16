@@ -514,5 +514,9 @@ namespace Intersect.GameObjects
                     return Combat.CastRange;
             }
         }
+
+        public long ExhaustionCastTime { get; set; }
+
+        public long ExhaustionInterruptTime { get; set; }
     }
 }

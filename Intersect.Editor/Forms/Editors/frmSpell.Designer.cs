@@ -34,6 +34,10 @@ namespace Intersect.Editor.Forms.Editors
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSpell));
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpNpcSpellChain = new DarkUI.Controls.DarkGroupBox();
+            this.nudInterruptExhaustion = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblInterruptExhaustion = new System.Windows.Forms.Label();
+            this.nudCastExhaustion = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblCastExhaustion = new System.Windows.Forms.Label();
             this.lblAoeChainDelay = new System.Windows.Forms.Label();
             this.nudAoeChainDelay = new DarkUI.Controls.DarkNumericUpDown();
             this.lblChain = new System.Windows.Forms.Label();
@@ -307,6 +311,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlContainer.SuspendLayout();
             this.grpNpcSpellChain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInterruptExhaustion)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCastExhaustion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeChainDelay)).BeginInit();
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
@@ -421,6 +427,10 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpNpcSpellChain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpNpcSpellChain.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNpcSpellChain.Controls.Add(this.nudInterruptExhaustion);
+            this.grpNpcSpellChain.Controls.Add(this.lblInterruptExhaustion);
+            this.grpNpcSpellChain.Controls.Add(this.nudCastExhaustion);
+            this.grpNpcSpellChain.Controls.Add(this.lblCastExhaustion);
             this.grpNpcSpellChain.Controls.Add(this.lblAoeChainDelay);
             this.grpNpcSpellChain.Controls.Add(this.nudAoeChainDelay);
             this.grpNpcSpellChain.Controls.Add(this.lblChain);
@@ -430,15 +440,73 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcSpellChain.Margin = new System.Windows.Forms.Padding(2);
             this.grpNpcSpellChain.Name = "grpNpcSpellChain";
             this.grpNpcSpellChain.Padding = new System.Windows.Forms.Padding(2);
-            this.grpNpcSpellChain.Size = new System.Drawing.Size(438, 64);
+            this.grpNpcSpellChain.Size = new System.Drawing.Size(438, 113);
             this.grpNpcSpellChain.TabIndex = 125;
             this.grpNpcSpellChain.TabStop = false;
-            this.grpNpcSpellChain.Text = "NPC Spell Chaining";
+            this.grpNpcSpellChain.Text = "AI Caster Settings";
+            // 
+            // nudInterruptExhaustion
+            // 
+            this.nudInterruptExhaustion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudInterruptExhaustion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudInterruptExhaustion.Location = new System.Drawing.Point(228, 84);
+            this.nudInterruptExhaustion.Maximum = new decimal(new int[] {
+            -727379968,
+            232,
+            0,
+            0});
+            this.nudInterruptExhaustion.Name = "nudInterruptExhaustion";
+            this.nudInterruptExhaustion.Size = new System.Drawing.Size(165, 20);
+            this.nudInterruptExhaustion.TabIndex = 134;
+            this.nudInterruptExhaustion.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudInterruptExhaustion.ValueChanged += new System.EventHandler(this.nudInterruptExhaustion_ValueChanged);
+            // 
+            // lblInterruptExhaustion
+            // 
+            this.lblInterruptExhaustion.AutoSize = true;
+            this.lblInterruptExhaustion.Location = new System.Drawing.Point(231, 68);
+            this.lblInterruptExhaustion.Name = "lblInterruptExhaustion";
+            this.lblInterruptExhaustion.Size = new System.Drawing.Size(126, 13);
+            this.lblInterruptExhaustion.TabIndex = 133;
+            this.lblInterruptExhaustion.Text = "Interrupt Exhaustion (ms):";
+            // 
+            // nudCastExhaustion
+            // 
+            this.nudCastExhaustion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudCastExhaustion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudCastExhaustion.Location = new System.Drawing.Point(12, 84);
+            this.nudCastExhaustion.Maximum = new decimal(new int[] {
+            -727379968,
+            232,
+            0,
+            0});
+            this.nudCastExhaustion.Name = "nudCastExhaustion";
+            this.nudCastExhaustion.Size = new System.Drawing.Size(165, 20);
+            this.nudCastExhaustion.TabIndex = 132;
+            this.nudCastExhaustion.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudCastExhaustion.ValueChanged += new System.EventHandler(this.nudCastExhaustion_ValueChanged);
+            // 
+            // lblCastExhaustion
+            // 
+            this.lblCastExhaustion.AutoSize = true;
+            this.lblCastExhaustion.Location = new System.Drawing.Point(12, 68);
+            this.lblCastExhaustion.Name = "lblCastExhaustion";
+            this.lblCastExhaustion.Size = new System.Drawing.Size(108, 13);
+            this.lblCastExhaustion.TabIndex = 131;
+            this.lblCastExhaustion.Text = "Cast Exhaustion (ms):";
             // 
             // lblAoeChainDelay
             // 
             this.lblAoeChainDelay.AutoSize = true;
-            this.lblAoeChainDelay.Location = new System.Drawing.Point(219, 38);
+            this.lblAoeChainDelay.Location = new System.Drawing.Point(231, 19);
             this.lblAoeChainDelay.Name = "lblAoeChainDelay";
             this.lblAoeChainDelay.Size = new System.Drawing.Size(59, 13);
             this.lblAoeChainDelay.TabIndex = 129;
@@ -448,14 +516,14 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudAoeChainDelay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAoeChainDelay.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAoeChainDelay.Location = new System.Drawing.Point(294, 35);
+            this.nudAoeChainDelay.Location = new System.Drawing.Point(228, 35);
             this.nudAoeChainDelay.Maximum = new decimal(new int[] {
             -727379968,
             232,
             0,
             0});
             this.nudAoeChainDelay.Name = "nudAoeChainDelay";
-            this.nudAoeChainDelay.Size = new System.Drawing.Size(111, 20);
+            this.nudAoeChainDelay.Size = new System.Drawing.Size(165, 20);
             this.nudAoeChainDelay.TabIndex = 130;
             this.nudAoeChainDelay.Value = new decimal(new int[] {
             0,
@@ -469,9 +537,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblChain.AutoSize = true;
             this.lblChain.Location = new System.Drawing.Point(10, 19);
             this.lblChain.Name = "lblChain";
-            this.lblChain.Size = new System.Drawing.Size(58, 13);
+            this.lblChain.Size = new System.Drawing.Size(209, 13);
             this.lblChain.TabIndex = 127;
-            this.lblChain.Text = "Next Spell:";
+            this.lblChain.Text = "Chained Spell (force casting after this one):";
             // 
             // cmbAoeChain
             // 
@@ -486,7 +554,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbAoeChain.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbAoeChain.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbAoeChain.FormattingEnabled = true;
-            this.cmbAoeChain.Location = new System.Drawing.Point(5, 35);
+            this.cmbAoeChain.Location = new System.Drawing.Point(12, 35);
             this.cmbAoeChain.Name = "cmbAoeChain";
             this.cmbAoeChain.Size = new System.Drawing.Size(193, 21);
             this.cmbAoeChain.TabIndex = 128;
@@ -1710,7 +1778,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.Controls.Add(this.grpEffectDuration);
             this.grpCombat.Controls.Add(this.grpDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(3, 559);
+            this.grpCombat.Location = new System.Drawing.Point(3, 612);
             this.grpCombat.Name = "grpCombat";
             this.grpCombat.Size = new System.Drawing.Size(636, 730);
             this.grpCombat.TabIndex = 39;
@@ -4105,7 +4173,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(3, 563);
+            this.grpEvent.Location = new System.Drawing.Point(3, 611);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(441, 48);
             this.grpEvent.TabIndex = 40;
@@ -4148,7 +4216,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWarp.Controls.Add(this.lblX);
             this.grpWarp.Controls.Add(this.lblMap);
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(3, 561);
+            this.grpWarp.Location = new System.Drawing.Point(3, 610);
             this.grpWarp.Name = "grpWarp";
             this.grpWarp.Size = new System.Drawing.Size(247, 182);
             this.grpWarp.TabIndex = 35;
@@ -4502,6 +4570,8 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.ResumeLayout(false);
             this.grpNpcSpellChain.ResumeLayout(false);
             this.grpNpcSpellChain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInterruptExhaustion)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCastExhaustion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAoeChainDelay)).EndInit();
             this.grpSpellGroup.ResumeLayout(false);
             this.grpSpellGroup.PerformLayout();
@@ -4894,5 +4964,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpAdvTrapSettings;
         private DarkNumericUpDown nudTrapCooldown;
         private System.Windows.Forms.Label lblTrapCooldown;
+        private DarkNumericUpDown nudCastExhaustion;
+        private System.Windows.Forms.Label lblCastExhaustion;
+        private System.Windows.Forms.Label lblInterruptExhaustion;
+        private DarkNumericUpDown nudInterruptExhaustion;
     }
 }
