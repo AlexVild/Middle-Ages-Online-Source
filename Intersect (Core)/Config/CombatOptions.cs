@@ -272,6 +272,10 @@ namespace Intersect.Config
 
         public string ExhaustionAnimationId { get; set; } = "85fedc65-4460-4e44-945b-11969c4e56fc";
 
+        public string AggroAnimationId { get; set; } = "b5b325ad-007e-4ee4-b01e-d33b9d00b79a";
+
+        public long AggroSurpriseTime { get; set; } = 1000L;
+
         public string InterruptSound { get; set; } = "al_interrupt.wav";
 
         [OnDeserializing]

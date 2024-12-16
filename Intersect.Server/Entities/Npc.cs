@@ -1743,6 +1743,7 @@ namespace Intersect.Server.Entities
             {
                 // Aggressively attack closest person!
                 AssignTarget(possibleTargets[closestIndex]);
+                EnemySighted(possibleTargets[closestIndex]);
             }
             else if (possibleTargets.Count > 0)
             {
@@ -1751,10 +1752,12 @@ namespace Intersect.Server.Entities
                 {
                     var target = Randomization.Next(0, possibleTargets.Count - 1);
                     AssignTarget(possibleTargets[target]);
+                    EnemySighted(possibleTargets[target]);
                 }
                 else
                 {
                     AssignTarget(possibleTargets[0]);
+                    EnemySighted(possibleTargets[0]);
                 }
             }
             else
@@ -1779,6 +1782,32 @@ namespace Intersect.Server.Entities
             }
 
             return Base.VitalRegen[vital] / 100f;
+        }
+
+        private void EnemySighted(Entity target)
+        {
+            var dirToEnemy = DirToEnemy(target);
+            if (dirToEnemy != Dir)
+            {
+                ChangeDir(dirToEnemy);
+            }
+
+            ExhaustionEndTime = Timing.Global.MillisecondsUtc + Options.Instance.CombatOpts.AggroSurpriseTime;
+            
+            if (!(target is Player player))
+            {
+                return;
+            }
+
+            PacketSender.SendAnimationTo(Guid.Parse(Options.Instance.CombatOpts.AggroAnimationId),
+                1,
+                Id,
+                MapId,
+                (byte)X,
+                (byte)Y,
+                (sbyte)Directions.Up,
+                MapInstanceId,
+                player);
         }
 
         public override void Warp(
