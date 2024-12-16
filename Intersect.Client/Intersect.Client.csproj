@@ -471,6 +471,7 @@
   <ItemGroup>
     <Content Include="MAO.ico" />
     <Content Include="mao_icon.ico" />
+    <EmbeddedResource Include="Resources\Shaders\color_replacement.xnb" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

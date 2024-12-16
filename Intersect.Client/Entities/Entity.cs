@@ -1062,15 +1062,17 @@ namespace Intersect.Client.Entities
 
             var sprite = "";
             // Copy the actual render color, because we'll be editing it later and don't want to overwrite it.
-            var renderColor = new Color(Color.A, Color.R, Color.G, Color.B);
-            if (Flash && FlashColor != null) // Flash the sprite some color for some duration
+            var baseRenderColor = new Color(Color.A, Color.R, Color.G, Color.B);
+            var renderColor = new Color(baseRenderColor);
+            var flashColor = Flash ? FlashColor : null;
+            if (flashColor != null) // Flash the sprite some color for some duration
             {
-                renderColor = FlashColor;
+                renderColor = flashColor;
             }
             else if (IsExhausted)
             {
-                renderColor = Color.InterpolateColor(Color, ExhaustedColor, ExhaustionInterpVal);
-                renderColor.A = Color.A;
+                renderColor = Color.InterpolateColor(baseRenderColor, ExhaustedColor, ExhaustionInterpVal);
+                renderColor.A = baseRenderColor.A;
                 UpdateExhaustionInterpValues();
             }
 
@@ -1218,8 +1220,23 @@ namespace Intersect.Client.Entities
                 //Check for player
                 if (paperdoll == "Player")
                 {
+                    GameShader flashShader = null;
+                    if (flashColor != null)
+                    {
+                        flashShader = Graphics.FlashShader;
+                        if (flashShader != null)
+                        {
+                            flashShader.SetColor("replacement_color", flashColor);
+                            renderColor = baseRenderColor;
+                        }
+                    }
+                    
                     Graphics.DrawGameTexture(
-                        texture, srcRectangle, destRectangle, renderColor
+                        texture,
+                        srcRectangle,
+                        destRectangle,
+                        renderColor,
+                        shader: flashShader
                     );
                 }
                 else if (notTransformed)
