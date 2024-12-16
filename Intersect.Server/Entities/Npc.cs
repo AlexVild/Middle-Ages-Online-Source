@@ -991,7 +991,7 @@ namespace Intersect.Server.Entities
                 // If we don't have a target, keep the attack timer at bay. This prevents unfair insta-attacking when aggro is received
                 if (Target == null)
                 {
-                    IncrementAttackTimer();
+                    IncrementAttackTimer(0.5f);
                     CastFreq = timeMs + 1000;
                 }
 
@@ -1494,28 +1494,35 @@ namespace Intersect.Server.Entities
 
         public override void NotifySwarm(Entity attacker)
         {
-            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+            if (!MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
             {
-                foreach (var en in instance.GetEntities(true))
+                return;
+            }
+            
+            foreach (var en in instance.GetEntities(true))
+            {
+                if (en.GetType() != typeof(Npc))
                 {
-                    if (en.GetType() == typeof(Npc))
-                    {
-                        var npc = (Npc)en;
-                        // Swarm if an aggressive enemy, or it's direct relative is being attacked
-                        if (npc.Target == null & npc.Base.Swarm && IsAllyOf(npc) && (npc.Base.Aggressive || npc.Base.Id == Base.Id))
-                        {
-                            var range = Range;
-                            if (attacker is Player player)
-                            {
-                                range = (int)Math.Ceiling(range * player.GetBonusEffectPercent(EffectType.Phantom, false));
-                            }
+                    continue;
+                }
+                var npc = (Npc)en;
+                
+                if (npc.Target != null | !npc.Base.Swarm || !IsAllyOf(npc) || !npc.Base.Aggressive && npc.Base.Id != Base.Id)
+                {
+                    continue;
+                }
 
-                            if (npc.InRangeOf(attacker, range))
-                            {
-                                npc.AssignTarget(attacker);
-                            }
-                        }
-                    }
+                // Swarm if an aggressive enemy, or it's direct relative is being attacked
+                var range = Range;
+                if (attacker is Player player)
+                {
+                    range = (int)Math.Ceiling(range * player.GetBonusEffectPercent(EffectType.Phantom, false));
+                }
+
+                if (npc.InRangeOf(attacker, range))
+                {
+                    npc.AssignTarget(attacker);
+                    npc.EnemySighted(attacker);
                 }
             }
         }
@@ -1808,6 +1815,7 @@ namespace Intersect.Server.Entities
                 (sbyte)Directions.Up,
                 MapInstanceId,
                 player);
+            PacketSender.SendCombatEffectPacket(player.Client, Id, 0.0f, Color.White, string.Empty, 0f, 0f, Color.White);
         }
 
         public override void Warp(

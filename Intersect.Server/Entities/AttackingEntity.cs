@@ -324,9 +324,10 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void IncrementAttackTimer()
+        public void IncrementAttackTimer(float modifier = 1.0f)
         {
-            AttackTimer = Timing.Global.Milliseconds + CalculateAttackTime();
+            var attackTime = (int)Math.Round((Timing.Global.Milliseconds + CalculateAttackTime()) * modifier);
+            AttackTimer = attackTime;
         }
 
         public virtual bool IsCriticalHit(int critChance)
