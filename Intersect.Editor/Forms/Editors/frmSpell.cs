@@ -1099,7 +1099,7 @@ namespace Intersect.Editor.Forms.Editors
                 mEditorItem.Combat.OnHitDuration = (int) nudDuration.Value;
             }
 
-            if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Trap)
+            if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Trap || cmbTargetType.SelectedIndex == (int)SpellTargetTypes.AoE)
             {
                 mEditorItem.Combat.TrapDuration = (int) nudDuration.Value;
             }
