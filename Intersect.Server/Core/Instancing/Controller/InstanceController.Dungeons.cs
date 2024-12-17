@@ -8,6 +8,7 @@ using Intersect.Utilities;
 using Intersect.Server.Networking;
 using Intersect.Enums;
 using Intersect.Server.Database.PlayerData;
+using Intersect.Server.Maps;
 
 namespace Intersect.Server.Core.Instancing.Controller
 {
@@ -97,6 +98,16 @@ namespace Intersect.Server.Core.Instancing.Controller
             {
                 Logging.Log.Error($"DUNGEON: {player?.Name} Tried to complete a dungeon, but the dungeon was never active! Dungeon state was {Dungeon.State}");
                 return;
+            }
+
+            if (player == null)
+            {
+                return;
+            }
+
+            foreach (var instance in MapController.GetSurroundingMapInstances(player.MapId, player.MapInstanceId, true))
+            {
+                instance.DespawnTraps();
             }
 
             lock (DungeonLock)

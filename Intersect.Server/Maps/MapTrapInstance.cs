@@ -99,7 +99,7 @@ namespace Intersect.Server.Classes.Maps
             if (!ParentSpell.Combat.TrapMultiUse)
             {
                 Triggered = true;
-                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
+                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true, ignoreEvasion: true);
             }
             else
             {
@@ -111,12 +111,12 @@ namespace Intersect.Server.Classes.Maps
                     }
 
                     EntitiesHit[target.Id] = Timing.Global.Milliseconds + ParentSpell.Combat.TrapDamageCooldown;
-                    Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
+                    Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true, ignoreEvasion: true);
                     return;
                 }
 
                 EntitiesHit.Add(target.Id, Timing.Global.Milliseconds + ParentSpell.Combat.TrapDamageCooldown);
-                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true);
+                Owner.HandleAoESpell(ParentSpell.Id, target.MapId, target.X, target.Y, null, detonation: true, ignoreEvasion: true);
             }
         }
 

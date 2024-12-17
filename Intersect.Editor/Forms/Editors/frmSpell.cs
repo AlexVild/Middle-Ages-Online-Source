@@ -483,7 +483,6 @@ namespace Intersect.Editor.Forms.Editors
                 chkAreaDenial.Checked = mEditorItem.Combat.AoeTrapSpawner;
                 nudAreaDenialRadius.Value = mEditorItem.Combat.AoeTrapRadiusOverride;
                 nudAreaSpawnIntensity.Value = mEditorItem.Combat.AoeTrapIntensity;
-                UpdateAreaDenialSettings();
 
                 chkNotSingleUseTrap.Checked = mEditorItem.Combat.TrapMultiUse;
                 nudTrapCooldown.Value = mEditorItem.Combat.TrapDamageCooldown;
@@ -620,6 +619,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudHitRadius.Show();
                 lblDuration.Show();
                 nudDuration.Show();
+                nudDuration.Value = mEditorItem.Combat.TrapDuration;
                 lblTrapAnimation.Show();
                 cmbTrapAnimation.Show();
                 cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;

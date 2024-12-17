@@ -1290,11 +1290,15 @@ namespace Intersect.Server.Maps
 
         public void DespawnTraps()
         {
+            foreach (var trap in MapTraps.Values.ToArray())
+            {
+                RemoveTrap(trap, false);
+            }
             MapTraps.Clear();
             MapTrapsCached = new MapTrapInstance[0];
         }
 
-        public void RemoveTrap(MapTrapInstance trap)
+        public void RemoveTrap(MapTrapInstance trap, bool updateCache = true)
         {
             if (MapTraps.TryRemove(trap.Id, out MapTrapInstance removed))
             {
@@ -1303,7 +1307,11 @@ namespace Intersect.Server.Maps
                     PacketSender.SendMapTrapPacket(player, removed.MapId, removed.Id, removed.ParentSpell.CastAnimationId, removed.Owner.Id, removed.X, removed.Y, true);
                 }
             }
-            MapTrapsCached = MapTraps.Values.ToArray();
+
+            if (updateCache)
+            {
+                MapTrapsCached = MapTraps.Values.ToArray();
+            }
         }
 
         public void UpdateTraps(long timeMs)
