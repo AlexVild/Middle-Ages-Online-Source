@@ -951,11 +951,12 @@ namespace Intersect.Server.Entities
                 return true;
             }
 
+            var distance = target.GetDistanceTo(startMap, startX, startY);
             // If this is coming from a trap spawned by an AoE Area Denial spell, use the trap radius override
             // instead of the spell's AoE radius. Hacky
             if (spell.Combat.AoeTrapSpawner)
             {
-                return target.GetDistanceTo(startMap, startX, startY) <= spell.Combat.AoeTrapRadiusOverride;
+                return distance <= spell.Combat.AoeTrapRadiusOverride;
             }
 
             var shape = spell.Combat.AoeShape;
@@ -964,9 +965,10 @@ namespace Intersect.Server.Entities
                 case AoeShape.Circle:
                     if (spell.Combat.MinRange > 0)
                     {
+                        return distance <= spell.Combat.HitRadius && distance > spell.Combat.MinRange;
                         return InRangeOf(target, spell.Combat.HitRadius, spell.Combat.MinRange);
                     }
-                    return InRangeOf(target, spell.Combat.HitRadius);
+                    return distance <= spell.Combat.HitRadius;
 
                 case AoeShape.Rectangle:
                     var faceDir = (Directions)Dir;
