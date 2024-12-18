@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using Intersect.Client.Entities.Events;
+using Intersect.Client.Entities.Projectiles;
 using Intersect.Client.General;
 using Intersect.Client.Maps;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Intersect.Client.Core
 {
@@ -146,6 +149,20 @@ namespace Intersect.Client.Core
             foreach (var entity in ActiveEntities.ToArray())
             {
                 entity.Draw();
+                EntitiesDrawn++;
+            }
+        }
+
+        private static void DrawDebugProjectiles()
+        {
+            if (!Interface.Interface.GameUi.DebugMenuOpen() || Globals.Me?.Type <= 0)
+            {
+                return;
+            }
+
+            foreach (var projectile in Globals.Entities.Values.OfType<Projectile>())
+            {
+                projectile.Draw();
                 EntitiesDrawn++;
             }
         }

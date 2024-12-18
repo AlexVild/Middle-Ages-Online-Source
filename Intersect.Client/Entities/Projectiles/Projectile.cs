@@ -8,6 +8,14 @@ using Intersect.Client.Maps;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 using Pango;
+using Intersect.Client.Framework.Graphics;
+using static Intersect.Client.Framework.File_Management.GameContentManager;
+using System.Drawing;
+using Intersect.Client.Framework.GenericClasses;
+using Gtk;
+using Intersect.Client.Framework.Gwen;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using static Intersect.Client.Framework.Gwen.Skin.SkinTextures._Tab;
 
 namespace Intersect.Client.Entities.Projectiles
 {
@@ -43,6 +51,8 @@ namespace Intersect.Client.Entities.Projectiles
         public ProjectileSpawns[] Spawns;
 
         public Guid TargetId;
+
+        private GameTexture COMBAT_TILE_AOE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
 
         /// <summary>
         ///     The constructor for the inherated projectile class
@@ -513,9 +523,9 @@ namespace Intersect.Client.Entities.Projectiles
                         spawn.Anim.SetPosition(
                             worldX,
                             worldY,
-                            X,
-                            Y,
-                            CurrentMap,
+                            spawn.X,
+                            spawn.Y,
+                            spawn.MapId,
                             spawn.AutoRotate ? spawn.Dir : 0,
                             spawn.Z
                         );
@@ -529,6 +539,26 @@ namespace Intersect.Client.Entities.Projectiles
             }
 
             return true;
+        }
+
+        public void DrawActiveTile(ProjectileSpawns spawn)
+        {
+            // If mod with debug open
+            if (!Interface.Interface.GameUi.DebugMenuOpen() || Globals.Me.Type <= 0 || spawn == null)
+            {
+                    return;
+            }
+
+            var map = MapInstance.Get(spawn.MapId);
+            if (map == null)
+            {
+                return;
+            }
+            var tile = GetTileRectangle(map, (byte)spawn.X, (byte)spawn.Y);
+            Core.Graphics.DrawGameTexture(
+                COMBAT_TILE_AOE, new FloatRect(0, 0, COMBAT_TILE_AOE.Width, COMBAT_TILE_AOE.Height),
+                new FloatRect(tile.X, tile.Y, Options.TileWidth, Options.TileHeight), Color.White
+            );
         }
 
         public void CheckForCollision()
@@ -720,6 +750,11 @@ namespace Intersect.Client.Entities.Projectiles
             if (MapInstance.Get(CurrentMap) == null || !Globals.GridMaps.Contains(CurrentMap))
             {
                 return;
+            }
+
+            foreach (var spawn in Spawns)
+            {
+                DrawActiveTile(spawn);
             }
 
             if (Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight)

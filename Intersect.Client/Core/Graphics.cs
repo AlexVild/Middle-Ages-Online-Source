@@ -396,6 +396,7 @@ namespace Intersect.Client.Core
             DrawMapsOnLayer(1);
             DrawMapsOnLayer(2);
             DrawUpperAnimations();
+            DrawDebugProjectiles();
             DrawMapExtras();
             Globals.Me.DrawTargets();
             DrawOverlay();

@@ -415,6 +415,11 @@ namespace Intersect.Client.Interface.Game
             }
         }
 
+        public bool DebugMenuOpen()
+        {
+            return mDebugMenu.IsVisible();
+        }
+
         public void ShowAdminWindow()
         {
             if (mAdminWindow == null)
