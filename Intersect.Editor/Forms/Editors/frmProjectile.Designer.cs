@@ -101,6 +101,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.grpAdvanced = new DarkUI.Controls.DarkGroupBox();
+            this.chkNewAligment = new DarkUI.Controls.DarkCheckBox();
             this.grpProjectiles.SuspendLayout();
             this.grpSpawns.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpawns)).BeginInit();
@@ -117,6 +119,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAmmo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudConsume)).BeginInit();
             this.toolStrip.SuspendLayout();
+            this.grpAdvanced.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpProjectiles
@@ -758,6 +761,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // pnlContainer
             // 
+            this.pnlContainer.Controls.Add(this.grpAdvanced);
             this.pnlContainer.Controls.Add(this.grpGrappleOptions);
             this.pnlContainer.Controls.Add(this.grpAmmo);
             this.pnlContainer.Controls.Add(this.grpCollisions);
@@ -766,7 +770,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpawns);
             this.pnlContainer.Location = new System.Drawing.Point(221, 36);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(473, 573);
+            this.pnlContainer.Size = new System.Drawing.Size(473, 593);
             this.pnlContainer.TabIndex = 30;
             this.pnlContainer.Visible = false;
             // 
@@ -882,7 +886,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(494, 615);
+            this.btnCancel.Location = new System.Drawing.Point(504, 648);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -892,7 +896,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(298, 615);
+            this.btnSave.Location = new System.Drawing.Point(298, 648);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -1021,13 +1025,36 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // grpAdvanced
+            // 
+            this.grpAdvanced.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAdvanced.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdvanced.Controls.Add(this.chkNewAligment);
+            this.grpAdvanced.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAdvanced.Location = new System.Drawing.Point(3, 528);
+            this.grpAdvanced.Name = "grpAdvanced";
+            this.grpAdvanced.Size = new System.Drawing.Size(186, 62);
+            this.grpAdvanced.TabIndex = 48;
+            this.grpAdvanced.TabStop = false;
+            this.grpAdvanced.Text = "Advanced";
+            // 
+            // chkNewAligment
+            // 
+            this.chkNewAligment.AutoSize = true;
+            this.chkNewAligment.Location = new System.Drawing.Point(6, 19);
+            this.chkNewAligment.Name = "chkNewAligment";
+            this.chkNewAligment.Size = new System.Drawing.Size(100, 17);
+            this.chkNewAligment.TabIndex = 41;
+            this.chkNewAligment.Text = "Top Alignment?";
+            this.chkNewAligment.CheckedChanged += new System.EventHandler(this.chkNewAligment_CheckedChanged);
+            // 
             // FrmProjectile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(698, 654);
+            this.ClientSize = new System.Drawing.Size(698, 687);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -1064,6 +1091,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudConsume)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpAdvanced.ResumeLayout(false);
+            this.grpAdvanced.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1139,5 +1168,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblDeathAnim;
         private DarkCheckBox chkAmmoDrop;
         private DarkCheckBox chkUseAmmoOverride;
+        private DarkGroupBox grpAdvanced;
+        private DarkCheckBox chkNewAligment;
     }
 }

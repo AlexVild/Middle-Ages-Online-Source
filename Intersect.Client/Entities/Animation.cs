@@ -1,11 +1,14 @@
 ﻿using System;
-
+using Atk;
+using GLib;
+using Gtk;
 using Intersect.Client.Core;
 using Intersect.Client.Core.Sounds;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
 
@@ -60,6 +63,9 @@ namespace Intersect.Client.Entities
 
         public int Opacity = 255;
 
+        public GameTexture LowerTexture { get; set; }
+        public GameTexture UpperTexture { get; set; }
+
         public Animation(
             AnimationBase animBase,
             bool loopForever,
@@ -87,6 +93,12 @@ namespace Intersect.Client.Entities
                 {
                     Graphics.LiveAnimations.Add(this);
                 }
+                LowerTexture = Globals.ContentManager.GetTexture(
+                    GameContentManager.TextureType.Animation, MyBase.Lower.Sprite
+                );
+                UpperTexture = Globals.ContentManager.GetTexture(
+                    GameContentManager.TextureType.Animation, MyBase.Upper.Sprite
+                );
             }
             else
             {
@@ -116,128 +128,76 @@ namespace Intersect.Client.Entities
             var drawColor = new Color(Opacity, 255, 255, 255);
             if ((AutoRotate || mRenderDir != -1) && !dontRotate)
             {
-                switch (mRenderDir)
-                {
-                    case 0: //Up
-                        rotationDegrees = 0f;
-
-                        break;
-                    case 1: //Down
-                        rotationDegrees = 180f;
-
-                        break;
-                    case 2: //Left
-                        rotationDegrees = 270f;
-
-                        break;
-                    case 3: //Right
-                        rotationDegrees = 90f;
-
-                        break;
-                    case 4: //NW
-                        rotationDegrees = 315f;
-
-                        break;
-                    case 5: //NE
-                        rotationDegrees = 45f;
-
-                        break;
-                    case 6: //SW
-                        rotationDegrees = 225f;
-
-                        break;
-                    case 7: //SE
-                        rotationDegrees = 135f;
-
-                        break;
-                }
+                rotationDegrees = MathHelper.GetRotationAngleFromDir((ProjectileDirections)mRenderDir);
             }
 
             if (!upper && mShowLower && mZDimension < 1 || !upper && mShowLower && mZDimension > 0)
             {
-                //Draw Lower
-                var tex = Globals.ContentManager.GetTexture(
-                    GameContentManager.TextureType.Animation, MyBase.Lower.Sprite
-                );
-
-                if (tex != null)
-                {
-                    if (MyBase.Lower.XFrames > 0 && MyBase.Lower.YFrames > 0)
-                    {
-                        var frameWidth = tex.GetWidth() / MyBase.Lower.XFrames;
-                        var frameHeight = tex.GetHeight() / MyBase.Lower.YFrames;
-                        var scaledWidth = frameWidth * DRAW_SCALE;
-                        var scaledHeight = frameHeight * DRAW_SCALE;
-                        Graphics.DrawGameTexture(
-                            tex,
-                            new FloatRect(
-                                mLowerFrame % MyBase.Lower.XFrames * frameWidth,
-                                (float) Math.Floor((double) mLowerFrame / MyBase.Lower.XFrames) * frameHeight,
-                                frameWidth, frameHeight
-                            ),
-                            new FloatRect(
-                                mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
-                            ), drawColor, null, GameBlendModes.None, null, rotationDegrees
-                        );
-                    }
-                }
-
-                var offsetX = MyBase.Lower.Lights[mLowerFrame].OffsetX;
-                var offsetY = MyBase.Lower.Lights[mLowerFrame].OffsetY;
-                var offset = RotatePoint(
-                    new Point((int) offsetX, (int) offsetY), new Point(0, 0), rotationDegrees + 180
-                );
-
-                Graphics.AddLight(
-                    (int) mRenderX - offset.X, (int) mRenderY - offset.Y, MyBase.Lower.Lights[mLowerFrame].Size,
-                    MyBase.Lower.Lights[mLowerFrame].Intensity, MyBase.Lower.Lights[mLowerFrame].Expand,
-                    MyBase.Lower.Lights[mLowerFrame].Color
-                );
+                DrawAnimationLayer(MyBase.Lower, LowerTexture, mLowerFrame, rotationDegrees, drawColor);
             }
 
             if (upper && mShowUpper && mZDimension != 0 || upper && mShowUpper && mZDimension == 0)
             {
-                //Draw Upper
-                var tex = Globals.ContentManager.GetTexture(
-                    GameContentManager.TextureType.Animation, MyBase.Upper.Sprite
-                );
-
-                if (tex != null)
-                {
-                    if (MyBase.Upper.XFrames > 0 && MyBase.Upper.YFrames > 0)
-                    {
-                        var frameWidth = tex.GetWidth() / MyBase.Upper.XFrames;
-                        var frameHeight = tex.GetHeight() / MyBase.Upper.YFrames;
-                        var scaledWidth = frameWidth * DRAW_SCALE;
-                        var scaledHeight = frameHeight * DRAW_SCALE;
-
-                        Graphics.DrawGameTexture(
-                            tex,
-                            new FloatRect(
-                                mUpperFrame % MyBase.Upper.XFrames * frameWidth,
-                                (float) Math.Floor((double) mUpperFrame / MyBase.Upper.XFrames) * frameHeight,
-                                frameWidth, frameHeight
-                            ),
-                            new FloatRect(
-                                mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
-                            ), drawColor, null, GameBlendModes.None, null, rotationDegrees
-                        );
-                    }
-                }
-
-                var offsetX = MyBase.Upper.Lights[mUpperFrame].OffsetX;
-                var offsetY = MyBase.Upper.Lights[mUpperFrame].OffsetY;
-                var offset = RotatePoint(
-                    new Point((int) offsetX, (int) offsetY), new Point(0, 0), rotationDegrees + 180
-                );
-
-                Graphics.AddLight(
-                    (int) mRenderX - offset.X, (int) mRenderY - offset.Y, MyBase.Upper.Lights[mUpperFrame].Size,
-                    MyBase.Upper.Lights[mUpperFrame].Intensity, MyBase.Upper.Lights[mUpperFrame].Expand,
-                    MyBase.Upper.Lights[mUpperFrame].Color
-                );
+                DrawAnimationLayer(MyBase.Upper, UpperTexture, mUpperFrame, rotationDegrees, drawColor);
             }
         }
+
+        public float GetRotationDegrees()
+        {
+            return MathHelper.GetRotationAngleFromDir((ProjectileDirections)mRenderDir);
+        }
+
+        private void DrawAnimationLayer(AnimationLayer layer, GameTexture texture, int frame, float rotationDegrees, Color drawColor)
+        {
+            if (texture != null && layer.XFrames > 0 && layer.YFrames > 0)
+            {
+                var frameWidth = texture.GetWidth() / layer.XFrames;
+                var frameHeight = texture.GetHeight() / layer.YFrames;
+                var scaledWidth = frameWidth * DRAW_SCALE;
+                var scaledHeight = frameHeight * DRAW_SCALE;
+                Graphics.DrawGameTexture(
+                    texture,
+                    new FloatRect(
+                        frame % layer.XFrames * frameWidth,
+                        (float)Math.Floor((double)frame / layer.XFrames) * frameHeight,
+                        frameWidth, frameHeight
+                    ),
+                    new FloatRect(
+                        mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
+                    ), drawColor, null, GameBlendModes.None, null, rotationDegrees
+                );
+            }
+
+            DrawLayerLights(layer, frame, rotationDegrees);
+        }
+
+        private void DrawLayerLights(AnimationLayer layer, int frame, float rotationDegrees)
+        {
+            var currentLight = layer.Lights[frame];
+            if (currentLight.Intensity == 0 || currentLight.Size == 0)
+            {
+                return;
+            }
+            var offsetX = currentLight.OffsetX;
+            var offsetY = currentLight.OffsetY;
+            var offset = RotatePoint(
+                new Point((int)offsetX, (int)offsetY), new Point(0, 0), rotationDegrees + 180
+            );
+
+            Graphics.AddLight(
+                (int)mRenderX - offset.X, (int)mRenderY - offset.Y, currentLight.Size,
+                currentLight.Intensity, currentLight.Expand,
+                currentLight.Color
+            );
+        }
+
+        public int Width => Math.Max(
+            (LowerTexture?.Width ?? 0) / (MyBase?.Lower?.XFrames ?? 1),
+            (UpperTexture?.Width ?? 0) / (MyBase?.Upper?.XFrames ?? 1)) * DRAW_SCALE;
+        
+        public int Height => Math.Max(
+            (LowerTexture?.Height ?? 0) / (MyBase?.Lower?.YFrames ?? 1),
+            (UpperTexture?.Height ?? 0) / (MyBase?.Upper?.YFrames ?? 1)) * DRAW_SCALE;
 
         public void EndDraw()
         {

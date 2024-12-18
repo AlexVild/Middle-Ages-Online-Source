@@ -10098,5 +10098,11 @@ namespace Intersect.Server.Entities
         {
             return FaceDirection;
         }
+
+        public override void NotifyExistingTrap()
+        {
+            PacketSender.SendChatMsg(this, "Someone else has laid a trap here!", ChatMessageType.Combat, CustomColors.General.GeneralDisabled);
+            base.NotifyExistingTrap();
+        }
     }
 }

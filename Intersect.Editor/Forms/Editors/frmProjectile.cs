@@ -184,6 +184,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
                 chkFakeMelee.Checked = mEditorItem.FakeMelee;
+                chkNewAligment.Checked = mEditorItem.UseNewClientAlignment;
 
                 if (lstAnimations.SelectedIndex < 0)
                 {
@@ -812,6 +813,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkUseAmmoOverride_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.UseAmmoOverride = chkUseAmmoOverride.Checked;
+        }
+
+        private void chkNewAligment_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.UseNewClientAlignment = chkNewAligment.Checked;
         }
     }
 

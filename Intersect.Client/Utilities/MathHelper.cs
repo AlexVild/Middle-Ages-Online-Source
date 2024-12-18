@@ -1,4 +1,6 @@
-﻿namespace Intersect.Client.Utilities
+﻿using Intersect.Enums;
+
+namespace Intersect.Client.Utilities
 {
 
     public static class MathHelper

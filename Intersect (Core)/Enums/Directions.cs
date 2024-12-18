@@ -10,8 +10,20 @@ namespace Intersect.Enums
 
         Left,
 
-        Right
+        Right,
 
+    }
+
+    public enum ProjectileDirections
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        UpLeft,
+        UpRight,
+        DownLeft,
+        DownRight
     }
 
 }

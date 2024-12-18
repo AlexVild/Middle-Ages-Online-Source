@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intersect.Enums;
+using System;
 
 namespace Intersect.Utilities
 {
@@ -160,6 +161,56 @@ namespace Intersect.Utilities
         {
             var randomChance = Randomization.Next(1, 100001);
             return randomChance < percentChance * 1000;
+        }
+
+        public static float GetRotationAngleFromDir(ProjectileDirections dir)
+        {
+            switch (dir)
+            {
+                case ProjectileDirections.Up:
+                    return 0f;
+
+                case ProjectileDirections.Down:
+                    return 180f;
+
+                case ProjectileDirections.Left:
+                    return 270f;
+
+                case ProjectileDirections.Right:
+                    return 90f;
+
+                case ProjectileDirections.UpLeft:
+                    return 315f;
+
+                case ProjectileDirections.UpRight:
+                    return 45f;
+
+                case ProjectileDirections.DownLeft:
+                    return 225f;
+
+                case ProjectileDirections.DownRight:
+                    return 135f;
+
+                default:
+                    return 0f;
+            }
+        }
+
+        public static double GetRotationAngleFromDirRad(ProjectileDirections dir)
+        {
+            return GetRotationAngleFromDir(dir) * (Math.PI / 180);
+        }
+
+        public static double CalculateRotatedWidth(float originalWidth, float originalHeight, float angleRadians)
+        {
+            return Math.Abs(originalWidth * Math.Cos(angleRadians)) +
+                   Math.Abs(originalHeight * Math.Sin(angleRadians));
+        }
+
+        public static double CalculateRotatedHeight(float originalWidth, float originalHeight, float angleRadians)
+        {
+            return Math.Abs(originalWidth * Math.Sin(angleRadians)) +
+                   Math.Abs(originalHeight * Math.Cos(angleRadians));
         }
     }
 

@@ -1093,5 +1093,10 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+
+        public virtual void NotifyExistingTrap()
+        {
+            return;
+        }
     }
 }

@@ -630,6 +630,7 @@ namespace Intersect.Editor.Forms.Editors
                 UpdateAreaDenialSettings();
                 lblMinRange.Show();
                 nudMinRange.Show();
+                nudMinRange.Value = mEditorItem.Combat.MinRange;
             }
 
             if (cmbTargetType.SelectedIndex < (int) SpellTargetTypes.Self)

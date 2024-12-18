@@ -47,14 +47,19 @@ namespace Intersect.Server.Classes.Maps
         {
             Owner = owner;
             ParentSpell = parentSpell;
-            StartTime = Timing.Global.Milliseconds;
-            Duration = Timing.Global.Milliseconds + ParentSpell.Combat.TrapDuration;
+            Refresh();
             MapId = mapId;
             MapInstanceId = mapInstanceId;
             X = x;
             Y = y;
             Z = z;
             EntitiesHit = new Dictionary<Guid, long>();
+        }
+
+        public void Refresh()
+        {
+            StartTime = Timing.Global.Milliseconds;
+            Duration = Timing.Global.Milliseconds + ParentSpell.Combat.TrapDuration;
         }
 
         public void CheckEntityHasDetonatedTrap(Entity entity)

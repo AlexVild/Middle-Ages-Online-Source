@@ -27,6 +27,8 @@ namespace Intersect.GameObjects
 
         public bool UseAmmoOverride { get; set; } = false;
 
+        public bool UseNewClientAlignment { get; set; }
+
         [NotMapped] public List<ProjectileAnimation> Animations = new List<ProjectileAnimation>();
 
         [NotMapped] public Location[,] SpawnLocations = new Location[SPAWN_LOCATIONS_WIDTH, SPAWN_LOCATIONS_HEIGHT];

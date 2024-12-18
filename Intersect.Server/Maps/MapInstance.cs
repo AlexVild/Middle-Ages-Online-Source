@@ -1266,17 +1266,35 @@ namespace Intersect.Server.Maps
 
         public void SpawnTrap(AttackingEntity owner, SpellBase parentSpell, byte x, byte y, byte z)
         {
-            if (TileBlocked(x, y, true))
+            if (TileBlocked(x, y, true) || owner == null)
             {
                 return;
             }
 
-            var trap = new MapTrapInstance(owner, parentSpell, mMapController.Id, MapInstanceId, x, y, z);
+            var existingTraps = MapTrapsCached.ToArray().Where(trap => trap.X == x && trap.Y == y);
+
+            if (existingTraps.Any())
+            {
+                foreach (var existingTrap in MapTrapsCached.ToArray().Where(trap => trap.X == x && trap.Y == y))
+                {
+                    if (existingTrap.Owner.Id != owner.Id)
+                    {
+                        owner.NotifyExistingTrap();
+                        continue;
+                    }
+                    
+                    existingTrap.Refresh();
+                }
+                
+                return;
+            }
+
+            var newTrap = new MapTrapInstance(owner, parentSpell, mMapController.Id, MapInstanceId, x, y, z);
             foreach(var player in GetPlayers(true))
             {
-                PacketSender.SendMapTrapPacket(player, trap.MapId, trap.Id, trap.ParentSpell.TrapAnimationId, trap.Owner.Id, trap.X, trap.Y);
+                PacketSender.SendMapTrapPacket(player, newTrap.MapId, newTrap.Id, newTrap.ParentSpell.TrapAnimationId, newTrap.Owner.Id, newTrap.X, newTrap.Y);
             }
-            MapTraps.TryAdd(trap.Id, trap);
+            MapTraps.TryAdd(newTrap.Id, newTrap);
             MapTrapsCached = MapTraps.Values.ToArray();
         }
 

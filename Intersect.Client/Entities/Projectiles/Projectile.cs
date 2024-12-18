@@ -7,6 +7,7 @@ using Intersect.GameObjects.Maps;
 using Intersect.Client.Maps;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
+using Pango;
 
 namespace Intersect.Client.Entities.Projectiles
 {
@@ -388,26 +389,140 @@ namespace Intersect.Client.Entities.Projectiles
                 {
                     for (var s = 0; s < mSpawnedAmount; s++)
                     {
-                        if (Spawns[s] != null && MapInstance.Get(Spawns[s].SpawnMapId) != null)
+                        var spawn = Spawns[s];
+                        var spawnMap = MapInstance.Get(spawn?.SpawnMapId ?? Guid.Empty);
+                        if (spawn == null || spawnMap == null)
                         {
-                            Spawns[s].OffsetX = GetRangeX(Spawns[s].Dir, GetDisplacement(Spawns[s].SpawnTime));
-                            Spawns[s].OffsetY = GetRangeY(Spawns[s].Dir, GetDisplacement(Spawns[s].SpawnTime));
-                            Spawns[s]
-                                .Anim.SetPosition(
-                                    MapInstance.Get(Spawns[s].SpawnMapId).GetX() +
-                                    Spawns[s].SpawnX * Options.TileWidth +
-                                    Spawns[s].OffsetX +
-                                    Options.TileWidth / 2,
-                                    MapInstance.Get(Spawns[s].SpawnMapId).GetY() +
-                                    Spawns[s].SpawnY * Options.TileHeight +
-                                    Spawns[s].OffsetY +
-                                    Options.TileHeight / 2, X, Y, CurrentMap, Spawns[s].AutoRotate ? Spawns[s].Dir : 0,
-                                    Spawns[s].Z
-                                );
-
-                            Spawns[s].Anim.Update();
+                            continue;
                         }
+
+                        var animWidth = spawn.Anim?.Width ?? 0;
+                        var animHeight = spawn.Anim?.Height ?? 0;
+
+                        spawn.OffsetX = GetRangeX(spawn.Dir, GetDisplacement(spawn.SpawnTime));
+                        spawn.OffsetY = GetRangeY(spawn.Dir, GetDisplacement(spawn.SpawnTime));
+
+                        var worldTile = GetTileRectangle(spawnMap, (byte)spawn.SpawnX, (byte)spawn.SpawnY);
+
+                        // Base world positions (centered by default)
+                        float worldX = worldTile.X + spawn.OffsetX + Options.TileWidth / 2;
+                        float worldY = worldTile.Y + spawn.OffsetY + Options.TileHeight / 2;
+
+                        // Adjust for direction -- we align projectiles such that in the UP direction, the top of the projectile is aligned CenterH,Top
+                        if (spawn.ProjectileBase.UseNewClientAlignment)
+                        {
+                            var heightShift = (animHeight - Options.TileHeight) / 2;
+                            var widthShift = (animWidth - Options.TileWidth) / 2;
+
+                            var angleRadians = spawn.AutoRotate ? spawn.Anim.GetRotationDegrees() * Math.PI / 180 : 0;
+
+                            var rotatedWidth = MathHelper.CalculateRotatedWidth(animWidth, animHeight, (float)angleRadians);
+                            var rotatedHeight = MathHelper.CalculateRotatedHeight(animWidth, animHeight, (float)angleRadians);
+
+                            var rotatedWidthShift = (float)((rotatedWidth - Options.TileWidth) / 2);
+                            var rotatedHeightShift = (float)((rotatedHeight - Options.TileHeight) / 2);
+
+                            switch ((ProjectileDirections)spawn.Dir)
+                            {
+                                case ProjectileDirections.Up:
+                                    worldY += heightShift;
+                                    break;
+
+                                case ProjectileDirections.Down:
+                                    worldY -= heightShift;
+                                    break;
+
+                                case ProjectileDirections.Left:
+                                    if (spawn.AutoRotate)
+                                    {
+                                        worldX += heightShift;
+                                    }
+                                    else
+                                    {
+                                        worldX += widthShift;
+                                    }
+                                    break;
+
+                                case ProjectileDirections.Right:
+                                    if (spawn.AutoRotate)
+                                    {
+                                        worldX -= heightShift;
+                                    }
+                                    else
+                                    {
+                                        worldX -= widthShift;
+                                    }
+                                    break;
+
+                                case ProjectileDirections.UpLeft:
+                                    if (!spawn.AutoRotate)
+                                    {
+                                        worldX += widthShift / (float)Math.Sqrt(2); // Move horizontally by half diagonal offset
+                                        worldY += heightShift / (float)Math.Sqrt(2); // Move vertically by half diagonal offset
+                                    }
+                                    else
+                                    {
+                                        worldX += rotatedWidthShift;
+                                        worldY += rotatedHeightShift;
+                                    }
+                                    break;
+
+                                case ProjectileDirections.UpRight:
+                                    if (!spawn.AutoRotate)
+                                    {
+                                        worldX -= widthShift / (float)Math.Sqrt(2);
+                                        worldY += heightShift / (float)Math.Sqrt(2);
+                                    }
+                                    else
+                                    {
+                                        worldX -= rotatedWidthShift;
+                                        worldY += rotatedHeightShift;
+                                    }
+
+                                    break;
+
+                                case ProjectileDirections.DownLeft:
+                                    if (!spawn.AutoRotate)
+                                    {
+                                        worldX += widthShift / (float)Math.Sqrt(2);
+                                        worldY -= heightShift / (float)Math.Sqrt(2);
+                                    }
+                                    else
+                                    {
+                                        worldX += rotatedWidthShift;
+                                        worldY -= rotatedHeightShift;
+                                    }
+                                    break;
+
+                                case ProjectileDirections.DownRight:
+                                    if (!spawn.AutoRotate)
+                                    {
+                                        worldX -= widthShift / (float)Math.Sqrt(2);
+                                        worldY -= heightShift / (float)Math.Sqrt(2);
+                                    }
+                                    else
+                                    {
+                                        worldX -= rotatedWidthShift;
+                                        worldY -= rotatedHeightShift;
+                                    }
+                                    break;
+                            }
+                        }
+
+                        // Set position and update animation
+                        spawn.Anim.SetPosition(
+                            worldX,
+                            worldY,
+                            X,
+                            Y,
+                            CurrentMap,
+                            spawn.AutoRotate ? spawn.Dir : 0,
+                            spawn.Z
+                        );
+
+                        spawn.Anim.Update();
                     }
+
                 }
 
                 CheckForCollision();
