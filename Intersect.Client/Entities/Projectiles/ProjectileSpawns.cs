@@ -28,7 +28,7 @@ namespace Intersect.Client.Entities.Projectiles
 
         public Guid SpawnMapId;
 
-        public long SpawnTime = Timing.Global.Milliseconds;
+        public long SpawnTime;
 
         public int SpawnX;
 
@@ -70,6 +70,8 @@ namespace Intersect.Client.Entities.Projectiles
             Parent = parent;
             TransmissionTimer = Timing.Global.Milliseconds +
                                 (long) ((float) parent?.GetSpeedWithModifier() / ProjectileBase.Range);
+            SpawnTime = Timing.Global.Milliseconds +
+                                (long)((float)parent?.GetSpeedWithModifier() / ProjectileBase.Range);
         }
 
         public void Dispose()

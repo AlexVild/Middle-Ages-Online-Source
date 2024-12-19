@@ -1076,6 +1076,11 @@ namespace Intersect.Client.Entities
                 UpdateExhaustionInterpValues();
             }
 
+            if (this is Player debugPlayer && debugPlayer.Id == Globals.Me.Id)
+            {
+                DrawTrueTile();
+            }
+
             string transformedSprite = "";
 
             //If the entity has transformed, apply that sprite instead.
@@ -3859,6 +3864,21 @@ namespace Intersect.Client.Entities
                     new FloatRect(centerX + 24, y + 8, castFillWidth, fgTxt.GetHeight()), color
                 );
             }
+        }
+
+        public void DrawTrueTile()
+        {
+            // If mod with debug open
+            if (!Interface.Interface.GameUi.DebugMenuOpen() || Globals.Me.Type <= 0)
+            {
+                return;
+            }
+
+            var tile = GetTileRectangle(MapInstance, X, Y);
+            Graphics.DrawGameTexture(
+                COMBAT_TILE_NEUTRAL, new FloatRect(0, 0, COMBAT_TILE_NEUTRAL.Width, COMBAT_TILE_NEUTRAL.Height),
+                new FloatRect(tile.X, tile.Y, Options.TileWidth, Options.TileHeight), Color.White
+            );
         }
     }
 }

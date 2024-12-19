@@ -360,8 +360,9 @@ namespace Intersect.Client.Entities.Projectiles
         {
             var elapsedTime = Timing.Global.Milliseconds - spawnTime;
             var displacementPercent = elapsedTime / (float)GetSpeedWithModifier();
+            var clampedDisplacement = (float)MathHelper.Clamp(displacementPercent, 0f, 1f);
 
-            return displacementPercent * Options.TileHeight * mMyBase.Range;
+            return clampedDisplacement * Options.TileHeight * mMyBase.Range;
         }
 
         public int GetSpeedWithModifier()

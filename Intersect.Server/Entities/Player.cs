@@ -7986,6 +7986,15 @@ namespace Intersect.Server.Entities
                 CombatMode = FaceDirection != -1;
                 base.Move(moveDir, forPlayer, dontUpdate, correction, faceDirection);
 
+                // Allows a player-based projectile safety net to cover up the client/server tile movement disconnect
+                // (i.e, a player arrives at a tile long before the client shows this fact)
+                // t / 2 here represents "allow the player to get half way to the next tile before we allow projectile
+                // collisions", latency willing
+                if (prevX != X || prevY != Y)
+                {
+                    TileMovementTime = Timing.Global.Milliseconds + (long)(GetMovementTime() / 2);
+                }
+
                 // Check for a warp, if so warp the player.
                 var attribute = MapController.Get(MapId).Attributes[X, Y];
                 if (attribute != null && attribute.Type == MapAttributes.Warp)
@@ -8048,13 +8057,6 @@ namespace Intersect.Server.Entities
                 if (oldMap != MapId)
                 {
                     AddDeferredEvent(CommonEventTrigger.MapChanged);
-                }
-
-                // Allows a player-based projectile safety net to cover up the client/server tile movement disconnect
-                // (i.e, a player arrives at a tile long before the client shows this fact)
-                if (prevX != X || prevY != Y) 
-                {
-                    TileMovementTime = Timing.Global.Milliseconds + (long)(GetMovementTime() / 1.35);
                 }
             }
         }
