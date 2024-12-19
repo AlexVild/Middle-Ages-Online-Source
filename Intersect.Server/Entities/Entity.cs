@@ -2441,5 +2441,6 @@ namespace Intersect.Server.Entities
                 Z == trap.Z;
         }
 
+        public virtual bool ProjectileSafetyTime => false;
     }
 }

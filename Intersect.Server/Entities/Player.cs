@@ -7977,6 +7977,8 @@ namespace Intersect.Server.Entities
         {
             lock (EntityLock)
             {
+                var prevX = X;
+                var prevY = Y;
                 SetResourceLock(false);
 
                 var oldMap = MapId;
@@ -8046,6 +8048,13 @@ namespace Intersect.Server.Entities
                 if (oldMap != MapId)
                 {
                     AddDeferredEvent(CommonEventTrigger.MapChanged);
+                }
+
+                // Allows a player-based projectile safety net to cover up the client/server tile movement disconnect
+                // (i.e, a player arrives at a tile long before the client shows this fact)
+                if (prevX != X || prevY != Y) 
+                {
+                    TileMovementTime = Timing.Global.Milliseconds + (long)(GetMovementTime() / 1.35);
                 }
             }
         }
@@ -10104,5 +10113,10 @@ namespace Intersect.Server.Entities
             PacketSender.SendChatMsg(this, "Someone else has laid a trap here!", ChatMessageType.Combat, CustomColors.General.GeneralDisabled);
             base.NotifyExistingTrap();
         }
+
+        [NotMapped, JsonIgnore]
+        public long TileMovementTime { get; set; }
+
+        public override bool ProjectileSafetyTime => Timing.Global.Milliseconds < TileMovementTime;
     }
 }

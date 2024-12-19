@@ -142,6 +142,12 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            // Is the entity safe from projectiles (mid-move on their client)?
+            if (en.ProjectileSafetyTime)
+            {
+                return false;
+            }
+
             // Have we collided with this entity before? If so, cancel out.
             if (mEntitiesCollided.Contains(targetEntity.Id) || Parent.ProjectileCollidedOnQuantity(SpawnNumber, targetEntity.Id))
             {
