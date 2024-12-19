@@ -77,7 +77,7 @@ namespace Intersect.Server.Entities
             return isCrit;
         }
 
-        public override bool TryDealDamageTo(Entity enemy,
+        public override bool TryDealDamageTo(Entity target,
             List<AttackTypes> attackTypes,
             int dmgScaling,
             double critMultiplier,
@@ -131,39 +131,42 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            var targetHealthBefore = enemy.GetVital(Vitals.Health);
-            var targetMaxHealth = enemy.GetMaxVital(Vitals.Health);
+            var targetHealthBefore = target.GetVital(Vitals.Health);
+            var targetMaxHealth = target.GetMaxVital(Vitals.Health);
 
             bool damageWasDealt;
             if (spell != default)
             {
-                damageWasDealt = base.TryDealDamageTo(enemy, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
+                damageWasDealt = base.TryDealDamageTo(target, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
             }
             else
             {
-                damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
+                damageWasDealt = base.TryDealDamageTo(target, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
             }
 
             // Update challenges
-            if (damageWasDealt && damage > 0)
+            if (target.ValidForChallenges)
             {
-                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), enemy.TierLevel);
-                ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), enemy.TierLevel);
-                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageDealtUpdate(this, damage));
-
-                // For challenges where we don't want DoT values fudging the challenge - cheap fix
-                if (LastWeaponSwitch <= Timing.Global.Milliseconds)
+                if (damageWasDealt && damage > 0 && target.ValidForChallenges)
                 {
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, range), enemy.TierLevel);
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this), enemy.TierLevel);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), target.TierLevel);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), target.TierLevel);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new DamageDealtUpdate(this, damage));
+
+                    // For challenges where we don't want DoT values fudging the challenge - cheap fix
+                    if (LastWeaponSwitch <= Timing.Global.Milliseconds)
+                    {
+                        ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
+                        ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
+                        ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, range), target.TierLevel);
+                        ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this), target.TierLevel);
+                    }
                 }
-            }
-            if (damage < 0)
-            {
-                var healingRatio = (int)Math.Floor(((float)targetHealthBefore / targetMaxHealth) * 100);
-                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageHealedAtHealthUpdate(this, damage, healingRatio));
+                if (damage < 0 && target.ValidForChallenges)
+                {
+                    var healingRatio = (int)Math.Floor(((float)targetHealthBefore / targetMaxHealth) * 100);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new DamageHealedAtHealthUpdate(this, damage, healingRatio));
+                }
             }
 
             return damageWasDealt;
@@ -819,6 +822,11 @@ namespace Intersect.Server.Entities
 
         protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)
         {
+            if (!aggressor.ValidForChallenges)
+            {
+                return;
+            }
+
             if (damage > 0)
             {
                 HitFreeStreakEnd();

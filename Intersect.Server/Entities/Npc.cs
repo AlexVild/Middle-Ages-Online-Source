@@ -2410,5 +2410,7 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public long MeleeExhaustionTime => Math.Min(CalculateAttackTime(), Options.Instance.CombatOpts.NpcMeleeExhaustionTime);
+
+        public override bool ValidForChallenges => Base != null && !Base.InvalidForChallenges;
     }
 }

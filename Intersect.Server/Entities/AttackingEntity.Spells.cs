@@ -755,6 +755,7 @@ namespace Intersect.Server.Entities
         private void ProcessAoeTargets(SpellBase spellBase, Entity spellTarget, TileHelper castingTile, int tool, bool isProjectileTool, bool ignoreMissMessage, bool ignoreEvasion)
         {
             int entitiesHit = 0;
+            bool validForChallenges = false;
             foreach (var instance in MapController.GetSurroundingMapInstances(castingTile.MapId, MapInstanceId, true))
             {
                 foreach (var entity in instance.GetCachedEntities())
@@ -826,6 +827,10 @@ namespace Intersect.Server.Entities
                     SpellAttack(entity, spellBase, (sbyte)Directions.Up, null, ignoreEvasion); //Handle damage
                     SendSpellHitAnimation(spellBase, entity, entity.Id);
                     entitiesHit++;
+                    if (entity.ValidForChallenges)
+                    {
+                        validForChallenges = true;
+                    }
                 }
             }
 
@@ -839,7 +844,7 @@ namespace Intersect.Server.Entities
                 AttackMissed.Invoke(null);
             }
 
-            if (this is Player && entitiesHit > 1 && !spellBase.Combat.Friendly)
+            if (this is Player && entitiesHit > 1 && !spellBase.Combat.Friendly && validForChallenges)
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new AoEHitsUpdate((Player)this, entitiesHit));
             }

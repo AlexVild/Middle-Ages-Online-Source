@@ -176,7 +176,7 @@ namespace Intersect.Server.Entities
             }
             
             mEntitiesCollided.Add(targetEntity.Id);
-            if (Parent.Owner is Player playerOwner)
+            if (Parent.Owner is Player playerOwner && targetEntity.ValidForChallenges)
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new PierceManyUpdate(playerOwner, mEntitiesCollided.Count));
             }

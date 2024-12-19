@@ -182,7 +182,7 @@ namespace Intersect.Server.Entities
             if (!spell.Combat.Friendly)
             {
                 ReactToCombat(caster);
-                if (caster is Player player)
+                if (caster is Player player && ValidForChallenges)
                 {
                     ChallengeUpdateProcesser.UpdateChallengesOf(new StatusApplyUpdate(player, spell.Combat.Effect));
                 }

@@ -116,7 +116,7 @@ namespace Intersect.Server.Entities.Combat
                 playerAttacker.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
                 Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, weapon?.Descriptor, SpellBase, true, 1, out damageDealt);
 
-                if (!SpellBase.Combat.Friendly && SpellBase.Combat.VitalDiff[(int)Vitals.Mana] == 0)
+                if (!SpellBase.Combat.Friendly && SpellBase.Combat.VitalDiff[(int)Vitals.Mana] == 0 && Target.ValidForChallenges)
                 {
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DoTUpdate(playerAttacker, damageDealt));
                 }

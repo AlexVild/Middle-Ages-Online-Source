@@ -2442,5 +2442,7 @@ namespace Intersect.Server.Entities
         }
 
         public virtual bool ProjectileSafetyTime => false;
+
+        public virtual bool ValidForChallenges => true;
     }
 }

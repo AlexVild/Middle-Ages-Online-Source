@@ -1520,6 +1520,10 @@
     <Compile Include="Migrations\Game\20241218195717_ProjectileRenderMigration.designer.cs">
       <DependentUpon>20241218195717_ProjectileRenderMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.cs" />
+    <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.designer.cs">
+      <DependentUpon>20241219190955_NpcChallengeInvalidMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

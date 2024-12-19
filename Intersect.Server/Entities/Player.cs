@@ -10062,7 +10062,7 @@ namespace Intersect.Server.Entities
         {
             var damageDealt = base.TryDealManaDamageTo(enemy, dmg, dmgScaling, critMultiplier, vampire, out damage);
 
-            if (damageDealt)
+            if (damageDealt && enemy.ValidForChallenges)
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new ManaDamageDealtUpdate(this, damage));
             }

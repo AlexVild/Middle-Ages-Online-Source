@@ -473,7 +473,7 @@ namespace Intersect.Server.Entities
                 
                 if (!spell?.Combat?.Friendly ?? true && critMultiplier >= 1.0f)
                 {
-                    if (this is Player ply)
+                    if (this is Player ply && enemy.ValidForChallenges)
                     {
                         ChallengeUpdateProcesser.UpdateChallengesOf(new CriticalHitsUpdate(ply, 1));
                     }

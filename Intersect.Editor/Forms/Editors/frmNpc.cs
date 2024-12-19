@@ -334,6 +334,8 @@ namespace Intersect.Editor.Forms.Editors
                 PopulateDamageTypes();
                 chkSpellCast.Checked = mEditorItem.IsSpellcaster;
 
+                chkInvalidChallenges.Checked = mEditorItem.InvalidForChallenges;
+
                 //Combat
                 nudCritChance.Value = mEditorItem.CritChance;
                 nudCritMultiplier.Value = (decimal) mEditorItem.CritMultiplier;
@@ -1912,6 +1914,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkVulnWhenExhausted_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.VulnerableOnlyWhenExhausted = chkVulnWhenExhausted.Checked;
+        }
+
+        private void chkInvalidChallenges_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.InvalidForChallenges = chkInvalidChallenges.Checked;
         }
     }
 

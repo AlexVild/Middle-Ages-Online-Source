@@ -512,6 +512,8 @@ namespace Intersect.GameObjects
         public bool DisableAutoExhaustion { get; set; }
 
         public bool VulnerableOnlyWhenExhausted { get; set; }
+
+        public bool InvalidForChallenges { get; set; }
     }
 
 }

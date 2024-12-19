@@ -147,6 +147,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblFlee = new System.Windows.Forms.Label();
             this.chkSwarm = new DarkUI.Controls.DarkCheckBox();
             this.grpConditions = new DarkUI.Controls.DarkGroupBox();
+            this.chkVulnWhenExhausted = new DarkUI.Controls.DarkCheckBox();
             this.btnAttackOnSightCond = new DarkUI.Controls.DarkButton();
             this.btnPlayerCanAttackCond = new DarkUI.Controls.DarkButton();
             this.btnPlayerFriendProtectorCond = new DarkUI.Controls.DarkButton();
@@ -285,7 +286,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkVulnWhenExhausted = new DarkUI.Controls.DarkCheckBox();
+            this.chkInvalidChallenges = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -849,6 +850,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBestiary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBestiary.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBestiary.Controls.Add(this.chkInvalidChallenges);
             this.grpBestiary.Controls.Add(this.chkBestiary);
             this.grpBestiary.Controls.Add(this.btnBestiaryDefaults);
             this.grpBestiary.Controls.Add(this.nudKillCount);
@@ -862,7 +864,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBestiary.Margin = new System.Windows.Forms.Padding(2);
             this.grpBestiary.Name = "grpBestiary";
             this.grpBestiary.Padding = new System.Windows.Forms.Padding(2);
-            this.grpBestiary.Size = new System.Drawing.Size(226, 355);
+            this.grpBestiary.Size = new System.Drawing.Size(226, 374);
             this.grpBestiary.TabIndex = 89;
             this.grpBestiary.TabStop = false;
             this.grpBestiary.Text = "Bestiary";
@@ -1912,6 +1914,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConditions.TabIndex = 66;
             this.grpConditions.TabStop = false;
             this.grpConditions.Text = "Conditions:";
+            // 
+            // chkVulnWhenExhausted
+            // 
+            this.chkVulnWhenExhausted.AutoSize = true;
+            this.chkVulnWhenExhausted.Location = new System.Drawing.Point(6, 104);
+            this.chkVulnWhenExhausted.Name = "chkVulnWhenExhausted";
+            this.chkVulnWhenExhausted.Size = new System.Drawing.Size(159, 17);
+            this.chkVulnWhenExhausted.TabIndex = 80;
+            this.chkVulnWhenExhausted.Text = "Vuln. only when exhausted?";
+            this.chkVulnWhenExhausted.CheckedChanged += new System.EventHandler(this.chkVulnWhenExhausted_CheckedChanged);
             // 
             // btnAttackOnSightCond
             // 
@@ -3766,15 +3778,15 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkVulnWhenExhausted
+            // chkInvalidChallenges
             // 
-            this.chkVulnWhenExhausted.AutoSize = true;
-            this.chkVulnWhenExhausted.Location = new System.Drawing.Point(6, 104);
-            this.chkVulnWhenExhausted.Name = "chkVulnWhenExhausted";
-            this.chkVulnWhenExhausted.Size = new System.Drawing.Size(159, 17);
-            this.chkVulnWhenExhausted.TabIndex = 80;
-            this.chkVulnWhenExhausted.Text = "Vuln. only when exhausted?";
-            this.chkVulnWhenExhausted.CheckedChanged += new System.EventHandler(this.chkVulnWhenExhausted_CheckedChanged);
+            this.chkInvalidChallenges.AutoSize = true;
+            this.chkInvalidChallenges.Location = new System.Drawing.Point(10, 340);
+            this.chkInvalidChallenges.Name = "chkInvalidChallenges";
+            this.chkInvalidChallenges.Size = new System.Drawing.Size(172, 17);
+            this.chkInvalidChallenges.TabIndex = 96;
+            this.chkInvalidChallenges.Text = "Does not progress challenges?";
+            this.chkInvalidChallenges.CheckedChanged += new System.EventHandler(this.chkInvalidChallenges_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -4148,5 +4160,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkDisableAutoAttack;
         private DarkCheckBox chkDisableExhaustion;
         private DarkCheckBox chkVulnWhenExhausted;
+        private DarkCheckBox chkInvalidChallenges;
     }
 }
