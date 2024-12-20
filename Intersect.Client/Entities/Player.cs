@@ -139,6 +139,7 @@ namespace Intersect.Client.Entities
 
         private Dictionary<int, long> mLastHotbarUseTime = new Dictionary<int, long>();
         private int mHotbarUseDelay = 150;
+        public long HotbarCooldown { get; set; }
 
         /// <summary>
         /// Name of our guild if we are in one.
@@ -1399,6 +1400,16 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            HandleHotbarInput();
+        }
+
+        public void HandleHotbarInput()
+        {
+            if (Timing.Global.MillisecondsUtcUnsynced < HotbarCooldown) 
+            { 
+                return; 
+            }
+
             var castInput = -1;
             for (var barSlot = 0; barSlot < Options.MaxHotbar; barSlot++)
             {
@@ -1420,7 +1431,7 @@ namespace Intersect.Client.Entities
                     Interface.Interface.GameUi?.Hotbar?.Items?[castInput]?.Activate();
                     mLastHotbarUseTime[castInput] = Timing.Global.Milliseconds + mHotbarUseDelay;
                 }
-            }  
+            }
         }
 
         protected int GetDistanceTo(Entity target)

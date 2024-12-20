@@ -417,6 +417,7 @@ namespace Intersect.Client.Core
                     return false;
                 }
 
+                Globals.Me.HotbarCooldown = Timing.Global.MillisecondsUtcUnsynced + 1000;
                 switch (response)
                 {
                     case 0:
