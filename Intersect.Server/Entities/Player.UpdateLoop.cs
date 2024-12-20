@@ -53,6 +53,9 @@ namespace Intersect.Server.Entities
 
     public partial class Player : AttackingEntity
     {
+        [NotMapped, JsonIgnore]
+        public bool HasLoadedEvents { get; set; } = false;
+
         //Update
         public override void Update(long timeMs)
         {
@@ -351,6 +354,7 @@ namespace Intersect.Server.Entities
             }
 
             MapAutorunEvents = autorunEvents;
+            HasLoadedEvents = true;
         }
 
         private void UpdateEvents(MapController map, long timeMs)

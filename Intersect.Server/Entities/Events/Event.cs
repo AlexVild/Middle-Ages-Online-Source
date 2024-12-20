@@ -58,6 +58,8 @@ namespace Intersect.Server.Entities.Events
 
         public int Y;
 
+        public bool HasLoadedOnce { get; set; } = false;
+
         public Event(Guid instanceId, MapController map, Player player, EventBase baseEvent)
         {
             Id = instanceId;
@@ -388,6 +390,8 @@ namespace Intersect.Server.Entities.Events
                     PacketSender.SendEntityLeaveTo(Player, originalPageInstance);
                 }
             }
+
+            HasLoadedOnce = true;
         }
 
         public Dictionary<string, string> GetParams(Player player)

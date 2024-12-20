@@ -7946,27 +7946,50 @@ namespace Intersect.Server.Entities
 
         protected override int IsTileWalkable(MapController map, int x, int y, int z)
         {
-            if (base.IsTileWalkable(map, x, y, z) == -1)
+            if (map == null)
             {
-                foreach (var evt in EventLookup.ToArray())
-                {
-                    if (evt.Value.PageInstance != null)
-                    {
-                        var instance = evt.Value.PageInstance;
-                        if (instance.GlobalClone != null)
-                        {
-                            instance = instance.GlobalClone;
-                        }
+                return -5;
+            }
+            
+            if (base.IsTileWalkable(map, x, y, z) != -1)
+            {
+                return -1;
+            }
 
-                        if (instance.Map == map &&
-                            instance.X == x &&
-                            instance.Y == y &&
-                            instance.Z == z &&
-                            !instance.Passable)
-                        {
-                            return (int) EntityTypes.Event;
-                        }
-                    }
+            // Check if our event cache has loaded in yet (we should have as many events as the
+            // MapController defines)
+            var loadedEventsOnMap = EventLookup.Where((ev) => ev.Value.MapId == map.Id).ToArray();
+            if (map.EventIds.Count != loadedEventsOnMap.Length) 
+            {
+                return -5;
+            }
+
+            foreach (var evt in EventLookup.ToArray())
+            {
+                // If we have events that haven't yet completed their update loop, don't allow movement.
+                if (!evt.Value.HasLoadedOnce && evt.Value.MapId == map.Id) 
+                {
+                    return -5;
+                }
+
+                if (evt.Value.PageInstance == null)
+                {
+                    continue;
+                }
+                
+                var instance = evt.Value.PageInstance;
+                if (instance.GlobalClone != null)
+                {
+                    instance = instance.GlobalClone;
+                }
+
+                if (instance.Map == map &&
+                    instance.X == x &&
+                    instance.Y == y &&
+                    instance.Z == z &&
+                    !instance.Passable)
+                {
+                    return (int)EntityTypes.Event;
                 }
             }
 

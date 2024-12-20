@@ -6,6 +6,7 @@ using System.Linq;
 using Intersect.Compression;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Server.Database;
