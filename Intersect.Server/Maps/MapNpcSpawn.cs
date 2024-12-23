@@ -11,6 +11,8 @@ namespace Intersect.Server.Maps
         public long RespawnTime = -1;
 
         public int deaths = 0;
+
+        public int MapSpawnIndex;
     }
 
 }

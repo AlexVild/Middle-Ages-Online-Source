@@ -32,6 +32,12 @@ namespace Intersect.GameObjects.Maps
 
         public int OverriddenRange;
 
+        public bool WatchSpawn { get; set; }
+
+        public int SpawnHealthWatchId { get; set; }
+
+        public int SpawnHealthWatchThreshold { get; set; }
+
         public NpcSpawn()
         {
         }
@@ -50,6 +56,9 @@ namespace Intersect.GameObjects.Maps
             OverriddenMovement = copy.OverriddenMovement;
             OverrideRange = copy.OverrideRange;
             OverriddenRange = copy.OverriddenRange;
+            WatchSpawn = copy.WatchSpawn;
+            SpawnHealthWatchId = copy.SpawnHealthWatchId;
+            SpawnHealthWatchThreshold = copy.SpawnHealthWatchThreshold;
         }
 
     }

@@ -1305,6 +1305,14 @@ namespace Intersect.Server.Entities
             return mVitals[vital];
         }
 
+        public float GetVitalPercent(int vital)
+        {
+            var current = mVitals[vital];
+            var max = GetMaxVital(vital);
+
+            return (current / (float)max) * 100;
+        }
+
         public int[] GetVitals()
         {
             var vitals = new int[(int) Vitals.VitalCount];

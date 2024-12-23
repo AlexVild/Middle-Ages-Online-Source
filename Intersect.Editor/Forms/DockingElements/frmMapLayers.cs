@@ -969,12 +969,27 @@ namespace Intersect.Editor.Forms.DockingElements
         private void ClearAndAddNpcs()
         {
             lstMapNpcs.Items.Clear();
+            cmbHpWatch.Items.Clear();
             for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
             {
                 var spawn = Globals.CurrentMap.Spawns[i];
                 lstMapNpcs.Items.Add(GenerateNpcSpawnString(spawn));
+                cmbHpWatch.Items.Add(GenerateNpcWatchString(spawn, i + 1));
             }
             Globals.SelectedMapNpc = 0;
+            var currentSpawn = Globals.CurrentMap.Spawns.ElementAtOrDefault(lstMapNpcs.SelectedIndex);
+            if (currentSpawn != default && currentSpawn.WatchSpawn)
+            {
+                cmbHpWatch.Enabled = true;
+                cmbHpWatch.ForeColor = System.Drawing.Color.Gainsboro;
+                cmbHpWatch.SelectedIndex = currentSpawn.SpawnHealthWatchId;
+                nudHpWatch.Value = currentSpawn.SpawnHealthWatchThreshold;
+            }
+            else
+            {
+                cmbHpWatch.Enabled = false;
+                cmbHpWatch.ForeColor = System.Drawing.Color.Gray;
+            }
         }
 
         private void lstMapNpcs_Click(object sender, EventArgs e)
@@ -994,6 +1009,24 @@ namespace Intersect.Editor.Forms.DockingElements
                 cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
                 chkOverrideRange.Checked = spawn.OverrideRange;
                 nudOverriddenRange.Value = spawn.OverriddenRange;
+
+                chkSpawnWhen.Checked = spawn.WatchSpawn;
+                if (spawn.WatchSpawn)
+                {
+                    cmbHpWatch.Enabled = true;
+                    cmbHpWatch.ForeColor = System.Drawing.Color.Gainsboro;
+                    if (spawn.SpawnHealthWatchId < cmbHpWatch.Items.Count)
+                    {
+                        cmbHpWatch.SelectedIndex = spawn.SpawnHealthWatchId;
+                    }
+                    nudHpWatch.Value = spawn.SpawnHealthWatchThreshold;
+                }
+                else
+                {
+                    cmbHpWatch.Enabled = false;
+                    cmbHpWatch.ForeColor = System.Drawing.Color.Gray;
+                    nudHpWatch.Value = 0;
+                }
 
                 if (spawn.X >= 0)
                 {
@@ -1577,6 +1610,11 @@ namespace Intersect.Editor.Forms.DockingElements
             return Strings.MapLayers.NpcSpawn.ToString(NpcBase.GetName(spawn.NpcId), spawn.SpawnGroup);
         }
 
+        private string GenerateNpcWatchString(NpcSpawn spawn, int i)
+        {
+            return $"{i}. {NpcBase.GetName(spawn.NpcId)}";
+        }
+
         private void chkSpawnGroupGreater_CheckedChanged(object sender, EventArgs e)
         {
             if (mChanging)
@@ -1698,6 +1736,62 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 cmbTerritory.SelectedIndex = 0;
             }
+        }
+
+        private void chkSpawnWhen_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mChanging)
+            {
+                return;
+            }
+            if (lstMapNpcs.SelectedIndex < 0)
+            {
+                return;
+            }
+            
+            var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+            spawn.WatchSpawn = chkSpawnWhen.Checked;
+            cmbHpWatch.Enabled = chkSpawnWhen.Checked;
+            if (spawn.WatchSpawn)
+            {
+                spawn.SpawnHealthWatchId = cmbHpWatch.SelectedIndex;
+                spawn.SpawnHealthWatchThreshold = (int)nudHpWatch.Value;
+            }
+        }
+
+        private void cmbHpWatch_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mChanging)
+            {
+                return;
+            }
+            if (lstMapNpcs.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+            spawn.SpawnHealthWatchId = cmbHpWatch.SelectedIndex;
+        }
+
+        private void nudHpWatch_ValueChanged(object sender, EventArgs e)
+        {
+            if (mChanging)
+            {
+                return;
+            }
+            if (lstMapNpcs.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+            if (!spawn.WatchSpawn)
+            {
+                return;
+            }
+            
+            spawn.SpawnHealthWatchThreshold = (int)nudHpWatch.Value;
         }
     }
 

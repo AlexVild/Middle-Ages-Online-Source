@@ -521,7 +521,7 @@ namespace Intersect.Server.Maps
             for (var i = 0; i < spawns.Count; i++)
             {
                 NpcSpawn spawn = spawns[i];
-                if (NpcHasEnoughPlayersToSpawn(i) && CanSpawnInGroup(spawn) && !NpcSpawnInstances.TryGetValue(spawn, out _))
+                if (NpcHasEnoughPlayersToSpawn(i) && SpawnMeetsHpThreshold(spawn) && CanSpawnInGroup(spawn) && !NpcSpawnInstances.TryGetValue(spawn, out _))
                 {
                     SpawnMapNpc(i);
                 }
@@ -531,6 +531,7 @@ namespace Intersect.Server.Maps
         private bool CanSpawnInGroup(NpcSpawn spawn)
         {
             var spawns = mMapController.SpawnsInGroup(NpcSpawnGroup);
+
             return spawns.Count > 0 && spawns.Contains(spawn);
         }
 
@@ -564,16 +565,13 @@ namespace Intersect.Server.Maps
                 }
             }
 
-            MapNpcSpawn npcSpawnInstance;
-            if (NpcSpawnInstances.ContainsKey(spawn))
-            {
-                npcSpawnInstance = NpcSpawnInstances[spawn];
-            }
-            else
+            if (!NpcSpawnInstances.TryGetValue(spawn, out var npcSpawnInstance))
             {
                 npcSpawnInstance = new MapNpcSpawn();
                 NpcSpawnInstances.TryAdd(spawn, npcSpawnInstance);
             }
+            // The index in the MapController that this spawn appears (the index the spawn appears in the NPC list in-editor)
+            npcSpawnInstance.MapSpawnIndex = i;
 
             // Check to see if this NPC is on the permadeath list for this instance and, if so, do not spawn it
             // Unique identifier tying the spawning NPC to its map spawner
@@ -711,25 +709,27 @@ namespace Intersect.Server.Maps
                 {
                     lock (npcSpawn.Value.Entity.EntityLock)
                     {
-                        var npc = npcSpawn.Value.Entity as Npc;
-                        if (!npc.Dead)
+                        var npc = npcSpawn.Value.Entity;
+                        if (npc.Dead)
                         {
-                            // If we keep track of reset radiuses, just reset it to that value.
-                            if (Options.Npc.AllowResetRadius)
+                            continue;
+                        }
+                        
+                        // If we keep track of reset radiuses, just reset it to that value.
+                        if (Options.Npc.AllowResetRadius)
+                        {
+                            npc.Reset();
+                        }
+                        // If we don't.. Kill and respawn the Npc assuming it's in combat.
+                        else
+                        {
+                            if (npc.Target != null || npc.CombatTimer > Timing.Global.Milliseconds)
                             {
-                                npc.Reset();
-                            }
-                            // If we don't.. Kill and respawn the Npc assuming it's in combat.
-                            else
-                            {
-                                if (npc.Target != null || npc.CombatTimer > Timing.Global.Milliseconds)
+                                npc.Die(false);
+                                FindNpcSpawnLocation(npcSpawn.Key, out var x, out var y, out var dir);
+                                if (TrySpawnNpc((byte)x, (byte)y, dir, npcSpawn.Key.NpcId, out var newNpc))
                                 {
-                                    npc.Die(false);
-                                    FindNpcSpawnLocation(npcSpawn.Key, out var x, out var y, out var dir);
-                                    if (TrySpawnNpc((byte)x, (byte)y, dir, npcSpawn.Key.NpcId, out var newNpc))
-                                    {
-                                        npcSpawn.Value.Entity = newNpc;
-                                    }
+                                    npcSpawn.Value.Entity = newNpc;
                                 }
                             }
                         }
@@ -788,6 +788,32 @@ namespace Intersect.Server.Maps
                 }
             }
         }
+
+        public bool SpawnMeetsHpThreshold(NpcSpawn spawn)
+        {
+            if (spawn == null)
+            {
+                return false;
+            }
+            
+            if (!spawn.WatchSpawn)
+            {
+                return true;
+            }
+
+            var watchingSpawn = NpcSpawnInstances.Values.Where(spn => spn.MapSpawnIndex == spawn.SpawnHealthWatchId).FirstOrDefault();
+            if (watchingSpawn != default)
+            {
+                var hpPercent = watchingSpawn.Entity.GetVitalPercent((int)Vitals.Health);
+                if (hpPercent > spawn.SpawnHealthWatchThreshold)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Resources
@@ -1636,20 +1662,26 @@ namespace Intersect.Server.Maps
                         if (spawns[i].PreventRespawn && MapInstanceId != OverworldInstanceId) continue;
 
                         // If the entity is dead, but needs respawning, set its respawn time (or, wait for more players to show up before starting the timer)
-                        if (npcSpawnInstance.RespawnTime == -1 || !NpcHasEnoughPlayersToSpawn(i))
+                        if (npcSpawnInstance.RespawnTime == -1 || 
+                            !NpcHasEnoughPlayersToSpawn(i) || 
+                            !SpawnMeetsHpThreshold(spawns[i])
+                        )
                         {
                             npcSpawnInstance.RespawnTime = Timing.Global.Milliseconds +
                                                            ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
                                                            (Timing.Global.Milliseconds - mLastUpdateTime);
                         }
                         // If we're passed the respawn time, and there's enough players on the instance to warrant a spawn
-                        else if (npcSpawnInstance.RespawnTime < Timing.Global.Milliseconds && NpcHasEnoughPlayersToSpawn(i))
+                        else if (npcSpawnInstance.RespawnTime < Timing.Global.Milliseconds && 
+                            NpcHasEnoughPlayersToSpawn(i) &&
+                            SpawnMeetsHpThreshold(spawns[i])
+                        )
                         {
                             SpawnMapNpc(i);
                             npcSpawnInstance.RespawnTime = -1;
                         }
                     }
-                } else if (NpcHasEnoughPlayersToSpawn(i) && CanSpawnInGroup(spawns[i]))
+                } else if (NpcHasEnoughPlayersToSpawn(i) && SpawnMeetsHpThreshold(spawns[i]) && CanSpawnInGroup(spawns[i]))
                 {
                     SpawnMapNpc(i);
                 }
