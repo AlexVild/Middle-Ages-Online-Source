@@ -639,223 +639,223 @@
       <DependentUpon>20210510223205_TrackPlaytimeAsULongsInSeconds.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20210830010743_ComboFieldMigration.cs" />
-    <Compile Include="Migrations\20210830010743_ComboFieldMigration.designer.cs">
+    <Compile Include="Migrations\20210830010743_ComboFieldMigration.Designer.cs">
       <DependentUpon>20210830010743_ComboFieldMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20210903131751_AddDecorToPlayerMigration.cs" />
-    <Compile Include="Migrations\20210903131751_AddDecorToPlayerMigration.designer.cs">
+    <Compile Include="Migrations\20210903131751_AddDecorToPlayerMigration.Designer.cs">
       <DependentUpon>20210903131751_AddDecorToPlayerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20211108145352_AddVehicleColumn.cs" />
-    <Compile Include="Migrations\20211108145352_AddVehicleColumn.designer.cs">
+    <Compile Include="Migrations\20211108145352_AddVehicleColumn.Designer.cs">
       <DependentUpon>20211108145352_AddVehicleColumn.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220123173906_AddPersonalInstanceFields.cs" />
-    <Compile Include="Migrations\20220123173906_AddPersonalInstanceFields.designer.cs">
+    <Compile Include="Migrations\20220123173906_AddPersonalInstanceFields.Designer.cs">
       <DependentUpon>20220123173906_AddPersonalInstanceFields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220124143627_GuildInstanceIdMigration.cs" />
-    <Compile Include="Migrations\20220124143627_GuildInstanceIdMigration.designer.cs">
+    <Compile Include="Migrations\20220124143627_GuildInstanceIdMigration.Designer.cs">
       <DependentUpon>20220124143627_GuildInstanceIdMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220124175811_AddSharedInstanceIdToPlayerMigration.cs" />
-    <Compile Include="Migrations\20220124175811_AddSharedInstanceIdToPlayerMigration.designer.cs">
+    <Compile Include="Migrations\20220124175811_AddSharedInstanceIdToPlayerMigration.Designer.cs">
       <DependentUpon>20220124175811_AddSharedInstanceIdToPlayerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.cs" />
-    <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.designer.cs">
+    <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.Designer.cs">
       <DependentUpon>20220124215539_AddSharedInstanceRespawnPointMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220205181832_ClassRankMigration.cs" />
-    <Compile Include="Migrations\20220205181832_ClassRankMigration.designer.cs">
+    <Compile Include="Migrations\20220205181832_ClassRankMigration.Designer.cs">
       <DependentUpon>20220205181832_ClassRankMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.cs" />
-    <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.designer.cs">
+    <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.Designer.cs">
       <DependentUpon>20220207213352_PlayerRecordsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220210173234_InspirationMigration.cs" />
-    <Compile Include="Migrations\20220210173234_InspirationMigration.designer.cs">
+    <Compile Include="Migrations\20220210173234_InspirationMigration.Designer.cs">
       <DependentUpon>20220210173234_InspirationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220503205129_TimerMigration.cs" />
-    <Compile Include="Migrations\20220503205129_TimerMigration.designer.cs">
+    <Compile Include="Migrations\20220503205129_TimerMigration.Designer.cs">
       <DependentUpon>20220503205129_TimerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220331140427_GuildBankMaxSlotsMigration.cs" />
-    <Compile Include="Migrations\20220331140427_GuildBankMaxSlotsMigration.designer.cs">
+    <Compile Include="Migrations\20220331140427_GuildBankMaxSlotsMigration.Designer.cs">
       <DependentUpon>20220331140427_GuildBankMaxSlotsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220716235951_MapsExploredMigration.cs" />
-    <Compile Include="Migrations\20220716235951_MapsExploredMigration.designer.cs">
+    <Compile Include="Migrations\20220716235951_MapsExploredMigration.Designer.cs">
       <DependentUpon>20220716235951_MapsExploredMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.cs" />
-    <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.designer.cs">
+    <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.Designer.cs">
       <DependentUpon>20220725150345_RecorPlayerVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220725163234_RecordTeammateMigration.cs" />
-    <Compile Include="Migrations\20220725163234_RecordTeammateMigration.designer.cs">
+    <Compile Include="Migrations\20220725163234_RecordTeammateMigration.Designer.cs">
       <DependentUpon>20220725163234_RecordTeammateMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20220926191034_LootRollDbMigration.cs" />
-    <Compile Include="Migrations\20220926191034_LootRollDbMigration.designer.cs">
+    <Compile Include="Migrations\20220926191034_LootRollDbMigration.Designer.cs">
       <DependentUpon>20220926191034_LootRollDbMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20221005022511_AddLabelMigration.cs" />
-    <Compile Include="Migrations\20221005022511_AddLabelMigration.designer.cs">
+    <Compile Include="Migrations\20221005022511_AddLabelMigration.Designer.cs">
       <DependentUpon>20221005022511_AddLabelMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20221010003432_SpawnPointChangeMigration.cs" />
-    <Compile Include="Migrations\20221010003432_SpawnPointChangeMigration.designer.cs">
+    <Compile Include="Migrations\20221010003432_SpawnPointChangeMigration.Designer.cs">
       <DependentUpon>20221010003432_SpawnPointChangeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.cs" />
-    <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.designer.cs">
+    <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.Designer.cs">
       <DependentUpon>20221011005935_AddPlayerDeathMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20221127161920_CosmeticMigration.cs" />
-    <Compile Include="Migrations\20221127161920_CosmeticMigration.designer.cs">
+    <Compile Include="Migrations\20221127161920_CosmeticMigration.Designer.cs">
       <DependentUpon>20221127161920_CosmeticMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20221129185153_RecipeMigration.cs" />
-    <Compile Include="Migrations\20221129185153_RecipeMigration.designer.cs">
+    <Compile Include="Migrations\20221129185153_RecipeMigration.Designer.cs">
       <DependentUpon>20221129185153_RecipeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.cs" />
-    <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.designer.cs">
+    <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.Designer.cs">
       <DependentUpon>20221211175311_AddBestiaryUnlocksMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.cs" />
-    <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.designer.cs">
+    <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.Designer.cs">
       <DependentUpon>20230104222457_SkillUnlocksMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.cs" />
-    <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.designer.cs">
+    <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.Designer.cs">
       <DependentUpon>20230110154913_PlayerPassiveSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230120190134_InitialChallengeMigration.cs" />
-    <Compile Include="Migrations\20230120190134_InitialChallengeMigration.designer.cs">
+    <Compile Include="Migrations\20230120190134_InitialChallengeMigration.Designer.cs">
       <DependentUpon>20230120190134_InitialChallengeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230128162608_AddTrackedWeaponTypeMigration.cs" />
-    <Compile Include="Migrations\20230128162608_AddTrackedWeaponTypeMigration.designer.cs">
+    <Compile Include="Migrations\20230128162608_AddTrackedWeaponTypeMigration.Designer.cs">
       <DependentUpon>20230128162608_AddTrackedWeaponTypeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.cs" />
-    <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.designer.cs">
+    <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.Designer.cs">
       <DependentUpon>20230201204000_AddVitalAllocationsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230203163021_AddItemDiscoveredCollectionMigration.cs" />
-    <Compile Include="Migrations\20230203163021_AddItemDiscoveredCollectionMigration.designer.cs">
+    <Compile Include="Migrations\20230203163021_AddItemDiscoveredCollectionMigration.Designer.cs">
       <DependentUpon>20230203163021_AddItemDiscoveredCollectionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.cs" />
-    <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.designer.cs">
+    <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.Designer.cs">
       <DependentUpon>20230203173920_DungeonTrackingMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230212170016_AddPlayerFuelMigration.cs" />
-    <Compile Include="Migrations\20230212170016_AddPlayerFuelMigration.designer.cs">
+    <Compile Include="Migrations\20230212170016_AddPlayerFuelMigration.Designer.cs">
       <DependentUpon>20230212170016_AddPlayerFuelMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230215215510_ItemPropertiesMigration.cs" />
-    <Compile Include="Migrations\20230215215510_ItemPropertiesMigration.designer.cs">
+    <Compile Include="Migrations\20230215215510_ItemPropertiesMigration.Designer.cs">
       <DependentUpon>20230215215510_ItemPropertiesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230216210832_AddPlayerEnhancementsMigration.cs" />
-    <Compile Include="Migrations\20230216210832_AddPlayerEnhancementsMigration.designer.cs">
+    <Compile Include="Migrations\20230216210832_AddPlayerEnhancementsMigration.Designer.cs">
       <DependentUpon>20230216210832_AddPlayerEnhancementsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230310030245_ChallengeContractMigration.cs" />
-    <Compile Include="Migrations\20230310030245_ChallengeContractMigration.designer.cs">
+    <Compile Include="Migrations\20230310030245_ChallengeContractMigration.Designer.cs">
       <DependentUpon>20230310030245_ChallengeContractMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230407153336_TutorialMigration1.cs" />
-    <Compile Include="Migrations\20230407153336_TutorialMigration1.designer.cs">
+    <Compile Include="Migrations\20230407153336_TutorialMigration1.Designer.cs">
       <DependentUpon>20230407153336_TutorialMigration1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230412211853_TutorialMigration2.cs" />
-    <Compile Include="Migrations\20230412211853_TutorialMigration2.designer.cs">
+    <Compile Include="Migrations\20230412211853_TutorialMigration2.Designer.cs">
       <DependentUpon>20230412211853_TutorialMigration2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230424140456_SelectedLabelMigrationn.cs" />
-    <Compile Include="Migrations\20230424140456_SelectedLabelMigrationn.designer.cs">
+    <Compile Include="Migrations\20230424140456_SelectedLabelMigrationn.Designer.cs">
       <DependentUpon>20230424140456_SelectedLabelMigrationn.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230502164609_TimerPauseMigration.cs" />
-    <Compile Include="Migrations\20230502164609_TimerPauseMigration.designer.cs">
+    <Compile Include="Migrations\20230502164609_TimerPauseMigration.Designer.cs">
       <DependentUpon>20230502164609_TimerPauseMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230502193643_PlayerPermabuffsMigration.cs" />
-    <Compile Include="Migrations\20230502193643_PlayerPermabuffsMigration.designer.cs">
+    <Compile Include="Migrations\20230502193643_PlayerPermabuffsMigration.Designer.cs">
       <DependentUpon>20230502193643_PlayerPermabuffsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230503125632_PermabuffStatsAndVitalsMigation.cs" />
-    <Compile Include="Migrations\20230503125632_PermabuffStatsAndVitalsMigation.designer.cs">
+    <Compile Include="Migrations\20230503125632_PermabuffStatsAndVitalsMigation.Designer.cs">
       <DependentUpon>20230503125632_PermabuffStatsAndVitalsMigation.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230514165450_PlayerLoadoutMigration.cs" />
-    <Compile Include="Migrations\20230514165450_PlayerLoadoutMigration.designer.cs">
+    <Compile Include="Migrations\20230514165450_PlayerLoadoutMigration.Designer.cs">
       <DependentUpon>20230514165450_PlayerLoadoutMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230625133326_OpenMeleeMigration.cs" />
-    <Compile Include="Migrations\20230625133326_OpenMeleeMigration.designer.cs">
+    <Compile Include="Migrations\20230625133326_OpenMeleeMigration.Designer.cs">
       <DependentUpon>20230625133326_OpenMeleeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230626023856_MeleeDirMigration.cs" />
-    <Compile Include="Migrations\20230626023856_MeleeDirMigration.designer.cs">
+    <Compile Include="Migrations\20230626023856_MeleeDirMigration.Designer.cs">
       <DependentUpon>20230626023856_MeleeDirMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20230726144645_AddChampSettingsMigration.cs" />
-    <Compile Include="Migrations\20230726144645_AddChampSettingsMigration.designer.cs">
+    <Compile Include="Migrations\20230726144645_AddChampSettingsMigration.Designer.cs">
       <DependentUpon>20230726144645_AddChampSettingsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.cs" />
-    <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.designer.cs">
+    <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.Designer.cs">
       <DependentUpon>20231019235936_TutorialMigrationEnhancement.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.cs" />
-    <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.designer.cs">
+    <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.Designer.cs">
       <DependentUpon>20231023163959_CraftingWishlistMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240216183945_ClanWarInstanceMigration1.cs" />
-    <Compile Include="Migrations\20240216183945_ClanWarInstanceMigration1.designer.cs">
+    <Compile Include="Migrations\20240216183945_ClanWarInstanceMigration1.Designer.cs">
       <DependentUpon>20240216183945_ClanWarInstanceMigration1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240220165717_AddLastClanWarMigration.cs" />
-    <Compile Include="Migrations\20240220165717_AddLastClanWarMigration.designer.cs">
+    <Compile Include="Migrations\20240220165717_AddLastClanWarMigration.Designer.cs">
       <DependentUpon>20240220165717_AddLastClanWarMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.cs" />
-    <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.designer.cs">
+    <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.Designer.cs">
       <DependentUpon>20240222172606_ExpandedTerritoryKeysMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240302211506_AddClanWarParticipantMigration.cs" />
-    <Compile Include="Migrations\20240302211506_AddClanWarParticipantMigration.designer.cs">
+    <Compile Include="Migrations\20240302211506_AddClanWarParticipantMigration.Designer.cs">
       <DependentUpon>20240302211506_AddClanWarParticipantMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240305190320_ClanWarWinnerMigration.cs" />
-    <Compile Include="Migrations\20240305190320_ClanWarWinnerMigration.designer.cs">
+    <Compile Include="Migrations\20240305190320_ClanWarWinnerMigration.Designer.cs">
       <DependentUpon>20240305190320_ClanWarWinnerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240307201054_GuildVariableMigration.cs" />
-    <Compile Include="Migrations\20240307201054_GuildVariableMigration.designer.cs">
+    <Compile Include="Migrations\20240307201054_GuildVariableMigration.Designer.cs">
       <DependentUpon>20240307201054_GuildVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240708184313_AddItemCraftBackfillMigration.cs" />
-    <Compile Include="Migrations\20240708184313_AddItemCraftBackfillMigration.designer.cs">
+    <Compile Include="Migrations\20240708184313_AddItemCraftBackfillMigration.Designer.cs">
       <DependentUpon>20240708184313_AddItemCraftBackfillMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240726190513_ResetLoadoutMigration.cs" />
-    <Compile Include="Migrations\20240726190513_ResetLoadoutMigration.designer.cs">
+    <Compile Include="Migrations\20240726190513_ResetLoadoutMigration.Designer.cs">
       <DependentUpon>20240726190513_ResetLoadoutMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240730014601_TimerStartTimeMigration.cs" />
-    <Compile Include="Migrations\20240730014601_TimerStartTimeMigration.designer.cs">
+    <Compile Include="Migrations\20240730014601_TimerStartTimeMigration.Designer.cs">
       <DependentUpon>20240730014601_TimerStartTimeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\20240902235124_RecipeEventLockMigration.cs" />
-    <Compile Include="Migrations\20240902235124_RecipeEventLockMigration.designer.cs">
+    <Compile Include="Migrations\20240902235124_RecipeEventLockMigration.Designer.cs">
       <DependentUpon>20240902235124_RecipeEventLockMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
@@ -899,629 +899,629 @@
       <DependentUpon>20210513080440_AddItemStackCaps.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210607115442_AddedCanGuildBankOptionToItems.cs" />
-    <Compile Include="Migrations\Game\20210607115442_AddedCanGuildBankOptionToItems.designer.cs">
+    <Compile Include="Migrations\Game\20210607115442_AddedCanGuildBankOptionToItems.Designer.cs">
       <DependentUpon>20210607115442_AddedCanGuildBankOptionToItems.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.cs" />
-    <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.designer.cs">
+    <Compile Include="Migrations\Game\20210630114724_CraftingCommonEvents.Designer.cs">
       <DependentUpon>20210630114724_CraftingCommonEvents.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.cs" />
-    <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.designer.cs">
+    <Compile Include="Migrations\Game\20210622051409_AddingRequirementNotMetMessages.Designer.cs">
       <DependentUpon>20210622051409_AddingRequirementNotMetMessages.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.cs" />
-    <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.designer.cs">
+    <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.Designer.cs">
       <DependentUpon>20210703145618_AddingShopSoundEffects.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210810194601_OverTimeSpellAnimationMigration.cs" />
     <Compile Include="Migrations\Game\20210810194601_OverTimeSpellAnimationMigration.Designer.cs" />
     <Compile Include="Migrations\Game\20210826154714_AnimationBrightnessThreshold.cs" />
-    <Compile Include="Migrations\Game\20210826154714_AnimationBrightnessThreshold.designer.cs">
+    <Compile Include="Migrations\Game\20210826154714_AnimationBrightnessThreshold.Designer.cs">
       <DependentUpon>20210826154714_AnimationBrightnessThreshold.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210830230045_ComboEquipmentMigration.cs" />
-    <Compile Include="Migrations\Game\20210830230045_ComboEquipmentMigration.designer.cs">
+    <Compile Include="Migrations\Game\20210830230045_ComboEquipmentMigration.Designer.cs">
       <DependentUpon>20210830230045_ComboEquipmentMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210831005144_ComboEquipmentMigrationTwo.cs" />
-    <Compile Include="Migrations\Game\20210831005144_ComboEquipmentMigrationTwo.designer.cs">
+    <Compile Include="Migrations\Game\20210831005144_ComboEquipmentMigrationTwo.Designer.cs">
       <DependentUpon>20210831005144_ComboEquipmentMigrationTwo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210906022027_AddNewHelmetFields.cs" />
-    <Compile Include="Migrations\Game\20210906022027_AddNewHelmetFields.designer.cs">
+    <Compile Include="Migrations\Game\20210906022027_AddNewHelmetFields.Designer.cs">
       <DependentUpon>20210906022027_AddNewHelmetFields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210923215946_ProjectileGroundedMigration.cs" />
-    <Compile Include="Migrations\Game\20210923215946_ProjectileGroundedMigration.designer.cs">
+    <Compile Include="Migrations\Game\20210923215946_ProjectileGroundedMigration.Designer.cs">
       <DependentUpon>20210923215946_ProjectileGroundedMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211017155639_QuestListMigration.cs" />
-    <Compile Include="Migrations\Game\20211017155639_QuestListMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211017155639_QuestListMigration.Designer.cs">
       <DependentUpon>20211017155639_QuestListMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211025205347_CraftRequirementMigration.cs" />
-    <Compile Include="Migrations\Game\20211025205347_CraftRequirementMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211025205347_CraftRequirementMigration.Designer.cs">
       <DependentUpon>20211025205347_CraftRequirementMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211026130945_NpcImmunityMigration.cs" />
-    <Compile Include="Migrations\Game\20211026130945_NpcImmunityMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211026130945_NpcImmunityMigration.Designer.cs">
       <DependentUpon>20211026130945_NpcImmunityMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211027122112_ItemTagMigration.cs" />
-    <Compile Include="Migrations\Game\20211027122112_ItemTagMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211027122112_ItemTagMigration.Designer.cs">
       <DependentUpon>20211027122112_ItemTagMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211031200145_FixQuestTaskCompletionEvents.cs" />
-    <Compile Include="Migrations\Game\20211031200145_FixQuestTaskCompletionEvents.designer.cs">
+    <Compile Include="Migrations\Game\20211031200145_FixQuestTaskCompletionEvents.Designer.cs">
       <DependentUpon>20211031200145_FixQuestTaskCompletionEvents.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211102124722_ItemStatLockMigration.cs" />
-    <Compile Include="Migrations\Game\20211102124722_ItemStatLockMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211102124722_ItemStatLockMigration.Designer.cs">
       <DependentUpon>20211102124722_ItemStatLockMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211103142838_DestroyItemMigration.cs" />
-    <Compile Include="Migrations\Game\20211103142838_DestroyItemMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211103142838_DestroyItemMigration.Designer.cs">
       <DependentUpon>20211103142838_DestroyItemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211106140056_DeathAnimationMigration.cs" />
-    <Compile Include="Migrations\Game\20211106140056_DeathAnimationMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211106140056_DeathAnimationMigration.Designer.cs">
       <DependentUpon>20211106140056_DeathAnimationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.cs" />
-    <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.designer.cs">
+    <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.Designer.cs">
       <DependentUpon>20211213162720_WeaponSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.cs" />
-    <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.Designer.cs">
       <DependentUpon>20220125173554_InstanceVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220204163952_BackstabMigration.cs" />
-    <Compile Include="Migrations\Game\20220204163952_BackstabMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220204163952_BackstabMigration.Designer.cs">
       <DependentUpon>20220204163952_BackstabMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.cs" />
-    <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.Designer.cs">
       <DependentUpon>20220206010259_QuestTypeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220210173512_InspirationMigration.cs" />
-    <Compile Include="Migrations\Game\20220210173512_InspirationMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220210173512_InspirationMigration.Designer.cs">
       <DependentUpon>20220210173512_InspirationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.cs" />
-    <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.Designer.cs">
       <DependentUpon>20220210203035_ShopImprovementMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220314145643_ProjectileToolMigration.cs" />
-    <Compile Include="Migrations\Game\20220314145643_ProjectileToolMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220314145643_ProjectileToolMigration.Designer.cs">
       <DependentUpon>20220314145643_ProjectileToolMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220321165144_FixQuestsAgainMigration.cs" />
-    <Compile Include="Migrations\Game\20220321165144_FixQuestsAgainMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220321165144_FixQuestsAgainMigration.Designer.cs">
       <DependentUpon>20220321165144_FixQuestsAgainMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220323213555_ResourceRecordOptOutMigration.cs" />
-    <Compile Include="Migrations\Game\20220323213555_ResourceRecordOptOutMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220323213555_ResourceRecordOptOutMigration.Designer.cs">
       <DependentUpon>20220323213555_ResourceRecordOptOutMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220324181537_TrapAnimationMigration.cs" />
-    <Compile Include="Migrations\Game\20220324181537_TrapAnimationMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220324181537_TrapAnimationMigration.Designer.cs">
       <DependentUpon>20220324181537_TrapAnimationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220502235311_NpcDeathTransformMigration.cs" />
-    <Compile Include="Migrations\Game\20220502235311_NpcDeathTransformMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220502235311_NpcDeathTransformMigration.Designer.cs">
       <DependentUpon>20220502235311_NpcDeathTransformMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220503002505_NpcStandStillMigration.cs" />
-    <Compile Include="Migrations\Game\20220503002505_NpcStandStillMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220503002505_NpcStandStillMigration.Designer.cs">
       <DependentUpon>20220503002505_NpcStandStillMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220503010431_NpcSpellOverrideMigration.cs" />
-    <Compile Include="Migrations\Game\20220503010431_NpcSpellOverrideMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220503010431_NpcSpellOverrideMigration.Designer.cs">
       <DependentUpon>20220503010431_NpcSpellOverrideMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220503204227_TimerMigration.cs" />
-    <Compile Include="Migrations\Game\20220503204227_TimerMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220503204227_TimerMigration.Designer.cs">
       <DependentUpon>20220503204227_TimerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220513173328_TimerMigrationNewFields.cs" />
-    <Compile Include="Migrations\Game\20220513173328_TimerMigrationNewFields.designer.cs">
+    <Compile Include="Migrations\Game\20220513173328_TimerMigrationNewFields.Designer.cs">
       <DependentUpon>20220513173328_TimerMigrationNewFields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220513234035_TimerElapsedTimeMigration.cs" />
-    <Compile Include="Migrations\Game\20220513234035_TimerElapsedTimeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220513234035_TimerElapsedTimeMigration.Designer.cs">
       <DependentUpon>20220513234035_TimerElapsedTimeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220514162010_TimerServerStartMigration.cs" />
-    <Compile Include="Migrations\Game\20220514162010_TimerServerStartMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220514162010_TimerServerStartMigration.Designer.cs">
       <DependentUpon>20220514162010_TimerServerStartMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220520152021_TimerOnDeathMigration.cs" />
-    <Compile Include="Migrations\Game\20220520152021_TimerOnDeathMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220520152021_TimerOnDeathMigration.Designer.cs">
       <DependentUpon>20220520152021_TimerOnDeathMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220524143115_DestroyItemsOnInstanceMigration.cs" />
-    <Compile Include="Migrations\Game\20220524143115_DestroyItemsOnInstanceMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220524143115_DestroyItemsOnInstanceMigration.Designer.cs">
       <DependentUpon>20220524143115_DestroyItemsOnInstanceMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220527122512_TimerInstanceChangeMigration.cs" />
-    <Compile Include="Migrations\Game\20220527122512_TimerInstanceChangeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220527122512_TimerInstanceChangeMigration.Designer.cs">
       <DependentUpon>20220527122512_TimerInstanceChangeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.cs" />
-    <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.Designer.cs">
       <DependentUpon>20220710214245_ResourceGroupMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220725153029_PlayerVariableRecordableMigration.cs" />
-    <Compile Include="Migrations\Game\20220725153029_PlayerVariableRecordableMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220725153029_PlayerVariableRecordableMigration.Designer.cs">
       <DependentUpon>20220725153029_PlayerVariableRecordableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220825151516_RecordLowVarsMigration.cs" />
-    <Compile Include="Migrations\Game\20220825151516_RecordLowVarsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220825151516_RecordLowVarsMigration.Designer.cs">
       <DependentUpon>20220825151516_RecordLowVarsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220825184059_PlayerVarRecordSilentMigration.cs" />
-    <Compile Include="Migrations\Game\20220825184059_PlayerVarRecordSilentMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220825184059_PlayerVarRecordSilentMigration.Designer.cs">
       <DependentUpon>20220825184059_PlayerVarRecordSilentMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220915151233_InitialLootTableMigration.cs" />
-    <Compile Include="Migrations\Game\20220915151233_InitialLootTableMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220915151233_InitialLootTableMigration.Designer.cs">
       <DependentUpon>20220915151233_InitialLootTableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220921140307_AdditionalNPCTablesMigration.cs" />
-    <Compile Include="Migrations\Game\20220921140307_AdditionalNPCTablesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220921140307_AdditionalNPCTablesMigration.Designer.cs">
       <DependentUpon>20220921140307_AdditionalNPCTablesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20220921185811_NpcTableChanceMigration.cs" />
-    <Compile Include="Migrations\Game\20220921185811_NpcTableChanceMigration.designer.cs">
+    <Compile Include="Migrations\Game\20220921185811_NpcTableChanceMigration.Designer.cs">
       <DependentUpon>20220921185811_NpcTableChanceMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221001161959_AddLabelObjectMigration.cs" />
-    <Compile Include="Migrations\Game\20221001161959_AddLabelObjectMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221001161959_AddLabelObjectMigration.Designer.cs">
       <DependentUpon>20221001161959_AddLabelObjectMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221005022330_AddLabelOptionsMigration.cs" />
-    <Compile Include="Migrations\Game\20221005022330_AddLabelOptionsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221005022330_AddLabelOptionsMigration.Designer.cs">
       <DependentUpon>20221005022330_AddLabelOptionsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221007151950_VariableGroupMigration.cs" />
-    <Compile Include="Migrations\Game\20221007151950_VariableGroupMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221007151950_VariableGroupMigration.Designer.cs">
       <DependentUpon>20221007151950_VariableGroupMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221007190614_ItemOverrideMigration.cs" />
-    <Compile Include="Migrations\Game\20221007190614_ItemOverrideMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221007190614_ItemOverrideMigration.Designer.cs">
       <DependentUpon>20221007190614_ItemOverrideMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221010035213_AddMapLoginEventMigration.cs" />
-    <Compile Include="Migrations\Game\20221010035213_AddMapLoginEventMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221010035213_AddMapLoginEventMigration.Designer.cs">
       <DependentUpon>20221010035213_AddMapLoginEventMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221010173719_SoloOnlyVariableMigration.cs" />
-    <Compile Include="Migrations\Game\20221010173719_SoloOnlyVariableMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221010173719_SoloOnlyVariableMigration.Designer.cs">
       <DependentUpon>20221010173719_SoloOnlyVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221010191023_MovementBonusesOnWeaponsMigration.cs" />
-    <Compile Include="Migrations\Game\20221010191023_MovementBonusesOnWeaponsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221010191023_MovementBonusesOnWeaponsMigration.Designer.cs">
       <DependentUpon>20221010191023_MovementBonusesOnWeaponsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221014022649_AddShortHairMigration.cs" />
-    <Compile Include="Migrations\Game\20221014022649_AddShortHairMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221014022649_AddShortHairMigration.Designer.cs">
       <DependentUpon>20221014022649_AddShortHairMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221014140741_DashConfigMigration.cs" />
-    <Compile Include="Migrations\Game\20221014140741_DashConfigMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221014140741_DashConfigMigration.Designer.cs">
       <DependentUpon>20221014140741_DashConfigMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221014144350_DashSpellMigration.cs" />
-    <Compile Include="Migrations\Game\20221014144350_DashSpellMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221014144350_DashSpellMigration.Designer.cs">
       <DependentUpon>20221014144350_DashSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221014153324_ProjectileAttachmentMigration.cs" />
-    <Compile Include="Migrations\Game\20221014153324_ProjectileAttachmentMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221014153324_ProjectileAttachmentMigration.Designer.cs">
       <DependentUpon>20221014153324_ProjectileAttachmentMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221015154313_MultipleBonusesMigration.cs" />
-    <Compile Include="Migrations\Game\20221015154313_MultipleBonusesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221015154313_MultipleBonusesMigration.Designer.cs">
       <DependentUpon>20221015154313_MultipleBonusesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221015154500_MigrateOldBonusEffectToNewListMigration.cs" />
-    <Compile Include="Migrations\Game\20221015154500_MigrateOldBonusEffectToNewListMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221015154500_MigrateOldBonusEffectToNewListMigration.Designer.cs">
       <DependentUpon>20221015154500_MigrateOldBonusEffectToNewListMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221017170844_SpellComponentMigration.cs" />
-    <Compile Include="Migrations\Game\20221017170844_SpellComponentMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221017170844_SpellComponentMigration.Designer.cs">
       <DependentUpon>20221017170844_SpellComponentMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221018141529_SpecialAttackMigration.cs" />
-    <Compile Include="Migrations\Game\20221018141529_SpecialAttackMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221018141529_SpecialAttackMigration.Designer.cs">
       <DependentUpon>20221018141529_SpecialAttackMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221023144746_MultipleDamageTypesMigration.cs" />
-    <Compile Include="Migrations\Game\20221023144746_MultipleDamageTypesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221023144746_MultipleDamageTypesMigration.Designer.cs">
       <DependentUpon>20221023144746_MultipleDamageTypesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221023163539_NPCDamageTypesMigration.cs" />
-    <Compile Include="Migrations\Game\20221023163539_NPCDamageTypesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221023163539_NPCDamageTypesMigration.Designer.cs">
       <DependentUpon>20221023163539_NPCDamageTypesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221108204314_RPMigration.cs" />
-    <Compile Include="Migrations\Game\20221108204314_RPMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221108204314_RPMigration.Designer.cs">
       <DependentUpon>20221108204314_RPMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.cs" />
-    <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.Designer.cs">
       <DependentUpon>20221122165612_ResourceDisplayNameMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.cs" />
-    <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.Designer.cs">
       <DependentUpon>20221127160339_ComseticItemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221129185129_RecipeDescriptorMigration.cs" />
-    <Compile Include="Migrations\Game\20221129185129_RecipeDescriptorMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221129185129_RecipeDescriptorMigration.Designer.cs">
       <DependentUpon>20221129185129_RecipeDescriptorMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221130151137_RecipeRequirementsMigration.cs" />
-    <Compile Include="Migrations\Game\20221130151137_RecipeRequirementsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221130151137_RecipeRequirementsMigration.Designer.cs">
       <DependentUpon>20221130151137_RecipeRequirementsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221130162605_RecipeRequirementsNewFieldMigration.cs" />
-    <Compile Include="Migrations\Game\20221130162605_RecipeRequirementsNewFieldMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221130162605_RecipeRequirementsNewFieldMigration.Designer.cs">
       <DependentUpon>20221130162605_RecipeRequirementsNewFieldMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.cs" />
-    <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.Designer.cs">
       <DependentUpon>20221204170126_CraftRecipeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221206142831_AddBestiaryInfoMigration.cs" />
-    <Compile Include="Migrations\Game\20221206142831_AddBestiaryInfoMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221206142831_AddBestiaryInfoMigration.Designer.cs">
       <DependentUpon>20221206142831_AddBestiaryInfoMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20221206155602_AddBestiaryDenialMigration.cs" />
-    <Compile Include="Migrations\Game\20221206155602_AddBestiaryDenialMigration.designer.cs">
+    <Compile Include="Migrations\Game\20221206155602_AddBestiaryDenialMigration.Designer.cs">
       <DependentUpon>20221206155602_AddBestiaryDenialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.cs" />
-    <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.Designer.cs">
       <DependentUpon>20230101170457_SpellGroupMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230104222431_SkillPointSpellMigration.cs" />
-    <Compile Include="Migrations\Game\20230104222431_SkillPointSpellMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230104222431_SkillPointSpellMigration.Designer.cs">
       <DependentUpon>20230104222431_SkillPointSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.cs" />
-    <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.Designer.cs">
       <DependentUpon>20230108234041_SkillPointLevelUpMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230110154749_PassiveSpellMigration.cs" />
-    <Compile Include="Migrations\Game\20230110154749_PassiveSpellMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230110154749_PassiveSpellMigration.Designer.cs">
       <DependentUpon>20230110154749_PassiveSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230110203951_PandaBonusEffectMigration.cs" />
-    <Compile Include="Migrations\Game\20230110203951_PandaBonusEffectMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230110203951_PandaBonusEffectMigration.Designer.cs">
       <DependentUpon>20230110203951_PandaBonusEffectMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230110212822_DropItemColumnsMigration.cs" />
-    <Compile Include="Migrations\Game\20230110212822_DropItemColumnsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230110212822_DropItemColumnsMigration.Designer.cs">
       <DependentUpon>20230110212822_DropItemColumnsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230117154806_SkillOverhaulGameMigration.cs" />
-    <Compile Include="Migrations\Game\20230117154806_SkillOverhaulGameMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230117154806_SkillOverhaulGameMigration.Designer.cs">
       <DependentUpon>20230117154806_SkillOverhaulGameMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230118210112_NewChallengePropertiesMigration.cs" />
-    <Compile Include="Migrations\Game\20230118210112_NewChallengePropertiesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230118210112_NewChallengePropertiesMigration.Designer.cs">
       <DependentUpon>20230118210112_NewChallengePropertiesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230118225322_WeaponTypesToItemsMigration.cs" />
-    <Compile Include="Migrations\Game\20230118225322_WeaponTypesToItemsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230118225322_WeaponTypesToItemsMigration.Designer.cs">
       <DependentUpon>20230118225322_WeaponTypesToItemsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230120185643_ItemMaxLevelMigration.cs" />
-    <Compile Include="Migrations\Game\20230120185643_ItemMaxLevelMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230120185643_ItemMaxLevelMigration.Designer.cs">
       <DependentUpon>20230120185643_ItemMaxLevelMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230123212441_ImpassableBeastsMigration.cs" />
-    <Compile Include="Migrations\Game\20230123212441_ImpassableBeastsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230123212441_ImpassableBeastsMigration.Designer.cs">
       <DependentUpon>20230123212441_ImpassableBeastsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230123215839_BackstabOptionNPCMigration.cs" />
-    <Compile Include="Migrations\Game\20230123215839_BackstabOptionNPCMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230123215839_BackstabOptionNPCMigration.Designer.cs">
       <DependentUpon>20230123215839_BackstabOptionNPCMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230125200843_ChallengeIconMigration.cs" />
-    <Compile Include="Migrations\Game\20230125200843_ChallengeIconMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230125200843_ChallengeIconMigration.Designer.cs">
       <DependentUpon>20230125200843_ChallengeIconMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.cs" />
-    <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.Designer.cs">
       <DependentUpon>20230131151206_AddInitialSkillpointMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.cs" />
-    <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.Designer.cs">
       <DependentUpon>20230202023829_DungeonDescriptorMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230202200339_DungeonGnomeTreasureMigration.cs" />
-    <Compile Include="Migrations\Game\20230202200339_DungeonGnomeTreasureMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230202200339_DungeonGnomeTreasureMigration.Designer.cs">
       <DependentUpon>20230202200339_DungeonGnomeTreasureMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230204180724_RareDropMigration.cs" />
-    <Compile Include="Migrations\Game\20230204180724_RareDropMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230204180724_RareDropMigration.Designer.cs">
       <DependentUpon>20230204180724_RareDropMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230207155343_ChallengeDescriptionMigration.cs" />
-    <Compile Include="Migrations\Game\20230207155343_ChallengeDescriptionMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230207155343_ChallengeDescriptionMigration.Designer.cs">
       <DependentUpon>20230207155343_ChallengeDescriptionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230211171246_DeconstructionItemMigration.cs" />
-    <Compile Include="Migrations\Game\20230211171246_DeconstructionItemMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230211171246_DeconstructionItemMigration.Designer.cs">
       <DependentUpon>20230211171246_DeconstructionItemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230216163156_EnhancementMigration.cs" />
-    <Compile Include="Migrations\Game\20230216163156_EnhancementMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230216163156_EnhancementMigration.Designer.cs">
       <DependentUpon>20230216163156_EnhancementMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230216165536_EnhancementWeaponTypesMigration.cs" />
-    <Compile Include="Migrations\Game\20230216165536_EnhancementWeaponTypesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230216165536_EnhancementWeaponTypesMigration.Designer.cs">
       <DependentUpon>20230216165536_EnhancementWeaponTypesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230217153441_AddEnhancementsToChallengesMigration.cs" />
-    <Compile Include="Migrations\Game\20230217153441_AddEnhancementsToChallengesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230217153441_AddEnhancementsToChallengesMigration.Designer.cs">
       <DependentUpon>20230217153441_AddEnhancementsToChallengesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230217161232_AddEnhancementItemMigration.cs" />
-    <Compile Include="Migrations\Game\20230217161232_AddEnhancementItemMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230217161232_AddEnhancementItemMigration.Designer.cs">
       <DependentUpon>20230217161232_AddEnhancementItemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230225155635_AddWeaponUpgradeMigration.cs" />
-    <Compile Include="Migrations\Game\20230225155635_AddWeaponUpgradeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230225155635_AddWeaponUpgradeMigration.Designer.cs">
       <DependentUpon>20230225155635_AddWeaponUpgradeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230227162642_AddSpellDamageOverridesMigration.cs" />
-    <Compile Include="Migrations\Game\20230227162642_AddSpellDamageOverridesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230227162642_AddSpellDamageOverridesMigration.Designer.cs">
       <DependentUpon>20230227162642_AddSpellDamageOverridesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230302002248_LabelHiddenMigration.cs" />
-    <Compile Include="Migrations\Game\20230302002248_LabelHiddenMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230302002248_LabelHiddenMigration.Designer.cs">
       <DependentUpon>20230302002248_LabelHiddenMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230310025855_ChallengeContractMigration.cs" />
-    <Compile Include="Migrations\Game\20230310025855_ChallengeContractMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230310025855_ChallengeContractMigration.Designer.cs">
       <DependentUpon>20230310025855_ChallengeContractMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230327151638_ComponentOverrideMigration.cs" />
-    <Compile Include="Migrations\Game\20230327151638_ComponentOverrideMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230327151638_ComponentOverrideMigration.Designer.cs">
       <DependentUpon>20230327151638_ComponentOverrideMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230327162618_StudyEnhancementMigration.cs" />
-    <Compile Include="Migrations\Game\20230327162618_StudyEnhancementMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230327162618_StudyEnhancementMigration.Designer.cs">
       <DependentUpon>20230327162618_StudyEnhancementMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230403184350_AddFakeMeleeMigration.cs" />
-    <Compile Include="Migrations\Game\20230403184350_AddFakeMeleeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230403184350_AddFakeMeleeMigration.Designer.cs">
       <DependentUpon>20230403184350_AddFakeMeleeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230403185723_SortableItemsMigration.cs" />
-    <Compile Include="Migrations\Game\20230403185723_SortableItemsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230403185723_SortableItemsMigration.Designer.cs">
       <DependentUpon>20230403185723_SortableItemsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230408153611_TimerActionMigration1.cs" />
-    <Compile Include="Migrations\Game\20230408153611_TimerActionMigration1.designer.cs">
+    <Compile Include="Migrations\Game\20230408153611_TimerActionMigration1.Designer.cs">
       <DependentUpon>20230408153611_TimerActionMigration1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.cs" />
-    <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.Designer.cs">
       <DependentUpon>20230413145908_NpcTierMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230502193706_ItemPermabuffMigration.cs" />
-    <Compile Include="Migrations\Game\20230502193706_ItemPermabuffMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230502193706_ItemPermabuffMigration.Designer.cs">
       <DependentUpon>20230502193706_ItemPermabuffMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230511141249_OnHitReduxMigration.cs" />
-    <Compile Include="Migrations\Game\20230511141249_OnHitReduxMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230511141249_OnHitReduxMigration.Designer.cs">
       <DependentUpon>20230511141249_OnHitReduxMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230512141145_NewDungeonPropsMigration.cs" />
-    <Compile Include="Migrations\Game\20230512141145_NewDungeonPropsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230512141145_NewDungeonPropsMigration.Designer.cs">
       <DependentUpon>20230512141145_NewDungeonPropsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230513130907_NoHealNpcMigration.cs" />
-    <Compile Include="Migrations\Game\20230513130907_NoHealNpcMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230513130907_NoHealNpcMigration.Designer.cs">
       <DependentUpon>20230513130907_NoHealNpcMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230604160033_SpellStealMigration.cs" />
-    <Compile Include="Migrations\Game\20230604160033_SpellStealMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230604160033_SpellStealMigration.Designer.cs">
       <DependentUpon>20230604160033_SpellStealMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230619211223_AddDashMigration.cs" />
-    <Compile Include="Migrations\Game\20230619211223_AddDashMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230619211223_AddDashMigration.Designer.cs">
       <DependentUpon>20230619211223_AddDashMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230621152722_NpcScalingVitalsMigration.cs" />
-    <Compile Include="Migrations\Game\20230621152722_NpcScalingVitalsMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230621152722_NpcScalingVitalsMigration.Designer.cs">
       <DependentUpon>20230621152722_NpcScalingVitalsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230623020556_ScaleTypeMigration.cs" />
-    <Compile Include="Migrations\Game\20230623020556_ScaleTypeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230623020556_ScaleTypeMigration.Designer.cs">
       <DependentUpon>20230623020556_ScaleTypeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230623021154_ScaleTypeMigration2.cs" />
-    <Compile Include="Migrations\Game\20230623021154_ScaleTypeMigration2.designer.cs">
+    <Compile Include="Migrations\Game\20230623021154_ScaleTypeMigration2.Designer.cs">
       <DependentUpon>20230623021154_ScaleTypeMigration2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230623021914_ScaleTypeMigration3.cs" />
-    <Compile Include="Migrations\Game\20230623021914_ScaleTypeMigration3.designer.cs">
+    <Compile Include="Migrations\Game\20230623021914_ScaleTypeMigration3.Designer.cs">
       <DependentUpon>20230623021914_ScaleTypeMigration3.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230625151921_MeleeConsumableMigration.cs" />
-    <Compile Include="Migrations\Game\20230625151921_MeleeConsumableMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230625151921_MeleeConsumableMigration.Designer.cs">
       <DependentUpon>20230625151921_MeleeConsumableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230625215154_ProjectileDeathAnimationMigration.cs" />
-    <Compile Include="Migrations\Game\20230625215154_ProjectileDeathAnimationMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230625215154_ProjectileDeathAnimationMigration.Designer.cs">
       <DependentUpon>20230625215154_ProjectileDeathAnimationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230720145117_PlayerLockedLootMigration.cs" />
-    <Compile Include="Migrations\Game\20230720145117_PlayerLockedLootMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230720145117_PlayerLockedLootMigration.Designer.cs">
       <DependentUpon>20230720145117_PlayerLockedLootMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230720152054_NpcChampionMigration.cs" />
-    <Compile Include="Migrations\Game\20230720152054_NpcChampionMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230720152054_NpcChampionMigration.Designer.cs">
       <DependentUpon>20230720152054_NpcChampionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230720180222_IsChampionMigration.cs" />
-    <Compile Include="Migrations\Game\20230720180222_IsChampionMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230720180222_IsChampionMigration.Designer.cs">
       <DependentUpon>20230720180222_IsChampionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230802154522_WeaponProcMigration.cs" />
-    <Compile Include="Migrations\Game\20230802154522_WeaponProcMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230802154522_WeaponProcMigration.Designer.cs">
       <DependentUpon>20230802154522_WeaponProcMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20230817144615_RegenTypeMigration.cs" />
-    <Compile Include="Migrations\Game\20230817144615_RegenTypeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20230817144615_RegenTypeMigration.Designer.cs">
       <DependentUpon>20230817144615_RegenTypeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231018183837_NpcVitalStealMigration.cs" />
-    <Compile Include="Migrations\Game\20231018183837_NpcVitalStealMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231018183837_NpcVitalStealMigration.Designer.cs">
       <DependentUpon>20231018183837_NpcVitalStealMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231020192552_EnhancementPrereqMigration.cs" />
-    <Compile Include="Migrations\Game\20231020192552_EnhancementPrereqMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231020192552_EnhancementPrereqMigration.Designer.cs">
       <DependentUpon>20231020192552_EnhancementPrereqMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231026140827_DungeonScalingMigration.cs" />
-    <Compile Include="Migrations\Game\20231026140827_DungeonScalingMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231026140827_DungeonScalingMigration.Designer.cs">
       <DependentUpon>20231026140827_DungeonScalingMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231121201828_NpcSpellRandomMigration1.cs" />
-    <Compile Include="Migrations\Game\20231121201828_NpcSpellRandomMigration1.designer.cs">
+    <Compile Include="Migrations\Game\20231121201828_NpcSpellRandomMigration1.Designer.cs">
       <DependentUpon>20231121201828_NpcSpellRandomMigration1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231202155721_RecipeCRMigration.cs" />
-    <Compile Include="Migrations\Game\20231202155721_RecipeCRMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231202155721_RecipeCRMigration.Designer.cs">
       <DependentUpon>20231202155721_RecipeCRMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231212194414_HideNpcNamesMigration.cs" />
-    <Compile Include="Migrations\Game\20231212194414_HideNpcNamesMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231212194414_HideNpcNamesMigration.Designer.cs">
       <DependentUpon>20231212194414_HideNpcNamesMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231215191535_TimerExclusiveMapMigration.cs" />
-    <Compile Include="Migrations\Game\20231215191535_TimerExclusiveMapMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231215191535_TimerExclusiveMapMigration.Designer.cs">
       <DependentUpon>20231215191535_TimerExclusiveMapMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20231215194802_TimerExclusiveVisibilityMigration.cs" />
-    <Compile Include="Migrations\Game\20231215194802_TimerExclusiveVisibilityMigration.designer.cs">
+    <Compile Include="Migrations\Game\20231215194802_TimerExclusiveVisibilityMigration.Designer.cs">
       <DependentUpon>20231215194802_TimerExclusiveVisibilityMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240122153849_NpcAnimationMigration.cs" />
-    <Compile Include="Migrations\Game\20240122153849_NpcAnimationMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240122153849_NpcAnimationMigration.Designer.cs">
       <DependentUpon>20240122153849_NpcAnimationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240212164053_TerritoryMigration.cs" />
-    <Compile Include="Migrations\Game\20240212164053_TerritoryMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240212164053_TerritoryMigration.Designer.cs">
       <DependentUpon>20240212164053_TerritoryMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240219213657_AmmoDropMigration.cs" />
-    <Compile Include="Migrations\Game\20240219213657_AmmoDropMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240219213657_AmmoDropMigration.Designer.cs">
       <DependentUpon>20240219213657_AmmoDropMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240305170050_ClanWarItemMigration.cs" />
-    <Compile Include="Migrations\Game\20240305170050_ClanWarItemMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240305170050_ClanWarItemMigration.Designer.cs">
       <DependentUpon>20240305170050_ClanWarItemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240307201020_GuildVariableMigration.cs" />
-    <Compile Include="Migrations\Game\20240307201020_GuildVariableMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240307201020_GuildVariableMigration.Designer.cs">
       <DependentUpon>20240307201020_GuildVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240309192912_SpellProcEnhancementMigration.cs" />
-    <Compile Include="Migrations\Game\20240309192912_SpellProcEnhancementMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240309192912_SpellProcEnhancementMigration.Designer.cs">
       <DependentUpon>20240309192912_SpellProcEnhancementMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240318201615_CraftExtrasMigration.cs" />
-    <Compile Include="Migrations\Game\20240318201615_CraftExtrasMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240318201615_CraftExtrasMigration.Designer.cs">
       <DependentUpon>20240318201615_CraftExtrasMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240330164831_SpellInterruptMigration.cs" />
-    <Compile Include="Migrations\Game\20240330164831_SpellInterruptMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240330164831_SpellInterruptMigration.Designer.cs">
       <DependentUpon>20240330164831_SpellInterruptMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240708181217_AddBackfillIngredientUseMigration.cs" />
-    <Compile Include="Migrations\Game\20240708181217_AddBackfillIngredientUseMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240708181217_AddBackfillIngredientUseMigration.Designer.cs">
       <DependentUpon>20240708181217_AddBackfillIngredientUseMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240710012225_ParallelEventMigration.cs" />
-    <Compile Include="Migrations\Game\20240710012225_ParallelEventMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240710012225_ParallelEventMigration.Designer.cs">
       <DependentUpon>20240710012225_ParallelEventMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240717011646_ChallengeVitalBoostMigration.cs" />
-    <Compile Include="Migrations\Game\20240717011646_ChallengeVitalBoostMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240717011646_ChallengeVitalBoostMigration.Designer.cs">
       <DependentUpon>20240717011646_ChallengeVitalBoostMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240801193322_ProjectileOverrideMigration.cs" />
-    <Compile Include="Migrations\Game\20240801193322_ProjectileOverrideMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240801193322_ProjectileOverrideMigration.Designer.cs">
       <DependentUpon>20240801193322_ProjectileOverrideMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240802160906_PermabuffHintMigration.cs" />
-    <Compile Include="Migrations\Game\20240802160906_PermabuffHintMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240802160906_PermabuffHintMigration.Designer.cs">
       <DependentUpon>20240802160906_PermabuffHintMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240902150402_AddEnhancementGroupMigration.cs" />
-    <Compile Include="Migrations\Game\20240902150402_AddEnhancementGroupMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240902150402_AddEnhancementGroupMigration.Designer.cs">
       <DependentUpon>20240902150402_AddEnhancementGroupMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20240922171330_AddSpellUpgradeMigration.cs" />
-    <Compile Include="Migrations\Game\20240922171330_AddSpellUpgradeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20240922171330_AddSpellUpgradeMigration.Designer.cs">
       <DependentUpon>20240922171330_AddSpellUpgradeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241210181123_AoeShapeMigration.cs" />
-    <Compile Include="Migrations\Game\20241210181123_AoeShapeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241210181123_AoeShapeMigration.Designer.cs">
       <DependentUpon>20241210181123_AoeShapeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241210203648_AoeOffsetMigration.cs" />
-    <Compile Include="Migrations\Game\20241210203648_AoeOffsetMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241210203648_AoeOffsetMigration.Designer.cs">
       <DependentUpon>20241210203648_AoeOffsetMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241211031049_AoeRectangleSizeMigration.cs" />
-    <Compile Include="Migrations\Game\20241211031049_AoeRectangleSizeMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241211031049_AoeRectangleSizeMigration.Designer.cs">
       <DependentUpon>20241211031049_AoeRectangleSizeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241211190936_MinRangeSpellMigration.cs" />
-    <Compile Include="Migrations\Game\20241211190936_MinRangeSpellMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241211190936_MinRangeSpellMigration.Designer.cs">
       <DependentUpon>20241211190936_MinRangeSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241211205235_SequentialCastingNPCMigration.cs" />
-    <Compile Include="Migrations\Game\20241211205235_SequentialCastingNPCMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241211205235_SequentialCastingNPCMigration.Designer.cs">
       <DependentUpon>20241211205235_SequentialCastingNPCMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241212151632_SpellChainMigration.cs" />
-    <Compile Include="Migrations\Game\20241212151632_SpellChainMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241212151632_SpellChainMigration.Designer.cs">
       <DependentUpon>20241212151632_SpellChainMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241212184917_AreaDenialMigration.cs" />
-    <Compile Include="Migrations\Game\20241212184917_AreaDenialMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241212184917_AreaDenialMigration.Designer.cs">
       <DependentUpon>20241212184917_AreaDenialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241213031249_TrapSingleUseMigration.cs" />
-    <Compile Include="Migrations\Game\20241213031249_TrapSingleUseMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241213031249_TrapSingleUseMigration.Designer.cs">
       <DependentUpon>20241213031249_TrapSingleUseMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241215153355_NpcExhaustionMigration.cs" />
-    <Compile Include="Migrations\Game\20241215153355_NpcExhaustionMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241215153355_NpcExhaustionMigration.Designer.cs">
       <DependentUpon>20241215153355_NpcExhaustionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241215184634_NpcBehaviorExtensionMigration.cs" />
-    <Compile Include="Migrations\Game\20241215184634_NpcBehaviorExtensionMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241215184634_NpcBehaviorExtensionMigration.Designer.cs">
       <DependentUpon>20241215184634_NpcBehaviorExtensionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241215225214_NpcVulnerabilityExtensionMigration.cs" />
-    <Compile Include="Migrations\Game\20241215225214_NpcVulnerabilityExtensionMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241215225214_NpcVulnerabilityExtensionMigration.Designer.cs">
       <DependentUpon>20241215225214_NpcVulnerabilityExtensionMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241218195717_ProjectileRenderMigration.cs" />
-    <Compile Include="Migrations\Game\20241218195717_ProjectileRenderMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241218195717_ProjectileRenderMigration.Designer.cs">
       <DependentUpon>20241218195717_ProjectileRenderMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.cs" />
-    <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.designer.cs">
+    <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.Designer.cs">
       <DependentUpon>20241219190955_NpcChallengeInvalidMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
@@ -1537,7 +1537,7 @@
       <DependentUpon>20210515114555_LogPlayerTrades.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20210519095613_AddGuildActivityLogging.cs" />
-    <Compile Include="Migrations\Logging\20210519095613_AddGuildActivityLogging.designer.cs">
+    <Compile Include="Migrations\Logging\20210519095613_AddGuildActivityLogging.Designer.cs">
       <DependentUpon>20210519095613_AddGuildActivityLogging.cs</DependentUpon>
     </Compile>
     <Compile Include="Networking\Client.cs" />
