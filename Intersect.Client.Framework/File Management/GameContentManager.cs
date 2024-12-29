@@ -4,12 +4,18 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Logging;
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
+using Intersect.Client.Framework.GenericClasses;
 using Intersect.Plugins;
 using Intersect.Compression;
+
+using Newtonsoft.Json.Linq;
 
 namespace Intersect.Client.Framework.File_Management
 {
@@ -47,7 +53,7 @@ namespace Intersect.Client.Framework.File_Management
             Decor,
 
             Challenge,
-            
+
             Loading,
 
         }
@@ -63,17 +69,17 @@ namespace Intersect.Client.Framework.File_Management
 
         public static GameContentManager Current;
 
-        protected Dictionary<TextureType, Dictionary<string, IAsset>> mTextureAssets = new Dictionary<TextureType, Dictionary<string, IAsset>>();
+        protected Dictionary<TextureType, ConcurrentDictionary<string, IAsset>> mTextureAssets = new Dictionary<TextureType, ConcurrentDictionary<string, IAsset>>();
 
-        protected List<GameFont> mFontDict = new List<GameFont>();
+        protected ConcurrentDictionary<string, GameFont> mFontDict = new ConcurrentDictionary<string, GameFont>();
 
-        protected Dictionary<string, GameAudioSource> mMusicDict = new Dictionary<string, GameAudioSource>();
+        protected ConcurrentDictionary<string, GameAudioSource> mMusicDict = new ConcurrentDictionary<string, GameAudioSource>();
 
-        protected Dictionary<string, GameShader> mShaderDict = new Dictionary<string, GameShader>();
-        
-        protected Dictionary<string, GameAudioSource> mSoundDict = new Dictionary<string, GameAudioSource>();
+        protected ConcurrentDictionary<string, GameShader> mShaderDict = new ConcurrentDictionary<string, GameShader>();
 
-        protected Dictionary<KeyValuePair<UI, string>, string> mUiDict = new Dictionary<KeyValuePair<UI, string>, string>();
+        protected ConcurrentDictionary<string, GameAudioSource> mSoundDict = new ConcurrentDictionary<string, GameAudioSource>();
+
+        protected ConcurrentDictionary<KeyValuePair<UI, string>, string> mUiDict = new ConcurrentDictionary<KeyValuePair<UI, string>, string>();
 
         /// <summary>
         /// Contains all indexed files and their caches from sound pack files.
@@ -87,7 +93,7 @@ namespace Intersect.Client.Framework.File_Management
 
         protected Dictionary<string, IAsset> mSpellDict = new Dictionary<string, IAsset>();
 
-        protected Dictionary<string, IAsset> mTexturePackDict = new Dictionary<string, IAsset>();
+        protected ConcurrentDictionary<string, IAsset> mTexturePackDict = new ConcurrentDictionary<string, IAsset>();
 
         //Game Content
 
@@ -99,59 +105,495 @@ namespace Intersect.Client.Framework.File_Management
         }
 
         //Content Loading
-        public void LoadAll()
+        public void LoadAll(Action onCompleted)
         {
-            LoadTexturePacks();
-            LoadEntities();
-            LoadItems();
-            LoadAnimations();
-            LoadSpells();
-            LoadFaces();
-            LoadImages();
-            LoadFogs();
-            LoadResources();
-            LoadPaperdolls();
-            LoadMisc();
-            LoadGui();
-            LoadFonts();
-            LoadShaders();
-            LoadDecor();
-            LoadChallenges();
+            var contentLoader = new ThreadedContentLoader();
+            contentLoader.Completed += onCompleted;
+
+            Log.Info("[Content] Starting content indexing...");
+
+            var startIndexAll = DateTime.UtcNow;
+
+            var startTexturePacks = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexTexturePacks());
+            var endTexturePacks = DateTime.UtcNow;
+
+            var startEntities = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexEntities());
+            var endEntities = DateTime.UtcNow;
+
+            var startItems = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexItems());
+            var endItems = DateTime.UtcNow;
+
+            var startAnimations = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexAnimations());
+            var endAnimations = DateTime.UtcNow;
+
+            var startSpells = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexSpells());
+            var endSpells = DateTime.UtcNow;
+
+            var startFaces = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexFaces());
+            var endFaces = DateTime.UtcNow;
+
+            var startImages = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexImages());
+            var endImages = DateTime.UtcNow;
+
+            var startFogs = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexFogs());
+            var endFogs = DateTime.UtcNow;
+
+            var startResources = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexResources());
+            var endResources = DateTime.UtcNow;
+
+            var startPaperdolls = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexPaperdolls());
+            var endPaperdolls = DateTime.UtcNow;
+
+            var startMisc = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexMisc());
+            var endMisc = DateTime.UtcNow;
+
+            var startGui = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexGui());
+            var endGui = DateTime.UtcNow;
+
+            var startFonts = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexFonts());
+            var endFonts = DateTime.UtcNow;
+
+            var startShaders = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexShaders());
+            var endShaders = DateTime.UtcNow;
+
+            var startDecor = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexDecor());
+            var endDecor = DateTime.UtcNow;
+
+            var startChallenges = DateTime.UtcNow;
+            contentLoader.EnqueueWork(IndexChallenges());
+            var endChallenges = DateTime.UtcNow;
+
+            var endAll = DateTime.UtcNow;
+            var timeSpanIndexAll = endAll - startIndexAll;
+
+            var timeSpanTexturePacks = endTexturePacks - startTexturePacks;
+            var timeSpanEntities = endEntities - startEntities;
+            var timeSpanItems = endItems - startItems;
+            var timeSpanAnimations = endAnimations - startAnimations;
+            var timeSpanSpells = endSpells - startSpells;
+            var timeSpanFaces = endFaces - startFaces;
+            var timeSpanImages = endImages - startImages;
+            var timeSpanFogs = endFogs - startFogs;
+            var timeSpanResources = endResources - startResources;
+            var timeSpanPaperdolls = endPaperdolls - startPaperdolls;
+            var timeSpanMisc = endMisc - startMisc;
+            var timeSpanGui = endGui - startGui;
+            var timeSpanFonts = endFonts - startFonts;
+            var timeSpanShaders = endShaders - startShaders;
+            var timeSpanDecor = endDecor - startDecor;
+            var timeSpanChallenges = endChallenges - startChallenges;
+
+            Log.Info($"[Content] Indexing TexturePacks took {timeSpanTexturePacks.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Entities took {timeSpanEntities.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Items took {timeSpanItems.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Animations took {timeSpanAnimations.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Spells took {timeSpanSpells.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Faces took {timeSpanFaces.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Images took {timeSpanImages.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Fogs took {timeSpanFogs.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Resources took {timeSpanResources.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Paperdolls took {timeSpanPaperdolls.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Misc took {timeSpanMisc.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Gui took {timeSpanGui.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Fonts took {timeSpanFonts.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Shaders took {timeSpanShaders.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Decor took {timeSpanDecor.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing Challenges took {timeSpanChallenges.TotalMilliseconds}ms");
+            Log.Info($"[Content] Indexing all content took {timeSpanIndexAll.TotalMilliseconds}ms");
+
+            contentLoader.Start();
         }
 
-        public abstract void LoadTexturePacks();
+        public Action[] IndexTextureGroup(string textureGroup, ConcurrentDictionary<string, IAsset> textureLookup)
+        {
+            textureLookup.Clear();
 
-        public abstract void LoadTilesets(string[] tilesetnames);
+            var textureDirectoryPath = Path.Combine("resources", textureGroup);
+            if (!Directory.Exists(textureDirectoryPath))
+            {
+                if (!Directory.Exists(Path.Combine("resources", "packs")))
+                {
+                    Directory.CreateDirectory(textureDirectoryPath);
+                }
 
-        public abstract void LoadItems();
+                return Array.Empty<Action>();
+            }
 
-        public abstract void LoadEntities();
+            var workItems = new List<Action>();
 
-        public abstract void LoadSpells();
+            var looseFiles = Directory.GetFiles(textureDirectoryPath, "*.png");
+            workItems.AddRange(
+                looseFiles
+                    .Select<string, Action>(
+                        looseFilePath => () =>
+                        {
+                            var fileName = looseFilePath.Replace(textureDirectoryPath, string.Empty)
+                                .TrimStart(Path.DirectorySeparatorChar);
 
-        public abstract void LoadAnimations();
+                            var realFilePath = Path.Combine(textureDirectoryPath, fileName);
+                            var texture = LoadTexture(
+                                realFilePath,
+                                realFilePath
+                            );
 
-        public abstract void LoadFaces();
+                            textureLookup.TryAdd(fileName, texture);
+                        }
+                    )
+            );
 
-        public abstract void LoadImages();
+            var groupFrames = GameTexturePacks.GetFolderFrames(textureGroup);
+            if (groupFrames != null)
+            {
+                workItems.AddRange(
+                    groupFrames.Select<GameTexturePackFrame, Action>(
+                        frame => () =>
+                        {
+                            var frameFileName = Path.GetFileName(frame.Filename.ToLower().Replace("\\", "/"));
+                            if (textureLookup.ContainsKey(frameFileName))
+                            {
+                                return;
+                            }
 
-        public abstract void LoadFogs();
+                            var asset = LoadTexture(
+                                Path.Combine(textureDirectoryPath, frameFileName),
+                                Path.Combine(textureDirectoryPath, textureDirectoryPath, frameFileName)
+                            );
 
-        public abstract void LoadResources();
+                            textureLookup.TryAdd(frameFileName, asset);
+                        }
+                    )
+                );
+            }
 
-        public abstract void LoadPaperdolls();
+            return workItems.ToArray();
+        }
 
-        public abstract void LoadGui();
+        protected abstract void InitializeTextureAsset(TextureType textureType);
 
-        public abstract void LoadMisc();
+        public abstract GameTexture LoadTexture(string filename, string realFilename);
 
-        public abstract void LoadFonts();
+        public Action[] IndexTexturePacks()
+        {
+            mTexturePackDict.Clear();
 
-        public abstract void LoadShaders();
+            var dir = Path.Combine("resources", "packs");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
 
-        public abstract void LoadDecor();
+                return Array.Empty<Action>();
+            }
 
-        public abstract void LoadChallenges();
+            var packMetadataNames = Directory.GetFiles(dir, "*.meta");
+
+            return packMetadataNames.Select<string, Action>(
+                    packMetadataName => () =>
+                    {
+                        var json = GzipCompression.ReadDecompressedString(packMetadataName);
+                        var obj = JObject.Parse(json);
+                        if (!obj.TryGetValue("frames", out var framesToken) || !(framesToken is JArray frameMetaTokens))
+                        {
+                            return;
+                        }
+
+                        if (!obj.TryGetValue("meta", out var metaToken) || !(metaToken is JObject meta))
+                        {
+                            return;
+                        }
+
+                        if (!meta.TryGetValue("image", out var imageToken))
+                        {
+                            return;
+                        }
+
+                        var packTextureFileName = imageToken?.ToString();
+                        if (string.IsNullOrWhiteSpace(packTextureFileName))
+                        {
+                            return;
+                        }
+
+                        var packFilePath = Path.Combine("resources", "packs", packTextureFileName);
+                        if (!File.Exists(packFilePath))
+                        {
+                            return;
+                        }
+
+                        var platformText = LoadTexture(
+                            packFilePath,
+                            packFilePath
+                        );
+
+                        if (platformText == null)
+                        {
+                            return;
+                        }
+
+                        foreach (var frameMetaToken in frameMetaTokens)
+                        {
+                            if (!(frameMetaToken is JObject frameMeta))
+                            {
+                                continue;
+                            }
+
+                            if (!frameMeta.TryGetValue("frame", out var frameToken) || !(frameToken is JObject frame))
+                            {
+                                continue;
+                            }
+
+                            if (!frameMeta.TryGetValue("spriteSourceSize", out var spriteSourceSizeToken) ||
+                                !(spriteSourceSizeToken is JObject spriteSourceSize))
+                            {
+                                continue;
+                            }
+
+                            var filename = frameMeta["filename"]?.ToString();
+                            var rotated = bool.Parse(frameMeta["rotated"].ToString());
+
+                            var sourceRect = new Rectangle(
+                                int.Parse(frame["x"].ToString()),
+                                int.Parse(frame["y"].ToString()),
+                                int.Parse(frame["w"].ToString()),
+                                int.Parse(frame["h"].ToString())
+                            );
+
+                            var sourceBounds = new Rectangle(
+                                int.Parse(spriteSourceSize["x"].ToString()),
+                                int.Parse(spriteSourceSize["y"].ToString()),
+                                int.Parse(spriteSourceSize["w"].ToString()),
+                                int.Parse(spriteSourceSize["h"].ToString())
+                            );
+
+                            GameTexturePacks.AddFrame(
+                                new GameTexturePackFrame(
+                                    filename,
+                                    sourceRect,
+                                    rotated,
+                                    sourceBounds,
+                                    platformText
+                                )
+                            );
+                        }
+                    }
+                )
+                .ToArray();
+        }
+
+        public void LoadTilesets(string[] tilesetNames)
+        {
+            if (mTextureAssets.TryGetValue(TextureType.Tileset, out var tilesetDict))
+            {
+                tilesetDict.Clear();
+            }
+            else
+            {
+                InitializeTextureAsset(TextureType.Tileset);
+                tilesetDict = mTextureAssets[TextureType.Tileset];
+            }
+
+            var tilesetDirectoryPath = Path.Combine("resources", "tilesets");
+            if (!Directory.Exists(tilesetDirectoryPath))
+            {
+                if (!Directory.Exists(Path.Combine("resources", "packs")))
+                {
+                    Directory.CreateDirectory(tilesetDirectoryPath);
+                }
+
+                return;
+            }
+
+            var tilesetFiles = Directory.GetFiles(tilesetDirectoryPath)
+                .Select(f => Path.GetFileName(f))
+                .ToDictionary(f => f.ToLowerInvariant(), f => f);
+
+            foreach (var tilesetName in tilesetNames)
+            {
+                if (string.IsNullOrWhiteSpace(tilesetName))
+                {
+                    continue;
+                }
+
+                var searchName = tilesetName.ToLowerInvariant();
+                if (!tilesetFiles.TryGetValue(searchName, out var realFilename))
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(realFilename))
+                {
+                    var packFrame = GameTexturePacks.GetFrame(
+                        Path.Combine("resources", "tilesets", tilesetName),
+                        Path.Combine("resources", "tilesets", searchName)
+                    );
+
+                    if (packFrame == default && !tilesetDict.ContainsKey(searchName))
+                    {
+                        continue;
+                    }
+                }
+
+                var asset = LoadTexture(
+                    Path.Combine("resources", "tilesets", tilesetName),
+                    Path.Combine("resources", "tilesets", realFilename)
+                );
+
+                tilesetDict.TryAdd(searchName, asset);
+            }
+
+            TilesetsLoaded = true;
+        }
+
+        public Action[] IndexItems()
+        {
+            InitializeTextureAsset(TextureType.Item);
+            return IndexTextureGroup("items", mTextureAssets[TextureType.Item]);
+        }
+
+        public Action[] IndexEntities()
+        {
+            InitializeTextureAsset(TextureType.Entity);
+            return IndexTextureGroup("entities", mTextureAssets[TextureType.Entity]);
+        }
+
+        public Action[] IndexSpells()
+        {
+            InitializeTextureAsset(TextureType.Spell);
+            return IndexTextureGroup("spells", mTextureAssets[TextureType.Spell]);
+        }
+
+        public Action[] IndexAnimations()
+        {
+            InitializeTextureAsset(TextureType.Animation);
+            return IndexTextureGroup("animations", mTextureAssets[TextureType.Animation]);
+        }
+
+        public Action[] IndexFaces()
+        {
+            InitializeTextureAsset(TextureType.Face);
+            return IndexTextureGroup("faces", mTextureAssets[TextureType.Face]);
+        }
+
+        public Action[] IndexImages()
+        {
+            InitializeTextureAsset(TextureType.Image);
+            return IndexTextureGroup("images", mTextureAssets[TextureType.Image]);
+        }
+
+        public Action[] IndexFogs()
+        {
+            InitializeTextureAsset(TextureType.Fog);
+            return IndexTextureGroup("fogs", mTextureAssets[TextureType.Fog]);
+        }
+
+        public Action[] IndexResources()
+        {
+            InitializeTextureAsset(TextureType.Resource);
+            return IndexTextureGroup("resources", mTextureAssets[TextureType.Resource]);
+        }
+
+        public Action[] IndexPaperdolls()
+        {
+            InitializeTextureAsset(TextureType.Paperdoll);
+            return IndexTextureGroup("paperdolls", mTextureAssets[TextureType.Paperdoll]);
+        }
+
+        public Action[] IndexGui()
+        {
+            InitializeTextureAsset(TextureType.Gui);
+            return IndexTextureGroup("gui", mTextureAssets[TextureType.Gui]);
+        }
+
+        public Action[] IndexDecor()
+        {
+            InitializeTextureAsset(TextureType.Decor);
+            return IndexTextureGroup("decor", mTextureAssets[TextureType.Decor]);
+        }
+
+        public Action[] IndexChallenges()
+        {
+            InitializeTextureAsset(TextureType.Challenge);
+            return IndexTextureGroup("challenges", mTextureAssets[TextureType.Challenge]);
+        }
+
+        public void LoadLoading()
+        {
+            InitializeTextureAsset(TextureType.Loading);
+            foreach (var workItem in IndexTextureGroup("loading", mTextureAssets[TextureType.Loading]))
+            {
+                workItem();
+            }
+        }
+
+        public Action[] IndexMisc()
+        {
+            InitializeTextureAsset(TextureType.Misc);
+            return IndexTextureGroup("misc", mTextureAssets[TextureType.Misc]);
+        }
+
+        public Action[] IndexFonts()
+        {
+            mFontDict.Clear();
+            var dir = Path.Combine("resources", "fonts");
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            var filePaths = Directory.GetFiles(dir, "*.xnb");
+
+            return filePaths.Select<string, Action>(
+                    filePath => () =>
+                    {
+                        var fileName = filePath.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar).ToLower();
+                        var font = LoadFont(Path.Combine(dir, fileName));
+                        var fontSearchName = $"{font.GetName().Trim().ToLower()},{font.GetSize()}";
+                        mFontDict.TryAdd(fontSearchName, font);
+                    }
+                )
+                .ToArray();
+        }
+
+        public abstract GameFont LoadFont(string filePath);
+
+        public Action[] IndexShaders()
+        {
+            mShaderDict.Clear();
+
+            const string shaderPrefix = "Intersect.Client.Resources.Shaders.";
+            var availableShaders = GetType().Assembly
+                .GetManifestResourceNames()
+                .Where(resourceName =>
+                    resourceName.StartsWith(shaderPrefix)
+                    && resourceName.EndsWith(".xnb")
+                ).ToArray();
+
+            return availableShaders.Select<string, Action>(
+                    resourceFullName => () =>
+                    {
+                        var shaderNameWithoutExtension = resourceFullName.Substring(0, resourceFullName.Length - 4);
+                        var shaderName = shaderNameWithoutExtension.Substring(shaderPrefix.Length);
+                        var shader = LoadShader(resourceFullName);
+                        mShaderDict.TryAdd(shaderName, shader);
+                    }
+                )
+                .ToArray();
+        }
+
+        public abstract GameShader LoadShader(string shaderName);
 
         //Audio Loading
         public void LoadAudio()
@@ -160,9 +602,98 @@ namespace Intersect.Client.Framework.File_Management
             LoadMusic();
         }
 
-        public abstract void LoadSounds();
+        public void LoadSounds()
+        {
+            mSoundDict.Clear();
+            var dir = Path.Combine("resources", "sounds");
+            if (!Directory.Exists(dir))
+            {
+                if (!Directory.Exists(Path.Combine("resources", "packs")))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+            }
+            else
+            {
+                var items = Directory.GetFiles(dir, "*.wav");
+                for (var i = 0; i < items.Length; i++)
+                {
+                    var filename = items[i].Replace(dir, "").TrimStart(Path.DirectorySeparatorChar).ToLower();
+                    mSoundDict.TryAdd(
+                        RemoveExtension(filename),
+                        LoadSoundSource(
+                            Path.Combine(dir, filename),
+                            Path.Combine(dir, items[i].Replace(dir, "").TrimStart(Path.DirectorySeparatorChar))
+                        )
+                    );
+                }
+            }
 
-        public abstract void LoadMusic();
+            // If we have a sound index file, load from it!
+            if (File.Exists(Path.Combine("resources", "packs", "sound.index")))
+            {
+                SoundPacks = new AssetPacker(Path.Combine("resources", "packs", "sound.index"), Path.Combine("resources", "packs"));
+                foreach(var item in SoundPacks.FileList)
+                {
+                    if (!mSoundDict.ContainsKey(RemoveExtension(item).ToLower()))
+                    {
+                        mSoundDict.TryAdd(
+                            RemoveExtension(item).ToLower(),
+                            LoadSoundSource(item, item)
+                        );
+                    }
+                }
+            }
+
+        }
+
+        public abstract GameAudioSource LoadSoundSource(string path, string realPath);
+
+        public void LoadMusic()
+        {
+            mMusicDict.Clear();
+            var dir = Path.Combine("resources", "music");
+            if (!Directory.Exists(dir))
+            {
+                if (!Directory.Exists(Path.Combine("resources", "packs")))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+            }
+            else
+            {
+                var items = Directory.GetFiles(dir, "*.ogg");
+                foreach (var t in items)
+                {
+                    var filename = t.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar).ToLower();
+                    mMusicDict.TryAdd(
+                        RemoveExtension(filename),
+                        LoadMusicSource(
+                            Path.Combine(dir, filename),
+                            Path.Combine(dir, t.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar))
+                        )
+                    );
+                }
+            }
+
+            // If we have a music index file, load from it!
+            if (File.Exists(Path.Combine("resources", "packs", "music.index")))
+            {
+                MusicPacks = new AssetPacker(Path.Combine("resources", "packs", "music.index"), Path.Combine("resources", "packs"));
+                foreach (var item in MusicPacks.FileList)
+                {
+                    if (!mMusicDict.ContainsKey(RemoveExtension(item).ToLower()))
+                    {
+                        mMusicDict.TryAdd(
+                            RemoveExtension(item).ToLower(),
+                            LoadMusicSource(item, item)
+                        );
+                    }
+                }
+            }
+        }
+
+        public abstract GameAudioSource LoadMusicSource(string path, string realPath);
 
         public static string RemoveExtension(string fileName)
         {
@@ -218,9 +749,9 @@ namespace Intersect.Client.Framework.File_Management
                 return null;
             }
 
-            return mFontDict.Where(t => t != null)
-                .Where(t => t.GetName().ToLower().Trim() == name.ToLower().Trim())
-                .FirstOrDefault(t => t.GetSize() == size);
+            var searchName = $"{name.ToLower().Trim()},{size}";
+
+            return mFontDict.TryGetValue(searchName, out var font) ? font : default;
         }
 
         public virtual GameAudioSource GetMusic(string name)
@@ -310,7 +841,7 @@ namespace Intersect.Client.Framework.File_Management
                     try
                     {
                         var json = File.ReadAllText(path);
-                        mUiDict.Add(key, json);
+                        mUiDict.TryAdd(key, json);
                         return json;
                     }
                     catch (Exception ex)
@@ -385,7 +916,7 @@ namespace Intersect.Client.Framework.File_Management
             }
         }
 
-        protected Dictionary<string, IAsset> GetAssetLookup(ContentTypes contentType)
+        protected ConcurrentDictionary<string, IAsset> GetAssetLookup(ContentTypes contentType)
         {
             switch (contentType)
             {
@@ -453,7 +984,7 @@ namespace Intersect.Client.Framework.File_Management
         }
 
         protected abstract TAsset Load<TAsset>(
-            Dictionary<string, IAsset> lookup,
+            ConcurrentDictionary<string, IAsset> lookup,
             ContentTypes contentType,
             string assetName,
             Func<Stream> createStream

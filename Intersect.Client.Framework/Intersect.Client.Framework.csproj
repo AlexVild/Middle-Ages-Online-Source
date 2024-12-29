@@ -64,10 +64,12 @@
     <Compile Include="Audio\GameAudioInstance.cs" />
     <Compile Include="Audio\GameAudioSource.cs" />
     <Compile Include="Content\AssetTypeAttribute.cs" />
+    <Compile Include="Content\ContentLoaderThread.cs" />
     <Compile Include="Content\ContentTypes.cs" />
     <Compile Include="Content\ContentTypesExtensions.cs" />
     <Compile Include="Content\IAsset.cs" />
     <Compile Include="Content\IContentManager.cs" />
+    <Compile Include="Content\ThreadedContentLoader.cs" />
     <Compile Include="Database\GameDatabase.cs" />
     <Compile Include="File Management\GameContentManager.cs" />
     <Compile Include="General\GameStates.cs" />

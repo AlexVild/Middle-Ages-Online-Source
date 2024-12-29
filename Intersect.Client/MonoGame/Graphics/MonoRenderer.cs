@@ -315,7 +315,7 @@ namespace Intersect.Client.MonoGame.Graphics
                 Effect useEffect = null;
 
                 switch (mode)
-                {   
+                {
                     case GameBlendModes.None:
                         blend = mNormalState;
 
@@ -718,9 +718,15 @@ namespace Intersect.Client.MonoGame.Graphics
                 mGameWindow.Title = Strings.Main.gamename;
             }
 
-            foreach (var texture in mAllTextures)
+            // Don't bother even running this loop if PreloadAssets is on
+            // because all of the Update() calls will short-circuit anyway
+            // ReSharper disable once InvertIf
+            if (!ClientConfiguration.Instance.PreloadAssets)
             {
-                texture?.Update();
+                foreach (var texture in mAllTextures)
+                {
+                    texture?.Update();
+                }
             }
         }
 

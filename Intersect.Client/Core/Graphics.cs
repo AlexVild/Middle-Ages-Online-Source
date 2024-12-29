@@ -18,6 +18,10 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
 
+using Microsoft.Xna.Framework;
+
+using MathHelper = Intersect.Utilities.MathHelper;
+
 namespace Intersect.Client.Core
 {
 
@@ -163,31 +167,40 @@ namespace Intersect.Client.Core
         }
 
         //Init Functions
-        public static void InitGraphics()
+        public static void InitGraphics(Action onCompleted)
         {
             Renderer.Init();
             sContentManager = Globals.ContentManager;
-            sContentManager.LoadAll();
+            sContentManager.LoadAll(
+                () =>
+                {
+                    GameFont = FindFont(ClientConfiguration.Instance.GameFont);
+                    UIFont = FindFont(ClientConfiguration.Instance.UIFont);
+                    EntityNameFont = FindFont(ClientConfiguration.Instance.EntityNameFont);
+                    ChatBubbleFont = FindFont(ClientConfiguration.Instance.ChatBubbleFont);
+                    ActionMsgFont = FindFont(ClientConfiguration.Instance.ActionMsgFont);
+                    HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
+                    HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
+                    ToastFont = FindFont(ClientConfiguration.Instance.ToastFont);
+                    ToastFontSmall = FindFont(ClientConfiguration.Instance.ToastFontSmall);
+                    TerritoryFont = FindFont(ClientConfiguration.Instance.TerritoryFont);
+                    DamageFont = FindFont(ClientConfiguration.Instance.DamageFont);
+                    MenuTexture = sContentManager.GetTexture(
+                        GameContentManager.TextureType.Gui, ClientConfiguration.Instance.MenuBackground
+                    );
 
-            GameFont = FindFont(ClientConfiguration.Instance.GameFont);
-            UIFont = FindFont(ClientConfiguration.Instance.UIFont);
-            EntityNameFont = FindFont(ClientConfiguration.Instance.EntityNameFont);
-            ChatBubbleFont = FindFont(ClientConfiguration.Instance.ChatBubbleFont);
-            ActionMsgFont = FindFont(ClientConfiguration.Instance.ActionMsgFont);
-            HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
-            HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
-            ToastFont = FindFont(ClientConfiguration.Instance.ToastFont);
-            ToastFontSmall = FindFont(ClientConfiguration.Instance.ToastFontSmall);
-            TerritoryFont = FindFont(ClientConfiguration.Instance.TerritoryFont);
-            DamageFont = FindFont(ClientConfiguration.Instance.DamageFont);
-            MenuTexture = sContentManager.GetTexture(
-                GameContentManager.TextureType.Gui, ClientConfiguration.Instance.MenuBackground
+                    LogoTexture = sContentManager.GetTexture(
+                        GameContentManager.TextureType.Gui, ClientConfiguration.Instance.Logo
+                    );
+
+                    CombatNumberManager.CacheTextureRefs();
+                    ScanlineTexture = Globals.ContentManager.GetTexture(
+                        GameContentManager.TextureType.Image, "scanlines.png"
+                    );
+
+                    onCompleted();
+                }
             );
-            LogoTexture = sContentManager.GetTexture(
-                GameContentManager.TextureType.Gui, ClientConfiguration.Instance.Logo
-            );
-            CombatNumberManager.CacheTextureRefs();
-            ScanlineTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
         }
 
         public static GameFont FindFont(string font)
@@ -249,7 +262,7 @@ namespace Intersect.Client.Core
             }
         }
 
-        public static void DrawLoadingScreen()
+        public static void DrawLoadingScreen(TimeSpan totalTime)
         {
             // Get screen dimensions
             var screenHeight = Renderer.GetScreenHeight();
@@ -268,7 +281,13 @@ namespace Intersect.Client.Core
             var x = centerW - (loadingTxt.Width * scale / 2);
             var y = centerH - (loadingTxt.Height * scale / 2);
 
-            DrawGameTexture(loadingTxt, new FloatRect(0, 0, loadingTxt.Width, loadingTxt.Height), new FloatRect(x, y, loadingTxt.Width * scale, loadingTxt.Height * scale), Color.White);
+            DrawGameTexture(
+                loadingTxt,
+                new FloatRect(0, 0, loadingTxt.Width, loadingTxt.Height),
+                new FloatRect(x, y, loadingTxt.Width * scale, loadingTxt.Height * scale),
+                Color.White,
+                rotationDegrees: (float)totalTime.TotalSeconds * 180 /* FYI: Proof that the texture/font/shader loading is not on the main thread */
+            );
         }
 
         public static void DrawMenu()
@@ -408,7 +427,7 @@ namespace Intersect.Client.Core
             CombatNumberManager.UpdateAndDrawCombatNumbers();
             EndAnimationDraw();
             DrawScanlines();
-            
+
             // Because we want to render widescreen textures with different colors depending on the estimated background color of the map
             if (Globals.Me.MapInstance.IsIndoors && Globals.Me.MapInstance.Brightness <= 70 || Globals.Me.MapInstance.IsIndoors)
             {
@@ -417,7 +436,7 @@ namespace Intersect.Client.Core
                 DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), new Color(255, 20, 20, 20),
                     ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
-            else 
+            else
             {
                 // Use a _black_ background when in lighter areas
                 DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.Black,
@@ -443,7 +462,7 @@ namespace Intersect.Client.Core
             {
                 takingScreenshot = Renderer.BeginScreenshot();
             }
-            
+
             if (Renderer == default)
             {
                 return;
@@ -490,7 +509,7 @@ namespace Intersect.Client.Core
 
                     break;
                 case GameStates.Loading:
-                    DrawLoadingScreen();
+                    DrawLoadingScreen(totalTime);
                     break;
                 case GameStates.InGame:
                     DrawInGame();
@@ -500,7 +519,7 @@ namespace Intersect.Client.Core
                     break;
 
                 case GameStates.Preloading:
-                    DrawLoadingScreen();
+                    DrawLoadingScreen(totalTime);
                     break;
 
                 default:
@@ -533,7 +552,7 @@ namespace Intersect.Client.Core
                     Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, ClientConfiguration.Instance.MouseCursor), renderLoc.X, renderLoc.Y
                );
             }
-            
+
             Renderer.End();
             HasRendered = true;
 
@@ -936,7 +955,7 @@ namespace Intersect.Client.Core
             var destRect = new FloatRect(
                 Renderer.GetView().X + offsetX, Renderer.GetView().Y, scaledWidth, Renderer.GetScreenHeight()
             );
-            
+
             DrawGameTexture(tex, sourceRect, destRect, Color.White);
         }
 
@@ -1584,14 +1603,14 @@ namespace Intersect.Client.Core
     public static partial class Graphics
     {
         public static GameFont HUDFont;
-        
+
         public static GameFont HUDFontSmall;
 
         public static GameFont ToastFont;
         public static GameFont ToastFontSmall;
 
         public static GameFont DamageFont;
-        
+
         public static GameFont TerritoryFont;
 
         private static GameTexture MenuTexture;
@@ -1701,10 +1720,10 @@ namespace Intersect.Client.Core
                 hFrame = 0;
                 vFrame = 0;
             }
-            
+
             var fpsMillis = frameRate * 10;
             lastUpdate = Timing.Global.MillisecondsUtcUnsynced + fpsMillis;
-            
+
             return true;
         }
 

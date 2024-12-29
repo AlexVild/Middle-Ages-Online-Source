@@ -132,7 +132,7 @@ namespace Intersect.Client.Core
 
         private static void ProcessIntro()
         {
-            if (ClientConfiguration.Instance.IntroImages.Count <= 0 || 
+            if (ClientConfiguration.Instance.IntroImages.Count <= 0 ||
                 Globals.IntroIndex >= ClientConfiguration.Instance.IntroImages.Count)
             {
                 Globals.GameState = GameStates.Menu;
@@ -404,6 +404,8 @@ namespace Intersect.Client.Core
             Time.Update();
         }
 
+        private static bool _startedLoading = false;
+
         private static void ProcessPreloading()
         {
             if (!Graphics.HasRendered) // Don't hog the main-thread until we've rendered a frame -- otherwise the loading screen won't appear yet
@@ -411,8 +413,11 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            Graphics.InitGraphics();
-            StartIntro();
+            if (!_startedLoading)
+            {
+                _startedLoading = true;
+                Graphics.InitGraphics(StartIntro);
+            }
         }
 
         public static void JoinGame()

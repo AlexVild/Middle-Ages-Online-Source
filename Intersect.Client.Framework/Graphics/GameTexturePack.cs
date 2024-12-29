@@ -16,19 +16,22 @@ namespace Intersect.Client.Framework.Graphics
 
         public static void AddFrame(GameTexturePackFrame frame)
         {
-            mFrames.Add(frame);
-
-            //find the sub folder
-            var sep = new char[] {'/', '\\'};
-            var subFolder = frame.Filename.Split(sep)[1].ToLower();
-            if (!mFrameTypes.ContainsKey(subFolder))
+            lock (mFrames)
             {
-                mFrameTypes.Add(subFolder, new List<GameTexturePackFrame>());
-            }
+                mFrames.Add(frame);
 
-            if (!mFrameTypes[subFolder].Contains(frame))
-            {
-                mFrameTypes[subFolder].Add(frame);
+                //find the sub folder
+                var sep = new char[] {'/', '\\'};
+                var subFolder = frame.Filename.Split(sep)[1].ToLower();
+                if (!mFrameTypes.ContainsKey(subFolder))
+                {
+                    mFrameTypes.Add(subFolder, new List<GameTexturePackFrame>());
+                }
+
+                if (!mFrameTypes[subFolder].Contains(frame))
+                {
+                    mFrameTypes[subFolder].Add(frame);
+                }
             }
         }
 
@@ -42,10 +45,16 @@ namespace Intersect.Client.Framework.Graphics
             return null;
         }
 
-        public static GameTexturePackFrame GetFrame(string filename)
+        public static GameTexturePackFrame GetFrame(params string[] filenames)
         {
-            filename = filename.Replace("\\", "/");
-            return mFrames.Where(p => p.Filename.ToLower() == filename).FirstOrDefault();
+            foreach (var filename in filenames)
+            {
+                var searchName = filename.Replace("\\", "/");
+
+                return mFrames.Where(p => p.Filename.ToLower() == searchName).FirstOrDefault();
+            }
+
+            return default;
         }
 
     }

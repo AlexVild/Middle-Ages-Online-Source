@@ -112,7 +112,7 @@ namespace Intersect.Client.MonoGame
 
             Window.Position = new Microsoft.Xna.Framework.Point(-20, -2000);
             Window.AllowAltF4 = false;
-            
+
             if (!string.IsNullOrWhiteSpace(ClientConfiguration.Instance.UpdateUrl))
             {
                 mUpdater = new Updater.Updater(
@@ -225,7 +225,7 @@ namespace Intersect.Client.MonoGame
 
             if (Globals.GameState == GameStates.Preloading && Core.Graphics.Initialized)
             {
-                Core.Graphics.DrawLoadingScreen();
+                Core.Graphics.DrawLoadingScreen(gameTime.TotalGameTime);
             }
 
             if (mUpdater == null)
