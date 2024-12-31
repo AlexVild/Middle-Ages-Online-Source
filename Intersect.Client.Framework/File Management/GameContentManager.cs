@@ -237,24 +237,30 @@ namespace Intersect.Client.Framework.File_Management
             var workItems = new List<Action>();
 
             var looseFiles = Directory.GetFiles(textureDirectoryPath, "*.png");
-            workItems.AddRange(
-                looseFiles
-                    .Select<string, Action>(
-                        looseFilePath => () =>
+            var looseLoadItems = looseFiles
+                .Select<string, Action>(
+                    looseFilePath => () =>
+                    {
+                        var fileName = looseFilePath.Replace(textureDirectoryPath, string.Empty)
+                            .TrimStart(Path.DirectorySeparatorChar);
+
+                        var realFilePath = Path.Combine(textureDirectoryPath, fileName);
+                        var texture = LoadTexture(
+                            realFilePath,
+                            realFilePath
+                        );
+
+                        var textureName = fileName.ToLowerInvariant();
+                        if (!textureLookup.TryAdd(textureName, texture))
                         {
-                            var fileName = looseFilePath.Replace(textureDirectoryPath, string.Empty)
-                                .TrimStart(Path.DirectorySeparatorChar);
-
-                            var realFilePath = Path.Combine(textureDirectoryPath, fileName);
-                            var texture = LoadTexture(
-                                realFilePath,
-                                realFilePath
+                            Log.Error(
+                                $"Failed to add loaded texture for {looseFilePath} to the texture lookup because another texture shares the name '{textureName}'"
                             );
-
-                            textureLookup.TryAdd(fileName, texture);
                         }
-                    )
-            );
+                    }
+                )
+                .ToArray();
+            workItems.AddRange(looseLoadItems);
 
             var groupFrames = GameTexturePacks.GetFolderFrames(textureGroup);
             if (groupFrames != null)
@@ -274,7 +280,7 @@ namespace Intersect.Client.Framework.File_Management
                                 Path.Combine(textureDirectoryPath, textureDirectoryPath, frameFileName)
                             );
 
-                            textureLookup.TryAdd(frameFileName, asset);
+                            textureLookup.TryAdd(frameFileName.ToLowerInvariant(), asset);
                         }
                     )
                 );
@@ -560,7 +566,7 @@ namespace Intersect.Client.Framework.File_Management
                     {
                         var fileName = filePath.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar).ToLower();
                         var font = LoadFont(Path.Combine(dir, fileName));
-                        var fontSearchName = $"{font.GetName().Trim().ToLower()},{font.GetSize()}";
+                        var fontSearchName = $"{font.GetName().Trim().ToLowerInvariant()},{font.GetSize()}";
                         mFontDict.TryAdd(fontSearchName, font);
                     }
                 )
@@ -585,8 +591,8 @@ namespace Intersect.Client.Framework.File_Management
                     resourceFullName => () =>
                     {
                         var shaderNameWithoutExtension = resourceFullName.Substring(0, resourceFullName.Length - 4);
-                        var shaderName = shaderNameWithoutExtension.Substring(shaderPrefix.Length);
                         var shader = LoadShader(resourceFullName);
+                        var shaderName = shaderNameWithoutExtension.Substring(shaderPrefix.Length).ToLowerInvariant();
                         mShaderDict.TryAdd(shaderName, shader);
                     }
                 )
@@ -615,15 +621,15 @@ namespace Intersect.Client.Framework.File_Management
             }
             else
             {
-                var items = Directory.GetFiles(dir, "*.wav");
-                for (var i = 0; i < items.Length; i++)
+                var soundFilePaths = Directory.GetFiles(dir, "*.wav");
+                foreach (var soundFilePath in soundFilePaths)
                 {
-                    var filename = items[i].Replace(dir, "").TrimStart(Path.DirectorySeparatorChar).ToLower();
+                    var filename = soundFilePath.Replace(dir, string.Empty).TrimStart(Path.DirectorySeparatorChar).ToLowerInvariant();
                     mSoundDict.TryAdd(
                         RemoveExtension(filename),
                         LoadSoundSource(
                             Path.Combine(dir, filename),
-                            Path.Combine(dir, items[i].Replace(dir, "").TrimStart(Path.DirectorySeparatorChar))
+                            Path.Combine(dir, soundFilePath.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar))
                         )
                     );
                 }
@@ -633,14 +639,12 @@ namespace Intersect.Client.Framework.File_Management
             if (File.Exists(Path.Combine("resources", "packs", "sound.index")))
             {
                 SoundPacks = new AssetPacker(Path.Combine("resources", "packs", "sound.index"), Path.Combine("resources", "packs"));
-                foreach(var item in SoundPacks.FileList)
+                foreach(var soundFileName in SoundPacks.FileList)
                 {
-                    if (!mSoundDict.ContainsKey(RemoveExtension(item).ToLower()))
+                    var soundName = RemoveExtension(soundFileName).ToLowerInvariant();
+                    if (!mSoundDict.TryAdd(soundName, LoadSoundSource(soundFileName, soundFileName)))
                     {
-                        mSoundDict.TryAdd(
-                            RemoveExtension(item).ToLower(),
-                            LoadSoundSource(item, item)
-                        );
+                        Log.Error($"Found two sounds with the normalized name '{soundName}'");
                     }
                 }
             }
@@ -662,15 +666,15 @@ namespace Intersect.Client.Framework.File_Management
             }
             else
             {
-                var items = Directory.GetFiles(dir, "*.ogg");
-                foreach (var t in items)
+                var musicFilePaths = Directory.GetFiles(dir, "*.ogg");
+                foreach (var musicFilePath in musicFilePaths)
                 {
-                    var filename = t.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar).ToLower();
+                    var musicFileName = musicFilePath.Replace(dir, string.Empty).TrimStart(Path.DirectorySeparatorChar).ToLowerInvariant();
                     mMusicDict.TryAdd(
-                        RemoveExtension(filename),
+                        RemoveExtension(musicFileName),
                         LoadMusicSource(
-                            Path.Combine(dir, filename),
-                            Path.Combine(dir, t.Replace(dir, "").TrimStart(Path.DirectorySeparatorChar))
+                            Path.Combine(dir, musicFileName),
+                            Path.Combine(dir, musicFilePath.Replace(dir, string.Empty).TrimStart(Path.DirectorySeparatorChar))
                         )
                     );
                 }
@@ -680,14 +684,12 @@ namespace Intersect.Client.Framework.File_Management
             if (File.Exists(Path.Combine("resources", "packs", "music.index")))
             {
                 MusicPacks = new AssetPacker(Path.Combine("resources", "packs", "music.index"), Path.Combine("resources", "packs"));
-                foreach (var item in MusicPacks.FileList)
+                foreach (var musicFileName in MusicPacks.FileList)
                 {
-                    if (!mMusicDict.ContainsKey(RemoveExtension(item).ToLower()))
+                    var musicName = RemoveExtension(musicFileName).ToLowerInvariant();
+                    if (!mSoundDict.TryAdd(musicName, LoadMusicSource(musicFileName, musicFileName)))
                     {
-                        mMusicDict.TryAdd(
-                            RemoveExtension(item).ToLower(),
-                            LoadMusicSource(item, item)
-                        );
+                        Log.Error($"Found two music tracks with the normalized name '{musicName}'");
                     }
                 }
             }
