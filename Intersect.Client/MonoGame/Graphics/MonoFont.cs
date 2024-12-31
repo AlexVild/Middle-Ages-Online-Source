@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
@@ -19,10 +20,14 @@ namespace Intersect.Client.MonoGame.Graphics
             fontName, fontSize
         )
         {
+            Debug.Assert(contentManager != null, nameof(contentManager) + " != null");
             try
             {
                 fileName = GameContentManager.RemoveExtension(fileName);
-                mFont = contentManager.Load<SpriteFont>(fileName);
+                lock (contentManager)
+                {
+                    mFont = contentManager.Load<SpriteFont>(fileName);
+                }
             }
             catch (Exception ex)
             {
