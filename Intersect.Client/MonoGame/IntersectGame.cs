@@ -181,8 +181,7 @@ namespace Intersect.Client.MonoGame
             }
             else
             {
-                Mouse.SetCursor(MouseCursor.Wait);
-                IsMouseVisible = true;
+                IsMouseVisible = false;
             }
 
             if (mUpdater != null)

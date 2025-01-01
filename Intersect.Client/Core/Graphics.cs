@@ -272,7 +272,8 @@ namespace Intersect.Client.Core
             var centerW = screenWidth / 2;
 
             var loadingTxt = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Loading, "loading_screen.png");
-            if (loadingTxt == null)
+            var loadingSpinner = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Loading, "loading_spinner.png");
+            if (loadingTxt == null || loadingSpinner == null)
             {
                 return;
             }
@@ -280,13 +281,21 @@ namespace Intersect.Client.Core
             var scale = 4;
             var x = centerW - (loadingTxt.Width * scale / 2);
             var y = centerH - (loadingTxt.Height * scale / 2);
+            var spinnerX = centerW - (loadingSpinner.Width * scale / 2);
+            var spinnerY = centerH + (loadingTxt.Height * scale / 2);
 
             DrawGameTexture(
                 loadingTxt,
                 new FloatRect(0, 0, loadingTxt.Width, loadingTxt.Height),
                 new FloatRect(x, y, loadingTxt.Width * scale, loadingTxt.Height * scale),
+                Color.White
+            );
+            DrawGameTexture(
+                loadingSpinner,
+                new FloatRect(0, 0, loadingSpinner.Width, loadingSpinner.Height),
+                new FloatRect(spinnerX, spinnerY, loadingSpinner.Width * scale, loadingSpinner.Height * scale),
                 Color.White,
-                rotationDegrees: (float)totalTime.TotalSeconds * 180 /* FYI: Proof that the texture/font/shader loading is not on the main thread */
+                rotationDegrees: (float)totalTime.TotalSeconds * 180
             );
         }
 
