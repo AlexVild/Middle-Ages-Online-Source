@@ -232,22 +232,29 @@ namespace Intersect.Client.Framework.File_Management
         {
             textureLookup.Clear();
 
+            string[] looseFiles;
             var textureDirectoryPath = Path.Combine("resources", textureGroup);
             if (!Directory.Exists(textureDirectoryPath))
             {
                 if (!Directory.Exists(Path.Combine("resources", "packs")))
                 {
                     Directory.CreateDirectory(textureDirectoryPath);
+                    return Array.Empty<Action>();
                 }
 
-                return Array.Empty<Action>();
+                looseFiles = Array.Empty<string>();
             }
+            else
+            {
+                looseFiles = Directory.GetFiles(textureDirectoryPath, "*.png");
+            }
+
+            GameTexturePacks.TryGetFolderFrames(textureGroup, out var groupFrames);
 
             GameTexturePacks.TryGetFolderFrames(textureGroup, out var groupFrames);
 
             var workItems = new List<Action>();
 
-            var looseFiles = Directory.GetFiles(textureDirectoryPath, "*.png");
             var looseLoadItems = looseFiles
                 .Where(
                     looseFilePath =>
@@ -467,18 +474,22 @@ namespace Intersect.Client.Framework.File_Management
             }
 
             var tilesetDirectoryPath = Path.Combine("resources", "tilesets");
+            var tilesetDirectoryFilePaths = Array.Empty<string>();
             if (!Directory.Exists(tilesetDirectoryPath))
             {
                 if (!Directory.Exists(Path.Combine("resources", "packs")))
                 {
                     Directory.CreateDirectory(tilesetDirectoryPath);
-                }
 
-                return;
+                    return;
+                }
+            }
+            else
+            {
+                tilesetDirectoryFilePaths = Directory.GetFiles(tilesetDirectoryPath);
             }
 
-            var tilesetFiles = Directory.GetFiles(tilesetDirectoryPath)
-                .Select(f => Path.GetFileName(f))
+            var tilesetFiles = tilesetDirectoryFilePaths.Select(Path.GetFileName)
                 .ToDictionary(f => f.ToLowerInvariant(), f => f);
 
             foreach (var tilesetName in tilesetNames)
@@ -489,22 +500,22 @@ namespace Intersect.Client.Framework.File_Management
                 }
 
                 var searchName = tilesetName.ToLowerInvariant();
-                if (!tilesetFiles.TryGetValue(searchName, out var realFilename))
+                if (tilesetDict.ContainsKey(searchName))
                 {
                     continue;
                 }
 
-                if (string.IsNullOrWhiteSpace(realFilename))
-                {
-                    var packFrame = GameTexturePacks.GetFrame(
-                        Path.Combine("resources", "tilesets", tilesetName),
-                        Path.Combine("resources", "tilesets", searchName)
-                    );
+                var packFrame = GameTexturePacks.GetFrame(
+                    Path.Combine("resources", "tilesets", tilesetName),
+                    Path.Combine("resources", "tilesets", searchName)
+                );
 
-                    if (packFrame == default && !tilesetDict.ContainsKey(searchName))
-                    {
-                        continue;
-                    }
+                var realFilename = Path.GetFileName(packFrame?.Filename);
+                if (packFrame == default &&
+                    (!tilesetFiles.TryGetValue(searchName, out realFilename) ||
+                     string.IsNullOrWhiteSpace(realFilename)))
+                {
+                    continue;
                 }
 
                 var asset = LoadTexture(
