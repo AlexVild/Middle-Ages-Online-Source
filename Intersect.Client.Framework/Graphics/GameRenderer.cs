@@ -103,7 +103,12 @@ namespace Intersect.Client.Framework.Graphics
 
         public abstract GameRenderTexture CreateRenderTexture(int width, int height);
 
-        public abstract GameTexture LoadTexture(string filename, string realFilename);
+        public abstract GameTexture LoadTexture(
+            string filename,
+            string realFilename,
+            bool isTexturePack = false,
+            GameTexturePackFrame packFrame = null
+        );
 
         public abstract GameTexture LoadTexture(
             string assetName,

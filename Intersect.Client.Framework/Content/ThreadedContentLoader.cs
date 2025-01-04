@@ -110,7 +110,7 @@ namespace Intersect.Client.Framework.Content
             }
         }
 
-        public void Start()
+        public void Start(bool join = false)
         {
             Log.Info($"[Content] Running {TaskCount} tasks on {_threadCount} threads...");
 
@@ -119,6 +119,16 @@ namespace Intersect.Client.Framework.Content
             foreach (var thread in _threads)
             {
                 thread.Start();
+            }
+
+            if (!join)
+            {
+                return;
+            }
+
+            foreach (var thread in _threads)
+            {
+                thread.Join();
             }
         }
     }

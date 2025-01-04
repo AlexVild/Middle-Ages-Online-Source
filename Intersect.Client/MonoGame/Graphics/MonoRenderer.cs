@@ -884,25 +884,36 @@ namespace Intersect.Client.MonoGame.Graphics
             return new MonoShader(shaderName, mContentManager);
         }
 
-        public override GameTexture LoadTexture(string filename, string realFilename)
+        public override GameTexture LoadTexture(
+            string filename,
+            string realFilename,
+            bool isTexturePack = false,
+            GameTexturePackFrame packFrame = null
+        )
         {
-            var packFrame = GameTexturePacks.GetFrame(filename);
-            if (packFrame != null)
-            {
-                var tx = new MonoTexture(mGraphicsDevice, filename, packFrame);
-                mAllTextures.Add(tx);
+            MonoTexture texture = default;
 
-                return tx;
+            if (!isTexturePack)
+            {
+                packFrame = packFrame ?? GameTexturePacks.GetFrame(filename);
+                if (packFrame != null)
+                {
+                    texture = new MonoTexture(mGraphicsDevice, filename, packFrame);
+                }
             }
 
-            var tex = new MonoTexture(mGraphicsDevice, filename, realFilename);
-            if (ClientConfiguration.Instance.PreloadAssets)
+            if (texture == default)
             {
-                tex.LoadTexture();
+                texture = new MonoTexture(mGraphicsDevice, filename, realFilename);
+                if (ClientConfiguration.Instance.PreloadAssets)
+                {
+                    texture.LoadTexture();
+                }
             }
-            mAllTextures.Add(tex);
 
-            return tex;
+            mAllTextures.Add(texture);
+
+            return texture;
         }
 
         /// <inheritdoc />

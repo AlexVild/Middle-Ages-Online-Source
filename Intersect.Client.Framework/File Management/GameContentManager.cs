@@ -107,116 +107,125 @@ namespace Intersect.Client.Framework.File_Management
         //Content Loading
         public void LoadAll(Action onCompleted)
         {
-            var contentLoader = new ThreadedContentLoader();
-            contentLoader.Completed += onCompleted;
-
-            Log.Info("[Content] Starting content indexing...");
-
-            var startIndexAll = DateTime.UtcNow;
+            var packLoader = new ThreadedContentLoader();
 
             var startTexturePacks = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexTexturePacks());
+            packLoader.EnqueueWork(IndexTexturePacks());
             var endTexturePacks = DateTime.UtcNow;
 
-            var startEntities = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexEntities());
-            var endEntities = DateTime.UtcNow;
-
-            var startItems = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexItems());
-            var endItems = DateTime.UtcNow;
-
-            var startAnimations = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexAnimations());
-            var endAnimations = DateTime.UtcNow;
-
-            var startSpells = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexSpells());
-            var endSpells = DateTime.UtcNow;
-
-            var startFaces = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexFaces());
-            var endFaces = DateTime.UtcNow;
-
-            var startImages = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexImages());
-            var endImages = DateTime.UtcNow;
-
-            var startFogs = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexFogs());
-            var endFogs = DateTime.UtcNow;
-
-            var startResources = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexResources());
-            var endResources = DateTime.UtcNow;
-
-            var startPaperdolls = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexPaperdolls());
-            var endPaperdolls = DateTime.UtcNow;
-
-            var startMisc = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexMisc());
-            var endMisc = DateTime.UtcNow;
-
-            var startGui = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexGui());
-            var endGui = DateTime.UtcNow;
-
-            var startFonts = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexFonts());
-            var endFonts = DateTime.UtcNow;
-
-            var startShaders = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexShaders());
-            var endShaders = DateTime.UtcNow;
-
-            var startDecor = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexDecor());
-            var endDecor = DateTime.UtcNow;
-
-            var startChallenges = DateTime.UtcNow;
-            contentLoader.EnqueueWork(IndexChallenges());
-            var endChallenges = DateTime.UtcNow;
-
-            var endAll = DateTime.UtcNow;
-            var timeSpanIndexAll = endAll - startIndexAll;
-
             var timeSpanTexturePacks = endTexturePacks - startTexturePacks;
-            var timeSpanEntities = endEntities - startEntities;
-            var timeSpanItems = endItems - startItems;
-            var timeSpanAnimations = endAnimations - startAnimations;
-            var timeSpanSpells = endSpells - startSpells;
-            var timeSpanFaces = endFaces - startFaces;
-            var timeSpanImages = endImages - startImages;
-            var timeSpanFogs = endFogs - startFogs;
-            var timeSpanResources = endResources - startResources;
-            var timeSpanPaperdolls = endPaperdolls - startPaperdolls;
-            var timeSpanMisc = endMisc - startMisc;
-            var timeSpanGui = endGui - startGui;
-            var timeSpanFonts = endFonts - startFonts;
-            var timeSpanShaders = endShaders - startShaders;
-            var timeSpanDecor = endDecor - startDecor;
-            var timeSpanChallenges = endChallenges - startChallenges;
 
             Log.Info($"[Content] Indexing TexturePacks took {timeSpanTexturePacks.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Entities took {timeSpanEntities.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Items took {timeSpanItems.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Animations took {timeSpanAnimations.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Spells took {timeSpanSpells.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Faces took {timeSpanFaces.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Images took {timeSpanImages.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Fogs took {timeSpanFogs.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Resources took {timeSpanResources.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Paperdolls took {timeSpanPaperdolls.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Misc took {timeSpanMisc.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Gui took {timeSpanGui.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Fonts took {timeSpanFonts.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Shaders took {timeSpanShaders.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Decor took {timeSpanDecor.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing Challenges took {timeSpanChallenges.TotalMilliseconds}ms");
-            Log.Info($"[Content] Indexing all content took {timeSpanIndexAll.TotalMilliseconds}ms");
 
-            contentLoader.Start();
+            packLoader.Completed += () =>
+            {
+                var contentLoader = new ThreadedContentLoader();
+                contentLoader.Completed += onCompleted;
+
+                Log.Info("[Content] Starting content indexing...");
+
+                var startIndexAll = DateTime.UtcNow;
+
+                var startEntities = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexEntities());
+                var endEntities = DateTime.UtcNow;
+
+                var startItems = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexItems());
+                var endItems = DateTime.UtcNow;
+
+                var startAnimations = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexAnimations());
+                var endAnimations = DateTime.UtcNow;
+
+                var startSpells = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexSpells());
+                var endSpells = DateTime.UtcNow;
+
+                var startFaces = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexFaces());
+                var endFaces = DateTime.UtcNow;
+
+                var startImages = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexImages());
+                var endImages = DateTime.UtcNow;
+
+                var startFogs = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexFogs());
+                var endFogs = DateTime.UtcNow;
+
+                var startResources = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexResources());
+                var endResources = DateTime.UtcNow;
+
+                var startPaperdolls = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexPaperdolls());
+                var endPaperdolls = DateTime.UtcNow;
+
+                var startMisc = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexMisc());
+                var endMisc = DateTime.UtcNow;
+
+                var startGui = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexGui());
+                var endGui = DateTime.UtcNow;
+
+                var startFonts = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexFonts());
+                var endFonts = DateTime.UtcNow;
+
+                var startShaders = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexShaders());
+                var endShaders = DateTime.UtcNow;
+
+                var startDecor = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexDecor());
+                var endDecor = DateTime.UtcNow;
+
+                var startChallenges = DateTime.UtcNow;
+                contentLoader.EnqueueWork(IndexChallenges());
+                var endChallenges = DateTime.UtcNow;
+
+                var endAll = DateTime.UtcNow;
+                var timeSpanIndexAll = endAll - startIndexAll;
+
+                var timeSpanEntities = endEntities - startEntities;
+                var timeSpanItems = endItems - startItems;
+                var timeSpanAnimations = endAnimations - startAnimations;
+                var timeSpanSpells = endSpells - startSpells;
+                var timeSpanFaces = endFaces - startFaces;
+                var timeSpanImages = endImages - startImages;
+                var timeSpanFogs = endFogs - startFogs;
+                var timeSpanResources = endResources - startResources;
+                var timeSpanPaperdolls = endPaperdolls - startPaperdolls;
+                var timeSpanMisc = endMisc - startMisc;
+                var timeSpanGui = endGui - startGui;
+                var timeSpanFonts = endFonts - startFonts;
+                var timeSpanShaders = endShaders - startShaders;
+                var timeSpanDecor = endDecor - startDecor;
+                var timeSpanChallenges = endChallenges - startChallenges;
+
+                Log.Info($"[Content] Indexing Entities took {timeSpanEntities.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Items took {timeSpanItems.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Animations took {timeSpanAnimations.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Spells took {timeSpanSpells.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Faces took {timeSpanFaces.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Images took {timeSpanImages.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Fogs took {timeSpanFogs.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Resources took {timeSpanResources.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Paperdolls took {timeSpanPaperdolls.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Misc took {timeSpanMisc.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Gui took {timeSpanGui.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Fonts took {timeSpanFonts.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Shaders took {timeSpanShaders.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Decor took {timeSpanDecor.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing Challenges took {timeSpanChallenges.TotalMilliseconds}ms");
+                Log.Info($"[Content] Indexing all content took {timeSpanIndexAll.TotalMilliseconds}ms");
+
+                contentLoader.Start();
+            };
+
+            packLoader.Start();
         }
 
         public Action[] IndexTextureGroup(string textureGroup, ConcurrentDictionary<string, IAsset> textureLookup)
@@ -234,23 +243,60 @@ namespace Intersect.Client.Framework.File_Management
                 return Array.Empty<Action>();
             }
 
+            GameTexturePacks.TryGetFolderFrames(textureGroup, out var groupFrames);
+
             var workItems = new List<Action>();
 
             var looseFiles = Directory.GetFiles(textureDirectoryPath, "*.png");
             var looseLoadItems = looseFiles
+                .Where(
+                    looseFilePath =>
+                    {
+                        if (groupFrames == default &&
+                            !GameTexturePacks.TryGetFolderFrames(textureGroup, out groupFrames))
+                        {
+                            return true;
+                        }
+
+                        var fileName = looseFilePath.Replace(textureDirectoryPath, string.Empty)
+                            .TrimStart(Path.DirectorySeparatorChar);
+
+                        var textureName = fileName.ToLowerInvariant();
+                        if (!groupFrames.TryGetValue(textureName, out var matchingPackFrame))
+                        {
+                            return true;
+                        }
+
+                        Log.Debug(
+                            $"Texture '{textureName}' already found in texture pack '{matchingPackFrame.PackTexture.Name}'"
+                        );
+
+                        return false;
+
+                    }
+                )
                 .Select<string, Action>(
                     looseFilePath => () =>
                     {
                         var fileName = looseFilePath.Replace(textureDirectoryPath, string.Empty)
                             .TrimStart(Path.DirectorySeparatorChar);
 
+                        var textureName = fileName.ToLowerInvariant();
+
                         var realFilePath = Path.Combine(textureDirectoryPath, fileName);
+
+                        if (textureLookup.ContainsKey(textureName))
+                        {
+                            Log.Warn($"Duplicate texture with name '{textureName}' ({realFilePath})");
+
+                            return;
+                        }
+
                         var texture = LoadTexture(
                             realFilePath,
                             realFilePath
                         );
 
-                        var textureName = fileName.ToLowerInvariant();
                         if (!textureLookup.TryAdd(textureName, texture))
                         {
                             Log.Error(
@@ -262,27 +308,30 @@ namespace Intersect.Client.Framework.File_Management
                 .ToArray();
             workItems.AddRange(looseLoadItems);
 
-            var groupFrames = GameTexturePacks.GetFolderFrames(textureGroup);
-            if (groupFrames != null)
+            if (groupFrames != default)
             {
                 workItems.AddRange(
-                    groupFrames.Select<GameTexturePackFrame, Action>(
-                        frame => () =>
-                        {
-                            var frameFileName = Path.GetFileName(frame.Filename.ToLower().Replace("\\", "/"));
-                            if (textureLookup.ContainsKey(frameFileName))
+                    groupFrames.Where(kvp => !textureLookup.ContainsKey(kvp.Key))
+                        .Select<KeyValuePair<string, GameTexturePackFrame>, Action>(
+                            framePair => () =>
                             {
-                                return;
+                                var frameKey = framePair.Key;
+                                var frame = framePair.Value;
+
+                                if (textureLookup.ContainsKey(frameKey))
+                                {
+                                    return;
+                                }
+
+                                var asset = LoadTexture(
+                                    frameKey,
+                                    frame.Filename,
+                                    packFrame: frame
+                                );
+
+                                textureLookup.TryAdd(frameKey, asset);
                             }
-
-                            var asset = LoadTexture(
-                                Path.Combine(textureDirectoryPath, frameFileName),
-                                Path.Combine(textureDirectoryPath, textureDirectoryPath, frameFileName)
-                            );
-
-                            textureLookup.TryAdd(frameFileName.ToLowerInvariant(), asset);
-                        }
-                    )
+                        )
                 );
             }
 
@@ -291,7 +340,12 @@ namespace Intersect.Client.Framework.File_Management
 
         protected abstract void InitializeTextureAsset(TextureType textureType);
 
-        public abstract GameTexture LoadTexture(string filename, string realFilename);
+        public abstract GameTexture LoadTexture(
+            string filename,
+            string realFilename,
+            bool isTexturePack = false,
+            GameTexturePackFrame packFrame = null
+        );
 
         public Action[] IndexTexturePacks()
         {
@@ -341,7 +395,8 @@ namespace Intersect.Client.Framework.File_Management
 
                         var platformText = LoadTexture(
                             packFilePath,
-                            packFilePath
+                            packFilePath,
+                            isTexturePack: true
                         );
 
                         if (platformText == null)

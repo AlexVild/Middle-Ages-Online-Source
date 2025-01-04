@@ -25,6 +25,8 @@ namespace Intersect.Client.Framework.Content
 
         public void Start() => _thread.Start();
 
+        public void Join() => _thread.Join();
+
         private void Run()
         {
             Action[] workItems;

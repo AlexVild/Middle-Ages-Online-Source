@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Intersect.Client.Framework.GenericClasses;
@@ -8,11 +9,13 @@ namespace Intersect.Client.Framework.Graphics
 
     public class GameTexturePacks
     {
+        private static readonly char[] DirectorySeparatorChars =
+            new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }.Distinct().ToArray();
 
         private static List<GameTexturePackFrame> mFrames = new List<GameTexturePackFrame>();
 
-        private static Dictionary<string, List<GameTexturePackFrame>> mFrameTypes =
-            new Dictionary<string, List<GameTexturePackFrame>>();
+        private static Dictionary<string, Dictionary<string, GameTexturePackFrame>> _texturePackFramesByFolder =
+            new Dictionary<string, Dictionary<string, GameTexturePackFrame>>();
 
         public static void AddFrame(GameTexturePackFrame frame)
         {
@@ -20,30 +23,27 @@ namespace Intersect.Client.Framework.Graphics
             {
                 mFrames.Add(frame);
 
-                //find the sub folder
-                var sep = new char[] {'/', '\\'};
-                var subFolder = frame.Filename.Split(sep)[1].ToLower();
-                if (!mFrameTypes.ContainsKey(subFolder))
+                var fileNameParts = frame.Filename.ToLowerInvariant().Split(DirectorySeparatorChars);
+
+                var folderName = fileNameParts[1];
+                if (!_texturePackFramesByFolder.TryGetValue(folderName, out var texturePackFramesForFolder))
                 {
-                    mFrameTypes.Add(subFolder, new List<GameTexturePackFrame>());
+                    texturePackFramesForFolder = new Dictionary<string, GameTexturePackFrame>();
+                    _texturePackFramesByFolder[folderName] = texturePackFramesForFolder;
                 }
 
-                if (!mFrameTypes[subFolder].Contains(frame))
+                var frameKey = fileNameParts[2];
+                if (!texturePackFramesForFolder.ContainsKey(frameKey))
                 {
-                    mFrameTypes[subFolder].Add(frame);
+                    texturePackFramesForFolder.Add(frameKey, frame);
                 }
             }
         }
 
-        public static GameTexturePackFrame[] GetFolderFrames(string folder)
-        {
-            if (mFrameTypes.ContainsKey(folder.ToLower()))
-            {
-                return mFrameTypes[folder.ToLower()].ToArray();
-            }
-
-            return null;
-        }
+        public static bool TryGetFolderFrames(
+            string folder,
+            out Dictionary<string, GameTexturePackFrame> texturePackFramesForFolder
+        ) => _texturePackFramesByFolder.TryGetValue(folder.ToLowerInvariant(), out texturePackFramesForFolder);
 
         public static GameTexturePackFrame GetFrame(params string[] filenames)
         {

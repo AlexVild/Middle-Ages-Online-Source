@@ -35,8 +35,13 @@ namespace Intersect.Client.MonoGame.File_Management
         }
 
         /// <inheritdoc />
-        public override GameTexture LoadTexture(string filename, string realFilename) =>
-            Core.Graphics.Renderer.LoadTexture(filename, realFilename);
+        public override GameTexture LoadTexture(
+            string filename,
+            string realFilename,
+            bool isTexturePack = false,
+            GameTexturePackFrame packFrame = null
+        ) =>
+            Core.Graphics.Renderer.LoadTexture(filename, realFilename, isTexturePack, packFrame);
 
         protected override void InitializeTextureAsset(TextureType type)
         {
