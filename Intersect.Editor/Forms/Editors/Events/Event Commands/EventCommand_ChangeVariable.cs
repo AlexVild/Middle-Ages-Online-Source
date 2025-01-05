@@ -162,6 +162,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 return;
             }
 
+            if (VariableModUtils.ModMods.Contains(mod))
+            {
+                cmbOperator.SelectedValue = CurrentOperators.FindIndex(v => v == VariableOperators.Modulo);
+                return;
+            }
+
             if (VariableModUtils.RShiftMods.Contains(mod))
             {
                 cmbOperator.SelectedValue = CurrentOperators.FindIndex(v => v == VariableOperators.RShift);

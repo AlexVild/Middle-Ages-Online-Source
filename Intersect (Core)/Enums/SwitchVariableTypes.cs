@@ -153,6 +153,20 @@ namespace Intersect.Enums
 
         [RelatedVariableType(VariableTypes.GuildVariable)]
         RightShiftGuildVar,
+
+        [RelatedVariableType(VariableTypes.PlayerVariable)]
+        ModPlayerVar,
+
+        [RelatedVariableType(VariableTypes.ServerVariable)]
+        ModServerVar,
+
+        [RelatedVariableType(VariableTypes.InstanceVariable)]
+        ModInstanceVar,
+
+        [RelatedVariableType(VariableTypes.GuildVariable)]
+        ModGuildVar,
+
+        Mod,
     }
 
     public enum VariableComparators

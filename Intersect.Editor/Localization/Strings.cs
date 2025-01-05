@@ -1938,6 +1938,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString despawnnpcs = @"Despawn NPCs";
 
             public static LocalizedString dividevariable = @"Divide {00}";
+            
+            public static LocalizedString ModVariable = @"Modulo {00}";
 
             public static LocalizedString dupglobalvariable = @"Global Variable: {00}'s Value";
 
@@ -1994,6 +1996,14 @@ Tick timer saved in server config.json.";
             public static LocalizedString rightshiftinstancevariable = @"Right Bit Shift Instance Variable: {00}'s Value";
             
             public static LocalizedString rightshiftguildvariable = @"Right Bit Shift Guild Variable: {00}'s Value";
+
+            public static LocalizedString ModGlobalVariable = @"Modulo Global Variable: {00}'s Value";
+
+            public static LocalizedString ModPlayerVariable = @"Modulo Player Variable: {00}'s Value";
+
+            public static LocalizedString ModInstanceVariable = @"Modulo Instance Variable: {00}'s Value";
+
+            public static LocalizedString ModGuildVariable = @"Modulo Guild Variable: {00}'s Value";
 
             public static LocalizedString enditemchange = @"End Item Change";
 

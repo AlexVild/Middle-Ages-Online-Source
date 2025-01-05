@@ -1459,6 +1459,12 @@ namespace Intersect.Editor.Forms.Editors.Events
                     varvalue = Strings.EventCommandList.dividevariable.ToString(mod.Value);
 
                     break;
+
+                case Enums.VariableMods.Mod:
+                    varvalue = Strings.EventCommandList.ModVariable.ToString(mod.Value);
+
+                    break;
+
                 case Enums.VariableMods.LeftShift:
                     varvalue = Strings.EventCommandList.leftshiftvariable.ToString(mod.Value);
 
@@ -1665,6 +1671,33 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case Enums.VariableMods.RightShiftGuildVar:
                     varvalue = Strings.EventCommandList.rightshiftguildvariable.ToString(
                         GuildVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+
+                case Enums.VariableMods.ModPlayerVar:
+                    varvalue = Strings.EventCommandList.ModPlayerVariable.ToString(
+                        PlayerVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.ModServerVar:
+                    varvalue = Strings.EventCommandList.ModGlobalVariable.ToString(
+                        ServerVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+
+                case Enums.VariableMods.ModGuildVar:
+                    varvalue = Strings.EventCommandList.ModGuildVariable.ToString(
+                        GuildVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+
+                case Enums.VariableMods.ModInstanceVar:
+                    varvalue = Strings.EventCommandList.ModInstanceVariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
                     );
 
                     break;

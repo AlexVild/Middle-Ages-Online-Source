@@ -41,29 +41,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoGlobalVariable = new DarkUI.Controls.DarkRadioButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.grpBooleanVariable = new DarkUI.Controls.DarkGroupBox();
-            this.cmbGuildVarBool = new DarkUI.Controls.DarkComboBox();
-            this.rdoGuildVarBool = new DarkUI.Controls.DarkRadioButton();
-            this.cmbBooleanInstanceGlobalVar = new DarkUI.Controls.DarkComboBox();
-            this.optBooleanCloneInstanceVar = new DarkUI.Controls.DarkRadioButton();
-            this.cmbBooleanCloneGlobalVar = new DarkUI.Controls.DarkComboBox();
-            this.cmbBooleanClonePlayerVar = new DarkUI.Controls.DarkComboBox();
-            this.optBooleanCloneGlobalVar = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
-            this.grpStringVariable = new DarkUI.Controls.DarkGroupBox();
-            this.lblStringTextVariables = new System.Windows.Forms.Label();
-            this.grpStringReplace = new DarkUI.Controls.DarkGroupBox();
-            this.txtStringReplace = new DarkUI.Controls.DarkTextBox();
-            this.txtStringFind = new DarkUI.Controls.DarkTextBox();
-            this.lblStringReplace = new System.Windows.Forms.Label();
-            this.lblStringFind = new System.Windows.Forms.Label();
-            this.optReplaceString = new DarkUI.Controls.DarkRadioButton();
-            this.optStaticString = new DarkUI.Controls.DarkRadioButton();
-            this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
-            this.lblStringValue = new System.Windows.Forms.Label();
-            this.txtStringValue = new DarkUI.Controls.DarkTextBox();
             this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
             this.rdoInventorySlots = new DarkUI.Controls.DarkRadioButton();
             this.rdoSpawnGroup = new DarkUI.Controls.DarkRadioButton();
@@ -97,18 +74,42 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.nudLow = new DarkUI.Controls.DarkNumericUpDown();
             this.lblNumericRandomHigh = new System.Windows.Forms.Label();
             this.lblNumericRandomLow = new System.Windows.Forms.Label();
+            this.grpBooleanVariable = new DarkUI.Controls.DarkGroupBox();
+            this.cmbGuildVarBool = new DarkUI.Controls.DarkComboBox();
+            this.rdoGuildVarBool = new DarkUI.Controls.DarkRadioButton();
+            this.cmbBooleanInstanceGlobalVar = new DarkUI.Controls.DarkComboBox();
+            this.optBooleanCloneInstanceVar = new DarkUI.Controls.DarkRadioButton();
+            this.cmbBooleanCloneGlobalVar = new DarkUI.Controls.DarkComboBox();
+            this.cmbBooleanClonePlayerVar = new DarkUI.Controls.DarkComboBox();
+            this.optBooleanCloneGlobalVar = new DarkUI.Controls.DarkRadioButton();
+            this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
+            this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
+            this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
+            this.grpStringVariable = new DarkUI.Controls.DarkGroupBox();
+            this.lblStringTextVariables = new System.Windows.Forms.Label();
+            this.grpStringReplace = new DarkUI.Controls.DarkGroupBox();
+            this.txtStringReplace = new DarkUI.Controls.DarkTextBox();
+            this.txtStringFind = new DarkUI.Controls.DarkTextBox();
+            this.lblStringReplace = new System.Windows.Forms.Label();
+            this.lblStringFind = new System.Windows.Forms.Label();
+            this.optReplaceString = new DarkUI.Controls.DarkRadioButton();
+            this.optStaticString = new DarkUI.Controls.DarkRadioButton();
+            this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
+            this.lblStringValue = new System.Windows.Forms.Label();
+            this.txtStringValue = new DarkUI.Controls.DarkTextBox();
+            this.optNumericMod = new DarkUI.Controls.DarkRadioButton();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
-            this.grpBooleanVariable.SuspendLayout();
-            this.grpStringVariable.SuspendLayout();
-            this.grpStringReplace.SuspendLayout();
-            this.grpStringSet.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
             this.grpNumericValues.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumericValue)).BeginInit();
             this.grpNumericRandom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHigh)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLow)).BeginInit();
+            this.grpBooleanVariable.SuspendLayout();
+            this.grpStringVariable.SuspendLayout();
+            this.grpStringReplace.SuspendLayout();
+            this.grpStringSet.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpSetVariable
@@ -250,304 +251,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // grpBooleanVariable
-            // 
-            this.grpBooleanVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpBooleanVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBooleanVariable.Controls.Add(this.cmbGuildVarBool);
-            this.grpBooleanVariable.Controls.Add(this.rdoGuildVarBool);
-            this.grpBooleanVariable.Controls.Add(this.cmbBooleanInstanceGlobalVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneInstanceVar);
-            this.grpBooleanVariable.Controls.Add(this.cmbBooleanCloneGlobalVar);
-            this.grpBooleanVariable.Controls.Add(this.cmbBooleanClonePlayerVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneGlobalVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanClonePlayerVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanTrue);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanFalse);
-            this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBooleanVariable.Location = new System.Drawing.Point(6, 100);
-            this.grpBooleanVariable.Name = "grpBooleanVariable";
-            this.grpBooleanVariable.Size = new System.Drawing.Size(413, 200);
-            this.grpBooleanVariable.TabIndex = 40;
-            this.grpBooleanVariable.TabStop = false;
-            this.grpBooleanVariable.Text = "Boolean Variable:";
-            // 
-            // cmbGuildVarBool
-            // 
-            this.cmbGuildVarBool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbGuildVarBool.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbGuildVarBool.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbGuildVarBool.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbGuildVarBool.DrawDropdownHoverOutline = false;
-            this.cmbGuildVarBool.DrawFocusRectangle = false;
-            this.cmbGuildVarBool.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbGuildVarBool.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbGuildVarBool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbGuildVarBool.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbGuildVarBool.FormattingEnabled = true;
-            this.cmbGuildVarBool.Location = new System.Drawing.Point(155, 167);
-            this.cmbGuildVarBool.Name = "cmbGuildVarBool";
-            this.cmbGuildVarBool.Size = new System.Drawing.Size(241, 21);
-            this.cmbGuildVarBool.TabIndex = 53;
-            this.cmbGuildVarBool.Text = null;
-            this.cmbGuildVarBool.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // rdoGuildVarBool
-            // 
-            this.rdoGuildVarBool.AutoSize = true;
-            this.rdoGuildVarBool.Location = new System.Drawing.Point(9, 167);
-            this.rdoGuildVarBool.Name = "rdoGuildVarBool";
-            this.rdoGuildVarBool.Size = new System.Drawing.Size(123, 17);
-            this.rdoGuildVarBool.TabIndex = 52;
-            this.rdoGuildVarBool.Text = "Guild Variable Value:";
-            // 
-            // cmbBooleanInstanceGlobalVar
-            // 
-            this.cmbBooleanInstanceGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBooleanInstanceGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBooleanInstanceGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBooleanInstanceGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBooleanInstanceGlobalVar.DrawDropdownHoverOutline = false;
-            this.cmbBooleanInstanceGlobalVar.DrawFocusRectangle = false;
-            this.cmbBooleanInstanceGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBooleanInstanceGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBooleanInstanceGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBooleanInstanceGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBooleanInstanceGlobalVar.FormattingEnabled = true;
-            this.cmbBooleanInstanceGlobalVar.Location = new System.Drawing.Point(155, 137);
-            this.cmbBooleanInstanceGlobalVar.Name = "cmbBooleanInstanceGlobalVar";
-            this.cmbBooleanInstanceGlobalVar.Size = new System.Drawing.Size(241, 21);
-            this.cmbBooleanInstanceGlobalVar.TabIndex = 51;
-            this.cmbBooleanInstanceGlobalVar.Text = null;
-            this.cmbBooleanInstanceGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // optBooleanCloneInstanceVar
-            // 
-            this.optBooleanCloneInstanceVar.AutoSize = true;
-            this.optBooleanCloneInstanceVar.Location = new System.Drawing.Point(9, 138);
-            this.optBooleanCloneInstanceVar.Name = "optBooleanCloneInstanceVar";
-            this.optBooleanCloneInstanceVar.Size = new System.Drawing.Size(140, 17);
-            this.optBooleanCloneInstanceVar.TabIndex = 50;
-            this.optBooleanCloneInstanceVar.Text = "Instance Variable Value:";
-            // 
-            // cmbBooleanCloneGlobalVar
-            // 
-            this.cmbBooleanCloneGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBooleanCloneGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBooleanCloneGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBooleanCloneGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBooleanCloneGlobalVar.DrawDropdownHoverOutline = false;
-            this.cmbBooleanCloneGlobalVar.DrawFocusRectangle = false;
-            this.cmbBooleanCloneGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBooleanCloneGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBooleanCloneGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBooleanCloneGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBooleanCloneGlobalVar.FormattingEnabled = true;
-            this.cmbBooleanCloneGlobalVar.Location = new System.Drawing.Point(155, 103);
-            this.cmbBooleanCloneGlobalVar.Name = "cmbBooleanCloneGlobalVar";
-            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(241, 21);
-            this.cmbBooleanCloneGlobalVar.TabIndex = 49;
-            this.cmbBooleanCloneGlobalVar.Text = null;
-            this.cmbBooleanCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // cmbBooleanClonePlayerVar
-            // 
-            this.cmbBooleanClonePlayerVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBooleanClonePlayerVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBooleanClonePlayerVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBooleanClonePlayerVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBooleanClonePlayerVar.DrawDropdownHoverOutline = false;
-            this.cmbBooleanClonePlayerVar.DrawFocusRectangle = false;
-            this.cmbBooleanClonePlayerVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBooleanClonePlayerVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBooleanClonePlayerVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBooleanClonePlayerVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBooleanClonePlayerVar.FormattingEnabled = true;
-            this.cmbBooleanClonePlayerVar.Location = new System.Drawing.Point(155, 70);
-            this.cmbBooleanClonePlayerVar.Name = "cmbBooleanClonePlayerVar";
-            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(241, 21);
-            this.cmbBooleanClonePlayerVar.TabIndex = 48;
-            this.cmbBooleanClonePlayerVar.Text = null;
-            this.cmbBooleanClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // optBooleanCloneGlobalVar
-            // 
-            this.optBooleanCloneGlobalVar.AutoSize = true;
-            this.optBooleanCloneGlobalVar.Location = new System.Drawing.Point(9, 103);
-            this.optBooleanCloneGlobalVar.Name = "optBooleanCloneGlobalVar";
-            this.optBooleanCloneGlobalVar.Size = new System.Drawing.Size(129, 17);
-            this.optBooleanCloneGlobalVar.TabIndex = 47;
-            this.optBooleanCloneGlobalVar.Text = "Global Variable Value:";
-            // 
-            // optBooleanClonePlayerVar
-            // 
-            this.optBooleanClonePlayerVar.AutoSize = true;
-            this.optBooleanClonePlayerVar.Location = new System.Drawing.Point(9, 71);
-            this.optBooleanClonePlayerVar.Name = "optBooleanClonePlayerVar";
-            this.optBooleanClonePlayerVar.Size = new System.Drawing.Size(128, 17);
-            this.optBooleanClonePlayerVar.TabIndex = 46;
-            this.optBooleanClonePlayerVar.Text = "Player Variable Value:";
-            // 
-            // optBooleanTrue
-            // 
-            this.optBooleanTrue.AutoSize = true;
-            this.optBooleanTrue.Location = new System.Drawing.Point(9, 19);
-            this.optBooleanTrue.Name = "optBooleanTrue";
-            this.optBooleanTrue.Size = new System.Drawing.Size(47, 17);
-            this.optBooleanTrue.TabIndex = 26;
-            this.optBooleanTrue.Text = "True";
-            // 
-            // optBooleanFalse
-            // 
-            this.optBooleanFalse.AutoSize = true;
-            this.optBooleanFalse.Location = new System.Drawing.Point(9, 44);
-            this.optBooleanFalse.Name = "optBooleanFalse";
-            this.optBooleanFalse.Size = new System.Drawing.Size(50, 17);
-            this.optBooleanFalse.TabIndex = 25;
-            this.optBooleanFalse.Text = "False";
-            // 
-            // grpStringVariable
-            // 
-            this.grpStringVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpStringVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpStringVariable.Controls.Add(this.lblStringTextVariables);
-            this.grpStringVariable.Controls.Add(this.grpStringReplace);
-            this.grpStringVariable.Controls.Add(this.optReplaceString);
-            this.grpStringVariable.Controls.Add(this.optStaticString);
-            this.grpStringVariable.Controls.Add(this.grpStringSet);
-            this.grpStringVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStringVariable.Location = new System.Drawing.Point(6, 100);
-            this.grpStringVariable.Name = "grpStringVariable";
-            this.grpStringVariable.Size = new System.Drawing.Size(296, 183);
-            this.grpStringVariable.TabIndex = 51;
-            this.grpStringVariable.TabStop = false;
-            this.grpStringVariable.Text = "String Variable:";
-            this.grpStringVariable.Visible = false;
-            // 
-            // lblStringTextVariables
-            // 
-            this.lblStringTextVariables.AutoSize = true;
-            this.lblStringTextVariables.BackColor = System.Drawing.Color.Transparent;
-            this.lblStringTextVariables.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStringTextVariables.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblStringTextVariables.Location = new System.Drawing.Point(6, 159);
-            this.lblStringTextVariables.Name = "lblStringTextVariables";
-            this.lblStringTextVariables.Size = new System.Drawing.Size(249, 13);
-            this.lblStringTextVariables.TabIndex = 68;
-            this.lblStringTextVariables.Text = "Text variables work with strings. Click here for a list!";
-            this.lblStringTextVariables.Click += new System.EventHandler(this.lblStringTextVariables_Click);
-            // 
-            // grpStringReplace
-            // 
-            this.grpStringReplace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpStringReplace.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpStringReplace.Controls.Add(this.txtStringReplace);
-            this.grpStringReplace.Controls.Add(this.txtStringFind);
-            this.grpStringReplace.Controls.Add(this.lblStringReplace);
-            this.grpStringReplace.Controls.Add(this.lblStringFind);
-            this.grpStringReplace.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStringReplace.Location = new System.Drawing.Point(6, 55);
-            this.grpStringReplace.Name = "grpStringReplace";
-            this.grpStringReplace.Size = new System.Drawing.Size(284, 90);
-            this.grpStringReplace.TabIndex = 65;
-            this.grpStringReplace.TabStop = false;
-            this.grpStringReplace.Text = "Replace";
-            // 
-            // txtStringReplace
-            // 
-            this.txtStringReplace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtStringReplace.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtStringReplace.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtStringReplace.Location = new System.Drawing.Point(77, 52);
-            this.txtStringReplace.Name = "txtStringReplace";
-            this.txtStringReplace.Size = new System.Drawing.Size(201, 20);
-            this.txtStringReplace.TabIndex = 64;
-            // 
-            // txtStringFind
-            // 
-            this.txtStringFind.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtStringFind.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtStringFind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtStringFind.Location = new System.Drawing.Point(77, 20);
-            this.txtStringFind.Name = "txtStringFind";
-            this.txtStringFind.Size = new System.Drawing.Size(201, 20);
-            this.txtStringFind.TabIndex = 63;
-            // 
-            // lblStringReplace
-            // 
-            this.lblStringReplace.AutoSize = true;
-            this.lblStringReplace.Location = new System.Drawing.Point(9, 54);
-            this.lblStringReplace.Name = "lblStringReplace";
-            this.lblStringReplace.Size = new System.Drawing.Size(47, 13);
-            this.lblStringReplace.TabIndex = 39;
-            this.lblStringReplace.Text = "Replace";
-            // 
-            // lblStringFind
-            // 
-            this.lblStringFind.AutoSize = true;
-            this.lblStringFind.Location = new System.Drawing.Point(11, 27);
-            this.lblStringFind.Name = "lblStringFind";
-            this.lblStringFind.Size = new System.Drawing.Size(27, 13);
-            this.lblStringFind.TabIndex = 40;
-            this.lblStringFind.Text = "Find";
-            // 
-            // optReplaceString
-            // 
-            this.optReplaceString.AutoSize = true;
-            this.optReplaceString.Location = new System.Drawing.Point(62, 19);
-            this.optReplaceString.Name = "optReplaceString";
-            this.optReplaceString.Size = new System.Drawing.Size(65, 17);
-            this.optReplaceString.TabIndex = 63;
-            this.optReplaceString.Text = "Replace";
-            this.optReplaceString.CheckedChanged += new System.EventHandler(this.optReplaceString_CheckedChanged);
-            // 
-            // optStaticString
-            // 
-            this.optStaticString.AutoSize = true;
-            this.optStaticString.Location = new System.Drawing.Point(9, 19);
-            this.optStaticString.Name = "optStaticString";
-            this.optStaticString.Size = new System.Drawing.Size(41, 17);
-            this.optStaticString.TabIndex = 51;
-            this.optStaticString.Text = "Set";
-            this.optStaticString.CheckedChanged += new System.EventHandler(this.optStaticString_CheckedChanged);
-            // 
-            // grpStringSet
-            // 
-            this.grpStringSet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpStringSet.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpStringSet.Controls.Add(this.lblStringValue);
-            this.grpStringSet.Controls.Add(this.txtStringValue);
-            this.grpStringSet.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStringSet.Location = new System.Drawing.Point(6, 55);
-            this.grpStringSet.Name = "grpStringSet";
-            this.grpStringSet.Size = new System.Drawing.Size(284, 90);
-            this.grpStringSet.TabIndex = 67;
-            this.grpStringSet.TabStop = false;
-            this.grpStringSet.Text = "Set";
-            // 
-            // lblStringValue
-            // 
-            this.lblStringValue.AutoSize = true;
-            this.lblStringValue.Location = new System.Drawing.Point(6, 28);
-            this.lblStringValue.Name = "lblStringValue";
-            this.lblStringValue.Size = new System.Drawing.Size(37, 13);
-            this.lblStringValue.TabIndex = 66;
-            this.lblStringValue.Text = "Value:";
-            // 
-            // txtStringValue
-            // 
-            this.txtStringValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtStringValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtStringValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtStringValue.Location = new System.Drawing.Point(71, 25);
-            this.txtStringValue.Name = "txtStringValue";
-            this.txtStringValue.Size = new System.Drawing.Size(207, 20);
-            this.txtStringValue.TabIndex = 62;
-            // 
             // grpNumericVariable
             // 
             this.grpNumericVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpNumericVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNumericVariable.Controls.Add(this.optNumericMod);
             this.grpNumericVariable.Controls.Add(this.rdoInventorySlots);
             this.grpNumericVariable.Controls.Add(this.rdoSpawnGroup);
             this.grpNumericVariable.Controls.Add(this.optEventX);
@@ -991,6 +699,310 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblNumericRandomLow.TabIndex = 40;
             this.lblNumericRandomLow.Text = "Low";
             // 
+            // grpBooleanVariable
+            // 
+            this.grpBooleanVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpBooleanVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBooleanVariable.Controls.Add(this.cmbGuildVarBool);
+            this.grpBooleanVariable.Controls.Add(this.rdoGuildVarBool);
+            this.grpBooleanVariable.Controls.Add(this.cmbBooleanInstanceGlobalVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneInstanceVar);
+            this.grpBooleanVariable.Controls.Add(this.cmbBooleanCloneGlobalVar);
+            this.grpBooleanVariable.Controls.Add(this.cmbBooleanClonePlayerVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneGlobalVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanClonePlayerVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanTrue);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanFalse);
+            this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBooleanVariable.Location = new System.Drawing.Point(6, 100);
+            this.grpBooleanVariable.Name = "grpBooleanVariable";
+            this.grpBooleanVariable.Size = new System.Drawing.Size(413, 200);
+            this.grpBooleanVariable.TabIndex = 40;
+            this.grpBooleanVariable.TabStop = false;
+            this.grpBooleanVariable.Text = "Boolean Variable:";
+            // 
+            // cmbGuildVarBool
+            // 
+            this.cmbGuildVarBool.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbGuildVarBool.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbGuildVarBool.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbGuildVarBool.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbGuildVarBool.DrawDropdownHoverOutline = false;
+            this.cmbGuildVarBool.DrawFocusRectangle = false;
+            this.cmbGuildVarBool.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbGuildVarBool.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGuildVarBool.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbGuildVarBool.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbGuildVarBool.FormattingEnabled = true;
+            this.cmbGuildVarBool.Location = new System.Drawing.Point(155, 167);
+            this.cmbGuildVarBool.Name = "cmbGuildVarBool";
+            this.cmbGuildVarBool.Size = new System.Drawing.Size(241, 21);
+            this.cmbGuildVarBool.TabIndex = 53;
+            this.cmbGuildVarBool.Text = null;
+            this.cmbGuildVarBool.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // rdoGuildVarBool
+            // 
+            this.rdoGuildVarBool.AutoSize = true;
+            this.rdoGuildVarBool.Location = new System.Drawing.Point(9, 167);
+            this.rdoGuildVarBool.Name = "rdoGuildVarBool";
+            this.rdoGuildVarBool.Size = new System.Drawing.Size(123, 17);
+            this.rdoGuildVarBool.TabIndex = 52;
+            this.rdoGuildVarBool.Text = "Guild Variable Value:";
+            // 
+            // cmbBooleanInstanceGlobalVar
+            // 
+            this.cmbBooleanInstanceGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBooleanInstanceGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBooleanInstanceGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBooleanInstanceGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBooleanInstanceGlobalVar.DrawDropdownHoverOutline = false;
+            this.cmbBooleanInstanceGlobalVar.DrawFocusRectangle = false;
+            this.cmbBooleanInstanceGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBooleanInstanceGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBooleanInstanceGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBooleanInstanceGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBooleanInstanceGlobalVar.FormattingEnabled = true;
+            this.cmbBooleanInstanceGlobalVar.Location = new System.Drawing.Point(155, 137);
+            this.cmbBooleanInstanceGlobalVar.Name = "cmbBooleanInstanceGlobalVar";
+            this.cmbBooleanInstanceGlobalVar.Size = new System.Drawing.Size(241, 21);
+            this.cmbBooleanInstanceGlobalVar.TabIndex = 51;
+            this.cmbBooleanInstanceGlobalVar.Text = null;
+            this.cmbBooleanInstanceGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // optBooleanCloneInstanceVar
+            // 
+            this.optBooleanCloneInstanceVar.AutoSize = true;
+            this.optBooleanCloneInstanceVar.Location = new System.Drawing.Point(9, 138);
+            this.optBooleanCloneInstanceVar.Name = "optBooleanCloneInstanceVar";
+            this.optBooleanCloneInstanceVar.Size = new System.Drawing.Size(140, 17);
+            this.optBooleanCloneInstanceVar.TabIndex = 50;
+            this.optBooleanCloneInstanceVar.Text = "Instance Variable Value:";
+            // 
+            // cmbBooleanCloneGlobalVar
+            // 
+            this.cmbBooleanCloneGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBooleanCloneGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBooleanCloneGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBooleanCloneGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBooleanCloneGlobalVar.DrawDropdownHoverOutline = false;
+            this.cmbBooleanCloneGlobalVar.DrawFocusRectangle = false;
+            this.cmbBooleanCloneGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBooleanCloneGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBooleanCloneGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBooleanCloneGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBooleanCloneGlobalVar.FormattingEnabled = true;
+            this.cmbBooleanCloneGlobalVar.Location = new System.Drawing.Point(155, 103);
+            this.cmbBooleanCloneGlobalVar.Name = "cmbBooleanCloneGlobalVar";
+            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(241, 21);
+            this.cmbBooleanCloneGlobalVar.TabIndex = 49;
+            this.cmbBooleanCloneGlobalVar.Text = null;
+            this.cmbBooleanCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // cmbBooleanClonePlayerVar
+            // 
+            this.cmbBooleanClonePlayerVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBooleanClonePlayerVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBooleanClonePlayerVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBooleanClonePlayerVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBooleanClonePlayerVar.DrawDropdownHoverOutline = false;
+            this.cmbBooleanClonePlayerVar.DrawFocusRectangle = false;
+            this.cmbBooleanClonePlayerVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBooleanClonePlayerVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBooleanClonePlayerVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBooleanClonePlayerVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBooleanClonePlayerVar.FormattingEnabled = true;
+            this.cmbBooleanClonePlayerVar.Location = new System.Drawing.Point(155, 70);
+            this.cmbBooleanClonePlayerVar.Name = "cmbBooleanClonePlayerVar";
+            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(241, 21);
+            this.cmbBooleanClonePlayerVar.TabIndex = 48;
+            this.cmbBooleanClonePlayerVar.Text = null;
+            this.cmbBooleanClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // optBooleanCloneGlobalVar
+            // 
+            this.optBooleanCloneGlobalVar.AutoSize = true;
+            this.optBooleanCloneGlobalVar.Location = new System.Drawing.Point(9, 103);
+            this.optBooleanCloneGlobalVar.Name = "optBooleanCloneGlobalVar";
+            this.optBooleanCloneGlobalVar.Size = new System.Drawing.Size(129, 17);
+            this.optBooleanCloneGlobalVar.TabIndex = 47;
+            this.optBooleanCloneGlobalVar.Text = "Global Variable Value:";
+            // 
+            // optBooleanClonePlayerVar
+            // 
+            this.optBooleanClonePlayerVar.AutoSize = true;
+            this.optBooleanClonePlayerVar.Location = new System.Drawing.Point(9, 71);
+            this.optBooleanClonePlayerVar.Name = "optBooleanClonePlayerVar";
+            this.optBooleanClonePlayerVar.Size = new System.Drawing.Size(128, 17);
+            this.optBooleanClonePlayerVar.TabIndex = 46;
+            this.optBooleanClonePlayerVar.Text = "Player Variable Value:";
+            // 
+            // optBooleanTrue
+            // 
+            this.optBooleanTrue.AutoSize = true;
+            this.optBooleanTrue.Location = new System.Drawing.Point(9, 19);
+            this.optBooleanTrue.Name = "optBooleanTrue";
+            this.optBooleanTrue.Size = new System.Drawing.Size(47, 17);
+            this.optBooleanTrue.TabIndex = 26;
+            this.optBooleanTrue.Text = "True";
+            // 
+            // optBooleanFalse
+            // 
+            this.optBooleanFalse.AutoSize = true;
+            this.optBooleanFalse.Location = new System.Drawing.Point(9, 44);
+            this.optBooleanFalse.Name = "optBooleanFalse";
+            this.optBooleanFalse.Size = new System.Drawing.Size(50, 17);
+            this.optBooleanFalse.TabIndex = 25;
+            this.optBooleanFalse.Text = "False";
+            // 
+            // grpStringVariable
+            // 
+            this.grpStringVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpStringVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStringVariable.Controls.Add(this.lblStringTextVariables);
+            this.grpStringVariable.Controls.Add(this.grpStringReplace);
+            this.grpStringVariable.Controls.Add(this.optReplaceString);
+            this.grpStringVariable.Controls.Add(this.optStaticString);
+            this.grpStringVariable.Controls.Add(this.grpStringSet);
+            this.grpStringVariable.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpStringVariable.Location = new System.Drawing.Point(6, 100);
+            this.grpStringVariable.Name = "grpStringVariable";
+            this.grpStringVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpStringVariable.TabIndex = 51;
+            this.grpStringVariable.TabStop = false;
+            this.grpStringVariable.Text = "String Variable:";
+            this.grpStringVariable.Visible = false;
+            // 
+            // lblStringTextVariables
+            // 
+            this.lblStringTextVariables.AutoSize = true;
+            this.lblStringTextVariables.BackColor = System.Drawing.Color.Transparent;
+            this.lblStringTextVariables.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStringTextVariables.ForeColor = System.Drawing.SystemColors.MenuHighlight;
+            this.lblStringTextVariables.Location = new System.Drawing.Point(6, 159);
+            this.lblStringTextVariables.Name = "lblStringTextVariables";
+            this.lblStringTextVariables.Size = new System.Drawing.Size(249, 13);
+            this.lblStringTextVariables.TabIndex = 68;
+            this.lblStringTextVariables.Text = "Text variables work with strings. Click here for a list!";
+            this.lblStringTextVariables.Click += new System.EventHandler(this.lblStringTextVariables_Click);
+            // 
+            // grpStringReplace
+            // 
+            this.grpStringReplace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpStringReplace.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStringReplace.Controls.Add(this.txtStringReplace);
+            this.grpStringReplace.Controls.Add(this.txtStringFind);
+            this.grpStringReplace.Controls.Add(this.lblStringReplace);
+            this.grpStringReplace.Controls.Add(this.lblStringFind);
+            this.grpStringReplace.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpStringReplace.Location = new System.Drawing.Point(6, 55);
+            this.grpStringReplace.Name = "grpStringReplace";
+            this.grpStringReplace.Size = new System.Drawing.Size(284, 90);
+            this.grpStringReplace.TabIndex = 65;
+            this.grpStringReplace.TabStop = false;
+            this.grpStringReplace.Text = "Replace";
+            // 
+            // txtStringReplace
+            // 
+            this.txtStringReplace.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtStringReplace.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStringReplace.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtStringReplace.Location = new System.Drawing.Point(77, 52);
+            this.txtStringReplace.Name = "txtStringReplace";
+            this.txtStringReplace.Size = new System.Drawing.Size(201, 20);
+            this.txtStringReplace.TabIndex = 64;
+            // 
+            // txtStringFind
+            // 
+            this.txtStringFind.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtStringFind.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStringFind.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtStringFind.Location = new System.Drawing.Point(77, 20);
+            this.txtStringFind.Name = "txtStringFind";
+            this.txtStringFind.Size = new System.Drawing.Size(201, 20);
+            this.txtStringFind.TabIndex = 63;
+            // 
+            // lblStringReplace
+            // 
+            this.lblStringReplace.AutoSize = true;
+            this.lblStringReplace.Location = new System.Drawing.Point(9, 54);
+            this.lblStringReplace.Name = "lblStringReplace";
+            this.lblStringReplace.Size = new System.Drawing.Size(47, 13);
+            this.lblStringReplace.TabIndex = 39;
+            this.lblStringReplace.Text = "Replace";
+            // 
+            // lblStringFind
+            // 
+            this.lblStringFind.AutoSize = true;
+            this.lblStringFind.Location = new System.Drawing.Point(11, 27);
+            this.lblStringFind.Name = "lblStringFind";
+            this.lblStringFind.Size = new System.Drawing.Size(27, 13);
+            this.lblStringFind.TabIndex = 40;
+            this.lblStringFind.Text = "Find";
+            // 
+            // optReplaceString
+            // 
+            this.optReplaceString.AutoSize = true;
+            this.optReplaceString.Location = new System.Drawing.Point(62, 19);
+            this.optReplaceString.Name = "optReplaceString";
+            this.optReplaceString.Size = new System.Drawing.Size(65, 17);
+            this.optReplaceString.TabIndex = 63;
+            this.optReplaceString.Text = "Replace";
+            this.optReplaceString.CheckedChanged += new System.EventHandler(this.optReplaceString_CheckedChanged);
+            // 
+            // optStaticString
+            // 
+            this.optStaticString.AutoSize = true;
+            this.optStaticString.Location = new System.Drawing.Point(9, 19);
+            this.optStaticString.Name = "optStaticString";
+            this.optStaticString.Size = new System.Drawing.Size(41, 17);
+            this.optStaticString.TabIndex = 51;
+            this.optStaticString.Text = "Set";
+            this.optStaticString.CheckedChanged += new System.EventHandler(this.optStaticString_CheckedChanged);
+            // 
+            // grpStringSet
+            // 
+            this.grpStringSet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpStringSet.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStringSet.Controls.Add(this.lblStringValue);
+            this.grpStringSet.Controls.Add(this.txtStringValue);
+            this.grpStringSet.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpStringSet.Location = new System.Drawing.Point(6, 55);
+            this.grpStringSet.Name = "grpStringSet";
+            this.grpStringSet.Size = new System.Drawing.Size(284, 90);
+            this.grpStringSet.TabIndex = 67;
+            this.grpStringSet.TabStop = false;
+            this.grpStringSet.Text = "Set";
+            // 
+            // lblStringValue
+            // 
+            this.lblStringValue.AutoSize = true;
+            this.lblStringValue.Location = new System.Drawing.Point(6, 28);
+            this.lblStringValue.Name = "lblStringValue";
+            this.lblStringValue.Size = new System.Drawing.Size(37, 13);
+            this.lblStringValue.TabIndex = 66;
+            this.lblStringValue.Text = "Value:";
+            // 
+            // txtStringValue
+            // 
+            this.txtStringValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtStringValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStringValue.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtStringValue.Location = new System.Drawing.Point(71, 25);
+            this.txtStringValue.Name = "txtStringValue";
+            this.txtStringValue.Size = new System.Drawing.Size(207, 20);
+            this.txtStringValue.TabIndex = 62;
+            // 
+            // optNumericMod
+            // 
+            this.optNumericMod.AutoSize = true;
+            this.optNumericMod.Location = new System.Drawing.Point(296, 19);
+            this.optNumericMod.Name = "optNumericMod";
+            this.optNumericMod.Size = new System.Drawing.Size(60, 17);
+            this.optNumericMod.TabIndex = 57;
+            this.optNumericMod.Text = "Modulo";
+            this.optNumericMod.CheckedChanged += new System.EventHandler(this.rdoMod_CheckedChanged);
+            // 
             // EventCommandVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1004,14 +1016,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.PerformLayout();
             this.grpSelectVariable.ResumeLayout(false);
             this.grpSelectVariable.PerformLayout();
-            this.grpBooleanVariable.ResumeLayout(false);
-            this.grpBooleanVariable.PerformLayout();
-            this.grpStringVariable.ResumeLayout(false);
-            this.grpStringVariable.PerformLayout();
-            this.grpStringReplace.ResumeLayout(false);
-            this.grpStringReplace.PerformLayout();
-            this.grpStringSet.ResumeLayout(false);
-            this.grpStringSet.PerformLayout();
             this.grpNumericVariable.ResumeLayout(false);
             this.grpNumericVariable.PerformLayout();
             this.grpNumericValues.ResumeLayout(false);
@@ -1021,6 +1025,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericRandom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHigh)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudLow)).EndInit();
+            this.grpBooleanVariable.ResumeLayout(false);
+            this.grpBooleanVariable.PerformLayout();
+            this.grpStringVariable.ResumeLayout(false);
+            this.grpStringVariable.PerformLayout();
+            this.grpStringReplace.ResumeLayout(false);
+            this.grpStringReplace.PerformLayout();
+            this.grpStringSet.ResumeLayout(false);
+            this.grpStringSet.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1094,5 +1106,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkComboBox cmbGuildVarNum;
         internal DarkRadioButton rdoGuildVarNum;
         private DarkRadioButton rdoGuildVariable;
+        internal DarkRadioButton optNumericMod;
     }
 }

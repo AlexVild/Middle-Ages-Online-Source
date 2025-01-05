@@ -10,7 +10,8 @@ namespace Intersect.Editor.Utilities
             VariableMods.Set,
             VariableMods.DupPlayerVar,
             VariableMods.DupGlobalVar,
-            VariableMods.DupGuildVar
+            VariableMods.DupGuildVar,
+            VariableMods.DupInstanceVar,
         };
 
         public static readonly List<VariableMods> AddMods = new List<VariableMods>() {
@@ -18,6 +19,7 @@ namespace Intersect.Editor.Utilities
             VariableMods.AddPlayerVar,
             VariableMods.AddGlobalVar,
             VariableMods.AddGuildVar,
+            VariableMods.AddInstanceVar,
         };
 
         public static readonly List<VariableMods> SubMods = new List<VariableMods>() {
@@ -25,6 +27,7 @@ namespace Intersect.Editor.Utilities
             VariableMods.SubtractPlayerVar,
             VariableMods.SubtractGlobalVar,
             VariableMods.SubtractGuildVar,
+            VariableMods.SubtractInstanceVar,
         };
 
         public static readonly List<VariableMods> MultMods = new List<VariableMods>() {
@@ -32,6 +35,7 @@ namespace Intersect.Editor.Utilities
             VariableMods.MultiplyPlayerVar,
             VariableMods.MultiplyGlobalVar,
             VariableMods.MultiplyGuildVar,
+            VariableMods.MultiplyInstanceVar,
         };
 
         public static readonly List<VariableMods> DivideMods = new List<VariableMods>() {
@@ -39,12 +43,14 @@ namespace Intersect.Editor.Utilities
             VariableMods.DividePlayerVar,
             VariableMods.DivideGlobalVar,
             VariableMods.DivideGuildVar,
+            VariableMods.DivideInstanceVar,
         };
 
         public static readonly List<VariableMods> LShiftMods = new List<VariableMods>() {
             VariableMods.LeftShift,
             VariableMods.LeftShiftPlayerVar,
             VariableMods.LeftShiftGlobalVar,
+            VariableMods.LeftShiftInstanceVar,
             VariableMods.LeftShiftGuildVar,
         };
 
@@ -52,7 +58,16 @@ namespace Intersect.Editor.Utilities
             VariableMods.RightShift,
             VariableMods.RightShiftPlayerVar,
             VariableMods.RightShiftGlobalVar,
+            VariableMods.RightShiftInstanceVar,
             VariableMods.RightShiftGuildVar,
+        };
+
+        public static readonly List<VariableMods> ModMods = new List<VariableMods>() {
+            VariableMods.Mod,
+            VariableMods.ModPlayerVar,
+            VariableMods.ModInstanceVar,
+            VariableMods.ModGuildVar,
+            VariableMods.ModServerVar,
         };
 
     }

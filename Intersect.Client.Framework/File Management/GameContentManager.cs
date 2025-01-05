@@ -251,8 +251,6 @@ namespace Intersect.Client.Framework.File_Management
 
             GameTexturePacks.TryGetFolderFrames(textureGroup, out var groupFrames);
 
-            GameTexturePacks.TryGetFolderFrames(textureGroup, out var groupFrames);
-
             var workItems = new List<Action>();
 
             var looseLoadItems = looseFiles

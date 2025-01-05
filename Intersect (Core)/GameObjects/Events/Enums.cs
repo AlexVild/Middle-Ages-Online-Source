@@ -596,6 +596,9 @@ namespace Intersect.GameObjects.Events
         LShift,
 
         [Description("Replace")]
-        Replace
+        Replace,
+
+        [Description("Modulo")]
+        Modulo
     }
 }

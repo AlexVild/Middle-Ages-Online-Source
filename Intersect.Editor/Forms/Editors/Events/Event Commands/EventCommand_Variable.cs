@@ -699,6 +699,36 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         cmbGuildVarNum.SelectedIndex = GuildVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
+
+                    case VariableMods.Mod:
+                        optNumericMod.Checked = true;
+                        optNumericStaticVal.Checked = true;
+                        nudNumericValue.Value = mod.Value;
+                        break;
+
+                    case VariableMods.ModPlayerVar:
+                        optNumericMod.Checked = true;
+                        optNumericClonePlayerVar.Checked = true;
+                        cmbNumericClonePlayerVar.SelectedIndex = PlayerVariableBase.ListIndex(mod.DuplicateVariableId);
+                        break;
+
+                    case VariableMods.ModServerVar:
+                        optNumericMod.Checked = true;
+                        optNumericCloneGlobalVar.Checked = true;
+                        cmbNumericCloneGlobalVar.SelectedIndex = ServerVariableBase.ListIndex(mod.DuplicateVariableId);
+                        break;
+
+                    case VariableMods.ModInstanceVar:
+                        optNumericMod.Checked = true;
+                        optNumericCloneInstanceVar.Checked = true;
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        break;
+
+                    case VariableMods.ModGuildVar:
+                        optNumericMod.Checked = true;
+                        optNumericCloneGlobalVar.Checked = true;
+                        cmbNumericCloneGlobalVar.SelectedIndex = GuildVariableBase.ListIndex(mod.DuplicateVariableId);
+                        break;
                 }
             }
         }
@@ -707,7 +737,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             grpNumericRandom.Visible = optNumericRandom.Checked;
             grpNumericValues.Visible = optNumericAdd.Checked | optNumericSubtract.Checked | optNumericSet.Checked | optNumericMultiply.Checked |
-                                       optNumericDivide.Checked | optNumericLeftShift.Checked | optNumericRightShift.Checked;
+                                       optNumericDivide.Checked | optNumericLeftShift.Checked | optNumericRightShift.Checked | optNumericMod.Checked;
         }
 
         private void optNumericSet_CheckedChanged(object sender, EventArgs e)
@@ -808,6 +838,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 mod.ModType = VariableMods.RightShift;
                 mod.Value = (int)nudNumericValue.Value;
             }
+            else if (optNumericMod.Checked && optNumericStaticVal.Checked)
+            {
+                mod.ModType = VariableMods.Mod;
+                mod.Value = (int)nudNumericValue.Value;
+            }
             else if (optNumericRandom.Checked)
             {
                 mod.ModType = VariableMods.Random;
@@ -878,6 +913,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 {
                     mod.ModType = VariableMods.LeftShiftPlayerVar;
                 }
+                else if (optNumericMod.Checked)
+                {
+                    mod.ModType = VariableMods.ModPlayerVar;
+                }
                 else
                 {
                     mod.ModType = VariableMods.RightShiftPlayerVar;
@@ -910,6 +949,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 else if (optNumericLeftShift.Checked)
                 {
                     mod.ModType = VariableMods.LeftShiftGlobalVar;
+                }
+                else if (optNumericMod.Checked)
+                {
+                    mod.ModType = VariableMods.ModServerVar;
                 }
                 else
                 {
@@ -944,6 +987,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 {
                     mod.ModType = VariableMods.LeftShiftInstanceVar;
                 }
+                else if (optNumericMod.Checked)
+                {
+                    mod.ModType = VariableMods.ModInstanceVar;
+                }
                 else
                 {
                     mod.ModType = VariableMods.RightShiftInstanceVar;
@@ -977,9 +1024,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 {
                     mod.ModType = VariableMods.LeftShiftGuildVar;
                 }
-                else
+                else if (optNumericRightShift.Checked)
                 {
                     mod.ModType = VariableMods.RightShiftGuildVar;
+                }
+                else if (optNumericMod.Checked)
+                {
+                    mod.ModType = VariableMods.ModGuildVar;
                 }
 
                 mod.DuplicateVariableId = GuildVariableBase.IdFromList(cmbGuildVarNum.SelectedIndex);
@@ -1099,6 +1150,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void rdoGuildVarNum_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void rdoMod_CheckedChanged(object sender, EventArgs e)
         {
             UpdateNumericFormElements();
         }

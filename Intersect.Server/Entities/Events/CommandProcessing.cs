@@ -2163,6 +2163,12 @@ namespace Intersect.Server.Entities.Events
                     value.Integer = value.Integer >> (int)mod.Value;
 
                     break;
+
+                case Enums.VariableMods.Mod:
+                    value.Integer = value.Integer % (int)mod.Value;
+
+                    break;
+
                 case Enums.VariableMods.Random:
                     //TODO: Fix - Random doesnt work with longs lolz
                     value.Integer = Randomization.Next((int) mod.Value, (int) mod.HighValue + 1);
@@ -2244,6 +2250,7 @@ namespace Intersect.Server.Entities.Events
                     value.Integer += player.GetVariableValue(mod.DuplicateVariableId).Integer;
 
                     break;
+
                 case Enums.VariableMods.AddGlobalVar:
                     var asv = ServerVariableBase.Get(mod.DuplicateVariableId);
                     if (asv != null)
@@ -2252,6 +2259,7 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+
                 case Enums.VariableMods.SubtractPlayerVar:
                     value.Integer -= player.GetVariableValue(mod.DuplicateVariableId).Integer;
 
@@ -2294,6 +2302,26 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+
+                case Enums.VariableMods.ModPlayerVar:
+                    if (player.GetVariableValue(mod.DuplicateVariableId).Integer != 0) //Idiot proofing divide by 0 LOL
+                    {
+                        value.Integer %= player.GetVariableValue(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case Enums.VariableMods.ModServerVar:
+                    var modSv = ServerVariableBase.Get(mod.DuplicateVariableId);
+                    if (modSv != null)
+                    {
+                        if (modSv.Value != 0) //Idiot proofing divide by 0 LOL
+                        {
+                            value.Integer %= modSv.Value.Integer;
+                        }
+                    }
+
+                    break;
+
                 case Enums.VariableMods.LeftShiftPlayerVar:
                     value.Integer = value.Integer << (int)player.GetVariableValue(mod.DuplicateVariableId).Integer;
 
@@ -2357,6 +2385,19 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+
+                case VariableMods.ModInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var modI = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        if (modI != 0)
+                        {
+                            value.Integer %= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                        }
+                    }
+
+                    break;
+
                 case VariableMods.LeftShiftInstanceVar:
                     if (playersInstance != null)
                     {
@@ -2392,6 +2433,14 @@ namespace Intersect.Server.Entities.Events
                     if (div != 0)
                     {
                         value.Integer /= div;
+                    }
+
+                    break;
+                case VariableMods.ModGuildVar:
+                    var modGv = guild?.GetVariableValue(mod.DuplicateVariableId)?.Integer ?? 0;
+                    if (modGv != 0)
+                    {
+                        value.Integer %= modGv;
                     }
 
                     break;
