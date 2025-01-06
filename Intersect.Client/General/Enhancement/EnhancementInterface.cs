@@ -30,6 +30,7 @@ namespace Intersect.Client.General.Enhancement
 
         public int EPSpent => ItemDescriptor == default ? 0 : EnhancementsApplied
             .Select(e => EnhancementDescriptor.Get(e.EnhancementId))
+            .Where(e => e != default)
             .Aggregate(0, (prev, next) => prev + next.RequiredEnhancementPoints);
 
         public EnhancementInterface()
