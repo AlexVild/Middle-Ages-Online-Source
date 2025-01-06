@@ -510,6 +510,7 @@ namespace Intersect.Server.Entities
 
             // Used because we don't want to dash until _after_ we've cancelled spell casting - otherwise, the dash won't move us since we're spellcasting
             var queueDashAfterSpellCancel = false;
+            bool inRange;
             switch (spell.SpellType)
             {
                 case SpellTypes.CombatSpell:
@@ -526,7 +527,6 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Single:
-                            bool inRange;
                             if (spell.Combat.MinRange > 0)
                             {
                                 inRange = InRangeOf(CastTarget, spell.Combat.CastRange, spell.Combat.MinRange);
@@ -633,7 +633,20 @@ namespace Intersect.Server.Entities
 
                     break;
                 case SpellTypes.WarpTo:
-                    if (CastTarget != null)
+                    if (spell.Combat.MinRange > 0)
+                    {
+                        inRange = InRangeOf(CastTarget, spell.Combat.CastRange, spell.Combat.MinRange);
+                    }
+                    else
+                    {
+                        inRange = InRangeOf(CastTarget, spell.Combat.CastRange);
+                    }
+
+                    if (!inRange)
+                    {
+                        SendMissedAttackMessage(CastTarget, DamageType.Physical);
+                    }
+                    else if (CastTarget != null)
                     {
                         HandleAoESpell(spell.Id, MapId, X, Y, CastTarget, false, false, true);
                     }

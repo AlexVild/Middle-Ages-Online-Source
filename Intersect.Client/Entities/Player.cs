@@ -1111,7 +1111,8 @@ namespace Intersect.Client.Entities
                     return;
                 }
 
-                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && spellBase.SpellType == SpellTypes.CombatSpell)
+                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && 
+                    (spellBase.SpellType == SpellTypes.CombatSpell || spellBase.SpellType == SpellTypes.WarpTo))
                 {
                     if (TargetIndex == Guid.Empty)
                     {
