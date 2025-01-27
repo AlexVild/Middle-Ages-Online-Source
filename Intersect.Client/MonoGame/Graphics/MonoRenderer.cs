@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -26,7 +27,7 @@ namespace Intersect.Client.MonoGame.Graphics
     public partial class MonoRenderer : GameRenderer
     {
 
-        private readonly List<MonoTexture> mAllTextures = new List<MonoTexture>();
+        private readonly ConcurrentBag<MonoTexture> mAllTextures = new ConcurrentBag<MonoTexture>();
 
         private BasicEffect mBasicEffect;
 
