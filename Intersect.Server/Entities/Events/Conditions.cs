@@ -991,29 +991,26 @@ namespace Intersect.Server.Entities.Events
                 return false;
             }
 
+            var group = 0;
             if (InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var controller) && controller.MapSpawnGroups.TryGetValue(player.MapId, out var spawnInfo))
             {
-                var group = spawnInfo.Group;
-                
-                if (condition.OrGreater && condition.OrLess)
-                {
-                    return true;
-                }
-                else if (condition.OrLess)
-                {
-                    return group <= condition.SpawnGroup;
-                }
-                else if (condition.OrGreater)
-                {
-                    return group >= condition.SpawnGroup;
-                }
+                group = spawnInfo.Group;   
+            }
 
-                return condition.SpawnGroup == group;
-            }
-            else
+            if (condition.OrGreater && condition.OrLess)
             {
-                return false;
+                return true;
             }
+            else if (condition.OrLess)
+            {
+                return group <= condition.SpawnGroup;
+            }
+            else if (condition.OrGreater)
+            {
+                return group >= condition.SpawnGroup;
+            }
+
+            return condition.SpawnGroup == group;
         }
 
         public static bool MeetsCondition(
