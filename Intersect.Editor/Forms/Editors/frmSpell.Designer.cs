@@ -3741,8 +3741,8 @@ namespace Intersect.Editor.Forms.Editors
             this.nudTick.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudTick.Location = new System.Drawing.Point(99, 40);
             this.nudTick.Maximum = new decimal(new int[] {
-            60000,
-            0,
+            1410065407,
+            2,
             0,
             0});
             this.nudTick.Name = "nudTick";
@@ -3897,8 +3897,8 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBuffDuration.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudBuffDuration.Location = new System.Drawing.Point(137, 14);
             this.nudBuffDuration.Maximum = new decimal(new int[] {
-            999999999,
-            0,
+            1410065407,
+            2,
             0,
             0});
             this.nudBuffDuration.Name = "nudBuffDuration";
