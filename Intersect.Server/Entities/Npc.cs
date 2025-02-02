@@ -184,6 +184,8 @@ namespace Intersect.Server.Entities
                 SetMaxVital(i, myBase.MaxVital[i]);
                 SetVital(i, myBase.MaxVital[i]);
             }
+            
+            CastIndex = 0;
 
             mPathFinder = new Pathfinder(this);
             if (myBase.DeathAnimation != null)
@@ -841,11 +843,18 @@ namespace Intersect.Server.Entities
             spellDescriptor = null;
             spellSlotIdx = 0;
 
+
+            if (Base == null || Base.Spells.Count == 0)
+            {
+                return false;
+            }
+            var spells = Base.Spells.ToArray();
+
             if (!Base.SequentialCasting)
             {
                 // Pick a random spell
-                spellSlotIdx = Randomization.Next(0, Spells.Count);
-                var spellId = Base.Spells[spellSlotIdx];
+                spellSlotIdx = Randomization.Next(0, spells.Length);
+                var spellId = spells[spellSlotIdx];
                 if (!SpellBase.TryGet(spellId, out spellDescriptor))
                 {
                     return false;
@@ -858,11 +867,11 @@ namespace Intersect.Server.Entities
                     return false;
                 }
 
-                if (CastIndex >= Base.Spells.Count)
+                if (CastIndex >= spells.Length)
                 {
                     CastIndex = 0;
                 }
-                var spellId = Base.Spells[CastIndex];
+                var spellId = spells[CastIndex];
                 if (!SpellBase.TryGet(spellId, out spellDescriptor))
                 {
                     return false;
