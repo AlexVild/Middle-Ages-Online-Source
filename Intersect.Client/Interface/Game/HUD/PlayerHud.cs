@@ -337,7 +337,7 @@ namespace Intersect.Client.Interface.Game.HUD
             }
             else
             {
-                DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"{currentExp} / {tnlExp}", currentExp, tnlExp);
+                DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"{currentExp.ToString("N0")} / {tnlExp.ToString("N0")}", currentExp, tnlExp);
             }
 
             if (Globals.Me.TrackedWeaponTypeId != Guid.Empty && Globals.Me.WeaponExpTnl > 0)
