@@ -1247,6 +1247,15 @@ namespace Intersect.Client.Localization
                 {22, @"Manaflow:"},
                 {23, @"Swiftshot:"},
                 {24, @"Ammo Saver:"},
+                {25, @"Silence Resist:"},
+                {26, @"Stun Resist:"},
+                {27, @"Snare Resist:"},
+                {28, @"Blind Resist:"},
+                {29, @"Sleep Resist:"},
+                {30, @"Slowed Resist:"},
+                {31, @"Enfeebled Resist:"},
+                {32, @"Confusion Resist:"},
+                {33, @"Knockback Resist:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

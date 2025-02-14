@@ -24,6 +24,32 @@ namespace Intersect.Enums
             StatusTypes.TemporaryLumberjack,
             StatusTypes.TemporaryProspector,
         };
+
+        public static List<EffectType> ResistanceEffects = new List<EffectType>()
+        {
+            EffectType.SilenceResist,
+            EffectType.StunResistance,
+            EffectType.SnareResistance,
+            EffectType.BlindResistance,
+            EffectType.SleepResistance,
+            EffectType.SlowedResistance,
+            EffectType.EnfeebledResistance,
+            EffectType.ConfusionResistance,
+            EffectType.KnockbackResistance,
+        };
+
+        public static Dictionary<StatusTypes, EffectType> ResistanceMap = new Dictionary<StatusTypes, EffectType>()
+        {
+            { StatusTypes.Silence, EffectType.SilenceResist },
+            { StatusTypes.Stun, EffectType.StunResistance },
+            { StatusTypes.Snare, EffectType.SnareResistance },
+            { StatusTypes.Blind, EffectType.BlindResistance },
+            { StatusTypes.Sleep, EffectType.SleepResistance },
+            { StatusTypes.Slowed, EffectType.SlowedResistance },
+            { StatusTypes.Enfeebled, EffectType.EnfeebledResistance },
+            { StatusTypes.Confused, EffectType.ConfusionResistance },
+        };
+
     }
 
     public enum StatusTypes

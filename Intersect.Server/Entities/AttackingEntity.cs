@@ -346,7 +346,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void Knockback(byte dir, int amount)
+        public virtual void Knockback(byte dir, int amount)
         {
             _ = new Dash(this, amount, dir, false, false, false, false, stunMs: 250);
         }

@@ -80,5 +80,32 @@ namespace Intersect.Enums
 
         [Description("Ammo Saver")]
         AmmoSaver = 24,
+
+        [Description("Silence Resistance")]
+        SilenceResist,
+
+        [Description("Stun Resistance")]
+        StunResistance,
+        
+        [Description("Snare Resistance")]
+        SnareResistance,
+
+        [Description("Blind Resistance")]
+        BlindResistance,
+
+        [Description("Sleep Resistance")]
+        SleepResistance,
+
+        [Description("Slowed Resistance")]
+        SlowedResistance,
+
+        [Description("Enfeebled Resistance")]
+        EnfeebledResistance,
+
+        [Description("Confusion Resistance")]
+        ConfusionResistance,
+
+        [Description("KnockbackResistance")]
+        KnockbackResistance,
     }
 }

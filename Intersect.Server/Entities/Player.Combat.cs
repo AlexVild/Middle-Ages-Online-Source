@@ -10,6 +10,7 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using MimeKit.Cryptography;
 using Org.BouncyCastle.Asn1.X509;
 using System;
@@ -1034,6 +1035,42 @@ namespace Intersect.Server.Entities
                 PacketSender.SendActionMsg(this, "PROC!", CustomColors.Combat.MagicDamage);
             }
             base.HandleDefensiveSpellProccing(attacker);
+        }
+
+        public override bool ResistsEffect(StatusTypes status)
+        {
+            if (!StatusHelpers.ResistanceMap.TryGetValue(status, out var effect))
+            {
+                return false;
+            }
+            
+            var bonus = GetBonusEffectTotal(effect);
+            if (bonus == 0)
+            {
+                return base.ResistsEffect(status);
+            }
+
+            var random = Randomization.Next(1, 101);
+            return random <= bonus;
+        }
+
+        public override void Knockback(byte dir, int amount)
+        {
+            var bonus = GetBonusEffectTotal(EffectType.KnockbackResistance);
+            if (bonus == 0)
+            {
+                base.Knockback(dir, amount);
+                return;
+            }
+
+            var random = Randomization.Next(1, 101);
+            if (random <= bonus)
+            {
+                SendResistMessage();
+                return;
+            }
+            
+            base.Knockback(dir, amount);
         }
     }
 }

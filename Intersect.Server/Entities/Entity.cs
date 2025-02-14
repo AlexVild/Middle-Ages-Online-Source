@@ -1511,7 +1511,8 @@ namespace Intersect.Server.Entities
             switch (damageType)
             {
                 case DamageType.Magic:
-                    PacketSender.SendActionMsg(en, Strings.Combat.resist, CustomColors.Combat.Missed, Options.MissSound);
+                    // Switched to just be "miss" as well, resist used for resistance bonus effects
+                    PacketSender.SendActionMsg(en, Strings.Combat.miss, CustomColors.Combat.Missed, Options.MissSound);
                     break;
                 default:
                     PacketSender.SendActionMsg(en, Strings.Combat.miss, CustomColors.Combat.Missed, Options.MissSound);

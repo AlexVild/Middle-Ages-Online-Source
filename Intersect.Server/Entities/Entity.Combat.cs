@@ -151,14 +151,28 @@ namespace Intersect.Server.Entities
             return baseDamage;
         }
 
+        public virtual bool ResistsEffect(StatusTypes status)
+        {
+            return false;
+        }
+
         public virtual void ApplyStatus(SpellBase spell, Entity caster, int statBuffTime)
         {
+            if (spell == null)
+            {
+                return;
+            }
+
             if (spell.Combat.Effect > 0) //Handle status effects
             {
                 // If the entity is immune to some status, then just inform the client of such
                 if (IsImmuneTo(StatusToImmunity(spell.Combat.Effect)))
                 {
                     PacketSender.SendActionMsg(this, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
+                }
+                else if (ResistsEffect(spell.Combat.Effect))
+                {
+                    SendResistMessage();
                 }
                 else if (spell.Combat.Friendly || !IsInvincibleTo(caster))
                 {
@@ -187,6 +201,11 @@ namespace Intersect.Server.Entities
                     ChallengeUpdateProcesser.UpdateChallengesOf(new StatusApplyUpdate(player, spell.Combat.Effect));
                 }
             }
+        }
+
+        public void SendResistMessage()
+        {
+            PacketSender.SendActionMsg(this, Strings.Combat.resist, CustomColors.Combat.Status);
         }
 
         public virtual int GetBonusEffectTotal(EffectType effect, int startValue = 0)
