@@ -1836,7 +1836,7 @@ namespace Intersect.Editor.Forms.DockingElements
                                     tmpMap.LocalEvents.Remove(tmpMap.FindEventAt(x0, y0).Id);
                                 }
 
-                                eventCopy = new EventBase(Guid.NewGuid(), Globals.SelectionSource.FindEventAt(x0 - dragxoffset, y0 - dragyoffset)
+                                eventCopy = new EventBase(Guid.NewGuid(), Globals.CurrentMap.Id, Globals.SelectionSource.FindEventAt(x0 - dragxoffset, y0 - dragyoffset)
                                 )
                                 {
                                     SpawnX = x0,

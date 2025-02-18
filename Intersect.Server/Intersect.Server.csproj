@@ -487,6 +487,7 @@
     <Compile Include="Database\GameData\IGameContext.cs" />
     <Compile Include="Database\GameData\Migrations\Beta6Migration.cs" />
     <Compile Include="Database\GameData\Migrations\BonusEffectsToListMigration.cs" />
+    <Compile Include="Database\GameData\Migrations\EventMapIdMigration.cs" />
     <Compile Include="Database\GameData\Migrations\FixQuestTaskCompletionEventsMigration.cs" />
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
@@ -1523,6 +1524,10 @@
     <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.cs" />
     <Compile Include="Migrations\Game\20241219190955_NpcChallengeInvalidMigration.Designer.cs">
       <DependentUpon>20241219190955_NpcChallengeInvalidMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20250218221229_EventMapIdMigration.cs" />
+    <Compile Include="Migrations\Game\20250218221229_EventMapIdMigration.designer.cs">
+      <DependentUpon>20250218221229_EventMapIdMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

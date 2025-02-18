@@ -165,6 +165,11 @@ namespace Intersect.Server.Database.GameData
                 RecipeCrMigration.Run(this);
             }
 
+            if (migrations.IndexOf("20250218221229_EventMapIdMigration") > -1)
+            {
+                EventMapIdMigration.Run(this);
+            }
+
         }
 
         internal static class Queries

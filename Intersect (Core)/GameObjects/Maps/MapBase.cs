@@ -154,7 +154,7 @@ namespace Intersect.GameObjects.Maps
 
                     foreach (var record in mapBase.LocalEvents)
                     {
-                        var evt = new EventBase(record.Key, record.Value?.JsonData);
+                        var evt = new EventBase(record.Key, mapBase.Id, record.Value?.JsonData);
                         LocalEvents?.Add(record.Key, evt);
                     }
 

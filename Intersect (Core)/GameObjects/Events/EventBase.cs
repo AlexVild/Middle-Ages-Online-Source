@@ -53,17 +53,19 @@ namespace Intersect.GameObjects.Events
             CommonEvent = isCommon;
         }
 
-        public EventBase(Guid id, EventBase copy) : base(id)
+        public EventBase(Guid id, Guid mapId, EventBase copy) : base(id)
         {
             Name = "New Event";
             Pages = new List<EventPage>();
             Load(copy.JsonData);
+            MapId = mapId;
             CommonEvent = copy.CommonEvent;
         }
 
-        public EventBase(Guid id, string json, bool isCommon = false) : base(id)
+        public EventBase(Guid id, Guid mapId, string json, bool isCommon = false) : base(id)
         {
             Name = "New Event";
+            MapId = mapId;
             CommonEvent = isCommon;
             Pages = new List<EventPage>();
             Load(json);
