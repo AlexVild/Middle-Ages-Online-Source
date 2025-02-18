@@ -615,6 +615,7 @@ namespace Intersect.GameObjects.Events
         public Guid ChallengeId { get; set; }
     }
 
+    // This is _really_ "player has mastery level of X"
     public class WeaponTypeIs : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.WeaponMasteryOf;

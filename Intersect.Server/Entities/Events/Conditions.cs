@@ -1381,6 +1381,32 @@ namespace Intersect.Server.Entities.Events
         }
 
         public static bool MeetsCondition(
+           WeaponIsType condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var equippedWeapon))
+            {
+                return false;
+            }
+
+            var weapon = equippedWeapon.Descriptor;
+            if (weapon == null || !weapon.MaxWeaponLevels.TryGetValue(condition.WeaponTypeId, out var maxLvl))
+            {
+                return false;
+            }
+
+            return maxLvl >= condition.Level;
+        }
+
+        public static bool MeetsCondition(
           PlayerIsDashing condition,
           Player player,
           Event eventInstance,
