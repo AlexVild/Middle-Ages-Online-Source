@@ -939,7 +939,7 @@ namespace Intersect.Server.Database.PlayerData
         private static readonly Func<PlayerContext, string, bool> AnyUserByNameOrEmail =
             EF.CompileQuery(
                 // ReSharper disable once SpecifyStringComparison
-                (PlayerContext context, string nameOrEmail) => context.Users.Where(u => u.Name == nameOrEmail || u.Email == nameOrEmail).Any());
+                (PlayerContext context, string nameOrEmail) => context.Users.Where(u => u.Name.ToLower() == nameOrEmail.ToLower() || u.Email.ToLower() == nameOrEmail.ToLower()).Any());
 
         private static readonly Func<PlayerContext, string, string> SaltByName =
                 EF.CompileQuery(
