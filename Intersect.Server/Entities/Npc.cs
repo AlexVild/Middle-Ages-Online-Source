@@ -104,6 +104,12 @@ namespace Intersect.Server.Entities
 
         public Guid SpawnMapId { get; set; }
 
+        public MapController SpawnMap { get; set; }
+
+        public int SpawnX { get; set; }
+        
+        public int SpawnY { get; set; }
+
         public long SpawnedAt { get; set; }
 
         /// <summary>
@@ -137,6 +143,9 @@ namespace Intersect.Server.Entities
         public void InitializeToMap(Guid mapId, NpcSpawn spawnSettings, MapNpcSpawn mapSpawner, string npcKey)
         {
             SpawnMapId = mapId;
+            SpawnMap = Map;
+            SpawnX = X;
+            SpawnY = Y;
             if (spawnSettings.PreventRespawn)
             {
                 PermadeathKey = npcKey;
@@ -199,6 +208,8 @@ namespace Intersect.Server.Entities
         public NpcBase Base { get; private set; }
 
         private bool IsStunnedOrSleeping => CachedStatuses.Any(PredicateStunnedOrSleeping);
+        
+        private bool IsStatusMovementBlocked => CachedStatuses.Any(PredicateStatusMovementBlocked);
 
         private bool IsUnableToCastSpells => CachedStatuses.Any(PredicateUnableToCastSpells);
 
@@ -579,6 +590,19 @@ namespace Intersect.Server.Entities
             }
         }
 
+        private static bool PredicateStatusMovementBlocked(Status status)
+        {
+            switch (status?.Type)
+            {
+                case StatusTypes.Snare:
+                case StatusTypes.Sleep:
+                case StatusTypes.Stun:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         private static bool PredicateUnableToCastSpells(Status status)
         {
             switch (status?.Type)
@@ -592,6 +616,8 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public bool IsWandering => Target == null && !mResetting && !IsFleeing();
+
         public override int CanMove(int moveDir)
         {
             var canMove = base.CanMove(moveDir);
@@ -601,59 +627,27 @@ namespace Intersect.Server.Entities
             {
                 canMove = mResetting ? -1 : canMove;
             }
-            if ((canMove == -1 || canMove == -4) && IsFleeing() && Options.Instance.NpcOpts.AllowResetRadius)
+
+            var tile = new TileHelper(MapId, X, Y);
+            var validTile = tile.Translate(moveDir);
+
+            var distanceToDesiredTile = GetDistanceBetween(SpawnMap, tile.GetMap(), SpawnX, tile.GetX(), SpawnY, tile.GetY());
+            // If we're in wander state
+            if (IsWandering && distanceToDesiredTile >= Options.Npc.WanderRadius)
             {
-                var yOffset = 0;
-                var xOffset = 0;
-                var tile = new TileHelper(MapId, X, Y);
-                switch (moveDir)
+                return -2;
+            }
+
+            if ((canMove == -1 || canMove == -4) 
+                && IsFleeing() 
+                && Options.Instance.NpcOpts.AllowResetRadius
+                && validTile)
+            {
+                //If this would move us past our reset radius then we cannot move.
+                var dist = GetDistanceBetween(AggroCenterMap, tile.GetMap(), AggroCenterX, tile.GetX(), AggroCenterY, tile.GetY());
+                if (dist > Math.Max(Options.Npc.ResetRadius, Base.ResetRadius))
                 {
-                    case 0: //Up
-                        yOffset--;
-
-                        break;
-                    case 1: //Down
-                        yOffset++;
-
-                        break;
-                    case 2: //Left
-                        xOffset--;
-
-                        break;
-                    case 3: //Right
-                        xOffset++;
-
-                        break;
-                    case 4: //NW
-                        yOffset--;
-                        xOffset--;
-
-                        break;
-                    case 5: //NE
-                        yOffset--;
-                        xOffset++;
-
-                        break;
-                    case 6: //SW
-                        yOffset++;
-                        xOffset--;
-
-                        break;
-                    case 7: //SE
-                        yOffset++;
-                        xOffset++;
-
-                        break;
-                }
-
-                if (tile.Translate(xOffset, yOffset))
-                {
-                    //If this would move us past our reset radius then we cannot move.
-                    var dist = GetDistanceBetween(AggroCenterMap, tile.GetMap(), AggroCenterX, tile.GetX(), AggroCenterY, tile.GetY());
-                    if (dist > Math.Max(Options.Npc.ResetRadius, Base.ResetRadius))
-                    {
-                        return -2;
-                    }
+                    return -2;
                 }
             }
             return canMove;
@@ -821,7 +815,7 @@ namespace Intersect.Server.Entities
 
         private void IncrementRandomMoveTimer()
         {
-            LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
+            LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(800, 2500);
         }
 
         public void ProgressCastIndex()
@@ -1231,22 +1225,11 @@ namespace Intersect.Server.Entities
                                         mPathFinder.PathFailed(timeMs);
                                     }
 
-                                    // Are we resetting?
-                                    if (mResetting)
+                                    // Were we resetting and made it back to our pull point?
+                                    if (mResetting && IsAtResetPoint)
                                     {
-                                        // Have we reached our destination? If so, clear it.
-                                        if (GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) == 0)
-                                        {
-                                            targetMap = Guid.Empty;
-
-                                            // Reset our aggro center so we can get "pulled" again.
-                                            AggroCenterMap = null;
-                                            AggroCenterX = 0;
-                                            AggroCenterY = 0;
-                                            AggroCenterZ = 0;
-                                            mPathFinder?.SetTarget(null);
-                                            mResetting = false;
-                                        }
+                                        ResetAggroCenter(out targetMap);
+                                        IncrementRandomMoveTimer();
                                     }
                                 }
 
@@ -1357,26 +1340,28 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
-                var i = Randomization.Next(0, 1);
-                if (i == 0)
+                var i = Randomization.Next(1, 101);
+                // 65% chance to move, and only if movement isn’t blocked by a status
+                if (i < 65 && !IsStatusMovementBlocked)
                 {
-                    i = Randomization.Next(0, 4);
-                    if (CanMove(i) == -1)
-                    {
-                        //check if NPC is snared or stunned
-                        foreach (var status in CachedStatuses)
-                        {
-                            if (status.Type == StatusTypes.Stun ||
-                                status.Type == StatusTypes.Snare ||
-                                status.Type == StatusTypes.Sleep)
-                            {
-                                return;
-                            }
-                        }
+                    var validDirections = new List<int>();
 
-                        Move((byte)i, null);
+                    // Add only directions that are valid
+                    for (int dir = 0; dir < 4; dir++)
+                    {
+                        if (CanMove(dir) == -1)
+                        {
+                            validDirections.Add(dir);
+                        }
+                    }
+
+                    // Pick a random valid direction, if any
+                    if (validDirections.Count > 0)
+                    {
+                        Move((byte)validDirections[Randomization.Next(validDirections.Count)], null);
                     }
                 }
+
 
                 IncrementRandomMoveTimer();
 
@@ -1440,23 +1425,37 @@ namespace Intersect.Server.Entities
             mResetting = false;
         }
 
+        private bool IsAtResetPoint => AggroCenterMap != null && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) == 0;
+        
+        private bool IsOutsideRadius => AggroCenterMap != null 
+            && Options.Instance.NpcOpts.AllowResetRadius 
+            && GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) > ResetRadius;
+
+        private int ResetRadius => Math.Max(Options.Npc.ResetRadius, Base.ResetRadius);
+
         private bool CheckForResetLocation(bool forceDistance = false)
         {
             // Check if we've moved out of our range we're allowed to move from after being "aggro'd" by something.
             // If so, remove target and move back to the origin point.
-            if (Options.Npc.AllowResetRadius && AggroCenterMap != null && (GetDistanceTo(AggroCenterMap, AggroCenterX, AggroCenterY) > Math.Max(Options.Npc.ResetRadius, Base.ResetRadius) || forceDistance))
+            if (AggroCenterMap == null || !Options.Npc.AllowResetRadius)
             {
-                ResetNpc(Options.Npc.ResetVitalsAndStatusses);
-
-                mResetCounter = 0;
-                mResetDistance = 0;
-
-                // Try and move back to where we came from before we started chasing something.
-                mResetting = true;
-                mPathFinder.SetTarget(new PathfinderTarget(AggroCenterMap.Id, AggroCenterX, AggroCenterY, AggroCenterZ));
-                return true;
+                return false;
             }
-            return false;
+
+            if (!IsOutsideRadius && !forceDistance)
+            {
+                return false;
+            }
+
+            ResetNpc(Options.Npc.ResetVitalsAndStatusses);
+
+            mResetCounter = 0;
+            mResetDistance = 0;
+
+            // Try and move back to where we came from before we started chasing something.
+            mResetting = true;
+            mPathFinder.SetTarget(new PathfinderTarget(AggroCenterMap.Id, AggroCenterX, AggroCenterY, AggroCenterZ));
+            return true;
         }
 
         private void ResetNpc(bool resetVitals = true, bool clearLocation = false)
@@ -2085,7 +2084,7 @@ namespace Intersect.Server.Entities
         /// <param name="newDamage">The amount of damage to add</param>
         public void AddToDamageAndLootMaps(Entity attacker, int newDamage)
         {
-            if (attacker == null)
+            if (attacker == null || attacker.Id == Id || newDamage < 0)
             {
                 return;
             }

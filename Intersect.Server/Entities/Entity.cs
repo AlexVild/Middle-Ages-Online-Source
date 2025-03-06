@@ -1839,20 +1839,26 @@ namespace Intersect.Server.Entities
 
         public static int GetDistanceBetween(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB)
         {
-            if (mapA == null ||  mapB == null || mapA.MapGrid != mapB.MapGrid)
+            if (mapA == null || mapB == null || mapA.MapGrid != mapB.MapGrid)
             {
                 return int.MaxValue;
             }
 
-            //Calculate World Tile of Me
-            var x1 = xTileA + mapA.MapGridX * Options.MapWidth;
-            var y1 = yTileA + mapA.MapGridY * Options.MapHeight;
+            // Calculate world tile of Me
+            long x1 = (long)xTileA + mapA.MapGridX * (long)Options.MapWidth;
+            long y1 = (long)yTileA + mapA.MapGridY * (long)Options.MapHeight;
 
-            //Calculate world tile of target
-            var x2 = xTileB + mapB.MapGridX * Options.MapWidth;
-            var y2 = yTileB + mapB.MapGridY * Options.MapHeight;
+            // Calculate world tile of target
+            long x2 = (long)xTileB + mapB.MapGridX * (long)Options.MapWidth;
+            long y2 = (long)yTileB + mapB.MapGridY * (long)Options.MapHeight;
 
-            return (int)Math.Sqrt(Math.Pow(x1 - x2, 2) + Math.Pow(y1 - y2, 2));
+            // Use long for squared distance to prevent overflow
+            long dx = x1 - x2;
+            long dy = y1 - y2;
+            long squaredDistance = dx * dx + dy * dy;
+
+            // Compute distance and round before casting to int
+            return (int)Math.Round(Math.Sqrt(squaredDistance));
         }
 
         /// <summary>

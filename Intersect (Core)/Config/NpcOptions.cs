@@ -17,6 +17,8 @@
         /// </summary>
         public int ResetRadius = 8;
 
+        public int WanderRadius = 10;
+
         /// <summary>
         /// Configures whether or not the NPC is allowed to gain a new reset center point while it is still busy moving to its original reset point.
         /// NOTE: Can be used to allow the NPCs to be dragged far far away, as it constantly resets the center of its radius!!!

@@ -56,6 +56,11 @@ namespace Intersect.Server.Entities
 
         public override void ReactToCombat(Entity attacker)
         {
+            if (attacker?.Id == Id)
+            {
+                return;
+            }
+
             AddToDamageAndLootMaps(attacker, 0);
             NotifySwarm(attacker);
             base.ReactToCombat(attacker);
