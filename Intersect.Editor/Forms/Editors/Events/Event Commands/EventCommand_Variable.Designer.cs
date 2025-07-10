@@ -42,6 +42,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
+            this.optNumericMod = new DarkUI.Controls.DarkRadioButton();
             this.rdoInventorySlots = new DarkUI.Controls.DarkRadioButton();
             this.rdoSpawnGroup = new DarkUI.Controls.DarkRadioButton();
             this.optEventX = new DarkUI.Controls.DarkRadioButton();
@@ -97,7 +98,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
             this.lblStringValue = new System.Windows.Forms.Label();
             this.txtStringValue = new DarkUI.Controls.DarkTextBox();
-            this.optNumericMod = new DarkUI.Controls.DarkRadioButton();
+            this.chkToLower = new DarkUI.Controls.DarkCheckBox();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -121,9 +122,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.Controls.Add(this.grpSelectVariable);
             this.grpSetVariable.Controls.Add(this.btnCancel);
             this.grpSetVariable.Controls.Add(this.btnSave);
+            this.grpSetVariable.Controls.Add(this.grpStringVariable);
             this.grpSetVariable.Controls.Add(this.grpNumericVariable);
             this.grpSetVariable.Controls.Add(this.grpBooleanVariable);
-            this.grpSetVariable.Controls.Add(this.grpStringVariable);
             this.grpSetVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSetVariable.Location = new System.Drawing.Point(3, 3);
             this.grpSetVariable.Name = "grpSetVariable";
@@ -281,6 +282,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericVariable.TabIndex = 36;
             this.grpNumericVariable.TabStop = false;
             this.grpNumericVariable.Text = "Numeric Variable:";
+            // 
+            // optNumericMod
+            // 
+            this.optNumericMod.AutoSize = true;
+            this.optNumericMod.Location = new System.Drawing.Point(296, 19);
+            this.optNumericMod.Name = "optNumericMod";
+            this.optNumericMod.Size = new System.Drawing.Size(60, 17);
+            this.optNumericMod.TabIndex = 57;
+            this.optNumericMod.Text = "Modulo";
+            this.optNumericMod.CheckedChanged += new System.EventHandler(this.rdoMod_CheckedChanged);
             // 
             // rdoInventorySlots
             // 
@@ -859,6 +870,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpStringVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpStringVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStringVariable.Controls.Add(this.chkToLower);
             this.grpStringVariable.Controls.Add(this.lblStringTextVariables);
             this.grpStringVariable.Controls.Add(this.grpStringReplace);
             this.grpStringVariable.Controls.Add(this.optReplaceString);
@@ -867,7 +879,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpStringVariable.Location = new System.Drawing.Point(6, 100);
             this.grpStringVariable.Name = "grpStringVariable";
-            this.grpStringVariable.Size = new System.Drawing.Size(296, 183);
+            this.grpStringVariable.Size = new System.Drawing.Size(296, 200);
             this.grpStringVariable.TabIndex = 51;
             this.grpStringVariable.TabStop = false;
             this.grpStringVariable.Text = "String Variable:";
@@ -879,7 +891,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblStringTextVariables.BackColor = System.Drawing.Color.Transparent;
             this.lblStringTextVariables.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStringTextVariables.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblStringTextVariables.Location = new System.Drawing.Point(6, 159);
+            this.lblStringTextVariables.Location = new System.Drawing.Point(6, 171);
             this.lblStringTextVariables.Name = "lblStringTextVariables";
             this.lblStringTextVariables.Size = new System.Drawing.Size(249, 13);
             this.lblStringTextVariables.TabIndex = 68;
@@ -993,15 +1005,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtStringValue.Size = new System.Drawing.Size(207, 20);
             this.txtStringValue.TabIndex = 62;
             // 
-            // optNumericMod
+            // chkToLower
             // 
-            this.optNumericMod.AutoSize = true;
-            this.optNumericMod.Location = new System.Drawing.Point(296, 19);
-            this.optNumericMod.Name = "optNumericMod";
-            this.optNumericMod.Size = new System.Drawing.Size(60, 17);
-            this.optNumericMod.TabIndex = 57;
-            this.optNumericMod.Text = "Modulo";
-            this.optNumericMod.CheckedChanged += new System.EventHandler(this.rdoMod_CheckedChanged);
+            this.chkToLower.AutoSize = true;
+            this.chkToLower.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkToLower.Location = new System.Drawing.Point(9, 151);
+            this.chkToLower.Name = "chkToLower";
+            this.chkToLower.Size = new System.Drawing.Size(175, 17);
+            this.chkToLower.TabIndex = 69;
+            this.chkToLower.Text = "To Lower? (For \"set\" operation)";
             // 
             // EventCommandVariable
             // 
@@ -1107,5 +1119,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton rdoGuildVarNum;
         private DarkRadioButton rdoGuildVariable;
         internal DarkRadioButton optNumericMod;
+        private DarkCheckBox chkToLower;
     }
 }

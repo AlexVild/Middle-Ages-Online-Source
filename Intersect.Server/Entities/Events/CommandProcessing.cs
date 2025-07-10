@@ -2559,7 +2559,12 @@ namespace Intersect.Server.Entities.Events
             switch (mod.ModType)
             {
                 case Enums.VariableMods.Set:
-                    value.String = ParseEventText(mod.Value, player, instance);
+                    var modValue = mod.Value;
+                    value.String = ParseEventText(modValue, player, instance);
+                    if (mod.ToLower)
+                    {
+                        value.String = value.String.ToLower();
+                    }
 
                     break;
                 case Enums.VariableMods.Replace:

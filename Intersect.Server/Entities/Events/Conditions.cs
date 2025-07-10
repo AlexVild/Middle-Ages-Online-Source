@@ -607,9 +607,8 @@ namespace Intersect.Server.Entities.Events
             QuestBase questBase
         )
         {
-            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            if (player != null && player.ClassInfo.TryGetValue(condition.ClassId, out var classInfo))
             {
-                var classInfo = player.ClassInfo[condition.ClassId];
                 return classInfo.InGuild && classInfo.Rank >= condition.ClassRank;
             }
             return false;

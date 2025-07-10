@@ -1058,6 +1058,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 {
                     case VariableMods.Set:
                         optStaticString.Checked = true;
+                        chkToLower.Checked = mod.ToLower;
                         txtStringValue.Text = mod.Value;
 
                         break;
@@ -1078,6 +1079,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 mod.ModType = VariableMods.Set;
                 mod.Value = txtStringValue.Text;
+                mod.ToLower = chkToLower.Checked;
             }
             else if (optReplaceString.Checked)
             {

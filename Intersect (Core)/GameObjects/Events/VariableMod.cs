@@ -47,6 +47,8 @@ namespace Intersect.GameObjects.Events
 
         public string Replace { get; set; }
 
+        public bool ToLower { get; set; }
+
     }
 
 }
