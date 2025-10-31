@@ -853,11 +853,9 @@ namespace Intersect.Server.Entities
                 var entities = mapInstance.GetCachedEntities();
                 var aggroedNpcs = GetAggroedNpcCount();
 
-                if (aggroedNpcs > 1)
+                if (aggroedNpcs > Options.Instance.CombatOpts.BerzerkMinMobs)
                 {
-                    var maxMobs = Options.Instance.CombatOpts.BerzerkMaxMobs;
-                    var effectiveMobs = Math.Min(aggroedNpcs, maxMobs) - 1;
-                    var bonusPercent = (berzerk * effectiveMobs) / 100f;
+                    var bonusPercent = berzerk / 100f;
                     baseDamage = Math.Max(baseDamage + 1, (int)(baseDamage * (1 + bonusPercent)));
                 }
             }
