@@ -22,7 +22,7 @@ namespace Intersect.Client.Utilities
             {EffectType.Angler, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Angler], "Increases harvest speed when fishing.")}, // Angler
             {EffectType.Lumberjack, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Lumberjack], "Increases harvest speed when woodcutting.")}, // Lumberjack
             {EffectType.Assassin, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Assassin], "Increases backstab/stealth attack modifier on weapons with backstab.")}, // Assassin
-            {EffectType.Sniper, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Sniper], "Does more damage if attacks are at a longer range.")}, // Sniper
+            {EffectType.Sniper, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Sniper], "Does more damage if attacks are further than 4 tiles.")}, // Sniper
             {EffectType.Berzerk, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Berzerk], "Increases damage based on how many enemies are aggressive toward you.")}, // Berzerk
             {EffectType.Manasteal, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Manasteal], "Gives mana as a percentage of damage dealt.")}, // Manasteal
             {EffectType.Phantom, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Phantom], "Reduces sight range of enemies and reduces amount of aggro pulled from damage.")}, // Phantom
