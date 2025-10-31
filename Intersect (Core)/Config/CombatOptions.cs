@@ -160,9 +160,15 @@ namespace Intersect.Config
             0.05f, 0.1f, 0.25f, 0.33f, 0.5f
         };
 
-        public float SniperDamageDivider = 2.0f;
+        public float SniperDamageDivider = 2.0f; // DEPRECATED
 
-        public float BerzerkDamageDivider = 2.0f;
+        public float BerzerkDamageDivider = 2.0f; // DEPRECATED
+
+        public int BerzerkMaxMobs { get; set; } = 4;
+
+        public int SniperRequiredRange { get; set; } = 5;
+
+        public int SniperMultiplierCap { get; set; } = 4;
 
         // How long after a heal/buff some entity can be considered an ally
         public long AllyTimer = 10000;

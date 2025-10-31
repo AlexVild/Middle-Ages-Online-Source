@@ -369,8 +369,8 @@
     <Reference Include="GtkSharp, Version=3.24.24.95, Culture=neutral, PublicKeyToken=f6892ebcc5dd81ba, processorArchitecture=MSIL">
       <HintPath>..\packages\GtkSharp.3.24.24.95\lib\netstandard2.0\GtkSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Lidgren.Network">
-      <HintPath>..\packages\AscensionGameDev.Lidgren.Network.1.7.4.9\lib\net462\Lidgren.Network.dll</HintPath>
+    <Reference Include="Lidgren.Network, Version=1.8.0.13, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AscensionGameDev.Lidgren.Network.1.8.0.13\lib\net462\Lidgren.Network.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.Validation, Version=15.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

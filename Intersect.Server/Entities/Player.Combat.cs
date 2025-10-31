@@ -846,40 +846,34 @@ namespace Intersect.Server.Entities
 
             if (target is Resource) return baseDamage;
 
+            // Apply "Berzerk" effect - Applies user's %Berzerk per enemy aggro'd above 1, up to configured maximum
             var berzerk = GetBonusEffectTotal(EffectType.Berzerk);
             if (berzerk > 0 && Map.TryGetInstance(MapInstanceId, out var mapInstance))
             {
                 var entities = mapInstance.GetCachedEntities();
-                var currentAggrod = 0;
-                foreach (var entity in entities)
-                {
-                    if (!(entity is Npc n))
-                    {
-                        continue;
-                    }
+                var aggroedNpcs = GetAggroedNpcCount();
 
-                    if (n.Target == this)
-                    {
-                        currentAggrod++;
-                    }
-                }
-
-                var berzerkDamageMultiplier = (int)Math.Round(originalDamage / Options.Instance.CombatOpts.BerzerkDamageDivider);
-                var berzerkDamage = (int)Math.Round(berzerkDamageMultiplier * (currentAggrod - 1) * (berzerk / 100f));
-                if (currentAggrod > 1)
+                if (aggroedNpcs > 1)
                 {
-                    baseDamage += Math.Max(0, berzerkDamage);
+                    var maxMobs = Options.Instance.CombatOpts.BerzerkMaxMobs;
+                    var effectiveMobs = Math.Min(aggroedNpcs, maxMobs) - 1;
+                    var bonusPercent = (berzerk * effectiveMobs) / 100f;
+                    baseDamage = Math.Max(baseDamage + 1, (int)(baseDamage * (1 + bonusPercent)));
                 }
             }
 
             var sniper = GetBonusEffectTotal(EffectType.Sniper);
-            if (range > 1 && sniper > 0)
+            if (range >= Options.Instance.CombatOpts.SniperRequiredRange && sniper > 0)
             {
-                var sniperDamageMultiplier = (int)Math.Round(originalDamage / Options.Instance.CombatOpts.SniperDamageDivider);
-                var sniperDamage = (int)Math.Round(sniperDamageMultiplier * range * (sniper / 100f));
-                baseDamage += Math.Max(0, sniperDamage);
+                // If the user is 2x the required range, then double the sniper effect, continuous up to a cap
+                var rangeMod = Math.Min((int)Math.Floor((float)range / Options.Instance.CombatOpts.SniperRequiredRange), Options.Instance.CombatOpts.SniperMultiplierCap);
+                var moddedSniper = sniper * rangeMod;
+                var sniperDamageMultiplier = moddedSniper / 100f;
+                var sniperDamage = (int)Math.Round(sniperDamageMultiplier * baseDamage);
+                baseDamage += Math.Max(1, sniperDamage);
             }
 
+            // Do backstabs/stealth below, or other such things that require a weapon.
             if (item == null || target == null) return baseDamage;
 
             var canBackstab = true;

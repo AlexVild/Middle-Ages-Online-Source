@@ -10143,5 +10143,15 @@ namespace Intersect.Server.Entities
         public long TileMovementTime { get; set; }
 
         public override bool ProjectileSafetyTime => Timing.Global.Milliseconds < TileMovementTime;
+
+        private int GetAggroedNpcCount()
+        {
+            if (!Map.TryGetInstance(MapInstanceId, out var mapInstance))
+                return 0;
+
+            return mapInstance.GetCachedEntities()
+                .OfType<Npc>()
+                .Count(n => n.Target == this);
+        }
     }
 }
