@@ -101,7 +101,7 @@ namespace Intersect.Server.Entities
 
                 if (IsCriticalHit(cls.CritChance))
                 {
-                    critMultiplier = cls.CritChance;
+                    critMultiplier = cls.CritMultiplier;
                     critMultiplier = ApplyEffectBonusToValue(critMultiplier, EffectType.CritBonus);
                 }
             }
