@@ -589,7 +589,7 @@ namespace Intersect.Server.Entities
                 }
 
                 damage = CalculateSpecialDamage(damage, range, weaponMetadata, enemy);
-                damage = (int)Math.Round(critMultiplier * damage); // apply crit AFTER special damage
+                damage = (int)Math.Ceiling(critMultiplier * damage); // apply crit AFTER special damage
 
                 if (damage > enemy.GetVital((int)Vitals.Health))
                 {
