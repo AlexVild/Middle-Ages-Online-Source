@@ -265,24 +265,24 @@ namespace Intersect.Server.Entities
             return base.ValidateCast(spell, target, ignoreVitals);
         }
 
-        public override void UseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
+        public override bool TryUseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
             if (spell == null)
             {
-                return;
+                return false;
             }
 
             if (PlayerDead)
             {
                 CancelCast();
-                return;
+                return false;
             }
 
             if (target is Player spellTarget && spell.Combat.Friendly && spellTarget.Id != Id && spellTarget.InDuel && spell.Combat.TargetType != SpellTargetTypes.Self)
             {
                 PacketSender.SendChatMsg(this, "You can not cast friendly spells on a dueling player.", ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
                 CancelCast();
-                return;
+                return false;
             }
 
             if (resourceLock != null)
@@ -307,13 +307,15 @@ namespace Intersect.Server.Entities
                         EnqueueStartCommonEvent(evt);
                     }
 
-                    base.UseSpell(spell, spellSlot, target, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
+                    base.TryUseSpell(spell, spellSlot, target, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
                     break;
 
                 default:
-                    base.UseSpell(spell, spellSlot, target, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
+                    base.TryUseSpell(spell, spellSlot, target, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
                     break;
             }
+
+            return true;
         }
 
         protected override void PopulateExtraSpellDamage(ref int scaling,
@@ -853,7 +855,7 @@ namespace Intersect.Server.Entities
                 var entities = mapInstance.GetCachedEntities();
                 var aggroedNpcs = GetAggroedNpcCount();
 
-                if (aggroedNpcs > Options.Instance.CombatOpts.BerzerkMinMobs)
+                if (aggroedNpcs >= Options.Instance.CombatOpts.BerzerkMinMobs)
                 {
                     var bonusPercent = berzerk / 100f;
                     baseDamage = Math.Max(baseDamage + 1, (int)(baseDamage * (1 + bonusPercent)));
@@ -980,7 +982,7 @@ namespace Intersect.Server.Entities
 
             if (procSpell.Combat.TargetType == SpellTargetTypes.Self)
             {
-                UseSpell(procSpell, -1, this, true, true, (byte)Dir, this, true);
+                TryUseSpell(procSpell, -1, this, true, true, (byte)Dir, this, true);
             }
             else
             {

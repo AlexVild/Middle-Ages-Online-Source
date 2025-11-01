@@ -185,55 +185,47 @@ namespace Intersect.Server.Entities
         }
 
         /// <summary>
-        /// Starts a cast - sets the casting timer for some entity.
-        /// This is a convenience override for <see cref="StartCast(SpellBase, Entity, bool)"/>
+        /// Attempts to get a spell from an entity's spell slots.
         /// </summary>
-        /// <param name="spellSlot">The slot to cast from</param>
-        /// <param name="target">The target entity</param>
-        protected void StartCast(int spellSlot, Entity target)
+        /// <param name="spellSlotIdx">The index of the slot </param>
+        /// <param name="spell">The SpellBase to be found</param>
+        /// <returns>True if a spell is found</returns>
+        public bool TryGetSpellInSlot(int spellSlotIdx, out SpellBase spell)
         {
-            if (spellSlot < 0 && spellSlot >= Spells.Count)
+            var spellSlot = Spells.ElementAtOrDefault(spellSlotIdx);
+            if (spellSlot == default)
             {
-                return;
-            }
-            SpellCastSlot = spellSlot;
-            var spell = SpellBase.Get(Spells[spellSlot].SpellId);
-
-            if ((spell.Combat?.Friendly ?? false) && !IsAllyOf(target))
-            {
-                target = this;
+                spell = null;
+                return false;
             }
 
-            StartCast(spell, target, spell.CastDuration <= 0);
+            return SpellBase.TryGet(spellSlot.SpellId, out spell);
         }
 
         /// <summary>
         /// Starts a cast - sets the casting timer for some entity.
         /// </summary>
-        /// <param name="spell">The spell we're casting</param>
-        /// <param name="target">The target we're casting to</param>
-        /// <param name="instant">Whether the spell should instantly cast, and not set casting timers</param>
-        public void StartCast(SpellBase spell, Entity target, bool instant = false)
+        /// <param name="spellSlotIdx">The slot to cast from</param>
+        /// <param name="target">The target entity</param>
+        protected bool TryStartCast(int spellSlotIdx, Entity target)
         {
-            if (spell == null)
+            if (!TryGetSpellInSlot(spellSlotIdx, out var spell))
             {
-                return;
+                return false;
             }
 
-            if (spell.SpellType == SpellTypes.Passive) 
+            // Auto-target friendly spells on self
+            if ((spell.Combat?.Friendly ?? false) && !IsAllyOf(target))
             {
-                return;
+                target = this;
             }
 
-            if (spell.CastDuration > 0 && !instant)
-            {
-                CastTime = Timing.Global.Milliseconds + spell.CastDuration;
-            }
-            else
-            {
-                CastTime = 0;
-            }
+            // Set spell-start variables
+            var instantCast = spell.CastDuration <= 0;
+            CastTime = instantCast ? 0: Timing.Global.Milliseconds + spell.CastDuration;
             Target = target;
+            InterruptThreshold = -1;
+            SpellCastSlot = spellSlotIdx;
 
             if (spell.CastAnimationId != Guid.Empty)
             {
@@ -242,10 +234,9 @@ namespace Intersect.Server.Entities
                 );
             }
 
-            InterruptThreshold = -1;
-            if (instant || CastTime == 0)
+            if (instantCast || CastTime == 0)
             {
-                UseSpell(spell, SpellCastSlot, Target);
+                return TryUseSpell(spell, SpellCastSlot, Target);
             }
             else
             {
@@ -255,6 +246,7 @@ namespace Intersect.Server.Entities
                     PacketSender.SendCombatNumber(CombatNumberType.Interrupt, this, 0, threshold: spell.InterruptThreshold);
                 }
                 PacketSender.SendEntityCastTime(this, spell.Id);
+                return true;
             }
         }
 
@@ -263,6 +255,11 @@ namespace Intersect.Server.Entities
         /// </summary>
         public virtual void CancelCast()
         {
+            // Entity was never casting in the first place.
+            if (CastTime == 0)
+            {
+                return;
+            }
             CastTime = 0;
             CastTarget = null;
             SpellCastSlot = -1;
@@ -486,12 +483,12 @@ namespace Intersect.Server.Entities
         /// <param name="prayerSpell">Whether this spell is from a prayer</param>
         /// <param name="prayerSpellDir">What direction the prayer was</param>
         /// <param name="prayerTarget">The prayer's target</param>
-        public virtual void UseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
+        public virtual bool TryUseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
             if (spell?.SpellType == SpellTypes.Passive)
             {
                 CancelCast();
-                return;
+                return false;
             }
 
             CastTarget = target;
@@ -499,7 +496,7 @@ namespace Intersect.Server.Entities
             if (!prayerSpell && !instantCast && !ValidateCast(spell, CastTarget, ignoreVitals))
             {
                 CancelCast();
-                return;
+                return false;
             }
 
             // Without this, stealth spells... immediately unstealth you.
@@ -689,6 +686,8 @@ namespace Intersect.Server.Entities
                         spell.Dash.DashAnimation
                     );
             }
+
+            return true;
         }
 
         /// <summary>
@@ -697,10 +696,9 @@ namespace Intersect.Server.Entities
         /// <param name="timeMs"></param>
         public override void CheckForSpellCast(long timeMs)
         {
-            if (CastTime != 0 && !IsCasting && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
+            if (CastTime != 0 && !IsCasting && TryGetSpellInSlot(SpellCastSlot, out var spell))
             {
-                var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
-                UseSpell(spell, SpellCastSlot, Target);
+                TryUseSpell(spell, SpellCastSlot, Target);
             }
         }
 

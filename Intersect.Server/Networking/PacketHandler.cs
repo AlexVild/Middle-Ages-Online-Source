@@ -1485,31 +1485,21 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            var casted = false;
+            Entity target = null;
+            MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance);
 
-            if (packet.TargetId != Guid.Empty)
+            if (packet.TargetId != Guid.Empty && mapInstance != default)
             {
-                foreach (var mapInstance in MapController.GetSurroundingMapInstances(player.Map.Id, player.MapInstanceId, true))
-                {
-                    foreach (var en in mapInstance.GetEntities())
-                    {
-                        if (en.Id == packet.TargetId)
-                        {
-                            player.UseSpellInHotbarSlot(packet.Slot, en);
-                            casted = true;
-
-                            break;
-                        }
-                    }
-                }
+                target = mapInstance.GetEntities(true).Find(en => en.Id == packet.TargetId);
             }
 
-            if (!casted)
+            var casted = player.TryUseSpellInHotbarSlot(packet.Slot, target);
+
+            // Place the player back to their position if they've started casting but moved away on the client before we could tell them as such.
+            if (casted && player.CastTime != 0)
             {
-                player.UseSpellInHotbarSlot(packet.Slot, null);
+                PacketSender.SendEntityPositionTo(client, client.Entity);
             }
-            
-            PacketSender.SendEntityPositionTo(client, client.Entity);
         }
 
         //UnequipItemPacket
