@@ -200,7 +200,7 @@ namespace Intersect.Server.Entities.Combat
                 {
                     if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
                     {
-                        attacker.UseSpell(Spell, -1, collidedEntity, true, instantCast: true);
+                        attacker.TryUseSpell(Spell, -1, collidedEntity, true, instantCast: true);
                     }
                 }
             }

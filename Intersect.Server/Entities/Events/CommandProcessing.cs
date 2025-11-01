@@ -3972,7 +3972,7 @@ namespace Intersect.Server.Entities.Events
                     continue;
                 }
 
-                affectedPlayer?.UseSpell(spell, -1, affectedPlayer, ignoreVitals: true, instantCast: true);
+                affectedPlayer?.TryUseSpell(spell, -1, affectedPlayer, ignoreVitals: true, instantCast: true);
             }
         }
 

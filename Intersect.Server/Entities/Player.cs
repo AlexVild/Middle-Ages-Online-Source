@@ -1407,7 +1407,7 @@ namespace Intersect.Server.Entities
                 && prayer.ComboInterval > 0
                 && CurrentCombo % prayer.ComboInterval == 0)
             {
-                UseSpell(prayerSpell, -1, target, true, true, (byte)Dir, target);
+                TryUseSpell(prayerSpell, -1, target, true, true, (byte)Dir, target);
                 return true;
             }
 
@@ -3473,7 +3473,7 @@ namespace Intersect.Server.Entities
                                 return;
                             }
                             Target = target;
-                            UseSpell(itemBase.Spell, -1, target, true, instantCast: true);
+                            TryUseSpell(itemBase.Spell, -1, target, true, instantCast: true);
                         }
                         else if (!TryAddSkillToBook(itemBase.SpellId))
                         {
@@ -6016,12 +6016,14 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        public void UseSpellInHotbarSlot(int spellSlot, Entity target)
+        public bool TryUseSpellInHotbarSlot(int spellSlot, Entity target)
         {
             if (CanStartCast(Timing.Global.Milliseconds, spellSlot, target))
             {
-                StartCast(spellSlot, target);
+                return TryStartCast(spellSlot, target);
             }
+
+            return false;
         }
 
         public int CalculateStealthDamage(int baseDamage, ItemBase item)

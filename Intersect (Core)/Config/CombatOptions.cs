@@ -164,7 +164,7 @@ namespace Intersect.Config
 
         public float BerzerkDamageDivider = 2.0f; // DEPRECATED
 
-        public int BerzerkMinMobs { get; set; } = 4;
+        public int BerzerkMinMobs { get; set; } = 3;
 
         public int SniperRequiredRange { get; set; } = 5;
 

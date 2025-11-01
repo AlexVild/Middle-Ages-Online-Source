@@ -42,7 +42,7 @@ namespace Intersect.Server.Entities
             }
             
             var tmpSpell = NextSpell;
-            UseSpell(tmpSpell, SpellCastSlot, CastTarget);
+            TryUseSpell(tmpSpell, SpellCastSlot, CastTarget);
             ProcSpellExhaustion(tmpSpell);
             IncrementAttackTimer();
         }
@@ -183,7 +183,7 @@ namespace Intersect.Server.Entities
                 var spell = SpellBase.Get(spellOverride);
                 if (Timing.Global.MillisecondsUtc > mLastOverrideAttack)
                 {
-                    UseSpell(spell, -1, enemy, instantCast: true);
+                    TryUseSpell(spell, -1, enemy, instantCast: true);
                     mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
                 }
 
