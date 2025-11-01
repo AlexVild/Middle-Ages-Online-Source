@@ -1115,7 +1115,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void ChangeDir(int dir)
+        public virtual void ChangeDir(int dir)
         {
             if (dir == -1)
             {

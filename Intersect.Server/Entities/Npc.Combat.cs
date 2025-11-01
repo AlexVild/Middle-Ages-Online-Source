@@ -276,6 +276,10 @@ namespace Intersect.Server.Entities
             base.HealVital(vital, amount);
         }
 
+        // The next spell to be cast -- never cleared
         public SpellBase NextSpell { get; set; }
+
+        // The current channeling spell
+        public SpellBase ChannelingSpell { get; set; }
     }
 }

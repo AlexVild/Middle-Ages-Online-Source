@@ -334,6 +334,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudCastExhaustion.Value = mEditorItem.ExhaustionCastTime;
                 nudInterruptExhaustion.Value = mEditorItem.ExhaustionInterruptTime;
+                chkAimWhileCasting.Checked = mEditorItem.NpcAimWhileCasting;
 
                 UpdateSpellTypePanels();
 
@@ -1878,6 +1879,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudInterruptExhaustion_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.ExhaustionInterruptTime = (int)nudInterruptExhaustion.Value;
+        }
+
+        private void chkAimWhileCasting_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.NpcAimWhileCasting = chkAimWhileCasting.Checked;
         }
     }
 }

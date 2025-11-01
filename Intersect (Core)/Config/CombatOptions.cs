@@ -136,8 +136,6 @@ namespace Intersect.Config
 
         public long NpcDirChangeTimer { get; set; } = 1200;
 
-        public long NpcDirChangeSpeedMult { get; set; } = 5;
-
         public int BestiaryCompletionExpMultiplier { get; set; } = 10;
 
         public float AttunedStatusDividend { get; set; } = 2.0f;

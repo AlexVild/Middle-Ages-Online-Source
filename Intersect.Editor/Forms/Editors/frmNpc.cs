@@ -356,6 +356,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkDisableExhaustion.Checked = mEditorItem.DisableAutoExhaustion;
 
                 chkVulnWhenExhausted.Checked = mEditorItem.VulnerableOnlyWhenExhausted;
+                chkRetainDir.Checked = mEditorItem.RetainDirection;
 
                 // Add the spells to the list
                 lstSpells.Items.Clear();
@@ -1919,6 +1920,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkInvalidChallenges_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.InvalidForChallenges = chkInvalidChallenges.Checked;
+        }
+
+        private void chkRetainDir_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RetainDirection = chkRetainDir.Checked;
         }
     }
 

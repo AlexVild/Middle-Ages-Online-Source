@@ -66,6 +66,17 @@
     <Prefer32Bit>false</Prefer32Bit>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Server + Client Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Server + Client Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;COMPILER_LEGACY</DefineConstants>
+    <DocumentationFile>..\build\debug\core\Intersect Core.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ceras, Version=4.0.40.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Ceras.4.0.40\lib\net45\Ceras.dll</HintPath>
