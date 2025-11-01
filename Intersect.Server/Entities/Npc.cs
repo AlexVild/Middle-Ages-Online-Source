@@ -271,50 +271,7 @@ namespace Intersect.Server.Entities
                 if (killer is Player playerKiller)
                 {
                     killedByPlayer = true;
-                    long recordKilled = playerKiller.IncrementRecord(RecordType.NpcKilled, Base.Id);
-
-                    // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
-                    var bestiaryThresholds = Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
-                    bestiaryThresholds.Sort();
-                    var lastUnlock = bestiaryThresholds.LastOrDefault();
-
-                    if (!Base.NotInBestiary && bestiaryThresholds.Contains((int)recordKilled))
-                    {
-                        PacketSender.SendKillCount(playerKiller, Base.Id);
-                        // Did we just finish the bestiary entry for this mob?
-                        if (lastUnlock != default && lastUnlock == (int)recordKilled)
-                        {
-                            PacketSender.SendChatMsg(playerKiller, $"You've completed the bestiary entry for {Base.Name}!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
-                            // Give experience based on completing a bestiary entry
-                            var bestiaryCompletionExp = Base.Experience * Options.Combat.BestiaryCompletionExpMultiplier;
-                            playerKiller.GiveExperience(bestiaryCompletionExp);
-                            PacketSender.SendExpToast(playerKiller, $"BESTIARY COMPLETE! {bestiaryCompletionExp} EXP", false, true, false);
-                            if (NpcBase.Get(Base.ChampionId) != default)
-                            {
-                                PacketSender.SendChatMsg(playerKiller, $"Killing {Base.Name} will now have a chance to spawn their champion.", ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
-                            }
-                        }
-
-                    }
-                    else if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
-                    {
-                        playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
-                    }
-
-                    // Does this mob have a champion?
-                    if (MapController.TryGetInstanceFromMap(SpawnMapId, MapInstanceId, out var beastInstance) && Base.ChampionId != Guid.Empty && Base.ChampionSpawnChance > 0f)
-                    {
-                        var bestiaryComplete = lastUnlock < recordKilled;
-                        if ((Base.NotInBestiary || bestiaryComplete) && beastInstance.TryAddChampionOf(Base.Id, Base.ChampionId, playerKiller))
-                        {
-                            // A champ is prepped - tell the server!
-                            PacketSender.SendGlobalMsg($"A champion {Base.Name} is stirring... ({MapController.GetName(SpawnMapId)})",
-                                Color.FromName("Purple", Strings.Colors.presets));
-                            PacketSender.SendToast(playerKiller, "A champion approaches...");
-                        }
-                    }
-
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id), TierLevel);
+                    playerKiller.KilledNpc(this);
                 }
 
                 if (validTransform)
@@ -728,7 +685,9 @@ namespace Intersect.Server.Entities
             var projectileBase = spellDescriptor.Combat?.Projectile;
 
             // Aim at the target if casting a projectile spell
-            if (Options.Instance.CombatOpts.NpcSpellAiming && SpellIsAimableAt(spellDescriptor, target))
+            if (Options.Instance.CombatOpts.NpcSpellAiming 
+                && SpellIsAimableAt(spellDescriptor, target) && 
+                !Base.RetainDirection)
             {
                 var dirToEnemy = DirToEnemy(target);
                 if (dirToEnemy != Dir)
@@ -1235,22 +1194,27 @@ namespace Intersect.Server.Entities
                                     if (Base.StandStill && Target != null)
                                     {
                                         var dirTarget = GetDirectionTo(Target);
-                                        if (mLastTargetDir < 0 || mLastTargetDir != dirTarget)
-                                        {
-                                            mLastTargetDir = dirTarget;
 
-                                            // Conditionally change direction if it's time -- melee, we always do this. Magic, there's an extra condition, hence "TryFaceCastingTarget"
-                                            if (DirChangeTime <= timeMs)
+                                        // Face the opponent if we're not meant to stay in one direction
+                                        if (!Base.RetainDirection)
+                                        {
+                                            if (mLastTargetDir < 0 || mLastTargetDir != dirTarget)
                                             {
-                                                if (IsCasting)
+                                                mLastTargetDir = dirTarget;
+
+                                                // Conditionally change direction if it's time -- melee, we always do this. Magic, there's an extra condition, hence "TryFaceCastingTarget"
+                                                if (DirChangeTime <= timeMs)
                                                 {
-                                                    TryFaceCastingTarget(Target);
+                                                    if (IsCasting)
+                                                    {
+                                                        TryFaceCastingTarget(Target);
+                                                    }
+                                                    else
+                                                    {
+                                                        ChangeDir(dirTarget);
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    ChangeDir(dirTarget);
-                                                }
-                                            }   
+                                            }
                                         }
                                         if ((Base.SpellAttackOverrideId == default && CanAttack(Target, null)) || (Base.SpellAttackOverrideId != default && CanAttack(Target, SpellBase.Get(Base.SpellAttackOverrideId))))
                                         {
@@ -1429,7 +1393,6 @@ namespace Intersect.Server.Entities
                 && SpellIsAimableAt(ChannelingSpell, target))
             {
                 ChangeDir(DirToEnemy(target));
-                Console.WriteLine(DirToEnemy(target));
                 return true;
             }
 

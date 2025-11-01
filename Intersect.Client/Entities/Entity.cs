@@ -1167,9 +1167,15 @@ namespace Intersect.Client.Entities
             destRectangle.Y = (int)Math.Ceiling(destRectangle.Y);
             if (Options.AnimatedSprites.Contains(sprite.ToLower()) || (NpcBase.TryGet(NpcId, out var npc) && npc.AnimatedSprite))
             {
+                // Calculate safe frame index
+                var frameIndex = SpriteAnimation == SpriteAnimations.Normal ? AnimationFrame : SpriteFrame;
+                frameIndex = Math.Min(frameIndex, SpriteFrames - 1); // Ensure it's within bounds
+
                 srcRectangle = new FloatRect(
-                    AnimationFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
-                    (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
+                    frameIndex * (int)texture.GetWidth() / SpriteFrames,
+                    dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                    (int)texture.GetWidth() / SpriteFrames,
+                    (int)texture.GetHeight() / Options.Instance.Sprites.Directions
                 );
             }
             else
@@ -1186,7 +1192,6 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        //Restore Original Attacking/Blocking Code
                         srcRectangle = new FloatRect(
                             WalkFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
