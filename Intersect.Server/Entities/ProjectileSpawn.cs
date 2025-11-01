@@ -143,10 +143,11 @@ namespace Intersect.Server.Entities
             }
 
             // Is the entity safe from projectiles (mid-move on their client)?
-            if (en.ProjectileSafetyTime)
-            {
-                return false;
-            }
+            //if (en.ProjectileSafetyTime)
+            //{
+            //    return false;
+            //}
+            // TODO Disabling projectile safety time for now; its too easy to abuse.
 
             // Have we collided with this entity before? If so, cancel out.
             if (mEntitiesCollided.Contains(targetEntity.Id) || Parent.ProjectileCollidedOnQuantity(SpawnNumber, targetEntity.Id))
