@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intersect.Server", "Intersect.Server\Intersect.Server.csproj", "{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}"
 EndProject
@@ -51,6 +51,8 @@ Global
 		NoFody|x86 = NoFody|x86
 		Release|Any CPU = Release|Any CPU
 		Release|x86 = Release|x86
+		Server + Client Debug|Any CPU = Server + Client Debug|Any CPU
+		Server + Client Debug|x86 = Server + Client Debug|x86
 		Tespia|Any CPU = Tespia|Any CPU
 		Tespia|x86 = Tespia|x86
 	EndGlobalSection
@@ -71,6 +73,10 @@ Global
 		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Release|x86.ActiveCfg = Debug|Any CPU
 		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Release|x86.Build.0 = Debug|Any CPU
+		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|x86
+		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Server + Client Debug|x86.Build.0 = Server + Client Debug|x86
 		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}.Tespia|x86.ActiveCfg = Debug|Any CPU
@@ -91,6 +97,10 @@ Global
 		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Release|x86.ActiveCfg = Debug|Any CPU
 		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Release|x86.Build.0 = Debug|Any CPU
+		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{BC304B43-1F2C-4454-9EDC-48F47357CA94}.Tespia|x86.ActiveCfg = Debug|Any CPU
@@ -111,6 +121,10 @@ Global
 		{2240F3DD-3694-4606-B181-F204CBBCB971}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2240F3DD-3694-4606-B181-F204CBBCB971}.Release|x86.ActiveCfg = Debug|Any CPU
 		{2240F3DD-3694-4606-B181-F204CBBCB971}.Release|x86.Build.0 = Debug|Any CPU
+		{2240F3DD-3694-4606-B181-F204CBBCB971}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{2240F3DD-3694-4606-B181-F204CBBCB971}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{2240F3DD-3694-4606-B181-F204CBBCB971}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{2240F3DD-3694-4606-B181-F204CBBCB971}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{2240F3DD-3694-4606-B181-F204CBBCB971}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{2240F3DD-3694-4606-B181-F204CBBCB971}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{2240F3DD-3694-4606-B181-F204CBBCB971}.Tespia|x86.ActiveCfg = Debug|Any CPU
@@ -131,6 +145,10 @@ Global
 		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Release|x86.ActiveCfg = Debug|Any CPU
 		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Release|x86.Build.0 = Debug|Any CPU
+		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{E8F288CB-51DF-4D9D-A3B3-A61BD4FD3F45}.Tespia|x86.ActiveCfg = Debug|Any CPU
@@ -151,6 +169,10 @@ Global
 		{40973F13-3339-4548-9008-FF76A0C8CD79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{40973F13-3339-4548-9008-FF76A0C8CD79}.Release|x86.ActiveCfg = Debug|Any CPU
 		{40973F13-3339-4548-9008-FF76A0C8CD79}.Release|x86.Build.0 = Debug|Any CPU
+		{40973F13-3339-4548-9008-FF76A0C8CD79}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{40973F13-3339-4548-9008-FF76A0C8CD79}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{40973F13-3339-4548-9008-FF76A0C8CD79}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{40973F13-3339-4548-9008-FF76A0C8CD79}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{40973F13-3339-4548-9008-FF76A0C8CD79}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{40973F13-3339-4548-9008-FF76A0C8CD79}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{40973F13-3339-4548-9008-FF76A0C8CD79}.Tespia|x86.ActiveCfg = Debug|Any CPU
@@ -171,6 +193,10 @@ Global
 		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Release|x86.ActiveCfg = Debug|Any CPU
 		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Release|x86.Build.0 = Debug|Any CPU
+		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{4030D4D5-9DC6-496D-9763-9A41DD1DECBE}.Tespia|x86.ActiveCfg = Debug|Any CPU
@@ -190,6 +216,10 @@ Global
 		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Release|Any CPU.Build.0 = Release|x86
 		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Release|x86.ActiveCfg = Debug|x86
 		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Release|x86.Build.0 = Debug|x86
+		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|x86
+		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|x86
+		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|x86
+		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Server + Client Debug|x86.Build.0 = Server + Client Debug|x86
 		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Tespia|Any CPU.ActiveCfg = Debug|x86
 		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Tespia|x86.ActiveCfg = Debug|x86
 		{5AC53DF1-8152-466D-B7D0-238657F013F7}.Tespia|x86.Build.0 = Debug|x86
@@ -209,6 +239,10 @@ Global
 		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Release|x86.Build.0 = Release|Any CPU
+		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Tespia|Any CPU.ActiveCfg = Release|Any CPU
 		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Tespia|Any CPU.Build.0 = Release|Any CPU
 		{F55A208D-6E20-462F-A204-EF13BCCF67D8}.Tespia|x86.ActiveCfg = Release|Any CPU
@@ -229,6 +263,10 @@ Global
 		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Release|x86.ActiveCfg = Release|Any CPU
 		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Release|x86.Build.0 = Release|Any CPU
+		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Tespia|Any CPU.ActiveCfg = Release|Any CPU
 		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Tespia|Any CPU.Build.0 = Release|Any CPU
 		{49599C25-3C71-4EE5-98C9-957EE20F7DE7}.Tespia|x86.ActiveCfg = Release|Any CPU
@@ -249,6 +287,10 @@ Global
 		{83033560-06F2-4155-9956-E4F0F06DC113}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83033560-06F2-4155-9956-E4F0F06DC113}.Release|x86.ActiveCfg = Release|Any CPU
 		{83033560-06F2-4155-9956-E4F0F06DC113}.Release|x86.Build.0 = Release|Any CPU
+		{83033560-06F2-4155-9956-E4F0F06DC113}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{83033560-06F2-4155-9956-E4F0F06DC113}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{83033560-06F2-4155-9956-E4F0F06DC113}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{83033560-06F2-4155-9956-E4F0F06DC113}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{83033560-06F2-4155-9956-E4F0F06DC113}.Tespia|Any CPU.ActiveCfg = Release|Any CPU
 		{83033560-06F2-4155-9956-E4F0F06DC113}.Tespia|Any CPU.Build.0 = Release|Any CPU
 		{83033560-06F2-4155-9956-E4F0F06DC113}.Tespia|x86.ActiveCfg = Release|Any CPU
@@ -267,6 +309,9 @@ Global
 		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Release|Any CPU.ActiveCfg = Release|x86
 		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Release|x86.ActiveCfg = Release|x86
 		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Release|x86.Build.0 = Release|x86
+		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|x86
+		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|x86
+		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|x86
 		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Tespia|Any CPU.ActiveCfg = Release|x86
 		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Tespia|Any CPU.Build.0 = Release|x86
 		{3E8FC79E-D0B3-4554-9ABD-BD6DCBFBEE5D}.Tespia|x86.ActiveCfg = Release|x86
@@ -287,6 +332,10 @@ Global
 		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Release|x86.ActiveCfg = Release|Any CPU
 		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Release|x86.Build.0 = Release|Any CPU
+		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Tespia|Any CPU.ActiveCfg = Release|Any CPU
 		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Tespia|Any CPU.Build.0 = Release|Any CPU
 		{E66A4B60-E79C-4222-A702-94D3CC7A2377}.Tespia|x86.ActiveCfg = Release|Any CPU
@@ -307,6 +356,10 @@ Global
 		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Release|x86.ActiveCfg = Release|Any CPU
 		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Release|x86.Build.0 = Release|Any CPU
+		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Tespia|Any CPU.ActiveCfg = Release|Any CPU
 		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Tespia|Any CPU.Build.0 = Release|Any CPU
 		{3CEB8210-E2AD-429C-86F0-EAAD9F49C160}.Tespia|x86.ActiveCfg = Release|Any CPU
@@ -327,6 +380,10 @@ Global
 		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Release|x86.ActiveCfg = Release|Any CPU
 		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Release|x86.Build.0 = Release|Any CPU
+		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Server + Client Debug|Any CPU.ActiveCfg = Server + Client Debug|Any CPU
+		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Server + Client Debug|Any CPU.Build.0 = Server + Client Debug|Any CPU
+		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Server + Client Debug|x86.ActiveCfg = Server + Client Debug|Any CPU
+		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Server + Client Debug|x86.Build.0 = Server + Client Debug|Any CPU
 		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Tespia|Any CPU.ActiveCfg = Debug|Any CPU
 		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Tespia|Any CPU.Build.0 = Debug|Any CPU
 		{4E38C9B0-DF8C-44E4-9704-D6B05E092733}.Tespia|x86.ActiveCfg = Debug|Any CPU

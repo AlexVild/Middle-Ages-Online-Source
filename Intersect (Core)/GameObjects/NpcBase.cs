@@ -183,6 +183,8 @@ namespace Intersect.GameObjects
 
         public bool StandStill { get; set; }
 
+        public bool RetainDirection { get; set; }
+
         //Conditions
         [Column("PlayerFriendConditions")]
         [JsonIgnore]

@@ -102,7 +102,9 @@ namespace Intersect.Server.Entities
         public bool SpellIsAimableAt(SpellBase spell, Entity target)
         {
             var validTargetTypes = new List<SpellTargetTypes>() { SpellTargetTypes.AoE, SpellTargetTypes.Projectile };
-            if (spell == null || spell.Combat == null || !validTargetTypes.Contains(spell.Combat.TargetType))
+            if (spell == null 
+                || spell.Combat == null 
+                || !validTargetTypes.Contains(spell.Combat.TargetType))
             {
                 return false;
             }

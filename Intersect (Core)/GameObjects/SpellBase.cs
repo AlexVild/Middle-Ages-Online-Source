@@ -518,5 +518,7 @@ namespace Intersect.GameObjects
         public long ExhaustionCastTime { get; set; }
 
         public long ExhaustionInterruptTime { get; set; }
+
+        public bool NpcAimWhileCasting { get; set; }
     }
 }
