@@ -10155,5 +10155,56 @@ namespace Intersect.Server.Entities
                 .OfType<Npc>()
                 .Count(n => n.Target == this);
         }
+
+        public void KilledNpc(Npc npc)
+        {
+            if (npc == null)
+                return;
+
+            long recordKilled = IncrementRecord(RecordType.NpcKilled, npc.Base.Id);
+
+            // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
+            var bestiaryThresholds = npc.Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
+            bestiaryThresholds.Sort();
+            var lastUnlock = bestiaryThresholds.LastOrDefault();
+
+            if (!npc.Base.NotInBestiary && bestiaryThresholds.Contains((int)recordKilled))
+            {
+                PacketSender.SendKillCount(this, npc.Base.Id);
+                // Did we just finish the bestiary entry for this mob?
+                if (lastUnlock != default && lastUnlock == (int)recordKilled)
+                {
+                    PacketSender.SendChatMsg(this, $"You've completed the bestiary entry for {npc.Base.Name}!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
+                    // Give experience based on completing a bestiary entry
+                    var bestiaryCompletionExp = npc.Base.Experience * Options.Combat.BestiaryCompletionExpMultiplier;
+                    GiveExperience(bestiaryCompletionExp);
+                    PacketSender.SendExpToast(this, $"BESTIARY COMPLETE! {bestiaryCompletionExp} EXP", false, true, false);
+                    if (NpcBase.Get(npc.Base.ChampionId) != default)
+                    {
+                        PacketSender.SendChatMsg(this, $"Killing {npc.Base.Name} will now have a chance to spawn their champion.", ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
+                    }
+                }
+
+            }
+            else if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
+            {
+                SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
+            }
+
+            // Does this mob have a champion?
+            if (MapController.TryGetInstanceFromMap(npc.SpawnMapId, npc.MapInstanceId, out var beastInstance) && npc.Base.ChampionId != Guid.Empty && npc.Base.ChampionSpawnChance > 0f)
+            {
+                var bestiaryComplete = lastUnlock < recordKilled;
+                if ((npc.Base.NotInBestiary || bestiaryComplete) && beastInstance.TryAddChampionOf(npc.Base.Id, npc.Base.ChampionId, this))
+                {
+                    // A champ is prepped - tell the server!
+                    PacketSender.SendGlobalMsg($"A champion {npc.Base.Name} is stirring... ({MapController.GetName(npc.SpawnMapId)})",
+                        Color.FromName("Purple", Strings.Colors.presets));
+                    PacketSender.SendToast(this, "A champion approaches...");
+                }
+            }
+
+            ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(this, npc.Base.Id), TierLevel);
+        }
     }
 }
