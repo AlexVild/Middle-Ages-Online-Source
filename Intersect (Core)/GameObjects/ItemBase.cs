@@ -568,7 +568,7 @@ namespace Intersect.GameObjects
 
         public void SetEffectOfType(EffectType type, int value)
         {
-            Effects.FindAll(effect => effect.Type == type).Select(effect => effect.Percentage = value);
+            Effects.FindAll(effect => effect.Type == type).ForEach(effect => effect.Percentage = value);
         }
 
         public string CosmeticDisplayName { get; set; }
