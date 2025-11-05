@@ -74,8 +74,24 @@ namespace Intersect.Editor.Forms.Editors
             cmbToolType.Items.Clear();
             cmbToolType.Items.Add(Strings.General.none);
             cmbToolType.Items.AddRange(Options.ToolTypes.ToArray());
-            cmbEquipmentBonus.Items.Clear();
-            cmbEquipmentBonus.Items.AddRange(EnumExtensions.GetDescriptions(typeof(EffectType)));
+
+            // Get our list of bonus effects in order so we know which ones we're changing later
+            mFilteredEffects.Clear();
+            var sortedEffects = Enum.GetValues(typeof(EffectType))
+                .Cast<EffectType>()
+                .Where(effect => effect != EffectType.None)
+                .OrderBy(effect => EnumExtensions.GetDescription(effect))
+                .ToArray();
+            var idx = 0;
+            foreach (EffectType effect in sortedEffects)
+            {
+                if (effect == EffectType.None)
+                {
+                    continue;
+                }
+                mFilteredEffects.Add(idx, effect);
+                idx++;
+            }
 
             UpdateOverrides();
 
@@ -287,7 +303,6 @@ namespace Intersect.Editor.Forms.Editors
             lblEquipmentSlot.Text = Strings.ItemEditor.slot;
             grpStatBonuses.Text = Strings.ItemEditor.bonuses;
             lblRange.Text = Strings.ItemEditor.bonusrange;
-            lblBonusEffect.Text = Strings.ItemEditor.bonuseffect;
             lblEffectPercent.Text = Strings.ItemEditor.bonusamount;
             lblEquipmentAnimation.Text = Strings.ItemEditor.equipmentanimation;
 
@@ -465,10 +480,6 @@ namespace Intersect.Editor.Forms.Editors
                 cmbAmmoOverride.Items.AddRange(ItemBase.Names);
 
                 RefreshExtendedData();
-                if (mEditorItem.ItemType == ItemTypes.Equipment && cmbEquipmentBonus.Items.Count > 0)
-                {
-                    cmbEquipmentBonus.SelectedIndex = 0;
-                }
 
                 ShowPermabuffOptions();
 
@@ -1113,6 +1124,19 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudEffectPercent_ValueChanged(object sender, EventArgs e)
         {
+            if (mUpdatingEffect)
+            {
+                return;
+            }
+            var selectedIdx = lstBonusEffects.SelectedIndex;
+            if (!mFilteredEffects.TryGetValue(selectedIdx, out var effect))
+            {
+                return;
+            }
+
+            mEditorItem.SetEffectOfType(effect, (int)nudEffectPercent.Value);
+            var text = GetBonusEffectRow(EnumExtensions.GetDescription(effect), mEditorItem.GetEffectPercentage(effect));
+            lstBonusEffects.Items[selectedIdx] = text;
         }
 
         private void nudRange_ValueChanged(object sender, EventArgs e)
@@ -1869,44 +1893,23 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.ShortHair = chkShortHair.Checked;
         }
 
+        private Dictionary<int, EffectType> mFilteredEffects = new Dictionary<int, EffectType>();
+
+
         private void RefreshBonusList()
         {
             lstBonusEffects.Items.Clear();
-            foreach (var effect in mEditorItem.Effects)
+            foreach (var kv in mFilteredEffects)
             {
-                var effectName = effect.Type.GetDescription();
-                var effectAmt = mEditorItem.GetEffectPercentage(effect.Type);
-                var editorString = Strings.ItemEditor.BonusEffectItem.ToString(effectName, effectAmt);
-                lstBonusEffects.Items.Add(editorString);
+                var effectName = EnumExtensions.GetDescription(kv.Value);
+                var effectAmt = mEditorItem.GetEffectPercentage(kv.Value);
+                lstBonusEffects.Items.Add(GetBonusEffectRow(effectName, effectAmt));
             }
         }
 
-        private void btnAddBonus_Click(object sender, EventArgs e)
+        private string GetBonusEffectRow(string effect, int amount)
         {
-            var effectType = (EffectType)cmbEquipmentBonus.SelectedIndex;
-            var effectPercentage = (int)nudEffectPercent.Value;
-            var effect = new EffectData(effectType, effectPercentage);
-
-            if (!mEditorItem.EffectsEnabled.Contains(effectType))
-            {
-                mEditorItem.Effects.Add(effect);
-                var editorString = Strings.ItemEditor.BonusEffectItem.ToString(cmbEquipmentBonus.Text, effectPercentage);
-                lstBonusEffects.Items.Add(editorString);
-            }
-            else
-            {
-                mEditorItem.SetEffectOfType(effectType, effectPercentage);
-                RefreshBonusList();
-            }
-        }
-
-        private void btnRemoveBonus_Click(object sender, EventArgs e)
-        {
-            if (lstBonusEffects.SelectedIndex >= 0 && lstBonusEffects.SelectedIndex < lstBonusEffects.Items.Count)
-            {
-                mEditorItem.Effects.RemoveAt(lstBonusEffects.SelectedIndex);
-                RefreshBonusList();
-            }
+            return $"{effect}: {amount}%";
         }
 
         private void nudSpecialAttackChargeTime_ValueChanged(object sender, EventArgs e)
@@ -2480,6 +2483,21 @@ namespace Intersect.Editor.Forms.Editors
         private void txtPbUnlockHint_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Hint = txtPbUnlockHint.Text;
+        }
+
+        private bool mUpdatingEffect = false;
+
+        private void lstBonusEffects_Click(object sender, EventArgs e)
+        {
+            var selectedIdx = lstBonusEffects.SelectedIndex;
+            if (!mFilteredEffects.TryGetValue(selectedIdx, out var effect))
+            {
+                return;
+            }
+
+            mUpdatingEffect = true;
+            nudEffectPercent.Value = mEditorItem.GetEffectPercentage(effect);
+            mUpdatingEffect = false;
         }
     }
 }
