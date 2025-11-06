@@ -136,7 +136,7 @@ namespace Intersect.Server.Entities
             {
                 var price = EnhancementHelper.GetEnhancementCostOnWeapon(weapon.Descriptor, enhancementIds, CostMultiplier);
                 var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
-                if (!Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
+                if (price != 0 && !Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
                 {
                     PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to make the selected enhancements.", string.Empty, Guid.Empty);
                     return false;

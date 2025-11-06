@@ -137,7 +137,7 @@ namespace Intersect.Server.Entities
                     }
                 }
                 deconstructedLoot.AddRange(item.DeconstructRolls);
-                totalScraps = Owner.ApplyEffectBonusToValue(item.GetScrapAmount(), Enums.EffectType.Junkrat);
+                totalScraps += Owner.ApplyEffectBonusToValue(item.GetScrapAmount(), Enums.EffectType.Junkrat);
 
                 // Don't double-dip on crafted items
                 if (slot.ItemProperties.CraftedById != Owner.Id)
