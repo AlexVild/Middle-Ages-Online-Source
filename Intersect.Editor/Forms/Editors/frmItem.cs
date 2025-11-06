@@ -1898,12 +1898,18 @@ namespace Intersect.Editor.Forms.Editors
 
         private void RefreshBonusList()
         {
-            lstBonusEffects.Items.Clear();
             foreach (var kv in mFilteredEffects)
             {
                 var effectName = EnumExtensions.GetDescription(kv.Value);
                 var effectAmt = mEditorItem.GetEffectPercentage(kv.Value);
-                lstBonusEffects.Items.Add(GetBonusEffectRow(effectName, effectAmt));
+                if (kv.Key < lstBonusEffects.Items.Count)
+                {
+                    lstBonusEffects.Items[kv.Key] = GetBonusEffectRow(effectName, effectAmt);
+                }
+                else
+                {
+                    lstBonusEffects.Items.Add(GetBonusEffectRow(effectName, effectAmt));
+                }
             }
         }
 
@@ -2492,6 +2498,7 @@ namespace Intersect.Editor.Forms.Editors
             var selectedIdx = lstBonusEffects.SelectedIndex;
             if (!mFilteredEffects.TryGetValue(selectedIdx, out var effect))
             {
+                mUpdatingEffect = false;
                 return;
             }
 

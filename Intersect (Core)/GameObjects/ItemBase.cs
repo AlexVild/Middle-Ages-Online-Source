@@ -568,6 +568,11 @@ namespace Intersect.GameObjects
 
         public void SetEffectOfType(EffectType type, int value)
         {
+            if (Effects.All(effect => effect.Type != type))
+            {
+                Effects.Add(new EffectData(type, value));
+                return;
+            }
             Effects.FindAll(effect => effect.Type == type).ForEach(effect => effect.Percentage = value);
         }
 
