@@ -1920,7 +1920,7 @@ namespace Intersect.Editor.Forms
 
         private void packageUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selectedPath = @"E:\Alex Vild\Documents\Game Dev\Intersect\Projects\Middle Ages Online\updates";
+            var selectedPath = @"C:\Users\ratha\Documents\Game Dev\Intersect\Middle-Ages-Online\updates";
             Uri baseDir = new Uri(Directory.GetCurrentDirectory() + "\\");
             Uri selectedDir = new Uri(selectedPath + "\\");
             if (baseDir.IsBaseOf(selectedDir))
@@ -1979,7 +1979,7 @@ namespace Intersect.Editor.Forms
             using(var fbd = new FolderBrowserDialog())
             {
                 // MAO default update path
-                fbd.SelectedPath = @"E:\Alex Vild\Documents\Game Dev\Intersect\Projects\Middle Ages Online\updates";
+                fbd.SelectedPath = @"C:\Users\ratha\Documents\Game Dev\Intersect\Middle-Ages-Online\updates";
                 DialogResult result = fbd.ShowDialog();
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
@@ -2238,7 +2238,7 @@ namespace Intersect.Editor.Forms
                 // Handle the user's response
                 if (result == DialogResult.Yes)
                 {
-                    PythonExecutor.ExecutePythonScript(@"E:\Alex Vild\Documents\Game Dev\Intersect\Projects\Middle Ages Online\Tools\Transfer Update\transfer_update.py");
+                    PythonExecutor.ExecutePythonScript(@"C:\Users\ratha\Documents\Game Dev\Intersect\Middle-Ages-Online\tools\Transfer Update");
                 }
             }
 
