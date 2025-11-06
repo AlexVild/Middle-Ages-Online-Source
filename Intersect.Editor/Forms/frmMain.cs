@@ -1957,6 +1957,15 @@ namespace Intersect.Editor.Forms
                 }
             }
 
+            if (MessageBox.Show(
+                        "Start Update", "Start packaging an update?",
+                        MessageBoxButtons.YesNo
+                    ) ==
+                    DialogResult.No)
+            {
+                return;
+            }
+
             // Are we configured to package up our assets for an update?
             var packageUpdateAssets = Preferences.LoadPreference("PackageUpdateAssets");
             if (packageUpdateAssets != "" && Convert.ToBoolean(packageUpdateAssets))
@@ -2238,7 +2247,7 @@ namespace Intersect.Editor.Forms
                 // Handle the user's response
                 if (result == DialogResult.Yes)
                 {
-                    PythonExecutor.ExecutePythonScript(@"C:\Users\ratha\Documents\Game Dev\Intersect\Middle-Ages-Online\tools\Transfer Update");
+                    PythonExecutor.ExecutePythonScript(@"C:\Users\ratha\Documents\Game Dev\Intersect\Middle-Ages-Online\tools\Transfer Update\transfer_update.py");
                 }
             }
 
