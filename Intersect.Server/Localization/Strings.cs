@@ -1353,6 +1353,12 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString npctask = @"{00}  updated! {01}/{02} {03}(s) slain!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CraftTask = @"{00}  updated! {01}/{02} {03}(s) crafted!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ResourceTask = @"{00}  updated! {01}/{02} {03}(s) nodes harvested!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString started = @"Quest Started: {00}!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

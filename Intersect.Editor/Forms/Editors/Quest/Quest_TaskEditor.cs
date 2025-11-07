@@ -6,6 +6,7 @@ using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.Logging;
 
 namespace Intersect.Editor.Forms.Editors.Quest
@@ -61,6 +62,16 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     cmbNpc.SelectedIndex = NpcBase.ListIndex(mMyTask?.TargetId ?? Guid.Empty);
                     nudNpcQuantity.Value = mMyTask?.Quantity ?? 0;
 
+                    break;
+                case 3: //Craft crafts
+                    cmbCraft.SelectedIndex = CraftBase.ListIndex(mMyTask?.TargetId ?? Guid.Empty);
+                    nudCraftAmt.Value = mMyTask?.Quantity ?? 0;
+
+                    break;
+                case 4: //Harvest Resources
+                    cmbResource.SelectedIndex = ResourceBase.ListIndex(mMyTask?.TargetId ?? Guid.Empty);
+                    nudResourceAmt.Value = mMyTask?.Quantity ?? 0;
+                    
                     break;
             }
         }
@@ -125,6 +136,30 @@ namespace Intersect.Editor.Forms.Editors.Quest
                     nudNpcQuantity.Value = 1;
 
                     break;
+                case 3: //Craft crafts
+                    grpCraftCrafts.Show();
+                    cmbCraft.Items.Clear();
+                    cmbCraft.Items.AddRange(CraftBase.Names);
+                    if (cmbCraft.Items.Count > 0)
+                    {
+                        cmbCraft.SelectedIndex = 0;
+                    }
+
+                    nudCraftAmt.Value = 1;
+
+                    break;
+                case 4: //Harvest Resources
+                    grpResource.Show();
+                    cmbResource.Items.Clear();
+                    cmbResource.Items.AddRange(ResourceBase.Names);
+                    if (cmbResource.Items.Count > 0)
+                    {
+                        cmbResource.SelectedIndex = 0;
+                    }
+
+                    nudResourceAmt.Value = 1;
+
+                    break;
             }
         }
 
@@ -147,6 +182,16 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 case QuestObjective.KillNpcs: //Kill Npcs
                     mMyTask.TargetId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
                     mMyTask.Quantity = (int) nudNpcQuantity.Value;
+
+                    break;
+                case QuestObjective.CraftItems: //Craft Items
+                    mMyTask.TargetId = CraftBase.IdFromList(cmbCraft.SelectedIndex);
+                    mMyTask.Quantity = (int)nudCraftAmt.Value;
+
+                    break;
+                case QuestObjective.HarvestResources: //Harvest Resources
+                    mMyTask.TargetId = ResourceBase.IdFromList(cmbResource.SelectedIndex);
+                    mMyTask.Quantity = (int)nudResourceAmt.Value;
 
                     break;
             }

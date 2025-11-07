@@ -11,6 +11,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game
@@ -369,6 +370,26 @@ namespace Intersect.Client.Interface.Game
                                             Globals.Me.QuestProgress[mSelectedQuest.Id].TaskProgress,
                                             mSelectedQuest.Tasks[i].Quantity,
                                             NpcBase.GetName(mSelectedQuest.Tasks[i].TargetId)
+                                        ), Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
+                                    );
+                                }
+                                else if (mSelectedQuest.Tasks[i].Objective == QuestObjective.CraftItems)
+                                {
+                                    mQuestDescLabel.AddText(
+                                        Strings.QuestLog.TaskCraft.ToString(
+                                            Globals.Me.QuestProgress[mSelectedQuest.Id].TaskProgress,
+                                            mSelectedQuest.Tasks[i].Quantity,
+                                            CraftBase.GetName(mSelectedQuest.Tasks[i].TargetId)
+                                        ), Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
+                                    );
+                                }
+                                else if (mSelectedQuest.Tasks[i].Objective == QuestObjective.HarvestResources)
+                                {
+                                    mQuestDescLabel.AddText(
+                                        Strings.QuestLog.TaskHarvest.ToString(
+                                            Globals.Me.QuestProgress[mSelectedQuest.Id].TaskProgress,
+                                            mSelectedQuest.Tasks[i].Quantity,
+                                            ResourceBase.GetName(mSelectedQuest.Tasks[i].TargetId)
                                         ), Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
                                     );
                                 }

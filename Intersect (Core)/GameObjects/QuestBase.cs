@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Intersect.Enums;
 using Intersect.GameObjects.Conditions;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.Localization;
 using Intersect.Models;
@@ -288,6 +289,16 @@ namespace Intersect.GameObjects
                     case QuestObjective.KillNpcs: //Kill Npcs
                         taskString = descriptions[(int) Objective]
                             .ToString(NpcBase.GetName(TargetId), Quantity, Description);
+
+                        break;
+                    case QuestObjective.CraftItems:
+                        taskString = descriptions[(int)Objective]
+                            .ToString(CraftBase.GetName(TargetId), Quantity, Description);
+
+                        break;
+                    case QuestObjective.HarvestResources:
+                        taskString = descriptions[(int)Objective]
+                            .ToString(ResourceBase.GetName(TargetId), Quantity, Description);
 
                         break;
                 }

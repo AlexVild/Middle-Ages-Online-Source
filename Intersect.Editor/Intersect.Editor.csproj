@@ -1164,6 +1164,9 @@
     <EmbeddedResource Include="Forms\Editors\frmWeaponType.resx">
       <DependentUpon>frmWeaponType.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Quest\Quest_TaskEditor.resx">
+      <DependentUpon>Quest_TaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\frmMapCopier.resx">
       <DependentUpon>frmMapCopier.cs</DependentUpon>
     </EmbeddedResource>
