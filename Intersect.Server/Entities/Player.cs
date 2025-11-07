@@ -1485,43 +1485,106 @@ namespace Intersect.Server.Entities
 
         public void UpdateQuestKillTasks(Entity en)
         {
-            //If any quests demand that this Npc be killed then let's handle it
             var npc = (Npc)en;
+            if (npc == null)
+            {
+                return;
+            }
+
+            foreach (var (quest, questTask) in TryGetActiveQuestTasks(QuestObjective.KillNpcs, npc.Base.Id))
+            {
+                quest.TaskProgress++;
+                if (quest.TaskProgress >= questTask.Quantity)
+                {
+                    CompleteQuestTask(quest.QuestId, quest.TaskId);
+                    continue;
+                }
+                
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.npctask.ToString(
+                        QuestBase.GetName(quest.QuestId), quest.TaskProgress, questTask.Quantity,
+                        NpcBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+
+        public void UpdateQuestResourceHarvestTasks(Resource resource)
+        {
+            if (resource == null)
+            {
+                return;
+            }
+
+            foreach (var (quest, questTask) in TryGetActiveQuestTasks(QuestObjective.HarvestResources, resource.Base.Id))
+            {
+                quest.TaskProgress++;
+                if (quest.TaskProgress >= questTask.Quantity)
+                {
+                    CompleteQuestTask(quest.QuestId, quest.TaskId);
+                    continue;
+                }
+
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.ResourceTask.ToString(
+                        QuestBase.GetName(quest.QuestId), quest.TaskProgress, questTask.Quantity,
+                        ResourceBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+
+        public void UpdateQuestCraftTasks(CraftBase craft, int quantity)
+        {
+            if (craft == null || quantity == 0)
+            {
+                return;
+            }
+
+            foreach (var (quest, questTask) in TryGetActiveQuestTasks(QuestObjective.CraftItems, craft.Id))
+            {
+                quest.TaskProgress += quantity;
+                if (quest.TaskProgress >= questTask.Quantity)
+                {
+                    CompleteQuestTask(quest.QuestId, quest.TaskId);
+                    continue;
+                }
+                
+                PacketSender.SendQuestsProgress(this);
+                PacketSender.SendChatMsg(
+                    this,
+                    Strings.Quests.CraftTask.ToString(
+                        QuestBase.GetName(quest.QuestId), quest.TaskProgress, questTask.Quantity,
+                        CraftBase.GetName(questTask.TargetId)
+                    ),
+                    ChatMessageType.Quest
+                );
+            }
+        }
+
+        public IEnumerable<(Quest quest, QuestBase.QuestTask task)> TryGetActiveQuestTasks(QuestObjective objectiveType, Guid targetId)
+        {
             foreach (var questProgress in Quests)
             {
                 var questId = questProgress.QuestId;
                 var quest = QuestBase.Get(questId);
-                if (quest != null)
+                if (quest == null || questProgress.TaskId == Guid.Empty)
                 {
-                    if (questProgress.TaskId != Guid.Empty)
-                    {
-                        //Assume this quest is in progress. See if we can find the task in the quest
-                        var questTask = quest.FindTask(questProgress.TaskId);
-                        if (questTask != null)
-                        {
-                            if (questTask.Objective == QuestObjective.KillNpcs && questTask.TargetId == npc.Base.Id)
-                            {
-                                questProgress.TaskProgress++;
-                                if (questProgress.TaskProgress >= questTask.Quantity)
-                                {
-                                    CompleteQuestTask(questId, questProgress.TaskId);
-                                }
-                                else
-                                {
-                                    PacketSender.SendQuestsProgress(this);
-                                    PacketSender.SendChatMsg(
-                                        this,
-                                        Strings.Quests.npctask.ToString(
-                                            quest.Name, questProgress.TaskProgress, questTask.Quantity,
-                                            NpcBase.GetName(questTask.TargetId)
-                                        ),
-                                        ChatMessageType.Quest
-                                    );
-                                }
-                            }
-                        }
-                    }
+                    continue;
                 }
+                //Assume this quest is in progress. See if we can find the task in the quest
+                var questTask = quest.FindTask(questProgress.TaskId);
+                if (questTask == null || questTask.Objective != objectiveType || questTask.TargetId != targetId)
+                {
+                    continue;
+                }
+                yield return (quest: questProgress, task: questTask);
             }
         }
 
@@ -4698,6 +4761,8 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendUnlockedCosmeticsPacket(this);
                 }
+
+                UpdateQuestCraftTasks(craft, quantity);
 
                 // Start any related common events
                 if (CraftBase.Get(id).Event != null)
@@ -10188,7 +10253,7 @@ namespace Intersect.Server.Entities
             }
             else if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
             {
-                SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
+                SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, npc.Base.Name));
             }
 
             // Does this mob have a champion?

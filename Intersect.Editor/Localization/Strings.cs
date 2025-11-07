@@ -6052,6 +6052,8 @@ Tick timer saved in server config.json.";
                 {0, @"Event Driven"},
                 {1, @"Gather Item(s)"},
                 {2, @"Kill NPC(s)"},
+                {3, @"Create Craft(s)"},
+                {4, @"Harvest Resource(s)"},
             };
 
             public static Dictionary<int, LocalizedString> descriptions = new Dictionary<int, LocalizedString>
@@ -6059,6 +6061,8 @@ Tick timer saved in server config.json.";
                 {0, @"Event Driven - {00}"},
                 {1, @"Gather Items [{00} x{01}] - {02}"},
                 {2, @"Kill Npc(s) [{00} x{01}] - {02}"},
+                {3, @"Create Craft(s) [{00} x{01}] - {02}"},
+                {4, @"Harvest Resource(s) [{00} x{01}] - {02}"},
             };
 
         }

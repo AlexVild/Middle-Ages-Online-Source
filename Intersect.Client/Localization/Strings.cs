@@ -1820,6 +1820,12 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString tasknpc = @"{00}/{01} {02}(s) slain.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TaskCraft = @"{00}/{01} {02}(s) crafted.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TaskHarvest = @"{00}/{01} {02}(s) nodes harvested.";
+
             public static LocalizedString title = @"Quest Log";
 
             public static LocalizedString questpoints = @"Unspent Quest Points: {00}";

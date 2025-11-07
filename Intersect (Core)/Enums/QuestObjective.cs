@@ -8,7 +8,11 @@
 
         GatherItems,
 
-        KillNpcs
+        KillNpcs,
+
+        CraftItems,
+
+        HarvestResources,
 
     }
 

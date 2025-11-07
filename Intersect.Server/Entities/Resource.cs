@@ -86,6 +86,7 @@ namespace Intersect.Server.Entities
             }
 
             playerKiller.GiveInspiredExperience(Base.Experience);
+            playerKiller.UpdateQuestResourceHarvestTasks(this);
             if (Base.DoNotRecord)
             {
                 return;
