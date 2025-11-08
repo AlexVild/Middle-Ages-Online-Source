@@ -25,14 +25,14 @@ namespace Intersect.Utilities
             float time;
             if (speed <= speedThreshold)
             {
-                time = baseMs - (baseMs - maxMs) * (speed / speedThreshold);
+                time = baseMs - (baseMs - maxMs) * ((float)speed / speedThreshold);
             }
             else
             {
                 float excessSpeed = speed - speedThreshold;
                 float diminishedSpeed = (baseMs - maxMs) / diminishFactor;
 
-                time = maxMs - (diminishedSpeed * (excessSpeed / speedThreshold));
+                time = maxMs - (diminishedSpeed * ((float)excessSpeed / speedThreshold));
             }
 
             if (combatMode)
