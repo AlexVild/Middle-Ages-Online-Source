@@ -774,7 +774,8 @@ namespace Intersect.Client.MonoGame.Graphics
                 new Resolution(1600, 900),
                 new Resolution(1680, 1050),
                 new Resolution(1920, 1080),
-                new Resolution(2560, 1440)
+                new Resolution(2560, 1440),
+                new Resolution(3840, 2160)
             };
 
             var displayWidth = mGraphicsDevice?.DisplayMode?.Width;

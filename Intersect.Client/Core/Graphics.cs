@@ -1024,24 +1024,27 @@ namespace Intersect.Client.Core
             float x1 = mapWidth * 2;
             float y1 = mapHeight * 2;
 
-            if (map.CameraHolds[(int)Directions.Left])
+            if (!Globals.Database.AlwaysCenterCamera)
             {
-                x -= mapWidth;
-            }
+                if (map.CameraHolds[(int)Directions.Left])
+                {
+                    x -= mapWidth;
+                }
 
-            if (map.CameraHolds[(int)Directions.Up])
-            {
-                y -= mapHeight;
-            }
+                if (map.CameraHolds[(int)Directions.Up])
+                {
+                    y -= mapHeight;
+                }
 
-            if (map.CameraHolds[(int)Directions.Right])
-            {
-                x1 -= mapWidth;
-            }
+                if (map.CameraHolds[(int)Directions.Right])
+                {
+                    x1 -= mapWidth;
+                }
 
-            if (map.CameraHolds[(int)Directions.Down])
-            {
-                y1 -= mapHeight;
+                if (map.CameraHolds[(int)Directions.Down])
+                {
+                    y1 -= mapHeight;
+                }
             }
 
             x = map.GetX() - x;
