@@ -336,7 +336,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var descriptionTxt = Strings.ItemDescription.Description.ToString(mItem.Description);
             description.AddText(descriptionTxt, Color.White);
 
-            if (!string.IsNullOrEmpty(mItemProperties.CraftedBy))
+            if (!string.IsNullOrEmpty(mItemProperties.CraftedBy) && mItem.ItemType == ItemTypes.Equipment)
             {
                 if (mItemProperties.CraftedById == Globals.Me.Id)
                 {
