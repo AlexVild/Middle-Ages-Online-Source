@@ -79,6 +79,8 @@ namespace Intersect.Client.Framework.Database
 
         public bool NameFading;
 
+        public bool AlwaysCenterCamera;
+
         public float UIScale { get; set; } = 1.0f;
 
         public float WorldZoom { get; set; } = 1.0f;
@@ -115,7 +117,7 @@ namespace Intersect.Client.Framework.Database
             StickyTarget = LoadPreference("StickyTarget", true);
             CombatShake = LoadPreference("CombatShake", true);
             CombatFlash = LoadPreference("CombatFlash", true);
-            EnableScanlines = LoadPreference("EnableScanlines", true);
+            EnableScanlines = LoadPreference("EnableScanlines", false);
             FadeTransitions = LoadPreference("FadeTransitions", false);
             DisplayPartyMembers = LoadPreference("DisplayPartyMembers", true);
             DisplayClanMembers = LoadPreference("DisplayClanMembers", true);
@@ -140,6 +142,7 @@ namespace Intersect.Client.Framework.Database
             NameFading = LoadPreference("NameFading", true);
             UIScale = LoadPreference(nameof(UIScale), 1.0f);
             WorldZoom = LoadPreference(nameof(WorldZoom), 1.0f);
+            AlwaysCenterCamera = LoadPreference(nameof(AlwaysCenterCamera), false);
         }
 
         public virtual void SavePreferences()
@@ -180,6 +183,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplayWeather", DisplayWeather.ToString());
             SavePreference("DisplayFog", DisplayFog.ToString());
             SavePreference("NameFading", NameFading.ToString());
+            SavePreference(nameof(AlwaysCenterCamera), AlwaysCenterCamera);
             SavePreference(nameof(UIScale), UIScale);
             SavePreference(nameof(WorldZoom), WorldZoom);
         }

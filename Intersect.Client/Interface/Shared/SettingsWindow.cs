@@ -162,6 +162,8 @@ namespace Intersect.Client.Interface.Shared
         
         private readonly LabeledCheckBox mNameFading;
 
+        private readonly LabeledCheckBox mAlwaysCenterCamera;
+
         // Open settings
         private bool mReturnToMenu;
 
@@ -318,6 +320,11 @@ namespace Intersect.Client.Interface.Shared
             mNameFading = new LabeledCheckBox(mGameSettingsContainer, "NameFading")
             {
                 Text = Strings.Settings.NameFading
+            };
+
+            mAlwaysCenterCamera = new LabeledCheckBox(mGameSettingsContainer, "AlwaysCenterCamera")
+            {
+                Text = "Always Center Camera"
             };
 
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
@@ -830,6 +837,7 @@ namespace Intersect.Client.Interface.Shared
             mSelfStatusMarkers.IsChecked = Globals.Database.DisplaySelfStatusMarkers;
             mDisplayPartyInfo.IsChecked = Globals.Database.DisplayPartyInfo;
             mTypewriterText.IsChecked = Globals.Database.TypewriterText;
+            mAlwaysCenterCamera.IsChecked = Globals.Database.AlwaysCenterCamera;
             mNameFading.IsChecked = Globals.Database.NameFading;
 
             // Video Settings.
@@ -1029,6 +1037,7 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.DisplaySelfStatusMarkers = mSelfStatusMarkers.IsChecked;
             Globals.Database.DisplayPartyInfo = mDisplayPartyInfo.IsChecked;
             Globals.Database.TypewriterText = mTypewriterText.IsChecked;
+            Globals.Database.AlwaysCenterCamera = mAlwaysCenterCamera.IsChecked;
             Globals.Database.NameFading = mNameFading.IsChecked;
             
             // Save graphics settings
