@@ -207,13 +207,13 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// Find all online members of this guild.
         /// </summary>
         /// <returns>A list of online players.</returns>
-        public List<Player> FindOnlineMembers()
+        public List<Player> FindOnlineMembers(Guid? exclude = null)
         {
             var online = new List<Player>();
             foreach (var member in Members)
             {
                 var plyr = Player.FindOnline(member.Key);
-                if (plyr != null)
+                if (plyr != null && (!exclude.HasValue || plyr.Id != exclude.Value))
                 {
                     //Update Cached Member List Values
                     member.Value.Name = plyr.Name;

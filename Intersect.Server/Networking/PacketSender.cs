@@ -2400,11 +2400,15 @@ namespace Intersect.Server.Networking
         //GuildMsgPacket
         public static void SendGuildMsg(Player player, string message, Color clr, string target = "")
         {
-            foreach (var p in player.Guild.FindOnlineMembers())
+            if (player == null || player.Guild == null)
             {
-                if (p != null)
+                return;
+            }
+            foreach (var guildMember in player.Guild.FindOnlineMembers())
+            {
+                if (guildMember != null)
                 {
-                    SendChatMsg(p, message, ChatMessageType.Guild, clr, target);
+                    SendChatMsg(guildMember, message, ChatMessageType.Guild, clr, target);
                 }
             }
         }
