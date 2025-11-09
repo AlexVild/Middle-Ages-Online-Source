@@ -450,6 +450,7 @@ namespace Intersect.Server.Entities
 
             //Send guild list update to all members when coming online
             Guild?.UpdateMemberList();
+            PacketSender.SendGuildMsg(this, $"Clan member {Name} has logged on.", CustomColors.Chat.GuildChat);
 
             // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
@@ -641,6 +642,7 @@ namespace Intersect.Server.Entities
             }
 
             //Send guild update to all members when logging out
+            PacketSender.SendGuildMsg(this, $"Clan member {Name} has logged out.", CustomColors.Chat.GuildChat);
             Guild?.UpdateMemberList();
             Guild = null;
             GuildBank = false;
