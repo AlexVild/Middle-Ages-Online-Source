@@ -811,7 +811,6 @@ namespace Intersect.Server.Entities
 
             if (!Base.SequentialCasting)
             {
-                // Pick a random spell
                 spellSlotIdx = Randomization.Next(0, spells.Length);
                 var spellId = spells[spellSlotIdx];
                 if (!SpellBase.TryGet(spellId, out spellDescriptor))
@@ -1534,7 +1533,7 @@ namespace Intersect.Server.Entities
         {
             if (AggroCenterMap != null)
             {
-                Warp(AggroCenterMap.Id, AggroCenterX, AggroCenterY);
+                Warp(AggroCenterMap.Id, AggroCenterX, AggroCenterY, (byte)Dir);
             }
 
             ResetNpc(true, true);
@@ -2068,7 +2067,7 @@ namespace Intersect.Server.Entities
             }
 
             var playerProjectile = Guid.Empty;
-            if (player.TryGetEquippedItem(Options.WeaponIndex, out var playerWeapon)) 
+            if (player.TryGetEquippedItem(Options.WeaponIndex, out var playerWeapon))
             {
                 playerProjectile = playerWeapon.Descriptor?.ProjectileId ?? Guid.Empty;
             }
@@ -2102,13 +2101,13 @@ namespace Intersect.Server.Entities
             {
                 return false;
             }
-            
+
             // These instance types are used when we ALWAYS want aggro NPCs within
             if (player.InstanceType == MapInstanceType.PersonalDungeon || player.InstanceType == MapInstanceType.PartyDungeon || player.InstanceType == MapInstanceType.ClanWar)
             {
                 return true;
             }
-            
+
             if (player.MapInstanceId == MapInstanceId && player.InstanceType != MapInstanceType.Overworld
                 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
@@ -2150,7 +2149,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            
+
             if (player.Party != null && player.Party.Count > 2)
             {
                 return player.GetThreatLevelInPartyFor(this) < ThreatLevel.Trivial;
@@ -2224,9 +2223,9 @@ namespace Intersect.Server.Entities
             for (var vital = 0; vital < (int)Vitals.VitalCount; vital++)
             {
                 float vitalRatio = GetVital(vital) / (float)GetMaxVital(vital);
-                
+
                 SetMaxVital(vital, (int)Math.Round(Base.MaxVital[vital] * factor));
-                
+
                 int newVital = (int)Math.Round(GetMaxVital(vital) * vitalRatio);
                 SetVital(vital, newVital);
             }
@@ -2446,6 +2445,47 @@ namespace Intersect.Server.Entities
             }
 
             ExhaustionEndTime = Timing.Global.MillisecondsUtc + MeleeExhaustionTime;
+        }
+
+        public int EffectiveRange
+        {
+            get
+            {
+                SpellBase.TryGet(Base.SpellAttackOverrideId, out var spellAttackOverride);
+                if (Spells.Count == 0)
+                {
+                    return spellAttackOverride != null ? spellAttackOverride.GetRange() : 0;
+                }
+                
+                var maxSpellCastRange = Spells?.Select(spellSlot =>
+                {
+                    if (!SpellBase.TryGet(spellSlot.SpellId, out var spell))
+                    {
+                        return 0;
+                    }
+
+                    return spell.GetRange();
+                })?.Max() ?? 0;
+
+                return Math.Max(maxSpellCastRange, spellAttackOverride?.GetRange() ?? 0);
+            }
+        }
+
+        public override int GetDistanceTo(Entity target)
+        {
+            if (target == null)
+            {
+                return 9999;
+            }
+
+            // If the entity could hit the target with a spell, use non-blocking distance to entity
+            if (EffectiveRange >= base.GetDistanceTo(target))
+            {
+                return base.GetDistanceTo(target);
+            }
+
+            // Otherwise, the entity will have to path to the target to hit them
+            return Pathfinder.CalculatePathLength(this, target);
         }
 
         public void SendExhaustion(long endTimestamp)

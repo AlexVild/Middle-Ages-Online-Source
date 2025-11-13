@@ -1819,7 +1819,7 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        public int GetDistanceTo(Entity target)
+        public virtual int GetDistanceTo(Entity target)
         {
             if (target != null)
             {
