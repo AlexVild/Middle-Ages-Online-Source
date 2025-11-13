@@ -745,12 +745,6 @@ namespace Intersect.Server.Networking
             {
                 return;
             }
-
-            if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstanceTest) && msg == "npctester")
-            {
-                mapInstanceTest.PrintDebugInformation();
-                return;
-            }
             
             if (client?.User.IsMuted ?? false) //Don't let the tongueless toxic kids speak.
             {

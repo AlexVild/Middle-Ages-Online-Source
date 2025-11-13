@@ -1647,36 +1647,6 @@ namespace Intersect.Server.Maps
             }
         }
 
-        /// <summary>
-        /// Temporary, delete this eventually
-        /// </summary>
-        public void PrintDebugInformation()
-        {
-            Console.WriteLine($"--- PRINTING NPC SPAWN DEBUG INFO ---");
-            Console.WriteLine($"Current update time: {mLastUpdateTime}");
-            Console.WriteLine($"Map: {mMapController.Name}");
-            Console.WriteLine($"Spawns in map: {mMapController.Spawns.Count}");
-            Console.WriteLine($"Spawn instances in map: {NpcSpawnInstances.Count}");
-            Console.WriteLine($"Champion list:\n\tActive: {string.Join(", ", ActiveChampions.Select(c => NpcBase.GetName(c)))}\n\tAwaiting: {string.Join(", ", AwaitingChampions.Select(c => NpcBase.GetName(c)))}");
-            var idx = 0;
-            foreach (var spawn in mMapController.Spawns)
-            {
-                Console.WriteLine($"\n{NpcBase.GetName(spawn.NpcId)} -- ID {idx}");
-                Console.WriteLine($"Spawn info:\n\tSpawn Group: {spawn.SpawnGroup}\n\tPrevent respawn: {spawn.PreventRespawn}\n\tNPC ID:{spawn.NpcId}\n\tReq. Players to Spawn: {spawn.RequiredPlayersToSpawn}");
-                Console.WriteLine($"Function info:\n\tNpcHasEnoughPlayersToSpawn(): ${NpcHasEnoughPlayersToSpawn(idx)}\n\tSpawnMeetsHpThreshold(): ${SpawnMeetsHpThreshold(spawn)}\n\tCanSpawnInGroup: ${CanSpawnInGroup(spawn)}");
-                if (!NpcSpawnInstances.TryGetValue(spawn, out var spawnInstance))
-                {
-                    Console.WriteLine($"Could not get spawn instance!");
-                }
-                else
-                {
-                    Console.WriteLine($"Instance info:\n\tRespawn Time:{spawnInstance.RespawnTime}\n\tDead: {spawnInstance.Entity.Dead}\n\tMap Spawn Index: {spawnInstance.MapSpawnIndex}\n\t");
-                }
-                idx++;
-            }
-            Console.WriteLine("-----------------------------------------------");
-        }
-
         private void ProcessNpcRespawns()
         {
             var spawns = mMapController.Spawns;
