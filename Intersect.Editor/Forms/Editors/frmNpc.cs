@@ -124,6 +124,9 @@ namespace Intersect.Editor.Forms.Editors
             nudDef.Maximum = Options.MaxNpcStat;
             nudMR.Maximum = Options.MaxNpcStat;
             nudSpd.Maximum = Options.MaxNpcStat;
+            nudResetRadius.Maximum = Math.Max(
+                Options.MapWidth, Options.MapHeight
+            );
 
             cmbDeathAnimation.Items.Clear();
             cmbDeathAnimation.Items.Add(Strings.General.none);

@@ -431,6 +431,271 @@ namespace Intersect.Server.Entities.Pathfinding
             return false;
         }
 
+        public static int CalculatePathLength(Entity startEntity, Entity targetEntity)
+        {
+            if (startEntity == null || targetEntity == null)
+            {
+                return 9999; // Invalid entities
+            }
+
+            // Check if entities are on the same map or adjacent maps
+            var startMap = MapController.Get(startEntity.MapId);
+            var targetMap = MapController.Get(targetEntity.MapId);
+
+            if (startMap == null || targetMap == null)
+            {
+                return 9999; // Invalid maps
+            }
+
+            var startGrid = DbInterface.GetGrid(startMap.MapGrid);
+            var targetGrid = DbInterface.GetGrid(targetMap.MapGrid);
+
+            if (startGrid != targetGrid)
+            {
+                return 9999; // Entities are not on connected maps
+            }
+
+            var startGridX = startMap.MapGridX;
+            var startGridY = startMap.MapGridY;
+            var targetGridX = targetMap.MapGridX;
+            var targetGridY = targetMap.MapGridY;
+
+            // Check if target is within pathfinding range (3x3 map area)
+            if (Math.Abs(startGridX - targetGridX) > 1 || Math.Abs(startGridY - targetGridY) > 1)
+            {
+                return 9999; // Out of range
+            }
+
+            var pathfindingRange = Math.Max(Options.MapWidth, Options.MapHeight);
+
+            // Calculate coordinates in the 3x3 grid system
+            var sourceX = Options.MapWidth + startEntity.X;
+            var sourceY = Options.MapHeight + startEntity.Y;
+            var targetX = (targetGridX - startGridX + 1) * Options.MapWidth + targetEntity.X;
+            var targetY = (targetGridY - startGridY + 1) * Options.MapHeight + targetEntity.Y;
+
+            // Check if target is within pathfinding range
+            if (Math.Abs(sourceX - targetX) + Math.Abs(sourceY - targetY) >= pathfindingRange)
+            {
+                return 9999; // Out of range
+            }
+
+            try
+            {
+                // Create pathfinding grid
+                var mapGrid = new PathNode[Options.MapWidth * 3, Options.MapHeight * 3];
+
+                // Initialize grid
+                for (var x = 0; x < Options.MapWidth * 3; x++)
+                {
+                    for (var y = 0; y < Options.MapHeight * 3; y++)
+                    {
+                        mapGrid[x, y] = new PathNode(x, y, false);
+
+                        // Mark out-of-range areas as walls
+                        if (x < sourceX - pathfindingRange ||
+                            x > sourceX + pathfindingRange ||
+                            y < sourceY - pathfindingRange ||
+                            y > sourceY + pathfindingRange)
+                        {
+                            mapGrid[x, y].IsWall = true;
+                        }
+                    }
+                }
+
+                // Populate obstacles for surrounding maps
+                var grid = startGrid;
+                for (var x = startGridX - 1; x <= startGridX + 1; x++)
+                {
+                    if (x == -1 || x >= grid.Width)
+                    {
+                        // Fill areas outside grid boundaries
+                        for (var y = 0; y < 3; y++)
+                        {
+                            FillGridArea(mapGrid, (x + 1 - startGridX) * Options.MapWidth, y * Options.MapHeight,
+                                Options.MapWidth, Options.MapHeight);
+                        }
+                        continue;
+                    }
+
+                    for (var y = startGridY - 1; y <= startGridY + 1; y++)
+                    {
+                        if (y == -1 || y >= grid.Height)
+                        {
+                            // Fill areas outside grid boundaries
+                            FillGridArea(mapGrid, (x + 1 - startGridX) * Options.MapWidth,
+                                (y + 1 - startGridY) * Options.MapHeight, Options.MapWidth, Options.MapHeight);
+                            continue;
+                        }
+
+                        if (MapController.TryGetInstanceFromMap(grid.MyGrid[x, y], startEntity.MapInstanceId, out var instance))
+                        {
+                            // Add tile blocks
+                            var blocks = instance.GetCachedBlocks(startEntity.GetType() == typeof(Player));
+                            foreach (var block in blocks)
+                            {
+                                mapGrid[(x + 1 - startGridX) * Options.MapWidth + block.X,
+                                        (y + 1 - startGridY) * Options.MapHeight + block.Y].IsWall = true;
+                            }
+
+                            // Add entity blocks
+                            foreach (var entity in instance.GetEntities())
+                            {
+                                if (!entity.IsPassable() && entity.X > -1 && entity.X < Options.MapWidth &&
+                                    entity.Y > -1 && entity.Y < Options.MapHeight)
+                                {
+                                    mapGrid[(x + 1 - startGridX) * Options.MapWidth + entity.X,
+                                            (y + 1 - startGridY) * Options.MapHeight + entity.Y].IsWall = true;
+                                }
+                            }
+
+                            // Add global event blocks
+                            foreach (var globalEvent in instance.GlobalEventInstances)
+                            {
+                                if (globalEvent.Value?.X > -1 && globalEvent.Value.X < Options.MapWidth &&
+                                    globalEvent.Value.Y > -1 && globalEvent.Value.Y < Options.MapHeight)
+                                {
+                                    foreach (var page in globalEvent.Value.GlobalPageInstance)
+                                    {
+                                        if (!page.Passable)
+                                        {
+                                            mapGrid[(x + 1 - startGridX) * Options.MapWidth + globalEvent.Value.X,
+                                                    (y + 1 - startGridY) * Options.MapHeight + globalEvent.Value.Y].IsWall = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Make sure target position is passable
+                mapGrid[targetX, targetY].IsWall = false;
+
+
+
+                // Run A* pathfinding
+                var aStar = new SpatialAStar(mapGrid);
+                var path = aStar.Search(new Point(sourceX, sourceY), new Point(targetX, targetY), null);
+
+                if (path == null)
+                {
+                    return 9999; // No path found
+                }
+
+                // Check if the path actually reaches the target
+                var lastNode = path.Last();
+                if (lastNode.X != targetX || lastNode.Y != targetY)
+                {
+                    return 9999; // Path cannot reach target
+                }
+
+                return path.Count - 1; // Return path length (subtract 1 because path includes start node)
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex);
+                return 9999; // Error occurred
+            }
+        }
+
+        public static void PrintPathfindingGrid(PathNode[,] mapGrid, int sourceX, int sourceY, int targetX, int targetY, IEnumerable<PathNode> path = null)
+        {
+            if (mapGrid == null)
+            {
+                Log.Info("MapGrid is null");
+                return;
+            }
+
+            var width = mapGrid.GetLength(0);
+            var height = mapGrid.GetLength(1);
+
+            // Create a HashSet of path coordinates for quick lookup
+            var pathCoords = new HashSet<(int x, int y)>();
+            if (path != null)
+            {
+                foreach (var node in path)
+                {
+                    pathCoords.Add((node.X, node.Y));
+                }
+            }
+
+            Console.WriteLine($"Pathfinding Grid Visualization ({width}x{height}):");
+            Console.WriteLine($"Legend: O = Open, X = Blocked, S = Start, T = Target, * = Path");
+            Console.WriteLine("Grid Layout:");
+
+            // Print column numbers header
+            var header = "   ";
+            for (var x = 0; x < width; x++)
+            {
+                header += (x % 10).ToString();
+            }
+            Console.WriteLine(header);
+
+            // Print each row
+            for (var y = 0; y < height; y++)
+            {
+                var row = $"{y:D2} ";
+
+                for (var x = 0; x < width; x++)
+                {
+                    var node = mapGrid[x, y];
+                    char symbol;
+
+                    // Determine what symbol to show
+                    if (x == sourceX && y == sourceY)
+                    {
+                        symbol = 'S'; // Start position
+                    }
+                    else if (x == targetX && y == targetY)
+                    {
+                        symbol = 'T'; // Target position
+                    }
+                    else if (pathCoords.Contains((x, y)))
+                    {
+                        symbol = '*'; // Path
+                    }
+                    else if (node == null)
+                    {
+                        symbol = '?'; // Uninitialized
+                    }
+                    else if (node.IsWall)
+                    {
+                        symbol = 'X'; // Blocked
+                    }
+                    else
+                    {
+                        symbol = 'O'; // Open
+                    }
+
+                    row += symbol;
+                }
+
+                Console.WriteLine(row);
+            }
+
+            Console.WriteLine($"Start: ({sourceX}, {sourceY}), Target: ({targetX}, {targetY})");
+            if (path != null)
+            {
+                var pathLength = path.Count();
+                Console.WriteLine($"Path found with {pathLength} nodes");
+            }
+        }
+
+        private static void FillGridArea(PathNode[,] dest, int startX, int startY, int width, int height)
+        {
+            for (var x = startX; x < startX + width; x++)
+            {
+                for (var y = startY; y < startY + height; y++)
+                {
+                    if (x >= 0 && x < dest.GetLength(0) && y >= 0 && y < dest.GetLength(1))
+                    {
+                        dest[x, y].IsWall = true;
+                    }
+                }
+            }
+        }
+
         public void PathFailed(long timeMs)
         {
             mPath = null;
