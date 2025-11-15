@@ -71,7 +71,7 @@ namespace Intersect.Server.Entities
             
             if (critChance > 0)
             {
-                critChance += affinity;
+                critChance += CombatUtilities.GetCritChanceBonusValue(affinity, Accuracy);
             }
 
             bool isCrit = base.IsCriticalHit(critChance);
@@ -1039,10 +1039,12 @@ namespace Intersect.Server.Entities
             }
             
             var bonus = GetBonusEffectTotal(effect);
+            bonus += CombatUtilities.GetEvasionStatusAvoidancePercent(Evasion);
             if (bonus == 0)
             {
                 return base.ResistsEffect(status);
             }
+
 
             var random = Randomization.Next(1, 101);
             return random <= bonus;

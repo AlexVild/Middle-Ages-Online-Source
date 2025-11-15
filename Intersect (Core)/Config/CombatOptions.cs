@@ -282,6 +282,18 @@ namespace Intersect.Config
 
         public string InterruptSound { get; set; } = "al_interrupt.wav";
 
+        /// <summary>
+        /// Awards 1 crit chance% every X accuracy
+        /// </summary>
+        public int AccuracyCritEveryDivisor { get; set; } = 20;
+
+        public int EvasionStatusResistEveryMod { get; set; } = 10;
+
+        /// <summary>
+        /// At 100 speed, vital recovery speed is multiplied by this value
+        /// </summary>
+        public float SpeedRecoveryMaxModifier { get; set; } = 0.85f;
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {

@@ -408,5 +408,26 @@ namespace Intersect.Utilities
 
             return atkStats;
         }
+
+        public static int RecoveryTimeMs(int speed, Vitals vital)
+        {
+            var timeModifier = 1 - ((speed / 100f) * (1 - Options.Instance.CombatOpts.SpeedRecoveryMaxModifier));
+            var baseTime = vital == Vitals.Mana ? Options.Instance.CombatOpts.ManaRegenTime : Options.Instance.CombatOpts.RegenTime;
+            return (int)Math.Round(baseTime * timeModifier);
+        }
+
+        public static int GetCritChanceBonusValue(int affinity, int accuracy)
+        {
+
+            var critChance = affinity;
+            critChance += (int)Math.Floor(accuracy / (float)Options.Instance.CombatOpts.AccuracyCritEveryDivisor);
+
+            return critChance;
+        }
+
+        public static int GetEvasionStatusAvoidancePercent(int evasion)
+        {
+            return (int)Math.Floor(evasion / (float)Options.Instance.CombatOpts.EvasionStatusResistEveryMod);
+        }
     }
 }

@@ -371,7 +371,7 @@ namespace Intersect.Server.Entities
                     if (timeMs > CombatTimer && timeMs > RegenTimer)
                     {
                         ProcessRegen();
-                        RegenTimer = timeMs + Options.RegenTime;
+                        RegenTimer = timeMs + CombatUtilities.RecoveryTimeMs(Speed, Vitals.Health);
                     }
 
                     ProcessManaRegen(timeMs);

@@ -99,19 +99,19 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
             mMpCurrent = new NumberContainerComponent(mBackground, "MP", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
             mMpTotal = new NumberContainerComponent(mBackground, "MPTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
-            _ = new ImageLabelComponent(mBackground, "EvasionLabel", LabelColor, LabelHoverColor, "character_stats_evasion.png", "EVASION", "Dodge chance vs. opponent's accuracy.", ImageLabelComponents);
+            _ = new ImageLabelComponent(mBackground, "EvasionLabel", LabelColor, LabelHoverColor, "character_stats_evasion.png", "EVASION", $"Dodge chance vs. opponent's accuracy. Increases status resist by 1% every {Options.Instance.CombatOpts.EvasionStatusResistEveryMod} pts.", ImageLabelComponents);
             mEvasionBase = new NumberContainerComponent(mBackground, "EvasionBase", StatLabelColor, StatColor, "BASE", string.Empty, ContainerComponents);
-            mEvasionEqp = new NumberContainerComponent(mBackground, "EvasionEqp", StatLabelColor, StatColor, "EQP", string.Empty, ContainerComponents);
+            mEvasionEqp = new NumberContainerComponent(mBackground, "EvasionEqp", StatLabelColor, StatColor, "BNS", string.Empty, ContainerComponents);
             mEvasionTotal = new NumberContainerComponent(mBackground, "EvasionTotal", StatLabelColor, StatColor, "TOTAL", string.Empty, ContainerComponents);
 
-            _ = new ImageLabelComponent(mBackground, "AccuracyLabel", LabelColor, LabelHoverColor, "character_stats_accuracy.png", "ACCURACY", "Hit chance vs. opponent's evasion.", ImageLabelComponents);
+            _ = new ImageLabelComponent(mBackground, "AccuracyLabel", LabelColor, LabelHoverColor, "character_stats_accuracy.png", "ACCURACY", $"Hit chance vs. opponent's evasion. Increases crit chance by 1% every {Options.Instance.CombatOpts.AccuracyCritEveryDivisor} pts.", ImageLabelComponents);
             mAccuracyBase = new NumberContainerComponent(mBackground, "AccuracyBase", StatLabelColor, StatColor, "BASE", string.Empty, ContainerComponents);
-            mAccuracyEqp = new NumberContainerComponent(mBackground, "AccuracyEqp", StatLabelColor, StatColor, "EQP", string.Empty, ContainerComponents);
+            mAccuracyEqp = new NumberContainerComponent(mBackground, "AccuracyEqp", StatLabelColor, StatColor, "BNS", string.Empty, ContainerComponents);
             mAccuracyTotal = new NumberContainerComponent(mBackground, "AccuracyTotal", StatLabelColor, StatColor, "TOTAL", string.Empty, ContainerComponents);
 
-            _ = new ImageLabelComponent(mBackground, "SpeedLabel", LabelColor, LabelHoverColor, "character_stats_speed.png", "SPEED", "Determines movement speed.", ImageLabelComponents);
+            _ = new ImageLabelComponent(mBackground, "SpeedLabel", LabelColor, LabelHoverColor, "character_stats_speed.png", "SPEED", "Determines movement speed. Decreases health & mana regen times.", ImageLabelComponents);
             mSpeedBase = new NumberContainerComponent(mBackground, "SpeedBase", StatLabelColor, StatColor, "BASE", string.Empty, ContainerComponents);
-            mSpeedEqp = new NumberContainerComponent(mBackground, "SpeedEqp", StatLabelColor, StatColor, "EQP", string.Empty, ContainerComponents);
+            mSpeedEqp = new NumberContainerComponent(mBackground, "SpeedEqp", StatLabelColor, StatColor, "BNS", string.Empty, ContainerComponents);
             mSpeedTotal = new NumberContainerComponent(mBackground, "SpeedTotal", StatLabelColor, StatColor, "TOTAL", string.Empty, ContainerComponents);
         }
 

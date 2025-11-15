@@ -170,7 +170,7 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendActionMsg(this, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
                 }
-                else if (ResistsEffect(spell.Combat.Effect))
+                else if (!spell.Combat.Friendly && ResistsEffect(spell.Combat.Effect))
                 {
                     SendResistMessage();
                 }
@@ -222,6 +222,11 @@ namespace Intersect.Server.Entities
         {
             var percent = GetBonusEffectPercent(effect, additive, startValue);
             return (int)Math.Ceiling(value * percent);
+        }
+
+        public float GetRecoveryTimeModifier()
+        {
+            return 1 - ((Speed / 100f) * (1 - Options.Instance.CombatOpts.SpeedRecoveryMaxModifier));
         }
     }
 }
