@@ -731,7 +731,7 @@ namespace Intersect.Server.Entities
                                  Math.Abs(Math.Sign(manaRegenRate));
 
             AddVital(Vitals.Mana, regenValue);
-            ManaRegenTimer = timeMs + Options.Instance.CombatOpts.ManaRegenTime;
+            ManaRegenTimer = timeMs + CombatUtilities.RecoveryTimeMs(Speed, Vitals.Mana);
         }
 
         protected virtual bool TryLifesteal(int damage, Entity target, out float recovered)

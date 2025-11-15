@@ -22,8 +22,8 @@ namespace Intersect.Client.Utilities
             {EffectType.Angler, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Angler], "Increases harvest speed when fishing by X%.")}, // Angler
             {EffectType.Lumberjack, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Lumberjack], "Increases harvest speed when woodcutting by X%.")}, // Lumberjack
             {EffectType.Assassin, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Assassin], "Increases backstab/stealth attack modifier by X%.")}, // Assassin
-            {EffectType.Sniper, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Sniper], "Does X% more damage if attacks are further than 4 tiles.")}, // Sniper
-            {EffectType.Berzerk, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Berzerk], "Increases damage by X% if at least 3 enemies are aggro on you.")}, // Berzerk
+            {EffectType.Sniper, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Sniper], $"Does X% more damage if attacks are at least {Options.Instance.CombatOpts.SniperRequiredRange} tiles away from target.")}, // Sniper
+            {EffectType.Berzerk, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Berzerk], $"Increases damage by X% if at least {Options.Instance.CombatOpts.BerzerkMinMobs} enemies are aggro to you.")}, // Berzerk
             {EffectType.Manasteal, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Manasteal], "Gives mana as X% of damage dealt.")}, // Manasteal
             {EffectType.Phantom, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Phantom], "Reduces sight range of enemies and reduces aggro build-up from damage by X%.")}, // Phantom
             {EffectType.Vampire, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Vampire], "Increases effects of manasteal and lifesteal by X%.")}, // Vampire

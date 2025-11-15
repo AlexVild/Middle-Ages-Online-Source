@@ -8,6 +8,7 @@ using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,31 +109,58 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             PassivesScrollContainer?.ClearCreatedChildren();
         }
 
-        private Tuple<float, double> GetCritInfo()
+        /// <summary>
+        /// Gets critical hit info
+        /// </summary>
+        /// <returns>Two tuples. The first is your unmodified critical hit & bonus values, the second is your values w/ modifiers applied</returns>
+        private Tuple<Tuple<float, double>, Tuple<float, double>> GetCritInfo()
         {
-            var critChance = 0.0f;
-            var critMulti = 0.0;
+            var baseCritChance = 0.0f;
+            var baseCritMulti = 0.0;
+
+            Tuple<float, double> baseCritInfo;
+            Tuple<float, double> modifiedCritInfo;
 
             var equippedWeaponSlot = Globals.Me.MyEquipment[Options.Equipment.WeaponSlot];
             if (equippedWeaponSlot != -1 && equippedWeaponSlot < Globals.Me.Inventory.Length)
             {
                 var equippedWeapon = Globals.Me.Inventory[equippedWeaponSlot];
-                critChance = equippedWeapon.Base.CritChance;
-                critMulti = equippedWeapon.Base.CritMultiplier;
+                baseCritChance = equippedWeapon.Base.CritChance;
+                baseCritMulti = equippedWeapon.Base.CritMultiplier;
             }
             else
             {
                 var cls = ClassBase.Get(Globals.Me.Class);
                 if (cls == null)
                 {
-                    new Tuple<float, double>(critChance, critMulti);
+                    baseCritInfo = new Tuple<float, double>(baseCritChance, baseCritMulti);
                 }
-
-                critChance = cls.CritChance;
-                critMulti = cls.CritMultiplier;
+                else
+                {
+                    baseCritChance = cls.CritChance;
+                    baseCritMulti = cls.CritMultiplier;
+                }
             }
 
-            return new Tuple<float, double>(critChance, critMulti);
+            baseCritInfo = new Tuple<float, double>(baseCritChance, baseCritMulti);
+
+            // A weapon with a crit chance of 0 can _not_ critical hit
+            if (baseCritChance == 0)
+            {
+                modifiedCritInfo = new Tuple<float, double>(baseCritChance, baseCritMulti);
+            }
+            else
+            {
+                var affinity = Globals.Me.GetBonusEffect(EffectType.Affinity);
+                var accuracy = Globals.Me.Stat[(int)Stats.Accuracy];
+                var critBonus = Globals.Me.GetBonusEffect(EffectType.CritBonus);
+                
+                var modifiedCritChance = baseCritChance + CombatUtilities.GetCritChanceBonusValue(affinity, accuracy);
+                var modifiedCritBonus = baseCritMulti * (1 + (critBonus / 100f));
+                modifiedCritInfo = new Tuple<float, double>(modifiedCritChance, modifiedCritBonus);
+            }
+
+            return new Tuple<Tuple<float, double>, Tuple<float, double>>(baseCritInfo, modifiedCritInfo);
         }
 
         private string GetAttackSpeed()
@@ -170,25 +198,18 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 return;
             }
 
-            var critInfo = GetCritInfo();
+            var baseCritInfo = GetCritInfo();
             var attackSpeed = GetAttackSpeed();
             var bonusEffects = Globals.Me?.GetAllBonusEffects();
 
-            if (critInfo == null && bonusEffects == null)
-            {
-                NoBonusesLabel.Show();
-            }
-            else
-            {
-                NoBonusesLabel.Hide();
-                var yStart = 0;
-                AddVitalRegenInfo(yStart, out var y);
-                AddCritInfo(critInfo, y, out y);
-                AddAttackSpeed(attackSpeed, y, out y);
-                AddBonusEffectInfo(bonusEffects, y, out _);
+            NoBonusesLabel.Hide();
+            var yStart = 0;
+            AddVitalRegenInfo(yStart, out var y);
+            AddCritInfo(baseCritInfo, y, out y);
+            AddAttackSpeed(attackSpeed, y, out y);
+            AddBonusEffectInfo(bonusEffects, y, out _);
 
-                BonusRows.InitializeAll();
-            }
+            BonusRows.InitializeAll();
 
             RefreshPassiveSkillsDisplay();
         }
@@ -233,6 +254,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             yEnd = yStart;
 
             var regens = Globals.Me.GetVitalRegens();
+            var speed = Globals.Me.Speed;
 
             foreach (var vital in regens.Keys)
             {
@@ -242,13 +264,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 }
 
                 var label = "OoC HP Regen";
-                var time = Options.Combat.RegenTime / 1000f;
-                var helper = $"The percent of health regenerated every {time.ToString("N0")}s out of combat";
+                var helper = $"The percent of health regenerated every regen tick out of combat";
                 if (vital == Vitals.Mana)
                 {
                     label = "MP Regen";
-                    time = Options.Combat.ManaRegenTime / 1000f;
-                    helper = $"The percent of mana regenerated every {time.ToString("N0")}s";
+                    helper = $"The percent of mana regenerated every regen tick";
                 }
 
                 var regenRow = new CharacterBonusRow(BonusContainer, "VitalRegenRow", label, $"{regens[vital]}%", helper, BonusRows);
@@ -256,9 +276,39 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
                 yEnd = regenRow.Y + YPadding;
             }
+
+            foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
+            {
+                if (vital == Vitals.VitalCount)
+                {
+                    continue;
+                }
+
+                var label = "HP OoC Regen Rate";
+                var time = CombatUtilities.RecoveryTimeMs(speed, vital) / 1000f;
+                var helper = $"The length in time of a health regen tick";
+                if (vital == Vitals.Mana)
+                {
+                    label = "MP Regen Rate";
+                    helper = $"The length in time of a mana regen tick";
+                }
+
+                var regenRow = new CharacterBonusRow(BonusContainer, "VitalRegenSpeedRow", label, $"{time.ToString("N1")}s", helper, BonusRows);
+                regenRow.SetPosition(regenRow.X, regenRow.Y + yEnd);
+
+                yEnd = regenRow.Y + YPadding;
+            }
+
+            var evasionStatusBonus = CombatUtilities.GetEvasionStatusAvoidancePercent(Globals.Me.Stat[(int)Stats.Evasion]);
+            if (evasionStatusBonus > 0)
+            {
+                var regenRow = new CharacterBonusRow(BonusContainer, "EvasionResistBonusRow", "Evade Status", $"{evasionStatusBonus}%", "Chance to avoid negative status element due to evasion", BonusRows);
+                regenRow.SetPosition(regenRow.X, regenRow.Y + yEnd);
+                yEnd = regenRow.Y + YPadding;
+            }
         }
 
-        private void AddCritInfo(Tuple<float, double> critInfo, int yStart, out int yEnd)
+        private void AddCritInfo(Tuple<Tuple<float, double>, Tuple<float, double>> critInfo, int yStart, out int yEnd)
         {
             yEnd = yStart;
             if (critInfo == null)
@@ -266,16 +316,38 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 return;
             }
 
-            var critChance = $"{critInfo.Item1.ToString("N2")}%";
-            var critMulti = $"{critInfo.Item2.ToString("N2")}x";
+            var baseCritChance = critInfo.Item1.Item1;
+            var modifiedCritChance = critInfo.Item2.Item1;
 
-            var critChanceRow = new CharacterBonusRow(BonusContainer, "CritChanceRow", "Base Crit Chance", critChance, "Your base chance to critical hit.", BonusRows);
+            var baseCritMulti = critInfo.Item1.Item2;
+            var modifiedCritMulti = critInfo.Item2.Item2;
+
+            var critChanceRow = new CharacterBonusRow(BonusContainer, "CritChanceRow", "Base Crit Chance", $"{baseCritChance.ToString("N0")}%", "Your base chance to critical hit.", BonusRows);
             critChanceRow.SetPosition(critChanceRow.X, critChanceRow.Y + yStart);
 
-            var critMultiRow = new CharacterBonusRow(BonusContainer, "CritMultiRow", "Base Crit Multi.", critMulti, "Base damage multiplier for critical hits.", BonusRows);
-            critMultiRow.SetPosition(critMultiRow.X, critMultiRow.Y + yStart + YPadding);
+            if (modifiedCritChance != baseCritChance)
+            {
+                yStart += YPadding;
+                var critChanceModRow = new CharacterBonusRow(BonusContainer, "CritChanceModRow", "Total Crit Chance", $"{modifiedCritChance.ToString("N0")}%", "Your total chance to critical hit, including affinity + accuracy modifiers.", BonusRows);
+                critChanceModRow.SetPosition(critChanceModRow.X, critChanceModRow.Y + yStart);
+            }
 
-            yEnd = critMultiRow.Y + YPadding;
+            yStart += YPadding;
+            var critMultiRow = new CharacterBonusRow(BonusContainer, "CritMultiRow", "Base Crit Multi.", $"{baseCritMulti.ToString("N2")}x", "Base damage multiplier for critical hits.", BonusRows);
+            critMultiRow.SetPosition(critMultiRow.X, critMultiRow.Y + yStart);
+
+            if (modifiedCritMulti != baseCritMulti)
+            {
+                yStart += YPadding;
+                var critMultiModRow = new CharacterBonusRow(BonusContainer, "CritMultiModRow", "Total Crit Multi.", $"{modifiedCritMulti.ToString("N0")}x", "Total damage multiplier for critical hits, including crit bonus.", BonusRows);
+                critMultiModRow.SetPosition(critMultiModRow.X, critMultiModRow.Y + yStart);
+                
+                yEnd = critMultiModRow.Y + YPadding;
+            }
+            else
+            {
+                yEnd = critMultiRow.Y + YPadding;
+            }
         }
 
         private void AddBonusEffectInfo(Dictionary<EffectType, int> bonusEffects, int yStart, out int yEnd)

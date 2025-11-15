@@ -78,6 +78,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             StatsContainer = new ImagePanel(SelfContainer, "StatsContainer");
             EvasionLabel = new ImageLabelComponent(StatsContainer, "EvasionLabel", StatLabelColor, StatLabelHoverColor, "character_stats_evasion.png", "EVASION", "Affects the enemy's dodge chance.", Components);
             EvasionNumber = new NumberContainerComponent(StatsContainer, "Evasion", StatInnerLabelColor, StatColor, "MAX", string.Empty, Components);
+
             AccuracyLabel = new ImageLabelComponent(StatsContainer, "AccuracyLabel", StatLabelColor, StatLabelHoverColor, "character_stats_accuracy.png", "ACCURACY", "Affects the chance to hit vs evasion.", Components);
             AccuracyNumber = new NumberContainerComponent(StatsContainer, "Accuracy", StatInnerLabelColor, StatColor, "MAX", string.Empty, Components);
             SpeedLabel = new ImageLabelComponent(StatsContainer, "SpeedLabel", StatLabelColor, StatLabelHoverColor, "character_stats_speed.png", "SPEED", "Affects the enemy's movement speed.", Components);

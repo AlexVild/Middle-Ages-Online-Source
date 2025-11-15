@@ -3414,6 +3414,13 @@ namespace Intersect.Client.Entities
         public Dictionary<Vitals, int> GetVitalRegens()
         {
             var regens = new Dictionary<Vitals, int>();
+
+            if (ClassBase.TryGet(Globals.Me.Class, out var cls)) 
+            {
+                regens[Vitals.Health] = cls.VitalRegen[(int)Vitals.Health];
+                regens[Vitals.Mana] = cls.VitalRegen[(int)Vitals.Mana];
+            }
+
             foreach (var eqp in Equipment)
             {
                 if (eqp == Guid.Empty)

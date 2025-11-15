@@ -86,8 +86,13 @@ namespace Intersect.Server.Entities.Combat
                     npc.LootMapCache = npc.LootMap.Keys.ToArray();
                 }
 
-                tenacity = npc.Base.Tenacity + npc.GetStaleTenacityMod(type);
+                if (!TenacityExcluded.Contains(type))
+                {
+                    tenacity = npc.Base.Tenacity + npc.GetStaleTenacityMod(type);
+                }
             }
+
+            tenacity = MathHelper.Clamp(tenacity, -100.0, 100.0);
 
             // Interrupt their spellcast if we are running a Silence, Sleep or Stun!
             if (InterruptStatusses.Contains(type) && en is AttackingEntity victim)
