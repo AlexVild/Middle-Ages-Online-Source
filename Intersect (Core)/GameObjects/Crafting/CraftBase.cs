@@ -74,6 +74,12 @@ namespace Intersect.GameObjects.Crafting
             set => Requirements.Load(value);
         }
 
+        [NotMapped]
+        public List<string> RequirementStrings
+        {
+            get => Requirements.ConditionListsToRequirementsString();
+        }
+
         public Guid Recipe { get; set; }
 
         public bool EventOnly { get; set; }
