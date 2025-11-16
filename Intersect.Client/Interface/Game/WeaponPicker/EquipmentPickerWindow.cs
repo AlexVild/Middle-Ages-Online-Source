@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Intersect.Client.Interface.Game.WeaponPicker
 {
-    public static class WeaponPickerController
+    public static class EquipmentPickerController
     {
         public static WeaponPickerResult ResultType { get; set; }
 
@@ -24,7 +24,7 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
         }
     }
 
-    public class WeaponPickerWindow : GameWindow
+    public class EquipmentPickerWindow : GameWindow
     {
         protected override string FileName => "WeaponPicker";
 
@@ -36,7 +36,7 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
 
         ComponentList<WeaponPickerWeaponComponent> Weapons { get; set; } = new ComponentList<WeaponPickerWeaponComponent>();
 
-        public WeaponPickerWindow(Base gameCanvas) : base(gameCanvas)
+        public EquipmentPickerWindow(Base gameCanvas) : base(gameCanvas)
         {
         }
 
@@ -63,9 +63,9 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
         public override void Show()
         {
             Prompt.SetText(
-                WeaponPickerController.ResultType == WeaponPickerResult.Enhancement ?
-                "Select a weapon to enhance..." :
-                "Select a weapon to upgrade..."
+                EquipmentPickerController.ResultType == WeaponPickerResult.Enhancement ?
+                "Enhanceable weapons..." :
+                "Upgradeable equipment..."
             );
             
             RefreshWeaponSelection();
@@ -84,17 +84,33 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
         {
             ClearWeaponContainer();
 
-            var playerWeapons = Globals.Me.Inventory
+            var weaponsOnly = EquipmentPickerController.ResultType == WeaponPickerResult.Enhancement;
+
+            var playerEquipment = Globals.Me.Inventory
                 .Select((invItem, i) => new KeyValuePair<int, Item>(i, invItem))
-                .Where(item => item.Value?.Base?.ItemType == Enums.ItemTypes.Equipment && item.Value?.Base?.EquipmentSlot == Options.WeaponIndex)
+                .Where(item => item.Value?.Base?.ItemType == Enums.ItemTypes.Equipment && (!weaponsOnly || item.Value?.Base?.EquipmentSlot == Options.WeaponIndex))
+                .Where(item =>
+                {
+                    if (item.Value?.Base == null)
+                    {
+                        return false;
+                    }
+                    var itemBase = item.Value.Base;
+                    if (weaponsOnly)
+                    {
+                        return itemBase.EnhancementThreshold > 0;
+                    }
+
+                    return itemBase.WeaponUpgrades.Keys.Count > 0;
+                })
                 .ToArray();
 
             var idx = 0;
-            foreach (var invItem in playerWeapons)
+            foreach (var invItem in playerEquipment)
             {
-                var weapon = invItem.Value;
+                var equipmentItem = invItem.Value;
                 var invSlot = invItem.Key;
-                if (weapon.Base.Id == Guid.Empty)
+                if (equipmentItem.Base.Id == Guid.Empty)
                 {
                     continue;
                 }
@@ -102,11 +118,11 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
                 var item = new WeaponPickerWeaponComponent(WeaponContainer,
                     $"EnhancementItem_{idx}",
                     "inventoryitem.png",
-                    weapon.Base.Icon,
+                    equipmentItem.Base.Icon,
                     Framework.File_Management.GameContentManager.TextureType.Item,
                     1,
                     4,
-                    weapon,
+                    equipmentItem,
                     invSlot,
                     Background.X,
                     Background.Y

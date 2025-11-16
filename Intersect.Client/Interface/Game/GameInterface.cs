@@ -827,7 +827,7 @@ namespace Intersect.Client.Interface.Game
         public DeconstructorWindow DeconstructorWindow;
         public EnhancementWindow EnhancementWindow;
         public UpgradeStationWindow UpgradeStationWindow;
-        public WeaponPickerWindow WeaponPickerWindow;
+        public EquipmentPickerWindow WeaponPickerWindow;
         public ClanWarScoreboard ClanWarScorePanel;
         public ClanWarCompletionWindow ClanWarCompletionWindow;
         private CharacterPanelType _CurrentCharPanel;
@@ -852,7 +852,7 @@ namespace Intersect.Client.Interface.Game
             DeconstructorWindow = new DeconstructorWindow(gameCanvas);
             EnhancementWindow = new EnhancementWindow(gameCanvas);
             UpgradeStationWindow = new UpgradeStationWindow(gameCanvas);
-            WeaponPickerWindow = new WeaponPickerWindow(gameCanvas);
+            WeaponPickerWindow = new EquipmentPickerWindow(gameCanvas);
         }
 
         private void _Draw()

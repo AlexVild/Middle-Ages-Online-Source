@@ -136,6 +136,8 @@ namespace Intersect.Editor.Forms.Editors
             this.nudEnhanceThresh = new DarkUI.Controls.DarkNumericUpDown();
             this.lblEnhancementThres = new System.Windows.Forms.Label();
             this.grpDeconstruction = new DarkUI.Controls.DarkGroupBox();
+            this.cmbOnDecon = new DarkUI.Controls.DarkComboBox();
+            this.lblDeconEvent = new System.Windows.Forms.Label();
             this.btnFuelReqRecc = new DarkUI.Controls.DarkButton();
             this.nudStudyChance = new DarkUI.Controls.DarkNumericUpDown();
             this.lblStudyChance = new System.Windows.Forms.Label();
@@ -368,8 +370,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.lblDeconEvent = new System.Windows.Forms.Label();
-            this.cmbOnDecon = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -1681,7 +1681,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpEquipment.Name = "grpEquipment";
             this.grpEquipment.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpEquipment.Size = new System.Drawing.Size(1098, 1791);
+            this.grpEquipment.Size = new System.Drawing.Size(1098, 1863);
             this.grpEquipment.TabIndex = 12;
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
@@ -1990,6 +1990,38 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDeconstruction.TabIndex = 121;
             this.grpDeconstruction.TabStop = false;
             this.grpDeconstruction.Text = "Deconstruction";
+            // 
+            // cmbOnDecon
+            // 
+            this.cmbOnDecon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbOnDecon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbOnDecon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbOnDecon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbOnDecon.DrawDropdownHoverOutline = false;
+            this.cmbOnDecon.DrawFocusRectangle = false;
+            this.cmbOnDecon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbOnDecon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOnDecon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbOnDecon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbOnDecon.FormattingEnabled = true;
+            this.cmbOnDecon.Location = new System.Drawing.Point(12, 574);
+            this.cmbOnDecon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbOnDecon.Name = "cmbOnDecon";
+            this.cmbOnDecon.Size = new System.Drawing.Size(295, 27);
+            this.cmbOnDecon.TabIndex = 126;
+            this.cmbOnDecon.Text = null;
+            this.cmbOnDecon.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbOnDecon.SelectedIndexChanged += new System.EventHandler(this.cmbOnDecon_SelectedIndexChanged);
+            // 
+            // lblDeconEvent
+            // 
+            this.lblDeconEvent.AutoSize = true;
+            this.lblDeconEvent.Location = new System.Drawing.Point(12, 542);
+            this.lblDeconEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDeconEvent.Name = "lblDeconEvent";
+            this.lblDeconEvent.Size = new System.Drawing.Size(166, 20);
+            this.lblDeconEvent.TabIndex = 125;
+            this.lblDeconEvent.Text = "On Deconstruct Event";
             // 
             // btnFuelReqRecc
             // 
@@ -5372,38 +5404,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Size = new System.Drawing.Size(34, 33);
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
-            // 
-            // lblDeconEvent
-            // 
-            this.lblDeconEvent.AutoSize = true;
-            this.lblDeconEvent.Location = new System.Drawing.Point(12, 542);
-            this.lblDeconEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblDeconEvent.Name = "lblDeconEvent";
-            this.lblDeconEvent.Size = new System.Drawing.Size(166, 20);
-            this.lblDeconEvent.TabIndex = 125;
-            this.lblDeconEvent.Text = "On Deconstruct Event";
-            // 
-            // cmbOnDecon
-            // 
-            this.cmbOnDecon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbOnDecon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbOnDecon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbOnDecon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbOnDecon.DrawDropdownHoverOutline = false;
-            this.cmbOnDecon.DrawFocusRectangle = false;
-            this.cmbOnDecon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbOnDecon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbOnDecon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbOnDecon.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbOnDecon.FormattingEnabled = true;
-            this.cmbOnDecon.Location = new System.Drawing.Point(12, 574);
-            this.cmbOnDecon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbOnDecon.Name = "cmbOnDecon";
-            this.cmbOnDecon.Size = new System.Drawing.Size(295, 27);
-            this.cmbOnDecon.TabIndex = 126;
-            this.cmbOnDecon.Text = null;
-            this.cmbOnDecon.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbOnDecon.SelectedIndexChanged += new System.EventHandler(this.cmbOnDecon_SelectedIndexChanged);
             // 
             // FrmItem
             // 
