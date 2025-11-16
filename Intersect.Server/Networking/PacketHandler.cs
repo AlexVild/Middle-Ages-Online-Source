@@ -4706,22 +4706,22 @@ namespace Intersect.Server.Networking
             // Client sends -1 if the player just cancels the picker
             if (packet.SelectedSlot < 0)
             {
-                player.CloseWeaponPicker();
+                player.CloseEquipmentPicker();
                 return;
             }
 
-            if (player.WeaponPicker == default)
+            if (player.EquipmentPicker == default)
             {
                 Log.Error($"No weapon picker existed for player {player.Name} when receiving a selection packet!");
             }
 
-            if (!player.WeaponPicker.TryChooseWeapon(packet.SelectedSlot))
+            if (!player.EquipmentPicker.TryChooseWeapon(packet.SelectedSlot))
             {
-                player.CloseWeaponPicker();
+                player.CloseEquipmentPicker();
                 return;
             }
 
-            player.WeaponPicker.OpenNextInterface();
+            player.EquipmentPicker.OpenNextInterface();
         }
 
         public void HandlePacket(Client client, WishlistAddPacket packet)

@@ -2893,7 +2893,7 @@ namespace Intersect.Client.Networking
 
             Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
 
-            WeaponPickerController.TryGetSelectedWeapon(out var weapon);
+            EquipmentPickerController.TryGetSelectedWeapon(out var weapon);
             Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier, weapon);
         }
 
@@ -3000,7 +3000,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            WeaponPickerController.ResultType = packet.ResultType;
+            EquipmentPickerController.ResultType = packet.ResultType;
             Interface.Interface.GameUi.ShowWeaponPicker();
         }
 

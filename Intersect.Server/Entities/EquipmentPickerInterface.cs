@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
-    public class WeaponPickerInterface
+    public class EquipmentPickerInterface
     {
         public int SelectedInventorySlot { get; set; }
 
@@ -23,7 +23,7 @@ namespace Intersect.Server.Entities
 
         private float CostMultiplier { get; set; }
 
-        public WeaponPickerInterface(Player owner, WeaponPickerResult resultType, Guid currencyId, float costMultiplier)
+        public EquipmentPickerInterface(Player owner, WeaponPickerResult resultType, Guid currencyId, float costMultiplier)
         {
             Owner = owner;
             ResultType = resultType;
@@ -50,7 +50,8 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (item.Descriptor.ItemType != ItemTypes.Equipment || item.Descriptor.EquipmentSlot != Options.WeaponIndex)
+            var weaponOnly = ResultType == WeaponPickerResult.Enhancement;
+            if (item.Descriptor.ItemType != ItemTypes.Equipment || (weaponOnly && item.Descriptor.EquipmentSlot != Options.WeaponIndex))
             {
                 Owner.SendDialogNotice($"The item at slot {invSlot} is not a weapon!");
                 Logging.Log.Error($"The item at slot {invSlot} is not a weapon for player {Owner.Name}!");

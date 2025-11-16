@@ -530,7 +530,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     }
                 }
             }
-
+            
             if (mItem.Fuel > 0)
             {
                 data.Add(new Tuple<string, string>("Fuel Stored", mItem.Fuel.ToString("N0")));
@@ -562,6 +562,18 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             description.AddText(Strings.ItemDescription.Restriction, CustomColors.ItemDesc.Notice);
             description.AddLineBreak();
             description.AddText(string.Join(" ", mItem.RestrictionStrings), CustomColors.ItemDesc.Notice);
+        }
+
+        protected void SetupUpgradeInfo()
+        {
+            if (mItem.WeaponUpgrades.Keys.Count <= 0)
+            {
+                return;
+            }
+
+            var description = AddDescription();
+
+            description.AddText("Upgradable", CustomColors.ItemDesc.Notice);
         }
 
         protected void SetupCosmeticInfo()

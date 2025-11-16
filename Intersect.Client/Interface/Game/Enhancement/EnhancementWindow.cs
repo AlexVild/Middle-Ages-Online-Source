@@ -151,7 +151,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 return;
             }
 
-            if (!WeaponPickerController.TryGetSelectedWeapon(out var equippedWeapon))
+            if (!EquipmentPickerController.TryGetSelectedWeapon(out var equippedWeapon))
             {
 #pragma warning disable CA2000 // Dispose objects before losing scope
                 _ = new InputBox(

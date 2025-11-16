@@ -776,8 +776,8 @@ namespace Intersect.Client.Networking
 
         public static void SendWeaponPickerResponse(int invSlot)
         {
-            WeaponPickerController.SelectedInventorySlot = invSlot;
-            Network.SendPacket(new WeaponPickerResponsePacket(WeaponPickerController.SelectedInventorySlot));
+            EquipmentPickerController.SelectedInventorySlot = invSlot;
+            Network.SendPacket(new WeaponPickerResponsePacket(EquipmentPickerController.SelectedInventorySlot));
             Interface.Interface.GameUi.HideWeaponPicker();
         }
 

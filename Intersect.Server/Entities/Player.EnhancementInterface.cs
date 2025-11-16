@@ -10,13 +10,13 @@ namespace Intersect.Server.Entities
     public partial class Player : AttackingEntity
     {
         [NotMapped, JsonIgnore]
-        public bool EnhancementOpen => Enhancement != default || WeaponPicker != default;
+        public bool EnhancementOpen => Enhancement != default || EquipmentPicker != default;
 
         [NotMapped, JsonIgnore]
         public EnhancementInterface Enhancement { get; set; }
 
         [NotMapped, JsonIgnore]
-        public bool UpgradeStationOpen => UpgradeStation != default || WeaponPicker != default;
+        public bool UpgradeStationOpen => UpgradeStation != default || EquipmentPicker != default;
 
         [NotMapped, JsonIgnore]
         public ItemUpgradeInterface UpgradeStation { get; set; }
@@ -24,21 +24,21 @@ namespace Intersect.Server.Entities
         public bool EnhancementTutorialDone { get; set; } = false;
 
         [NotMapped, JsonIgnore]
-        public WeaponPickerInterface WeaponPicker { get; set; }
+        public EquipmentPickerInterface EquipmentPicker { get; set; }
 
         public bool TryGetWeaponPicked(out Item weaponPicked)
         {
             weaponPicked = null;
 
-            if (WeaponPicker == null)
+            if (EquipmentPicker == null)
             {
                 Logging.Log.Error($"Tried to get a weapon picked while WeaponPicker was null for player {Name}.");
                 return false;
             }
 
-            weaponPicked = WeaponPicker.SelectedItem;
+            weaponPicked = EquipmentPicker.SelectedItem;
 
-            return WeaponPicker.SelectedItem != default;
+            return EquipmentPicker.SelectedItem != default;
         }
 
         public void OpenEnhancement(Guid currencyId, float multiplier)
@@ -50,7 +50,7 @@ namespace Intersect.Server.Entities
         public void CloseEnhancement()
         {
             Enhancement = null;
-            CloseWeaponPicker();
+            CloseEquipmentPicker();
         }
 
         public void OpenUpgradeStation(Guid currencyId, float multiplier)
@@ -62,18 +62,18 @@ namespace Intersect.Server.Entities
         public void CloseUpgradeStation()
         {
             UpgradeStation = null;
-            CloseWeaponPicker();
+            CloseEquipmentPicker();
         }
 
-        public void OpenWeaponPicker(WeaponPickerResult resultType, Guid currencyId, float costMultiplier)
+        public void OpenEquipmentPicker(WeaponPickerResult resultType, Guid currencyId, float costMultiplier)
         {
-            WeaponPicker = new WeaponPickerInterface(this, resultType, currencyId, costMultiplier);
+            EquipmentPicker = new EquipmentPickerInterface(this, resultType, currencyId, costMultiplier);
             PacketSender.SendOpenWeaponPicker(this, resultType);
         }
 
-        public void CloseWeaponPicker()
+        public void CloseEquipmentPicker()
         {
-            WeaponPicker = null;
+            EquipmentPicker = null;
         }
     }
 }
