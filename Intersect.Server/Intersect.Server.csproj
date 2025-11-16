@@ -1563,6 +1563,10 @@
     <Compile Include="Migrations\Game\20251101161843_NpcDirControlMigration.Designer.cs">
       <DependentUpon>20251101161843_NpcDirControlMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20251116024143_ItemDeconEventMigration.cs" />
+    <Compile Include="Migrations\Game\20251116024143_ItemDeconEventMigration.Designer.cs">
+      <DependentUpon>20251116024143_ItemDeconEventMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

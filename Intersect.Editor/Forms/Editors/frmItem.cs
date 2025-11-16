@@ -210,6 +210,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
 
+            cmbOnDecon.Items.Clear();
+            cmbOnDecon.Items.Add(Strings.General.none);
+            cmbOnDecon.Items.AddRange(EventBase.Names);
+
             cmbEnhancement.Items.Clear();
             cmbEnhancement.Items.Add(Strings.General.none);
             cmbEnhancement.Items.AddRange(EnhancementDescriptor.Names);
@@ -651,6 +655,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudFuel.Value = mEditorItem.Fuel;
                 nudReqFuel.Value = mEditorItem.FuelRequired;
                 nudWeaponCraftExp.Value = mEditorItem.CraftWeaponExp;
+                cmbOnDecon.SelectedIndex = EventBase.ListIndex(mEditorItem.OnDeconstructEventId) + 1;
                 RefreshDeconLoot(false);
 
                 RefreshUpgradeList(false);
@@ -2505,6 +2510,16 @@ namespace Intersect.Editor.Forms.Editors
             mUpdatingEffect = true;
             nudEffectPercent.Value = mEditorItem.GetEffectPercentage(effect);
             mUpdatingEffect = false;
+        }
+
+        private void cmbOnDecon_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mEditorItem == null)
+            {
+                return;
+            }
+
+            mEditorItem.OnDeconstructEventId = EventBase.IdFromList(cmbOnDecon.SelectedIndex - 1);
         }
     }
 }
