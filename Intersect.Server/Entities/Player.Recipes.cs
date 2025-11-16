@@ -62,7 +62,7 @@ namespace Intersect.Server.Entities
             var msg = $"You've completed a crafting challenge: {recipeName}!";
             if (recipeType != RecipeCraftType.Other && recipeType != null)
             {
-                msg = $"You've unlocked a {recipeType.GetDescription()} challenge: {recipeName}!";
+                msg = $"You've completed a {recipeType.GetDescription()} challenge: {recipeName}!";
             }
             PacketSender.SendChatMsg(this, msg, Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
         }
