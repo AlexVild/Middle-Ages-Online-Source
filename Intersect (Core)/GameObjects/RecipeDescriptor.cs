@@ -37,11 +37,14 @@ namespace Intersect.GameObjects
         [Description("Alchemy")]
         Alchemy,
 
-        [Description("Ritual")]
+        [Description("Spellcraft & Rituals")]
         MageCraft,
 
         [Description("Mage Craft")]
         MageSmithing,
+        
+        [Description("Dungeon Craft")]
+        DungeonCraft,
     }
 
     public enum RecipeTrigger
