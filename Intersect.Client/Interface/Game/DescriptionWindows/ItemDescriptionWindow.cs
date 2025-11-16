@@ -336,15 +336,24 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var descriptionTxt = Strings.ItemDescription.Description.ToString(mItem.Description);
             description.AddText(descriptionTxt, Color.White);
 
-            if (!string.IsNullOrEmpty(mItemProperties.CraftedBy) && mItem.ItemType == ItemTypes.Equipment)
+            if (mItem.ItemType == ItemTypes.Equipment)
             {
-                if (mItemProperties.CraftedById == Globals.Me.Id)
+                if (mItem.WeaponUpgrades.Keys.Count <= 0)
                 {
-                    description.AddText($" [Crafted by you.]", CustomColors.ItemDesc.Muted);
+                    return;
                 }
-                else
+                description.AddText(" Upgradable.", CustomColors.ItemDesc.Notice);
+                
+                if (!string.IsNullOrEmpty(mItemProperties.CraftedBy))
                 {
-                    description.AddText($" [Crafted by {mItemProperties.CraftedBy}.]", CustomColors.ItemDesc.Muted);
+                    if (mItemProperties.CraftedById == Globals.Me.Id)
+                    {
+                        description.AddText($" [Crafted by you.]", CustomColors.ItemDesc.Muted);
+                    }
+                    else
+                    {
+                        description.AddText($" [Crafted by {mItemProperties.CraftedBy}.]", CustomColors.ItemDesc.Muted);
+                    }
                 }
             }
         }
@@ -562,18 +571,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             description.AddText(Strings.ItemDescription.Restriction, CustomColors.ItemDesc.Notice);
             description.AddLineBreak();
             description.AddText(string.Join(" ", mItem.RestrictionStrings), CustomColors.ItemDesc.Notice);
-        }
-
-        protected void SetupUpgradeInfo()
-        {
-            if (mItem.WeaponUpgrades.Keys.Count <= 0)
-            {
-                return;
-            }
-
-            var description = AddDescription();
-
-            description.AddText("Upgradable", CustomColors.ItemDesc.Notice);
         }
 
         protected void SetupCosmeticInfo()

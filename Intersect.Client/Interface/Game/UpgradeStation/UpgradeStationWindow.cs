@@ -37,6 +37,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
 
         private ImagePanel UpgradingBg { get; set; }
         private Label NoCraftsLabel { get; set; }
+        private Label RequirementsLabel { get; set; }
 
         private ImagePanel ItemIcon { get; set; }
         private EnhancementItemIcon ItemIconComponent { get; set;}
@@ -89,6 +90,10 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             NoCraftsLabel = new Label(UpgradeListContainer, "NoCraftsLabel")
             {
                 Text = "No upgrades available!"
+            };
+            RequirementsLabel = new Label(Background, "RequirementsLabel")
+            {
+                IsHidden = true
             };
 
             UpgradeBg = new ImagePanel(Background, "UpgradeBg");
@@ -331,6 +336,16 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
         {
             var craftId = (Guid)((ListBoxRow)sender).UserData;
             UpgradeStation.SelectedCraftId = craftId;
+            
+            if (CraftBase.TryGet(craftId, out var craft) && craft.Requirements.Count > 0) 
+            {
+                RequirementsLabel.Show();
+                RequirementsLabel.Text = $"Requires: {string.Join(" ", craft.RequirementStrings)}";
+            }
+            else
+            {
+                RequirementsLabel.Hide();
+            }
         }
 
         public void ProcessCompletedUpgrade(Guid upgradedItemId, ItemProperties properties)
