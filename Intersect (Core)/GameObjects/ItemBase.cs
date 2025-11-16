@@ -735,6 +735,22 @@ namespace Intersect.GameObjects
                 return slotMod;
             }
         }
+
+        public Guid OnDeconstructEventId { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public EventBase OnDeconstructEvent
+        {
+            get
+            {
+                return EventBase.Get(OnDeconstructEventId);
+            }
+
+            set
+            {
+                OnDeconstructEventId = value?.Id ?? Guid.Empty;
+            }
+        }
     }
 
 }

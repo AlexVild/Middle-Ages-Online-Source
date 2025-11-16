@@ -368,6 +368,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.lblDeconEvent = new System.Windows.Forms.Label();
+            this.cmbOnDecon = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -1811,7 +1813,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUpgrades.Controls.Add(this.nudUpgradeCost);
             this.grpUpgrades.Controls.Add(this.lblUpgradeCost);
             this.grpUpgrades.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpUpgrades.Location = new System.Drawing.Point(651, 1468);
+            this.grpUpgrades.Location = new System.Drawing.Point(651, 1530);
             this.grpUpgrades.Name = "grpUpgrades";
             this.grpUpgrades.Size = new System.Drawing.Size(318, 311);
             this.grpUpgrades.TabIndex = 123;
@@ -1964,6 +1966,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDeconstruction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDeconstruction.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDeconstruction.Controls.Add(this.cmbOnDecon);
+            this.grpDeconstruction.Controls.Add(this.lblDeconEvent);
             this.grpDeconstruction.Controls.Add(this.btnFuelReqRecc);
             this.grpDeconstruction.Controls.Add(this.nudStudyChance);
             this.grpDeconstruction.Controls.Add(this.lblStudyChance);
@@ -1982,7 +1986,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDeconstruction.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDeconstruction.Location = new System.Drawing.Point(651, 909);
             this.grpDeconstruction.Name = "grpDeconstruction";
-            this.grpDeconstruction.Size = new System.Drawing.Size(318, 552);
+            this.grpDeconstruction.Size = new System.Drawing.Size(318, 611);
             this.grpDeconstruction.TabIndex = 121;
             this.grpDeconstruction.TabStop = false;
             this.grpDeconstruction.Text = "Deconstruction";
@@ -5369,6 +5373,38 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // lblDeconEvent
+            // 
+            this.lblDeconEvent.AutoSize = true;
+            this.lblDeconEvent.Location = new System.Drawing.Point(12, 542);
+            this.lblDeconEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDeconEvent.Name = "lblDeconEvent";
+            this.lblDeconEvent.Size = new System.Drawing.Size(166, 20);
+            this.lblDeconEvent.TabIndex = 125;
+            this.lblDeconEvent.Text = "On Deconstruct Event";
+            // 
+            // cmbOnDecon
+            // 
+            this.cmbOnDecon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbOnDecon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbOnDecon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbOnDecon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbOnDecon.DrawDropdownHoverOutline = false;
+            this.cmbOnDecon.DrawFocusRectangle = false;
+            this.cmbOnDecon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbOnDecon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOnDecon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbOnDecon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbOnDecon.FormattingEnabled = true;
+            this.cmbOnDecon.Location = new System.Drawing.Point(12, 574);
+            this.cmbOnDecon.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbOnDecon.Name = "cmbOnDecon";
+            this.cmbOnDecon.Size = new System.Drawing.Size(295, 27);
+            this.cmbOnDecon.TabIndex = 126;
+            this.cmbOnDecon.Text = null;
+            this.cmbOnDecon.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbOnDecon.SelectedIndexChanged += new System.EventHandler(this.cmbOnDecon_SelectedIndexChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -5861,5 +5897,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpPermabuffOpts;
         private Label lblPbUnlockHint;
         private DarkTextBox txtPbUnlockHint;
+        private DarkComboBox cmbOnDecon;
+        private Label lblDeconEvent;
     }
 }

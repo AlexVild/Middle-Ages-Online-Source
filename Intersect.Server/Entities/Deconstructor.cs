@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
@@ -110,6 +111,7 @@ namespace Intersect.Server.Entities
             Dictionary<Guid, long> expEarned = new Dictionary<Guid, long>();
             List<Guid> enhancementsLearned = new List<Guid>();
             List<Guid> cosmeticsEarned = new List<Guid>();
+            List<EventBase> deconEvents = new List<EventBase>();
             var totalScraps = 0;
             foreach (var slot in slotsToRemoveFrom)
             {
@@ -151,6 +153,12 @@ namespace Intersect.Server.Entities
                     {
                         cosmeticsEarned.Add(item.Id);
                     }
+                }
+                
+                // Queue up events
+                if (item.OnDeconstructEventId != Guid.Empty)
+                {
+                    deconEvents.Add(item.OnDeconstructEvent);
                 }
             }
 
@@ -200,6 +208,11 @@ namespace Intersect.Server.Entities
             if (newCosmetic)
             {
                 PacketSender.SendUnlockedCosmeticsPacket(Owner);
+            }
+
+            foreach (var evt in deconEvents)
+            {
+                Owner.EnqueueStartCommonEvent(evt);
             }
 
             // We are now waiting on the loot roll instead of the deconstructor being closed
