@@ -864,6 +864,7 @@ namespace Intersect.Server.Entities.Events
 
             player.NextInstanceLives = command.SharedLives - 1;
             player.NextDungeonId = command.DungeonId;
+            player.SkipMapTransitions = command.DoNotForceFadeIn;
             if (command.ChangeInstance)
             {
                 player.Warp(
@@ -1214,6 +1215,7 @@ namespace Intersect.Server.Entities.Events
         )
         {
             instance.HoldingPlayer = false;
+            player?.PermaHeld = false;
             PacketSender.SendReleasePlayer(player, instance.BaseEvent.Id);
         }
 
@@ -4023,6 +4025,18 @@ namespace Intersect.Server.Entities.Events
                     npc.ProcSpellInterruptExhaustion(command.DurationMs);
                 }
             }
+        }
+
+        private static void ProcessCommand(
+          PermaHoldPlayer command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+        )
+        {
+            player?.PermaHeld = true;
+            player.SendPacket(new PermaHoldPlayerPacket());
         }
     }
 }

@@ -53,6 +53,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbDirection.SelectedIndex = (int) mMyCommand.Direction;
             chkChangeInstance.Checked = mMyCommand.ChangeInstance;
             grpInstanceSettings.Visible = chkChangeInstance.Checked;
+            chkForceFade.Checked = chkChangeInstance.Checked;
             
             // We do not want to iterate over the "NoChange" enum - so we subtract 1 from the iterating maximum
             for (var i = 0; i < Enum.GetNames(typeof(MapInstanceType)).Length - 1; i++)
@@ -120,6 +121,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.DungeonId = DungeonDescriptor.IdFromList(cmbDungeon.SelectedIndex - 1);
             mMyCommand.Sound= TextUtils.SanitizeNone(cmbSound?.Text);
             mMyCommand.SharedLives = (int)nudSharedLives.Value;
+            mMyCommand.DoNotForceFadeIn = chkForceFade.Checked;
             
             mEventEditor.FinishCommandEdit();
         }

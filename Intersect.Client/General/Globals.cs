@@ -56,6 +56,7 @@ namespace Intersect.Client.General
         public static long LastDialogClosed = 0;
 
         public static Dictionary<Guid, Guid> EventHolds = new Dictionary<Guid, Guid>();
+        public static bool EventPermaHold = false;
         public static long EventHoldWidescreenTime = 0;
 
         //Game Lock

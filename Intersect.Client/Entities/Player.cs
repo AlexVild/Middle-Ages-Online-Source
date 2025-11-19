@@ -244,7 +244,7 @@ namespace Intersect.Client.Entities
 
         public bool InCutscene()
         {
-            return (Globals.EventHolds.Count > 0 && Globals.EventHoldWidescreenTime < Timing.Global.Milliseconds) || Globals.MoveRouteActive || IsDead;
+            return (Globals.EventHolds.Count > 0 && Globals.EventHoldWidescreenTime < Timing.Global.Milliseconds) || Globals.MoveRouteActive || IsDead || Globals.EventPermaHold;
         }
 
         public bool IsBusy()
@@ -262,6 +262,7 @@ namespace Intersect.Client.Entities
                      (!Globals.Me.Deconstructor?.IsOpen ?? true) &&
                      (!Globals.Me.Enhancement?.IsOpen ?? true) &&
                      (!Globals.Me.UpgradeStation?.IsOpen ?? true) &&
+                     !Globals.EventPermaHold &&
                      (!Interface.Interface.GameUi?.WeaponPickerOpen ?? true) &&
                      !Interface.Interface.HasInputFocus());
         }

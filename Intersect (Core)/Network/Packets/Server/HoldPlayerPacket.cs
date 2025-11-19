@@ -29,4 +29,12 @@ namespace Intersect.Network.Packets.Server
 
     }
 
+    [MessagePackObject]
+    public class PermaHoldPlayerPacket : IntersectPacket
+    {
+        //Parameterless Constructor for MessagePack
+        public PermaHoldPlayerPacket()
+        {
+        }
+    }
 }

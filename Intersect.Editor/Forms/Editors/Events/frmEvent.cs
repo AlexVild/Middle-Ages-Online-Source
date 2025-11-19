@@ -926,6 +926,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ForceNpcExhaustion();
                     break;
 
+                case EventCommandType.PermaHoldPlayer:
+                    tmpCommand = new PermaHoldPlayer();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1482,6 +1487,8 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case EventCommandType.HidePlayer:
                     break;
                 case EventCommandType.ShowPlayer:
+                    break;
+                case EventCommandType.PermaHoldPlayer:
                     break;
                 case EventCommandType.SpawnNpc:
                     cmdWindow = new EventCommandSpawnNpc(this, mCurrentMap, MyEvent, (SpawnNpcCommand) command);
