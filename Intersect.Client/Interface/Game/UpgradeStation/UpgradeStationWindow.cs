@@ -188,6 +188,8 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             var currTxt = UpgradeStation.Currency?.Icon ?? string.Empty;
             CurrencyIcon.Texture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Item, currTxt);
 
+            RequirementsLabel.Hide();
+
             RefreshCraftList();
 
             base.Show();
@@ -284,7 +286,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
                 return;
             }
 
-            CostLabel.SetText($"{(int)Math.Floor(cost * UpgradeStation.CostMultiplier)}");
+            CostLabel.SetText($"{((int)Math.Floor(cost * UpgradeStation.CostMultiplier)).ToString("N0")}");
         }
 
         private void RefreshCraftInfo() 
