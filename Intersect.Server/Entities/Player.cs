@@ -485,6 +485,7 @@ namespace Intersect.Server.Entities
 
             ReprocessEnhancements();
             ValidateCurrentWeaponLevels();
+            PermaHeld = false;
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -2147,10 +2148,11 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEntityPositionToAll(this);
             }
 
-            if (Options.DebugAllowMapFades && !adminWarp)
+            if (Options.DebugAllowMapFades && !adminWarp && !SkipMapTransitions)
             {
-                PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
+                PacketSender.SendFadePacket(Client, true);
             }
+            SkipMapTransitions = false;
 
             if (adminWarp)
             {
@@ -8005,7 +8007,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (PlayerDead)
+            if (PlayerDead || PermaHeld)
             {
                 return -5;
             }
@@ -10273,5 +10275,14 @@ namespace Intersect.Server.Entities
 
             ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(this, npc.Base.Id), TierLevel);
         }
+
+        /// <summary>
+        /// Used in fade events if we want to warp the player without force-fading them in. band-aid
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public bool SkipMapTransitions = false;
+
+        [NotMapped, JsonIgnore]
+        public bool PermaHeld = false;
     }
 }

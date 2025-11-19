@@ -1562,6 +1562,7 @@ namespace Intersect.Client.Networking
                 {
                     Globals.EventHolds.Remove(eventId);
                 }
+                Globals.EventPermaHold = false;
             }
         }
 
@@ -3117,6 +3118,11 @@ namespace Intersect.Client.Networking
             entity.ExhaustionStartTime = Timing.Global.MillisecondsUtc;
             entity.ExhaustionEndTime = packet.ExhaustionEndTime;
             entity.AddExhaustionAnimation();
+        }
+
+        public void HandlePacket(IPacketSender packetSender, PermaHoldPlayerPacket packet)
+        {
+            Globals.EventPermaHold = true;
         }
     }
 }

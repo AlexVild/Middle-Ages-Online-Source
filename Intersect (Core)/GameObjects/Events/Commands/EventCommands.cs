@@ -615,6 +615,8 @@ namespace Intersect.GameObjects.Events.Commands
         public string Sound { get; set; }
 
         public int SharedLives { get; set; }
+
+        public bool DoNotForceFadeIn { get; set; }
     }
 
     public class SetMoveRouteCommand : EventCommand
@@ -1601,5 +1603,13 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid NpcId { get; set; }
 
         public long DurationMs { get; set; }
+    }
+
+    /// <summary>
+    /// Used to hold a player across map transitions -- for cutscenes
+    /// </summary>
+    public partial class PermaHoldPlayer: EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.PermaHoldPlayer;
     }
 }

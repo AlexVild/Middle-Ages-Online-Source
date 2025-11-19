@@ -2275,5 +2275,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             return $"Force NPC Exhaustion: {npcName}s for {command.DurationMs}ms";
         }
+
+        private static string GetCommandText(PermaHoldPlayer command, MapInstance map)
+        {
+            return "Hold Player (Across map transitions)";
+        }
     }
 }

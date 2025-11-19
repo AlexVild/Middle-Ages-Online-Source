@@ -288,6 +288,7 @@ namespace Intersect.GameObjects.Events
         CastSpellOn, // 96
         CloseCraftingTable, // 97
         ForceNpcExhaustion, // 98
+        PermaHoldPlayer, // 99
     }
 
     public enum NPCGuildManagementSelection
