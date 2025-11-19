@@ -1215,7 +1215,10 @@ namespace Intersect.Server.Entities.Events
         )
         {
             instance.HoldingPlayer = false;
-            player?.PermaHeld = false;
+            if (player != null)
+            {
+                player.PermaHeld = false;
+            }
             PacketSender.SendReleasePlayer(player, instance.BaseEvent.Id);
         }
 
@@ -4035,7 +4038,10 @@ namespace Intersect.Server.Entities.Events
           Stack<CommandInstance> callStack
         )
         {
-            player?.PermaHeld = true;
+            if (player != null)
+            {
+                player.PermaHeld = true;
+            }
             player.SendPacket(new PermaHoldPlayerPacket());
         }
     }

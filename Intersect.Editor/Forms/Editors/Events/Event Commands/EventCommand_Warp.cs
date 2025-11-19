@@ -53,7 +53,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbDirection.SelectedIndex = (int) mMyCommand.Direction;
             chkChangeInstance.Checked = mMyCommand.ChangeInstance;
             grpInstanceSettings.Visible = chkChangeInstance.Checked;
-            chkForceFade.Checked = chkChangeInstance.Checked;
+            chkForceFade.Checked = chkForceFade.Checked;
             
             // We do not want to iterate over the "NoChange" enum - so we subtract 1 from the iterating maximum
             for (var i = 0; i < Enum.GetNames(typeof(MapInstanceType)).Length - 1; i++)
