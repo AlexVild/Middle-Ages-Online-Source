@@ -438,21 +438,27 @@ namespace Intersect.Client.Core
             DrawScanlines();
 
             // Because we want to render widescreen textures with different colors depending on the estimated background color of the map
-            if (Globals.Me.MapInstance.IsIndoors && Globals.Me.MapInstance.Brightness <= 70 || Globals.Me.MapInstance.IsIndoors)
+
+            // Alex: Uncomment widescreen stuffs if you want widescreen to be different colors again
+            if ((!Globals.Me.MapInstance.IsIndoors && Globals.Me.MapInstance.Brightness <= 50) || Globals.Me.MapInstance.IsIndoors)
             {
                 DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.White,
                     ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
-                DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), new Color(255, 20, 20, 20),
-                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
+                //DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), new Color(255, 20, 20, 20),
+                //    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
             else
             {
                 // Use a _black_ background when in lighter areas
                 DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.Black,
                     ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
-                DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
-                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
+                //DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
+                //    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
+
+            // Alex: If you want widescreens to be different colors, comment this out and uncomment above
+            DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
+                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
         }
 
         public static void DrawScanlines()
