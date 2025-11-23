@@ -969,6 +969,9 @@
     <EmbeddedResource Include="Forms\Controls\GameObjectList.resx">
       <DependentUpon>GameObjectList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\LightEditorCtrl.resx">
+      <DependentUpon>LightEditorCtrl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DockingElements\frmMapLayers.resx">
       <DependentUpon>frmMapLayers.cs</DependentUpon>
     </EmbeddedResource>
