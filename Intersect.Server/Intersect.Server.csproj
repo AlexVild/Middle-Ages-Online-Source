@@ -650,6 +650,7 @@
     <Compile Include="Entities\Pathfinding\SpatialAStar.cs" />
     <Compile Include="Entities\Pathfinding\PathfinderTarget.cs" />
     <Compile Include="Entities\Pathfinding\PriorityQueue.cs" />
+    <Compile Include="Maps\NpcWaveController.cs" />
     <Compile Include="Migrations\20210414121435_TrackUserPlayerStats.cs" />
     <Compile Include="Migrations\20210414121435_TrackUserPlayerStats.Designer.cs">
       <DependentUpon>20210414121435_TrackUserPlayerStats.cs</DependentUpon>

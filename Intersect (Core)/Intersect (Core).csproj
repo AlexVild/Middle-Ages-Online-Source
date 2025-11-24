@@ -317,6 +317,7 @@
     <Compile Include="GameObjects\ItemBase.Deconstruct.cs" />
     <Compile Include="GameObjects\LabelDescriptor.cs" />
     <Compile Include="GameObjects\LootTableDescriptor.cs" />
+    <Compile Include="GameObjects\MapBase.NpcWaves.cs" />
     <Compile Include="GameObjects\NpcBase.Champions.cs" />
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />
