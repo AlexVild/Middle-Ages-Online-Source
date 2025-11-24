@@ -645,6 +645,8 @@
     <Compile Include="Maps\MapResourceSpawn.cs" />
     <Compile Include="Maps\MapTileLoc.cs" />
     <Compile Include="Maps\MapTrapInstance.cs" />
+    <Compile Include="Maps\NpcWaveGroupInstance.cs" />
+    <Compile Include="Maps\NpcWaveInstance.cs" />
     <Compile Include="Maps\TileHelper.cs" />
     <Compile Include="Entities\Pathfinding\Pathfinder.cs" />
     <Compile Include="Entities\Pathfinding\SpatialAStar.cs" />

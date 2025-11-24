@@ -3,9 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.GameObjects.Maps
 {
@@ -64,11 +61,11 @@ namespace Intersect.GameObjects.Maps
         public string NpcWaveGroupsJson
         {
             get => JsonConvert.SerializeObject(NpcWaveGroups);
-            set => NpcWaveGroups = JsonConvert.DeserializeObject<Dictionary<Guid, NpcWaveGroupDescriptor>>(value ?? string.Empty) ?? new Dictionary<Guid, NpcWaveGroupDescriptor>();
+            set => NpcWaveGroups = JsonConvert.DeserializeObject<List<NpcWaveGroupDescriptor>>(value ?? string.Empty) ?? new List<NpcWaveGroupDescriptor>();
         }
 
         [NotMapped]
         [JsonProperty]
-        public Dictionary<Guid, NpcWaveGroupDescriptor> NpcWaveGroups { get; private set; } = new Dictionary<Guid, NpcWaveGroupDescriptor>();
+        public List<NpcWaveGroupDescriptor> NpcWaveGroups { get; private set; } = new List<NpcWaveGroupDescriptor>();
     }
 }

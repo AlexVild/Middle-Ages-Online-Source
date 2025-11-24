@@ -206,6 +206,7 @@ namespace Intersect.Server.Maps
                 DespawnEverything();
                 RespawnEverything();
                 InitializeTerritories();
+                InitializeNpcWaves();
 
                 // We don't want overworld maps bothering with clan wars, as they don't get
                 // .Dispose() called and might otherwise have long-hanging subscriptions
@@ -326,6 +327,7 @@ namespace Intersect.Server.Maps
                     UpdateGlobalEvents(timeMs);
                     UpdateTerritories();
                     UpdateTraps(timeMs);
+                    ProcessNpcWaves();
 
                     SendBatchedPacketsToPlayers();
                     mLastUpdateTime = timeMs;
