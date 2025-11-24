@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects.Maps
 {
 
-    public class MapBase : DatabaseObject<MapBase>
+    public partial class MapBase : DatabaseObject<MapBase>
     {
         [NotMapped]
         [JsonIgnore]

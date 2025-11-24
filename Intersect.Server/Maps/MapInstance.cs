@@ -1688,7 +1688,19 @@ namespace Intersect.Server.Maps
             }
         }
 
-        private bool NpcHasEnoughPlayersToSpawn(int spawnIndex)
+        public bool NpcHasEnoughPlayersToSpawn(int spawnIndex)
+        {
+            var spawns = mMapController.Spawns;
+
+            if (spawnIndex >= spawns.Count || spawnIndex < 0)
+            {
+                return true;
+            }
+
+            return NpcHasEnoughPlayersToSpawn(spawns[spawnIndex]);
+        }
+
+        public bool NpcHasEnoughPlayersToSpawn(NpcSpawn spawn)
         {
             int playersOnInstanceId;
             if (!InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
@@ -1699,14 +1711,8 @@ namespace Intersect.Server.Maps
             {
                 playersOnInstanceId = instanceController.PlayerCount;
             }
-            var spawns = mMapController.Spawns;
 
-            if (spawnIndex >= spawns.Count || spawnIndex < 0)
-            {
-                return true;
-            }
-
-            return spawns[spawnIndex].RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= spawns[spawnIndex].RequiredPlayersToSpawn;
+            return spawn.RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= spawn.RequiredPlayersToSpawn;
         }
 
         /// <summary>
