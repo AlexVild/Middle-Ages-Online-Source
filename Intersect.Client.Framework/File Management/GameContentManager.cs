@@ -751,7 +751,7 @@ namespace Intersect.Client.Framework.File_Management
                 foreach (var musicFileName in MusicPacks.FileList)
                 {
                     var musicName = RemoveExtension(musicFileName).ToLowerInvariant();
-                    if (!mSoundDict.TryAdd(musicName, LoadMusicSource(musicFileName, musicFileName)))
+                    if (!mMusicDict.TryAdd(musicName, LoadMusicSource(musicFileName, musicFileName)))
                     {
                         Log.Error($"Found two music tracks with the normalized name '{musicName}'");
                     }
