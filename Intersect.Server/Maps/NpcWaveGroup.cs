@@ -5,18 +5,19 @@ using System.Collections.Generic;
 
 namespace Intersect.Server.Maps
 {
-    public class NpcWaveGroupInstance
+    public class NpcWaveGroup
     {
         public MapInstance Map { get; set; }
         public NpcWaveGroupDescriptor Descriptor { get; set; }
         public long StartTime { get; set; }
-        public NpcWaveInstance CurrentWave { get; set; }
-        public Queue<NpcWaveInstance> WaveQueue { get; set; }
+        public NpcWave CurrentWave { get; set; }
+        public Queue<NpcWave> WaveQueue { get; set; }
+        public bool Started { get; set; }
         public bool Completed { get; set; }
         public Action OnComplete { get; set; }
         public long StartNextWaveTimestamp { get; set; }
 
-        public NpcWaveGroupInstance(MapInstance map, NpcWaveGroupDescriptor descriptor, Action onComplete = null)
+        public NpcWaveGroup(MapInstance map, NpcWaveGroupDescriptor descriptor, Action onComplete = null)
         {
             if (map == null || descriptor == null)
             {
@@ -27,19 +28,31 @@ namespace Intersect.Server.Maps
             Descriptor = descriptor;
             StartTime = Timing.Global.Milliseconds;
             Completed = false;
+            Started = false;
 
-            WaveQueue = new Queue<NpcWaveInstance>();
+            WaveQueue = new Queue<NpcWave>();
             foreach (var waveDesc in descriptor.Waves)
             {
-                WaveQueue.Enqueue(new NpcWaveInstance(map, waveDesc));
+                WaveQueue.Enqueue(new NpcWave(map, waveDesc));
             }
 
             OnComplete = onComplete;
         }
 
+        public void Start()
+        {
+            Started = true;
+        }
+
         public void Process()
         {
-            if (Map == null || Descriptor == null || WaveQueue.Count == 0 || Timing.Global.Milliseconds < StartNextWaveTimestamp)
+            if (Map == null || 
+                Descriptor == null || 
+                WaveQueue.Count == 0 || 
+                Timing.Global.Milliseconds < StartNextWaveTimestamp ||
+                !Started ||
+                Completed
+            )
             {
                 return;
             }
@@ -55,7 +68,7 @@ namespace Intersect.Server.Maps
                 currentWave.Start();
             }
 
-            if (currentWave.Descriptor.AdvanceOnTimeout > 0 && currentWave.WaveTimeoutExceeded())
+            if (currentWave.Descriptor.AdvanceOnTimeoutMs > 0 && currentWave.WaveTimeoutExceeded())
             {
                 NextWave(currentWave);
                 return;
@@ -68,12 +81,22 @@ namespace Intersect.Server.Maps
             }
         }
 
-        public void NextWave(NpcWaveInstance prevWave = null)
+        public void NextWave(NpcWave prevWave = null)
         {
             if (prevWave != null)
             {
                 prevWave.End();
-                StartNextWaveTimestamp = Timing.Global.Milliseconds + prevWave.Descriptor.TimeBetweenMs;
+                if (prevWave.Descriptor.TimeBetweenMs > 0)
+                {
+                    StartNextWaveTimestamp = Timing.Global.Milliseconds + prevWave.Descriptor.TimeBetweenMs;
+                }
+
+                // If this is a looping wave, do not dequeue the wave yet and just iterate the spawn group.
+                if (!prevWave.FinishedLoop)
+                {
+                    prevWave.Start();
+                    return;
+                }
             }
 
             WaveQueue.Dequeue();

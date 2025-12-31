@@ -103,6 +103,12 @@
     <Compile Include="Core\Preferences.cs" />
     <Compile Include="Core\Program.cs" />
     <Compile Include="Entities\Animation.cs" />
+    <Compile Include="Forms\AdvancedMapControls\frmNpcWaveGroups.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AdvancedMapControls\frmNpcWaveGroups.Designer.cs">
+      <DependentUpon>frmNpcWaveGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Controls\GameObjectList.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -966,6 +972,9 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Forms\AdvancedMapControls\frmNpcWaveGroups.resx">
+      <DependentUpon>frmNpcWaveGroups.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Controls\GameObjectList.resx">
       <DependentUpon>GameObjectList.cs</DependentUpon>
     </EmbeddedResource>

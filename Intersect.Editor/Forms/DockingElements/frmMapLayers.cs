@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Intersect.Config;
 using Intersect.Editor.Content;
+using Intersect.Editor.Forms.AdvancedMapControls;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
@@ -55,6 +56,8 @@ namespace Intersect.Editor.Forms.DockingElements
         private bool mTMouseDown;
 
         private bool mChanging;
+
+        private frmNpcWaveGroups frmNpcWaveGroups;
 
         public FrmMapLayers()
         {
@@ -1792,6 +1795,13 @@ namespace Intersect.Editor.Forms.DockingElements
             }
             
             spawn.SpawnHealthWatchThreshold = (int)nudHpWatch.Value;
+        }
+
+        private void btnWaveController_Click(object sender, EventArgs e)
+        {
+            frmNpcWaveGroups = new frmNpcWaveGroups(Globals.CurrentMap);
+            frmNpcWaveGroups.Show();
+            Globals.CurrentEditor = 999; // Lazy & stupid
         }
     }
 
