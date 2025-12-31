@@ -633,6 +633,7 @@
     <Compile Include="General\Time.cs" />
     <Compile Include="Localization\CommandsNamespace.cs" />
     <Compile Include="Localization\Strings.cs" />
+    <Compile Include="MapInstance.NpcWaves.cs" />
     <Compile Include="Maps\MapActionMessages.cs" />
     <Compile Include="Maps\MapAnimations.cs" />
     <Compile Include="Maps\MapEntityMovements.cs" />
@@ -645,8 +646,8 @@
     <Compile Include="Maps\MapResourceSpawn.cs" />
     <Compile Include="Maps\MapTileLoc.cs" />
     <Compile Include="Maps\MapTrapInstance.cs" />
-    <Compile Include="Maps\NpcWaveGroupInstance.cs" />
-    <Compile Include="Maps\NpcWaveInstance.cs" />
+    <Compile Include="Maps\NpcWaveGroup.cs" />
+    <Compile Include="Maps\NpcWave.cs" />
     <Compile Include="Maps\TileHelper.cs" />
     <Compile Include="Entities\Pathfinding\Pathfinder.cs" />
     <Compile Include="Entities\Pathfinding\SpatialAStar.cs" />
@@ -1569,6 +1570,10 @@
     <Compile Include="Migrations\Game\20251116024143_ItemDeconEventMigration.cs" />
     <Compile Include="Migrations\Game\20251116024143_ItemDeconEventMigration.Designer.cs">
       <DependentUpon>20251116024143_ItemDeconEventMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20251231163055_NpcWaveGroupMigration.cs" />
+    <Compile Include="Migrations\Game\20251231163055_NpcWaveGroupMigration.Designer.cs">
+      <DependentUpon>20251231163055_NpcWaveGroupMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

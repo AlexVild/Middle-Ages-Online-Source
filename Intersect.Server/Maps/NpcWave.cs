@@ -6,17 +6,21 @@ using System.Linq;
 
 namespace Intersect.Server.Maps
 {
-    public class NpcWaveInstance
+    public class NpcWave
     {
         public MapInstance Map { get; set; }
         public NpcWaveDescriptor Descriptor { get; set; }
         public long StartTime { get; set; }
         public bool HasStarted => StartTime != default;
+        public int IterationsCompleted { get; set; }
+        public bool FinishedLoop => IterationsCompleted > (Descriptor?.LoopIterations ?? 0);
 
-        public NpcWaveInstance(MapInstance map, NpcWaveDescriptor descriptor)
+        public NpcWave(MapInstance map, NpcWaveDescriptor descriptor)
         {
             Map = map;
             Descriptor = descriptor;
+            IterationsCompleted = 0;
+            StartTime = 0;
         }
 
         public void Start()
@@ -25,29 +29,24 @@ namespace Intersect.Server.Maps
 
             if (EventBase.TryGet(Descriptor.OnStartEventId, out var startEvent))
             {
-                foreach (var player in Map.GetPlayers(true))
-                {
-                    player.EnqueueStartCommonEvent(startEvent);
-                }
+                QueueEvent(startEvent);
             }
         }
 
         public void End()
         {
+            IterationsCompleted++;
             Map.ChangeSpawnGroup(Map.NpcSpawnGroup + 1, true, true, false, false);
 
-            if (EventBase.TryGet(Descriptor.OnEndEventId, out var endEvent))
+            if (FinishedLoop && EventBase.TryGet(Descriptor.OnEndEventId, out var endEvent))
             {
-                foreach (var player in Map.GetPlayers(true))
-                {
-                    player.EnqueueStartCommonEvent(endEvent);
-                }
+                QueueEvent(endEvent);
             }
         }
 
         public bool WaveTimeoutExceeded()
         {
-            return Timing.Global.Milliseconds >= StartTime + Descriptor.AdvanceOnTimeout;
+            return Timing.Global.Milliseconds >= StartTime + Descriptor.AdvanceOnTimeoutMs;
         }
 
         public bool PermadeadNpcsDead()
@@ -73,6 +72,14 @@ namespace Intersect.Server.Maps
                 .Select(spawn => spawn.Value.Entity?.PermadeathKey ?? string.Empty);
 
             return relevantSpawns.All(key => instanceController.PermadeadNpcs.Contains(key));
+        }
+
+        private void QueueEvent(EventBase evt)
+        {
+            foreach (var player in Map.GetPlayers(true))
+            {
+                player.EnqueueStartCommonEvent(evt);
+            }
         }
     }
 }

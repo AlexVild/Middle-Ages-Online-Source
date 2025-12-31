@@ -1,6 +1,6 @@
 ﻿using Intersect.GameObjects.Maps;
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Intersect.Server.Maps
@@ -10,7 +10,7 @@ namespace Intersect.Server.Maps
     /// </summary>
     public class NpcWaveController
     {
-        public ConcurrentBag<NpcWaveGroupInstance> NpcWaveGroups { get; set; }
+        public List<NpcWaveGroup> NpcWaveGroups { get; set; }
         public MapInstance Map { get; set; }
         public MapController MapController => Map.GetController();
 
@@ -26,16 +26,24 @@ namespace Intersect.Server.Maps
                 return;
             }
 
-            NpcWaveGroups = new ConcurrentBag<NpcWaveGroupInstance>();
+            NpcWaveGroups = new List<NpcWaveGroup>();
             foreach (var groupDesc in mapBase.NpcWaveGroups)
             {
-                NpcWaveGroups.Add(new NpcWaveGroupInstance(Map, groupDesc));
+                NpcWaveGroups.Add(new NpcWaveGroup(Map, groupDesc));
             }
         }
 
         public void ProcessWaves()
         {
-            foreach (var waveGroup in NpcWaveGroups.Where(group => !group.Completed).ToArray())
+            foreach (var waveGroup in NpcWaveGroups.Where(group => !group.Started).ToArray())
+            {
+                if (Map.NpcSpawnGroup == waveGroup.Descriptor?.AutoStartWave)
+                {
+                    waveGroup.Start();
+                }
+            }
+
+            foreach (var waveGroup in NpcWaveGroups.Where(group => !group.Completed && group.Started).ToArray())
             {
                 waveGroup.Process();
             }
