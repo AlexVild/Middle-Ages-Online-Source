@@ -9,8 +9,8 @@ namespace Intersect.Server.Maps
     {
         public MapInstance Map { get; set; }
         public NpcWaveGroupDescriptor Descriptor { get; set; }
-        public long StartTime { get; set; }
-        public NpcWave CurrentWave { get; set; }
+        private long StartTime { get; set; }
+        private NpcWave CurrentWave { get; set; }
         public Queue<NpcWave> WaveQueue { get; set; }
         public bool Started { get; set; }
         public bool Completed { get; set; }
@@ -33,7 +33,7 @@ namespace Intersect.Server.Maps
             WaveQueue = new Queue<NpcWave>();
             foreach (var waveDesc in descriptor.Waves)
             {
-                WaveQueue.Enqueue(new NpcWave(map, waveDesc));
+                WaveQueue.Enqueue(new NpcWave(map, waveDesc, this));
             }
 
             OnComplete = onComplete;
@@ -48,8 +48,7 @@ namespace Intersect.Server.Maps
         {
             if (Map == null || 
                 Descriptor == null || 
-                WaveQueue.Count == 0 || 
-                Timing.Global.Milliseconds < StartNextWaveTimestamp ||
+                WaveQueue.Count == 0 ||
                 !Started ||
                 Completed
             )
@@ -68,33 +67,41 @@ namespace Intersect.Server.Maps
                 currentWave.Start();
             }
 
-            if (currentWave.Descriptor.AdvanceOnTimeoutMs > 0 && currentWave.WaveTimeoutExceeded())
-            {
-                NextWave(currentWave);
-                return;
-            }
+            var goToNextWave = (currentWave.Descriptor.AdvanceOnTimeoutMs > 0 && currentWave.WaveTimeoutExceeded()) ||
+                (currentWave.Descriptor.AdvanceOnPermadeadCompletion && currentWave.PermadeadNpcsDead());
 
-            if (currentWave.Descriptor.AdvanceOnPermadeadCompletion && currentWave.PermadeadNpcsDead())
+            if (goToNextWave)
             {
-                NextWave(currentWave);
+                if (currentWave.Descriptor.TimeBetweenMs > 0 && StartNextWaveTimestamp == default)
+                {
+                    StartNextWaveTimestamp = Timing.Global.Milliseconds + currentWave.Descriptor.TimeBetweenMs;
+                }
+                
+                TryNextWave(currentWave);
                 return;
             }
         }
 
-        public void NextWave(NpcWave prevWave = null)
+        public void TryNextWave(NpcWave prevWave = null)
         {
+            // If we're in a delay period, don't proceed to the next wave yet.
+            if (Timing.Global.Milliseconds < StartNextWaveTimestamp)
+            {
+                return;
+            }
+
+            StartNextWaveTimestamp = default;
+
+            Logging.Log.Debug($"--- PROCEEDING TO NEXT WAVE...");
             if (prevWave != null)
             {
                 prevWave.End();
-                if (prevWave.Descriptor.TimeBetweenMs > 0)
-                {
-                    StartNextWaveTimestamp = Timing.Global.Milliseconds + prevWave.Descriptor.TimeBetweenMs;
-                }
 
-                // If this is a looping wave, do not dequeue the wave yet and just iterate the spawn group.
+                // If this is a looping wave, do not dequeue the wave yet
                 if (!prevWave.FinishedLoop)
                 {
-                    prevWave.Start();
+                    // Set the wave as un-started so it restarts itself
+                    prevWave.StartTime = default;
                     return;
                 }
             }
@@ -114,6 +121,12 @@ namespace Intersect.Server.Maps
             {
                 OnComplete.Invoke();
             }
+            Logging.Log.Debug($"--- WAVE GROUP COMPLETED...");
+        }
+
+        public int WavesRemaining()
+        {
+            return WaveQueue?.Count ?? 0;
         }
     }
 }

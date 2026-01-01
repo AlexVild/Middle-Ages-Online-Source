@@ -34,6 +34,24 @@
             this.btnRemoveGroup = new DarkUI.Controls.DarkButton();
             this.grpWaveGroup = new DarkUI.Controls.DarkGroupBox();
             this.grpWave = new DarkUI.Controls.DarkGroupBox();
+            this.grpEvents = new DarkUI.Controls.DarkGroupBox();
+            this.cmbLoopEndEvent = new DarkUI.Controls.DarkComboBox();
+            this.lblLoopEndEvent = new System.Windows.Forms.Label();
+            this.cmbLoopStartEvent = new DarkUI.Controls.DarkComboBox();
+            this.lblLoopStartEvent = new System.Windows.Forms.Label();
+            this.cmbEndEvent = new DarkUI.Controls.DarkComboBox();
+            this.cmbStartEvent = new DarkUI.Controls.DarkComboBox();
+            this.lblEndEvent = new System.Windows.Forms.Label();
+            this.lblStartEvent = new System.Windows.Forms.Label();
+            this.grpAdvancement = new DarkUI.Controls.DarkGroupBox();
+            this.nudTransitionTime = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblTransitionTime = new System.Windows.Forms.Label();
+            this.nudLoopIterations = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblLoop = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.nudAdvancetimeout = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkAutoAdvance = new DarkUI.Controls.DarkCheckBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnRemoveWave = new DarkUI.Controls.DarkButton();
             this.btnAddWave = new DarkUI.Controls.DarkButton();
             this.lbllWaves = new System.Windows.Forms.Label();
@@ -43,30 +61,17 @@
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.chkAutoAdvance = new DarkUI.Controls.DarkCheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.grpAdvancement = new DarkUI.Controls.DarkGroupBox();
-            this.nudAdvancetimeout = new DarkUI.Controls.DarkNumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.grpEvents = new DarkUI.Controls.DarkGroupBox();
-            this.lblStartEvent = new System.Windows.Forms.Label();
-            this.lblEndEvent = new System.Windows.Forms.Label();
-            this.cmbStartEvent = new DarkUI.Controls.DarkComboBox();
-            this.cmbEndEvent = new DarkUI.Controls.DarkComboBox();
-            this.lblLoop = new System.Windows.Forms.Label();
-            this.nudLoopIterations = new DarkUI.Controls.DarkNumericUpDown();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.lblTransitionTime = new System.Windows.Forms.Label();
-            this.nudTransitionTime = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkPersistFinal = new DarkUI.Controls.DarkCheckBox();
             this.grpWaveGroup.SuspendLayout();
             this.grpWave.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudStartWave)).BeginInit();
-            this.grpAdvancement.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAdvancetimeout)).BeginInit();
             this.grpEvents.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLoopIterations)).BeginInit();
+            this.grpAdvancement.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTransitionTime)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLoopIterations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdvancetimeout)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStartWave)).BeginInit();
             this.SuspendLayout();
             // 
             // lstWaveGroups
@@ -110,6 +115,7 @@
             // 
             this.grpWaveGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWaveGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWaveGroup.Controls.Add(this.chkPersistFinal);
             this.grpWaveGroup.Controls.Add(this.grpWave);
             this.grpWaveGroup.Controls.Add(this.btnRemoveWave);
             this.grpWaveGroup.Controls.Add(this.btnAddWave);
@@ -124,7 +130,7 @@
             this.grpWaveGroup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpWaveGroup.Name = "grpWaveGroup";
             this.grpWaveGroup.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpWaveGroup.Size = new System.Drawing.Size(586, 797);
+            this.grpWaveGroup.Size = new System.Drawing.Size(586, 922);
             this.grpWaveGroup.TabIndex = 130;
             this.grpWaveGroup.TabStop = false;
             this.grpWaveGroup.Text = "Wave Group";
@@ -140,10 +146,297 @@
             this.grpWave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpWave.Name = "grpWave";
             this.grpWave.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpWave.Size = new System.Drawing.Size(562, 478);
+            this.grpWave.Size = new System.Drawing.Size(562, 603);
             this.grpWave.TabIndex = 134;
             this.grpWave.TabStop = false;
             this.grpWave.Text = "Wave";
+            // 
+            // grpEvents
+            // 
+            this.grpEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpEvents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEvents.Controls.Add(this.cmbLoopEndEvent);
+            this.grpEvents.Controls.Add(this.lblLoopEndEvent);
+            this.grpEvents.Controls.Add(this.cmbLoopStartEvent);
+            this.grpEvents.Controls.Add(this.lblLoopStartEvent);
+            this.grpEvents.Controls.Add(this.cmbEndEvent);
+            this.grpEvents.Controls.Add(this.cmbStartEvent);
+            this.grpEvents.Controls.Add(this.lblEndEvent);
+            this.grpEvents.Controls.Add(this.lblStartEvent);
+            this.grpEvents.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEvents.Location = new System.Drawing.Point(9, 291);
+            this.grpEvents.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpEvents.Name = "grpEvents";
+            this.grpEvents.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpEvents.Size = new System.Drawing.Size(545, 302);
+            this.grpEvents.TabIndex = 136;
+            this.grpEvents.TabStop = false;
+            this.grpEvents.Text = "Events";
+            // 
+            // cmbLoopEndEvent
+            // 
+            this.cmbLoopEndEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbLoopEndEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbLoopEndEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbLoopEndEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbLoopEndEvent.DrawDropdownHoverOutline = false;
+            this.cmbLoopEndEvent.DrawFocusRectangle = false;
+            this.cmbLoopEndEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbLoopEndEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLoopEndEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbLoopEndEvent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbLoopEndEvent.FormattingEnabled = true;
+            this.cmbLoopEndEvent.Location = new System.Drawing.Point(12, 257);
+            this.cmbLoopEndEvent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbLoopEndEvent.Name = "cmbLoopEndEvent";
+            this.cmbLoopEndEvent.Size = new System.Drawing.Size(525, 27);
+            this.cmbLoopEndEvent.TabIndex = 66;
+            this.cmbLoopEndEvent.Text = null;
+            this.cmbLoopEndEvent.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbLoopEndEvent.SelectedIndexChanged += new System.EventHandler(this.cmbLoopEndEvent_SelectedIndexChanged);
+            // 
+            // lblLoopEndEvent
+            // 
+            this.lblLoopEndEvent.AutoSize = true;
+            this.lblLoopEndEvent.Location = new System.Drawing.Point(8, 232);
+            this.lblLoopEndEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLoopEndEvent.Name = "lblLoopEndEvent";
+            this.lblLoopEndEvent.Size = new System.Drawing.Size(124, 20);
+            this.lblLoopEndEvent.TabIndex = 65;
+            this.lblLoopEndEvent.Text = "Loop-End Event";
+            // 
+            // cmbLoopStartEvent
+            // 
+            this.cmbLoopStartEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbLoopStartEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbLoopStartEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbLoopStartEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbLoopStartEvent.DrawDropdownHoverOutline = false;
+            this.cmbLoopStartEvent.DrawFocusRectangle = false;
+            this.cmbLoopStartEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbLoopStartEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLoopStartEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbLoopStartEvent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbLoopStartEvent.FormattingEnabled = true;
+            this.cmbLoopStartEvent.Location = new System.Drawing.Point(12, 187);
+            this.cmbLoopStartEvent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbLoopStartEvent.Name = "cmbLoopStartEvent";
+            this.cmbLoopStartEvent.Size = new System.Drawing.Size(525, 27);
+            this.cmbLoopStartEvent.TabIndex = 64;
+            this.cmbLoopStartEvent.Text = null;
+            this.cmbLoopStartEvent.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbLoopStartEvent.SelectedIndexChanged += new System.EventHandler(this.cmbLoopStartEvent_SelectedIndexChanged);
+            // 
+            // lblLoopStartEvent
+            // 
+            this.lblLoopStartEvent.AutoSize = true;
+            this.lblLoopStartEvent.Location = new System.Drawing.Point(8, 162);
+            this.lblLoopStartEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLoopStartEvent.Name = "lblLoopStartEvent";
+            this.lblLoopStartEvent.Size = new System.Drawing.Size(130, 20);
+            this.lblLoopStartEvent.TabIndex = 63;
+            this.lblLoopStartEvent.Text = "Loop-Start Event";
+            // 
+            // cmbEndEvent
+            // 
+            this.cmbEndEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEndEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEndEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEndEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEndEvent.DrawDropdownHoverOutline = false;
+            this.cmbEndEvent.DrawFocusRectangle = false;
+            this.cmbEndEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEndEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEndEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEndEvent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEndEvent.FormattingEnabled = true;
+            this.cmbEndEvent.Location = new System.Drawing.Point(12, 115);
+            this.cmbEndEvent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbEndEvent.Name = "cmbEndEvent";
+            this.cmbEndEvent.Size = new System.Drawing.Size(525, 27);
+            this.cmbEndEvent.TabIndex = 62;
+            this.cmbEndEvent.Text = null;
+            this.cmbEndEvent.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEndEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEndEvent_SelectedIndexChanged);
+            // 
+            // cmbStartEvent
+            // 
+            this.cmbStartEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbStartEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbStartEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbStartEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbStartEvent.DrawDropdownHoverOutline = false;
+            this.cmbStartEvent.DrawFocusRectangle = false;
+            this.cmbStartEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbStartEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStartEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbStartEvent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbStartEvent.FormattingEnabled = true;
+            this.cmbStartEvent.Location = new System.Drawing.Point(12, 49);
+            this.cmbStartEvent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbStartEvent.Name = "cmbStartEvent";
+            this.cmbStartEvent.Size = new System.Drawing.Size(525, 27);
+            this.cmbStartEvent.TabIndex = 61;
+            this.cmbStartEvent.Text = null;
+            this.cmbStartEvent.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbStartEvent.SelectedIndexChanged += new System.EventHandler(this.cmbStartEvent_SelectedIndexChanged);
+            // 
+            // lblEndEvent
+            // 
+            this.lblEndEvent.AutoSize = true;
+            this.lblEndEvent.Location = new System.Drawing.Point(8, 90);
+            this.lblEndEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEndEvent.Name = "lblEndEvent";
+            this.lblEndEvent.Size = new System.Drawing.Size(109, 20);
+            this.lblEndEvent.TabIndex = 60;
+            this.lblEndEvent.Text = "On-End Event";
+            // 
+            // lblStartEvent
+            // 
+            this.lblStartEvent.AutoSize = true;
+            this.lblStartEvent.Location = new System.Drawing.Point(8, 24);
+            this.lblStartEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblStartEvent.Name = "lblStartEvent";
+            this.lblStartEvent.Size = new System.Drawing.Size(115, 20);
+            this.lblStartEvent.TabIndex = 59;
+            this.lblStartEvent.Text = "On-Start Event";
+            // 
+            // grpAdvancement
+            // 
+            this.grpAdvancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAdvancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdvancement.Controls.Add(this.nudTransitionTime);
+            this.grpAdvancement.Controls.Add(this.lblTransitionTime);
+            this.grpAdvancement.Controls.Add(this.nudLoopIterations);
+            this.grpAdvancement.Controls.Add(this.lblLoop);
+            this.grpAdvancement.Controls.Add(this.label3);
+            this.grpAdvancement.Controls.Add(this.nudAdvancetimeout);
+            this.grpAdvancement.Controls.Add(this.chkAutoAdvance);
+            this.grpAdvancement.Controls.Add(this.label1);
+            this.grpAdvancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAdvancement.Location = new System.Drawing.Point(9, 36);
+            this.grpAdvancement.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpAdvancement.Name = "grpAdvancement";
+            this.grpAdvancement.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpAdvancement.Size = new System.Drawing.Size(545, 232);
+            this.grpAdvancement.TabIndex = 135;
+            this.grpAdvancement.TabStop = false;
+            this.grpAdvancement.Text = "Wave Advancement";
+            // 
+            // nudTransitionTime
+            // 
+            this.nudTransitionTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudTransitionTime.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudTransitionTime.Location = new System.Drawing.Point(287, 179);
+            this.nudTransitionTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nudTransitionTime.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudTransitionTime.Name = "nudTransitionTime";
+            this.nudTransitionTime.Size = new System.Drawing.Size(250, 26);
+            this.nudTransitionTime.TabIndex = 87;
+            this.nudTransitionTime.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudTransitionTime.ValueChanged += new System.EventHandler(this.nudTransitionTime_ValueChanged);
+            // 
+            // lblTransitionTime
+            // 
+            this.lblTransitionTime.AutoSize = true;
+            this.lblTransitionTime.Location = new System.Drawing.Point(8, 181);
+            this.lblTransitionTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTransitionTime.Name = "lblTransitionTime";
+            this.lblTransitionTime.Size = new System.Drawing.Size(195, 20);
+            this.lblTransitionTime.TabIndex = 86;
+            this.lblTransitionTime.Text = "Wave Transition Time (ms)";
+            // 
+            // nudLoopIterations
+            // 
+            this.nudLoopIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudLoopIterations.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudLoopIterations.Location = new System.Drawing.Point(287, 130);
+            this.nudLoopIterations.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nudLoopIterations.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudLoopIterations.Name = "nudLoopIterations";
+            this.nudLoopIterations.Size = new System.Drawing.Size(250, 26);
+            this.nudLoopIterations.TabIndex = 85;
+            this.nudLoopIterations.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudLoopIterations.ValueChanged += new System.EventHandler(this.nudLoopIterations_ValueChanged);
+            // 
+            // lblLoop
+            // 
+            this.lblLoop.AutoSize = true;
+            this.lblLoop.Location = new System.Drawing.Point(8, 128);
+            this.lblLoop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblLoop.Name = "lblLoop";
+            this.lblLoop.Size = new System.Drawing.Size(116, 20);
+            this.lblLoop.TabIndex = 84;
+            this.lblLoop.Text = "Loop Iterations";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.Gray;
+            this.label3.Location = new System.Drawing.Point(357, 98);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(100, 20);
+            this.label3.TabIndex = 83;
+            this.label3.Text = "(Active if > 0)";
+            // 
+            // nudAdvancetimeout
+            // 
+            this.nudAdvancetimeout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAdvancetimeout.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAdvancetimeout.Location = new System.Drawing.Point(287, 67);
+            this.nudAdvancetimeout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nudAdvancetimeout.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudAdvancetimeout.Name = "nudAdvancetimeout";
+            this.nudAdvancetimeout.Size = new System.Drawing.Size(250, 26);
+            this.nudAdvancetimeout.TabIndex = 82;
+            this.nudAdvancetimeout.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAdvancetimeout.ValueChanged += new System.EventHandler(this.nudAdvancetimeout_ValueChanged);
+            // 
+            // chkAutoAdvance
+            // 
+            this.chkAutoAdvance.AutoSize = true;
+            this.chkAutoAdvance.Location = new System.Drawing.Point(8, 29);
+            this.chkAutoAdvance.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkAutoAdvance.Name = "chkAutoAdvance";
+            this.chkAutoAdvance.Size = new System.Drawing.Size(430, 24);
+            this.chkAutoAdvance.TabIndex = 54;
+            this.chkAutoAdvance.Text = "Advance when all permadead NPCs on group are dead?";
+            this.chkAutoAdvance.CheckedChanged += new System.EventHandler(this.chkAutoAdvance_CheckedChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 69);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(189, 20);
+            this.label1.TabIndex = 58;
+            this.label1.Text = "Advance on Timeout (ms)";
             // 
             // btnRemoveWave
             // 
@@ -256,196 +549,9 @@
             this.label2.TabIndex = 131;
             this.label2.Text = "Wave Groups";
             // 
-            // chkAutoAdvance
-            // 
-            this.chkAutoAdvance.AutoSize = true;
-            this.chkAutoAdvance.Location = new System.Drawing.Point(8, 29);
-            this.chkAutoAdvance.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.chkAutoAdvance.Name = "chkAutoAdvance";
-            this.chkAutoAdvance.Size = new System.Drawing.Size(430, 24);
-            this.chkAutoAdvance.TabIndex = 54;
-            this.chkAutoAdvance.Text = "Advance when all permadead NPCs on group are dead?";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 69);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 20);
-            this.label1.TabIndex = 58;
-            this.label1.Text = "Advance on Timeout (ms)";
-            // 
-            // grpAdvancement
-            // 
-            this.grpAdvancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpAdvancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpAdvancement.Controls.Add(this.nudTransitionTime);
-            this.grpAdvancement.Controls.Add(this.lblTransitionTime);
-            this.grpAdvancement.Controls.Add(this.nudLoopIterations);
-            this.grpAdvancement.Controls.Add(this.lblLoop);
-            this.grpAdvancement.Controls.Add(this.label3);
-            this.grpAdvancement.Controls.Add(this.nudAdvancetimeout);
-            this.grpAdvancement.Controls.Add(this.chkAutoAdvance);
-            this.grpAdvancement.Controls.Add(this.label1);
-            this.grpAdvancement.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAdvancement.Location = new System.Drawing.Point(9, 36);
-            this.grpAdvancement.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpAdvancement.Name = "grpAdvancement";
-            this.grpAdvancement.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpAdvancement.Size = new System.Drawing.Size(545, 234);
-            this.grpAdvancement.TabIndex = 135;
-            this.grpAdvancement.TabStop = false;
-            this.grpAdvancement.Text = "Wave Advancement";
-            // 
-            // nudAdvancetimeout
-            // 
-            this.nudAdvancetimeout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAdvancetimeout.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAdvancetimeout.Location = new System.Drawing.Point(287, 67);
-            this.nudAdvancetimeout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.nudAdvancetimeout.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
-            0,
-            0});
-            this.nudAdvancetimeout.Name = "nudAdvancetimeout";
-            this.nudAdvancetimeout.Size = new System.Drawing.Size(250, 26);
-            this.nudAdvancetimeout.TabIndex = 82;
-            this.nudAdvancetimeout.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudAdvancetimeout.ValueChanged += new System.EventHandler(this.nudAdvancetimeout_ValueChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.ForeColor = System.Drawing.Color.Gray;
-            this.label3.Location = new System.Drawing.Point(357, 98);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(100, 20);
-            this.label3.TabIndex = 83;
-            this.label3.Text = "(Active if > 0)";
-            // 
-            // grpEvents
-            // 
-            this.grpEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpEvents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpEvents.Controls.Add(this.cmbEndEvent);
-            this.grpEvents.Controls.Add(this.cmbStartEvent);
-            this.grpEvents.Controls.Add(this.lblEndEvent);
-            this.grpEvents.Controls.Add(this.lblStartEvent);
-            this.grpEvents.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvents.Location = new System.Drawing.Point(9, 291);
-            this.grpEvents.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpEvents.Name = "grpEvents";
-            this.grpEvents.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpEvents.Size = new System.Drawing.Size(545, 163);
-            this.grpEvents.TabIndex = 136;
-            this.grpEvents.TabStop = false;
-            this.grpEvents.Text = "Events";
-            // 
-            // lblStartEvent
-            // 
-            this.lblStartEvent.AutoSize = true;
-            this.lblStartEvent.Location = new System.Drawing.Point(8, 24);
-            this.lblStartEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblStartEvent.Name = "lblStartEvent";
-            this.lblStartEvent.Size = new System.Drawing.Size(115, 20);
-            this.lblStartEvent.TabIndex = 59;
-            this.lblStartEvent.Text = "On-Start Event";
-            // 
-            // lblEndEvent
-            // 
-            this.lblEndEvent.AutoSize = true;
-            this.lblEndEvent.Location = new System.Drawing.Point(8, 90);
-            this.lblEndEvent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblEndEvent.Name = "lblEndEvent";
-            this.lblEndEvent.Size = new System.Drawing.Size(109, 20);
-            this.lblEndEvent.TabIndex = 60;
-            this.lblEndEvent.Text = "On-End Event";
-            // 
-            // cmbStartEvent
-            // 
-            this.cmbStartEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbStartEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbStartEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbStartEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbStartEvent.DrawDropdownHoverOutline = false;
-            this.cmbStartEvent.DrawFocusRectangle = false;
-            this.cmbStartEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbStartEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbStartEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbStartEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbStartEvent.FormattingEnabled = true;
-            this.cmbStartEvent.Location = new System.Drawing.Point(12, 49);
-            this.cmbStartEvent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbStartEvent.Name = "cmbStartEvent";
-            this.cmbStartEvent.Size = new System.Drawing.Size(525, 27);
-            this.cmbStartEvent.TabIndex = 61;
-            this.cmbStartEvent.Text = null;
-            this.cmbStartEvent.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbStartEvent.SelectedIndexChanged += new System.EventHandler(this.cmbStartEvent_SelectedIndexChanged);
-            // 
-            // cmbEndEvent
-            // 
-            this.cmbEndEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbEndEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbEndEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbEndEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbEndEvent.DrawDropdownHoverOutline = false;
-            this.cmbEndEvent.DrawFocusRectangle = false;
-            this.cmbEndEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbEndEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEndEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEndEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbEndEvent.FormattingEnabled = true;
-            this.cmbEndEvent.Location = new System.Drawing.Point(12, 115);
-            this.cmbEndEvent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cmbEndEvent.Name = "cmbEndEvent";
-            this.cmbEndEvent.Size = new System.Drawing.Size(525, 27);
-            this.cmbEndEvent.TabIndex = 62;
-            this.cmbEndEvent.Text = null;
-            this.cmbEndEvent.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbEndEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEndEvent_SelectedIndexChanged);
-            // 
-            // lblLoop
-            // 
-            this.lblLoop.AutoSize = true;
-            this.lblLoop.Location = new System.Drawing.Point(8, 128);
-            this.lblLoop.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblLoop.Name = "lblLoop";
-            this.lblLoop.Size = new System.Drawing.Size(116, 20);
-            this.lblLoop.TabIndex = 84;
-            this.lblLoop.Text = "Loop Iterations";
-            // 
-            // nudLoopIterations
-            // 
-            this.nudLoopIterations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudLoopIterations.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudLoopIterations.Location = new System.Drawing.Point(287, 130);
-            this.nudLoopIterations.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.nudLoopIterations.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
-            0,
-            0});
-            this.nudLoopIterations.Name = "nudLoopIterations";
-            this.nudLoopIterations.Size = new System.Drawing.Size(250, 26);
-            this.nudLoopIterations.TabIndex = 85;
-            this.nudLoopIterations.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudLoopIterations.ValueChanged += new System.EventHandler(this.nudLoopIterations_ValueChanged);
-            // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(261, 1013);
+            this.btnSave.Location = new System.Drawing.Point(261, 1146);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(8);
@@ -456,7 +562,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(434, 1013);
+            this.btnCancel.Location = new System.Drawing.Point(434, 1146);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(8);
@@ -465,43 +571,23 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblTransitionTime
+            // chkPersistFinal
             // 
-            this.lblTransitionTime.AutoSize = true;
-            this.lblTransitionTime.Location = new System.Drawing.Point(8, 181);
-            this.lblTransitionTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblTransitionTime.Name = "lblTransitionTime";
-            this.lblTransitionTime.Size = new System.Drawing.Size(195, 20);
-            this.lblTransitionTime.TabIndex = 86;
-            this.lblTransitionTime.Text = "Wave Transition Time (ms)";
-            // 
-            // nudTransitionTime
-            // 
-            this.nudTransitionTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudTransitionTime.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudTransitionTime.Location = new System.Drawing.Point(287, 179);
-            this.nudTransitionTime.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.nudTransitionTime.Maximum = new decimal(new int[] {
-            1410065408,
-            2,
-            0,
-            0});
-            this.nudTransitionTime.Name = "nudTransitionTime";
-            this.nudTransitionTime.Size = new System.Drawing.Size(250, 26);
-            this.nudTransitionTime.TabIndex = 87;
-            this.nudTransitionTime.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudTransitionTime.ValueChanged += new System.EventHandler(this.nudTransitionTime_ValueChanged);
+            this.chkPersistFinal.AutoSize = true;
+            this.chkPersistFinal.Location = new System.Drawing.Point(181, 91);
+            this.chkPersistFinal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkPersistFinal.Name = "chkPersistFinal";
+            this.chkPersistFinal.Size = new System.Drawing.Size(220, 24);
+            this.chkPersistFinal.TabIndex = 88;
+            this.chkPersistFinal.Text = "Persist final spawn group?";
+            this.chkPersistFinal.CheckedChanged += new System.EventHandler(this.chkPersistFinal_CheckedChanged);
             // 
             // frmNpcWaveGroups
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(615, 1062);
+            this.ClientSize = new System.Drawing.Size(615, 1195);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label2);
@@ -516,14 +602,14 @@
             this.grpWaveGroup.ResumeLayout(false);
             this.grpWaveGroup.PerformLayout();
             this.grpWave.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudStartWave)).EndInit();
-            this.grpAdvancement.ResumeLayout(false);
-            this.grpAdvancement.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAdvancetimeout)).EndInit();
             this.grpEvents.ResumeLayout(false);
             this.grpEvents.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLoopIterations)).EndInit();
+            this.grpAdvancement.ResumeLayout(false);
+            this.grpAdvancement.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTransitionTime)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLoopIterations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAdvancetimeout)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStartWave)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -561,5 +647,10 @@
         private DarkUI.Controls.DarkButton btnCancel;
         private System.Windows.Forms.Label lblTransitionTime;
         private DarkUI.Controls.DarkNumericUpDown nudTransitionTime;
+        private DarkUI.Controls.DarkComboBox cmbLoopStartEvent;
+        private System.Windows.Forms.Label lblLoopStartEvent;
+        private DarkUI.Controls.DarkComboBox cmbLoopEndEvent;
+        private System.Windows.Forms.Label lblLoopEndEvent;
+        private DarkUI.Controls.DarkCheckBox chkPersistFinal;
     }
 }
