@@ -40,10 +40,19 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
         public void InitializeEditor()
         {
             grpWaveGroup.Hide();
-            cmbEndEvent.Items.Add(Strings.EditorGenerics.None);
-            cmbEndEvent.Items.AddRange(EventBase.Names);
+            
             cmbStartEvent.Items.Add(Strings.EditorGenerics.None);
             cmbStartEvent.Items.AddRange(EventBase.Names);
+            
+            cmbEndEvent.Items.Add(Strings.EditorGenerics.None);
+            cmbEndEvent.Items.AddRange(EventBase.Names);
+            
+            cmbLoopStartEvent.Items.Add(Strings.EditorGenerics.None);
+            cmbLoopStartEvent.Items.AddRange(EventBase.Names);
+            
+            cmbLoopEndEvent.Items.Add(Strings.EditorGenerics.None);
+            cmbLoopEndEvent.Items.AddRange(EventBase.Names);
+            
             UpdateGroupList();
         }
 
@@ -99,6 +108,7 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
         {
             txtName.Text = descriptor.Name;
             nudStartWave.Value = descriptor.AutoStartWave;
+            chkPersistFinal.Checked = descriptor.PersistFinalSpawnGroup;
             UpdateWaveList();
         }
 
@@ -111,6 +121,8 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
 
             cmbStartEvent.SelectedIndex = EventBase.ListIndex(descriptor.OnStartEventId) + 1;
             cmbEndEvent.SelectedIndex = EventBase.ListIndex(descriptor.OnEndEventId) + 1;
+            cmbLoopStartEvent.SelectedIndex = EventBase.ListIndex(descriptor.OnLoopStartEventId) + 1;
+            cmbLoopEndEvent.SelectedIndex = EventBase.ListIndex(descriptor.OnLoopEndEventId) + 1;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -147,6 +159,7 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             }
 
             grpWaveGroup.Show();
+            grpWave.Hide();
             InitializeWaveGroup(SelectedGroup);
             mEditing = false;
         }
@@ -231,7 +244,7 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
 
         private void nudTransitionTime_ValueChanged(object sender, EventArgs e)
         {
-            if (SelectedWave == null)
+            if (SelectedWave == null || mEditing)
             {
                 return;
             }
@@ -270,6 +283,36 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             SelectedGroup.Waves.RemoveAt(lstWaves.SelectedIndex);
             UpdateWaveList();
             grpWave.Hide();
+        }
+
+        private void chkAutoAdvance_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SelectedWave == null || mEditing)
+            {
+                return;
+            }
+
+            SelectedWave.AdvanceOnPermadeadCompletion = chkAutoAdvance.Checked;
+        }
+
+        private void cmbLoopStartEvent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedWave.OnLoopStartEventId = EventBase.IdFromList(cmbLoopStartEvent.SelectedIndex - 1);
+        }
+
+        private void cmbLoopEndEvent_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SelectedWave.OnLoopEndEventId = EventBase.IdFromList(cmbLoopEndEvent.SelectedIndex - 1);
+        }
+
+        private void chkPersistFinal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SelectedGroup == null || mEditing) 
+            {
+                return;
+            }
+
+            SelectedGroup.PersistFinalSpawnGroup = chkPersistFinal.Checked;
         }
     }
 }

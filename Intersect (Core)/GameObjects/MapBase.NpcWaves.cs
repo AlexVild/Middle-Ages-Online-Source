@@ -18,6 +18,8 @@ namespace Intersect.GameObjects.Maps
         public bool AdvanceOnPermadeadCompletion { get; set; }
         public Guid OnStartEventId { get; set; }
         public Guid OnEndEventId { get; set; }
+        public Guid OnLoopEndEventId { get; set; }
+        public Guid OnLoopStartEventId { get; set; }
         public int LoopIterations { get; set; }
 
         public NpcWaveDescriptor()
@@ -34,6 +36,8 @@ namespace Intersect.GameObjects.Maps
             AdvanceOnPermadeadCompletion = other.AdvanceOnPermadeadCompletion;
             OnStartEventId = other.OnStartEventId;
             OnEndEventId = other.OnEndEventId;
+            OnLoopStartEventId = other.OnLoopStartEventId;
+            OnLoopEndEventId = other.OnLoopEndEventId;
             LoopIterations = other.LoopIterations;
         }
     }
@@ -47,6 +51,7 @@ namespace Intersect.GameObjects.Maps
         public string Name { get; set; }
         public List<NpcWaveDescriptor> Waves { get; set; } = new List<NpcWaveDescriptor>();
         public int AutoStartWave { get; set; }
+        public bool PersistFinalSpawnGroup { get; set; }
 
         public NpcWaveGroupDescriptor()
         {
@@ -60,6 +65,7 @@ namespace Intersect.GameObjects.Maps
             Id = other.Id;
             Name = other.Name;
             AutoStartWave = other.AutoStartWave;
+            PersistFinalSpawnGroup = other.PersistFinalSpawnGroup;
             Waves = other.Waves
                 .Select(w => new NpcWaveDescriptor(w))
                 .ToList();
