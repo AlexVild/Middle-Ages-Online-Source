@@ -4805,6 +4805,8 @@ namespace Intersect.Server.Networking
             map.RegenType = copyingMap.RegenType;
 
             map.LoginEventId = copyingMap.LoginEventId;
+
+            map.DisableItemDrops = copyingMap.DisableItemDrops;
             
             map.Revision += 1;
 

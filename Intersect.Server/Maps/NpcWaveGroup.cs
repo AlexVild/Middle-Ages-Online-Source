@@ -44,11 +44,12 @@ namespace Intersect.Server.Maps
 
         public void Process()
         {
-            if (Map == null || 
-                Descriptor == null || 
-                WaveQueue.Count == 0 ||
-                !Started ||
-                Completed
+            if (Map == null
+                || Descriptor == null 
+                || WaveQueue.Count == 0
+                || !Started
+                || Map.GetPlayers().Count == 0
+                || Completed
             )
             {
                 return;
@@ -56,11 +57,6 @@ namespace Intersect.Server.Maps
 
             var currentWave = WaveQueue.Peek();
             if (currentWave == null)
-            {
-                return;
-            }
-
-            if (Map.GetPlayers().Count == 0)
             {
                 return;
             }

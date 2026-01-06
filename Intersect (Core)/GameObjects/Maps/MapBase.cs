@@ -283,6 +283,8 @@ namespace Intersect.GameObjects.Maps
 
         public bool IsIndoors { get; set; }
 
+        public bool DisableItemDrops { get; set; }
+
         public string Panorama { get; set; } = null;
 
         public string Fog { get; set; } = null;
