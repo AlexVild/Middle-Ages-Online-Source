@@ -52,6 +52,7 @@ namespace Intersect.GameObjects.Maps
         public List<NpcWaveDescriptor> Waves { get; set; } = new List<NpcWaveDescriptor>();
         public int AutoStartWave { get; set; }
         public bool PersistFinalSpawnGroup { get; set; }
+        public bool DisposeMapOnEmpty { get; set; }
 
         public NpcWaveGroupDescriptor()
         {
@@ -69,6 +70,7 @@ namespace Intersect.GameObjects.Maps
             Waves = other.Waves
                 .Select(w => new NpcWaveDescriptor(w))
                 .ToList();
+            DisposeMapOnEmpty = other.DisposeMapOnEmpty;
         }
     }
 

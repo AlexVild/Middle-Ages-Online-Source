@@ -1,4 +1,7 @@
 ﻿using Intersect.GameObjects.Maps;
+using Intersect.Server.Core;
+using Intersect.Server.Core.Instancing.Controller;
+using Intersect.Server.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,12 +43,20 @@ namespace Intersect.Server.Maps
                 if (Map.NpcSpawnGroup == waveGroup.Descriptor?.AutoStartWave)
                 {
                     waveGroup.Start();
+                    break;
                 }
             }
 
-            foreach (var waveGroup in NpcWaveGroups.Where(group => !group.Completed && group.Started).ToArray())
+            var currentGroup = NpcWaveGroups.Find(group => !group.Completed && group.Started);
+            if (currentGroup != null)
             {
-                waveGroup.Process();
+                currentGroup.Process();
+                if (currentGroup.Descriptor.DisposeMapOnEmpty && Map.GetPlayers(true).Count == 0 && InstanceProcessor.TryGetInstanceController(Map.MapInstanceId, out var instanceController))
+                {
+                    instanceController.ChangeSpawnGroup(MapController.Id, currentGroup.Descriptor?.AutoStartWave ?? 0, false, false);
+                    instanceController.ClearPermadeadNpcs(MapController.Id, true);
+                    currentGroup.Started = false;
+                }
             }
         }
     }

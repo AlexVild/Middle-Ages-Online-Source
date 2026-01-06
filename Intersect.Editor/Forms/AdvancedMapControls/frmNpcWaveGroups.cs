@@ -109,6 +109,7 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             txtName.Text = descriptor.Name;
             nudStartWave.Value = descriptor.AutoStartWave;
             chkPersistFinal.Checked = descriptor.PersistFinalSpawnGroup;
+            chkDisposeMap.Checked = descriptor.DisposeMapOnEmpty;
             UpdateWaveList();
         }
 
@@ -313,6 +314,16 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             }
 
             SelectedGroup.PersistFinalSpawnGroup = chkPersistFinal.Checked;
+        }
+
+        private void chkDisposeMap_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SelectedGroup == null || mEditing)
+            {
+                return;
+            }
+
+            SelectedGroup.DisposeMapOnEmpty = chkDisposeMap.Checked;
         }
     }
 }
