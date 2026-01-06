@@ -51,11 +51,9 @@ namespace Intersect.Server.Maps
             if (currentGroup != null)
             {
                 currentGroup.Process();
-                if (currentGroup.Descriptor.DisposeMapOnEmpty && Map.GetPlayers(true).Count == 0 && InstanceProcessor.TryGetInstanceController(Map.MapInstanceId, out var instanceController))
+                if (currentGroup.Descriptor.DisposeMapOnEmpty && Map.GetPlayers(true).Count == 0)
                 {
-                    instanceController.ChangeSpawnGroup(MapController.Id, currentGroup.Descriptor?.AutoStartWave ?? 0, false, false);
-                    instanceController.ClearPermadeadNpcs(MapController.Id, true);
-                    currentGroup.Started = false;
+                    currentGroup.ResetToStart();
                 }
             }
         }

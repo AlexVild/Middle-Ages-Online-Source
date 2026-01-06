@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects.Maps;
+using Intersect.Server.Core;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -26,15 +27,10 @@ namespace Intersect.Server.Maps
 
             Map = map;
             Descriptor = descriptor;
-            StartTime = Timing.Global.Milliseconds;
             Completed = false;
             Started = false;
 
-            WaveQueue = new Queue<NpcWave>();
-            foreach (var waveDesc in descriptor.Waves)
-            {
-                WaveQueue.Enqueue(new NpcWave(map, waveDesc, this));
-            }
+            InitializeWaves();
 
             OnComplete = onComplete;
         }
@@ -42,6 +38,8 @@ namespace Intersect.Server.Maps
         public void Start()
         {
             Started = true;
+            StartTime = Timing.Global.Milliseconds;
+            StartNextWaveTimestamp = default;
         }
 
         public void Process()
@@ -87,6 +85,29 @@ namespace Intersect.Server.Maps
             }
         }
 
+        private void InitializeWaves()
+        {
+            WaveQueue = new Queue<NpcWave>();
+            foreach (var waveDesc in Descriptor.Waves)
+            {
+                WaveQueue.Enqueue(new NpcWave(Map, waveDesc, this));
+            }
+        }
+
+        public void ResetToStart()
+        {
+            if (!InstanceProcessor.TryGetInstanceController(Map.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+            instanceController.ChangeSpawnGroup(Map.GetController().Id, Descriptor?.AutoStartWave ?? 0, false, false);
+            instanceController.ClearPermadeadNpcs(Map.GetController().Id, true);
+            
+            Started = false;
+            InitializeWaves();
+            StartNextWaveTimestamp = default;
+        }
+
         public void TryNextWave(NpcWave prevWave = null)
         {
             // If we're in a delay period, don't proceed to the next wave yet.
@@ -95,6 +116,7 @@ namespace Intersect.Server.Maps
                 return;
             }
 
+            // Allow for next wave delay
             StartNextWaveTimestamp = default;
 
             Logging.Log.Debug($"--- PROCEEDING TO NEXT WAVE...");
