@@ -33,6 +33,7 @@
             this.btnAddGroup = new DarkUI.Controls.DarkButton();
             this.btnRemoveGroup = new DarkUI.Controls.DarkButton();
             this.grpWaveGroup = new DarkUI.Controls.DarkGroupBox();
+            this.chkPersistFinal = new DarkUI.Controls.DarkCheckBox();
             this.grpWave = new DarkUI.Controls.DarkGroupBox();
             this.grpEvents = new DarkUI.Controls.DarkGroupBox();
             this.cmbLoopEndEvent = new DarkUI.Controls.DarkComboBox();
@@ -63,7 +64,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.chkPersistFinal = new DarkUI.Controls.DarkCheckBox();
+            this.chkDisposeMap = new DarkUI.Controls.DarkCheckBox();
             this.grpWaveGroup.SuspendLayout();
             this.grpWave.SuspendLayout();
             this.grpEvents.SuspendLayout();
@@ -115,6 +116,7 @@
             // 
             this.grpWaveGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWaveGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWaveGroup.Controls.Add(this.chkDisposeMap);
             this.grpWaveGroup.Controls.Add(this.chkPersistFinal);
             this.grpWaveGroup.Controls.Add(this.grpWave);
             this.grpWaveGroup.Controls.Add(this.btnRemoveWave);
@@ -134,6 +136,17 @@
             this.grpWaveGroup.TabIndex = 130;
             this.grpWaveGroup.TabStop = false;
             this.grpWaveGroup.Text = "Wave Group";
+            // 
+            // chkPersistFinal
+            // 
+            this.chkPersistFinal.AutoSize = true;
+            this.chkPersistFinal.Location = new System.Drawing.Point(181, 64);
+            this.chkPersistFinal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkPersistFinal.Name = "chkPersistFinal";
+            this.chkPersistFinal.Size = new System.Drawing.Size(220, 24);
+            this.chkPersistFinal.TabIndex = 88;
+            this.chkPersistFinal.Text = "Persist final spawn group?";
+            this.chkPersistFinal.CheckedChanged += new System.EventHandler(this.chkPersistFinal_CheckedChanged);
             // 
             // grpWave
             // 
@@ -571,16 +584,16 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // chkPersistFinal
+            // chkDisposeMap
             // 
-            this.chkPersistFinal.AutoSize = true;
-            this.chkPersistFinal.Location = new System.Drawing.Point(181, 91);
-            this.chkPersistFinal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.chkPersistFinal.Name = "chkPersistFinal";
-            this.chkPersistFinal.Size = new System.Drawing.Size(220, 24);
-            this.chkPersistFinal.TabIndex = 88;
-            this.chkPersistFinal.Text = "Persist final spawn group?";
-            this.chkPersistFinal.CheckedChanged += new System.EventHandler(this.chkPersistFinal_CheckedChanged);
+            this.chkDisposeMap.AutoSize = true;
+            this.chkDisposeMap.Location = new System.Drawing.Point(181, 92);
+            this.chkDisposeMap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkDisposeMap.Name = "chkDisposeMap";
+            this.chkDisposeMap.Size = new System.Drawing.Size(292, 24);
+            this.chkDisposeMap.TabIndex = 135;
+            this.chkDisposeMap.Text = "Dispose map on empty (no players)?";
+            this.chkDisposeMap.CheckedChanged += new System.EventHandler(this.chkDisposeMap_CheckedChanged);
             // 
             // frmNpcWaveGroups
             // 
@@ -652,5 +665,6 @@
         private DarkUI.Controls.DarkComboBox cmbLoopEndEvent;
         private System.Windows.Forms.Label lblLoopEndEvent;
         private DarkUI.Controls.DarkCheckBox chkPersistFinal;
+        private DarkUI.Controls.DarkCheckBox chkDisposeMap;
     }
 }

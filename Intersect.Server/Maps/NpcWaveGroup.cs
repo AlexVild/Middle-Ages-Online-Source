@@ -62,6 +62,11 @@ namespace Intersect.Server.Maps
                 return;
             }
 
+            if (Map.GetPlayers().Count == 0)
+            {
+                return;
+            }
+
             if (!currentWave.HasStarted)
             {
                 currentWave.Start();
