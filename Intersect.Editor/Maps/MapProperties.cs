@@ -614,6 +614,23 @@ namespace Intersect.Editor.Maps
             }
         }
 
+        [CustomCategory("misc"), CustomDescription("disableitemdropsdesc"), CustomDisplayName("disableitemdrops"),
+          DefaultValue(false)]
+        public bool DisableItemDrops
+        {
+            get => mMyMap.DisableItemDrops;
+            set
+            {
+                if (mMyMap.DisableItemDrops != value)
+                {
+                    Globals.MapEditorWindow.PrepUndoState();
+                    mMyMap.DisableItemDrops = value;
+                    Graphics.TilePreviewUpdated = true;
+                    Globals.MapEditorWindow.AddUndoState();
+                }
+            }
+        }
+
     }
 
     public class MapMusicProperty : StringConverter

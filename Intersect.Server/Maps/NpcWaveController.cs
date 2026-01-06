@@ -1,7 +1,4 @@
 ﻿using Intersect.GameObjects.Maps;
-using Intersect.Server.Core;
-using Intersect.Server.Core.Instancing.Controller;
-using Intersect.Server.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +8,7 @@ namespace Intersect.Server.Maps
     /// <summary>
     /// Goes on the <see cref="MapInstance"/>
     /// </summary>
-    public class NpcWaveController
+    public class NpcWaveController : IDisposable
     {
         public List<NpcWaveGroup> NpcWaveGroups { get; set; }
         public MapInstance Map { get; set; }
@@ -56,6 +53,11 @@ namespace Intersect.Server.Maps
                     currentGroup.ResetToStart();
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            NpcWaveGroups.Clear();
         }
     }
 }

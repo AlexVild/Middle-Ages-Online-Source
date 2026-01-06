@@ -2028,7 +2028,7 @@ namespace Intersect.Server.Entities
                 killer?.KilledEntity(this);
             }
 
-            if (dropItems)
+            if (dropItems && (!Map?.DisableItemDrops ?? true))
             {
                 // If this is an NPC, drop loot for every single player that participated in the fight.
                 if (this is Npc npc && npc.Base.IndividualizedLoot)

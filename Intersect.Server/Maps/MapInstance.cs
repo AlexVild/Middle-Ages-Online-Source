@@ -254,6 +254,7 @@ namespace Intersect.Server.Maps
         {
             DestroyDanglingTimers();
             UnsubscribeFromClanWars();
+            NpcWaveController.Dispose();
 
             if (!IsDisposed)
             {

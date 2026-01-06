@@ -4691,6 +4691,7 @@ Tick timer saved in server config.json.";
                 {"weatheryspeed", @"Weather Y Speed"},
                 {"weatherintensity", @"Weather Intensity"},
                 {"loginevent", @"Login Event"},
+                {"disableitemdrops", @"Disable Item Drops" },
                 {"regentype", @"Vital Regen Type"},
             };
 
@@ -4733,6 +4734,7 @@ Tick timer saved in server config.json.";
                 {"weatheryspeeddesc", @"How fast vertically weather particles move across the screen. (Range -5 to 5)"},
                 {"weatherintensitydesc", @"How intence the weather is (number of particles). (Range 0 to 100)"},
                 {"logineventdesc", @"An event to run if the player logs in to this map."},
+                {"disableitemdropsdesc", @"If enabled, NPCs and players will not drop items on death."},
                 {"regendesc", @"What vital regen type this map has."},
             };
 
