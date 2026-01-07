@@ -41,7 +41,8 @@ namespace Intersect.Editor.Forms
         // Editor shortcut chord state
         private bool ShortcutArmed => mEditorShortcutArmed;
         private bool mEditorShortcutArmed;
-        private DateTime mEditorShortcutArmedAt;
+
+        private bool _editorCtrl;
 
         // How long we wait for the second key
         private static readonly TimeSpan EditorShortcutTimeout = TimeSpan.FromSeconds(1);
@@ -53,6 +54,7 @@ namespace Intersect.Editor.Forms
             HandleAttributeShortcuts(e);
             HandleEditorOpenShortcuts(e);
             HandleToolShortcut(e);
+            HandleBrushShortcut(e);
         }
 
         private void HandleToolShortcut(KeyEventArgs e)
@@ -94,6 +96,43 @@ namespace Intersect.Editor.Forms
                     Globals.CurrentTool = (int)EditingTool.Selection;
                     e.Handled = true;
                     return;
+            }
+        }
+
+        private void HandleBrushShortcut(KeyEventArgs e)
+        {
+            if (ShortcutArmed) 
+            { 
+                return; 
+            }
+
+            switch (e.KeyCode)
+            {
+                case Keys.Oemtilde:
+                    var next = e.Shift ? Globals.Autotilemode - 1 : Globals.Autotilemode + 1;
+                    Globals.MapLayersWindow.SetAutoTile(MathHelper.Wrap(
+                        next,
+                        FrmMapLayers.BRUSH_MIN_IDX,
+                        FrmMapLayers.BRUSH_MAX_IDX)
+                    );
+                    e.Handled = true;
+                    break;
+                case Keys.PageUp:
+                    Globals.MapLayersWindow.SetAutoTile(MathHelper.Wrap(
+                        Globals.Autotilemode + 1,
+                        FrmMapLayers.BRUSH_MIN_IDX,
+                        FrmMapLayers.BRUSH_MAX_IDX)
+                    );
+                    e.Handled = true;
+                    break;
+                case Keys.PageDown:
+                    Globals.MapLayersWindow.SetAutoTile(MathHelper.Wrap(
+                        Globals.Autotilemode - 1,
+                        FrmMapLayers.BRUSH_MIN_IDX,
+                        FrmMapLayers.BRUSH_MAX_IDX)
+                    );
+                    e.Handled = true;
+                    break;
             }
         }
 
@@ -230,37 +269,41 @@ namespace Intersect.Editor.Forms
         private void HandleEditorOpenShortcuts(KeyEventArgs e)
         {
             // Handle quick-shortcuts
-            if (e.Control)
+            switch (e.KeyCode)
             {
-                switch (e.KeyCode)
-                {
-                    case Keys.I:
-                        TryOpenEditorMethod(GameObjectType.Item);
-                        return;
-                    case Keys.N:
-                        TryOpenEditorMethod(GameObjectType.Npc);
-                        return;
-                    case Keys.C:
-                        if (e.Shift)
-                            TryOpenEditorMethod(GameObjectType.Event);
-                        else if (e.Alt)
-                            HotkeyOpenMapPropCopier();
-                        else
-                            TryOpenEditorMethod(GameObjectType.Crafts);
-                        return;
-                    case Keys.T:
-                        TryOpenEditorMethod(GameObjectType.CraftTables);
-                        return;
-                    case Keys.M:
-                        TryOpenEditorMethod(GameObjectType.Spell);
-                        return;
-                    case Keys.P:
-                        TryOpenEditorMethod(GameObjectType.Projectile);
-                        return;
-                    case Keys.V:
-                        TryOpenEditorMethod(GameObjectType.PlayerVariable);
-                        return;
-                }
+                case Keys.F1:
+                    TryOpenEditorMethod(GameObjectType.Item);
+                    return;
+                case Keys.F2:
+                    TryOpenEditorMethod(GameObjectType.Npc);
+                    return;
+                case Keys.F3:
+                    TryOpenEditorMethod(GameObjectType.Crafts);
+                    return;
+                case Keys.F4:
+                    TryOpenEditorMethod(GameObjectType.CraftTables);
+                    return;
+                case Keys.F5:
+                    TryOpenEditorMethod(GameObjectType.Spell);
+                    return;
+                case Keys.F6:
+                    TryOpenEditorMethod(GameObjectType.PlayerVariable);
+                    return;
+                case Keys.F7:
+                    TryOpenEditorMethod(GameObjectType.Event);
+                    return;
+                case Keys.F8:
+                    TryOpenEditorMethod(GameObjectType.Projectile);
+                    return;
+                case Keys.F9:
+                    TryOpenEditorMethod(GameObjectType.Class);
+                    return;
+                case Keys.C:
+                    if (e.Shift && e.Control)
+                    {
+                        HotkeyOpenMapPropCopier();
+                    }
+                    return;
             }
 
             // Step 1: Ctrl+E arms editor mode
@@ -268,7 +311,10 @@ namespace Intersect.Editor.Forms
             {
                 toolstripLabelShortcutMode.Text = "Editor mode enabled, listening for key...";
                 mEditorShortcutArmed = true;
-                mEditorShortcutArmedAt = DateTime.UtcNow;
+
+                // Reset modifier intent
+                _editorCtrl = false;
+
                 e.Handled = true;
                 return;
             }
@@ -279,32 +325,49 @@ namespace Intersect.Editor.Forms
                 e.Handled = true;
             }
 
+            if (mEditorShortcutArmed)
+            {
+                if (e.KeyCode == Keys.ControlKey)
+                {
+                    _editorCtrl = true;
+                    e.Handled = true;
+                    return;
+                }
+            }
+
             // Step 2: If not armed, do nothing
             if (!mEditorShortcutArmed)
             {
                 return;
             }
 
-            // Step 3: Timeout
-            if (DateTime.UtcNow - mEditorShortcutArmedAt > EditorShortcutTimeout)
-            {
-                mEditorShortcutArmed = false;
-                return;
-            }
-
             // Step 4: Consume next key
             mEditorShortcutArmed = false;
             e.Handled = true;
-            HandleOpenEditorShortcutKey(e.KeyCode, e.Shift, e.Control);
+            HandleOpenEditorShortcutKey(e.KeyCode, _editorCtrl);
         }
 
         private void EditorModeShowHide(bool visible)
         {
             toolstripLabelShortcutMode.Visible = visible;
             toolstripSeparatorEditorMode.Visible = visible;
+            grpEditorShortcuts.Visible = visible;
+            if (grpEditorShortcuts.Visible)
+            {
+                CenterInParent(grpEditorShortcuts);
+            }
         }
 
-        private void HandleOpenEditorShortcutKey(Keys key, bool shift, bool ctrl)
+        private void CenterInParent(Control control)
+        {
+            if (control.Parent == null)
+                return;
+
+            control.Left = (control.Parent.ClientSize.Width - control.Width) / 2;
+            control.Top = (control.Parent.ClientSize.Height - control.Height) / 2;
+        }
+
+        private void HandleOpenEditorShortcutKey(Keys key, bool ctrl)
         {
             switch (key)
             {
@@ -318,16 +381,29 @@ namespace Intersect.Editor.Forms
                     TryOpenEditorMethod(GameObjectType.Npc);
                     break;
                 case Keys.R:
-                    TryOpenEditorMethod(GameObjectType.Resource);
+                    if (ctrl) 
+                        TryOpenEditorMethod(GameObjectType.Recipe);
+                    else
+                        TryOpenEditorMethod(GameObjectType.Resource);
                     break;
                 case Keys.S:
                     TryOpenEditorMethod(GameObjectType.Spell);
                     break;
                 case Keys.L:
-                    TryOpenEditorMethod(GameObjectType.Class);
+                    if (ctrl)
+                    {
+                        TryOpenEditorMethod(GameObjectType.QuestList);
+                    }
+                    else
+                    {
+                        TryOpenEditorMethod(GameObjectType.Class);
+                    }
                     break;
                 case Keys.B:
-                    TryOpenEditorMethod(GameObjectType.Shop);
+                    if (ctrl)
+                        TryOpenEditorMethod(GameObjectType.QuestBoard);
+                    else
+                        TryOpenEditorMethod(GameObjectType.Shop);
                     break;
                 case Keys.V:
                     TryOpenEditorMethod(GameObjectType.PlayerVariable);
@@ -336,18 +412,11 @@ namespace Intersect.Editor.Forms
                     TryOpenEditorMethod(GameObjectType.Event);
                     break;
                 case Keys.Q:
-                    if (shift)
-                        TryOpenEditorMethod(GameObjectType.QuestBoard);
-                    else if (ctrl)
-                        TryOpenEditorMethod(GameObjectType.QuestList);
-                    else
-                        TryOpenEditorMethod(GameObjectType.Quest);
+                    TryOpenEditorMethod(GameObjectType.Quest);
                     break;
                 case Keys.C:
-                    if (shift)
+                    if (ctrl)
                         TryOpenEditorMethod(GameObjectType.CraftTables);
-                    else if (ctrl)
-                        TryOpenEditorMethod(GameObjectType.Recipe);
                     else
                         TryOpenEditorMethod(GameObjectType.Crafts);
                     break;
@@ -372,8 +441,11 @@ namespace Intersect.Editor.Forms
                 case Keys.K:
                     TryOpenEditorMethod(GameObjectType.Label);
                     break;
+                case Keys.G:
+                    TryOpenEditorMethod(GameObjectType.Challenge);
+                    break;
                 case Keys.T:
-                    if (shift)
+                    if (ctrl)
                         TryOpenEditorMethod(GameObjectType.Time);
                     else
                         TryOpenEditorMethod(GameObjectType.Timer);
@@ -449,6 +521,16 @@ namespace Intersect.Editor.Forms
             }
 
             return false;
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (mEditorShortcutArmed && (keyData & Keys.Alt) == Keys.Alt)
+            {
+                return true; // swallow Alt
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }
