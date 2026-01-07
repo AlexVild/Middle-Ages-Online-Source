@@ -2,12 +2,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Intersect.Config
 {
+    public static class TileLayers
+    {
+        public const string MAP_LAYER_GROUND = "Ground";
+        public const string MAP_LAYER_MASK_1 = "Mask 1";
+        public const string MAP_LAYER_MASK_2 = "Mask 2";
+        public const string MAP_LAYER_FRINGE_1 = "Fringe 1";
+        public const string MAP_LAYER_FRINGE_2 = "Fringe 2";
+
+        public static List<string> Names = new List<string>
+        {
+            MAP_LAYER_GROUND,
+            MAP_LAYER_MASK_1,
+            MAP_LAYER_MASK_2,
+            MAP_LAYER_FRINGE_1,
+            MAP_LAYER_FRINGE_2,
+        };
+    }
+
     public class LayerOptions
     {
         public const string Attributes = nameof(Attributes);
@@ -16,13 +35,13 @@ namespace Intersect.Config
         public const string Events = nameof(Events);
 
         [JsonProperty]
-        public List<string> LowerLayers { get; private set; } = new List<string>() { "Ground", "Mask 1", "Mask 2" };
+        public List<string> LowerLayers { get; private set; } = new List<string>() { TileLayers.MAP_LAYER_GROUND, TileLayers.MAP_LAYER_MASK_1, TileLayers.MAP_LAYER_MASK_2 };
 
         [JsonProperty]
-        public List<string> MiddleLayers { get; private set; } = new List<string>() { "Fringe 1" };
+        public List<string> MiddleLayers { get; private set; } = new List<string>() { TileLayers.MAP_LAYER_FRINGE_1 };
 
         [JsonProperty]
-        public List<string> UpperLayers { get; private set; } = new List<string>() { "Fringe 2" };
+        public List<string> UpperLayers { get; private set; } = new List<string>() { TileLayers.MAP_LAYER_FRINGE_2 };
 
         [JsonIgnore]
         public List<string> All { get; private set; } = new List<string>();
