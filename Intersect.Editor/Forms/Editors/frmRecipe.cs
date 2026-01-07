@@ -46,7 +46,7 @@ namespace Intersect.Editor.Forms.Editors
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             FormHelpers.InitFoldersAndObjectList<RecipeDescriptor>(
                 ref mKnownFolders,

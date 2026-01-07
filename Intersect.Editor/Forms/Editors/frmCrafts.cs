@@ -499,7 +499,7 @@ namespace Intersect.Editor.Forms.Editors
 
         #region "Item List - Folders, Searching, Sorting, Etc"
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             //Collect folders
             var mFolders = new List<string>();

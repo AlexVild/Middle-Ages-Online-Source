@@ -110,7 +110,7 @@ namespace Intersect.Editor.Core
             if (sFpsTime < Timing.Global.Milliseconds)
             {
                 sFps = sFpsCount;
-                sMyForm.toolStripLabelFPS.Text = Strings.MainForm.fps.ToString(sFps);
+                sMyForm.toolstripLabelFps.Text = Strings.MainForm.fps.ToString(sFps);
                 sFpsCount = 0;
                 sFpsTime = Timing.Global.Milliseconds + 1000;
             }

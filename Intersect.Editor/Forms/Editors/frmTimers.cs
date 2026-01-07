@@ -45,7 +45,7 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #region Editor lifecycle
-        public void InitEditor()
+        public override void InitEditor()
         {
             // Fill in combo boxes (event boxes are filled on editor "_load" event)
             cmbOwnerType.Items.AddRange(Strings.TimerEditor.OwnerTypes.Values.ToArray());

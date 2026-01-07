@@ -82,7 +82,7 @@ namespace Intersect.Editor.Forms.Editors
                 );
         }
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             FormHelpers.InitFoldersAndObjectList<LabelDescriptor>(
                 ref mKnownFolders,

@@ -27,7 +27,6 @@ namespace Intersect.Editor.Forms.Editors
             ApplyHooks();
             InitializeComponent();
             InitLocalization();
-            InitEditor();
 
             lstGameObjects.NodeMouseDoubleClick += lstGameObjects_NodeMouseDoubleClick;
             lstGameObjects.AfterSelect += lstGameObjects_AfterSelect;
@@ -78,7 +77,7 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-        private void InitEditor()
+        public override void InitEditor()
         {
             //Collect folders
             var mFolders = new List<string>();

@@ -50,7 +50,7 @@ namespace Intersect.Editor.Forms.Editors
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             // Fill in combo boxes (event boxes are filled on editor "_load" event)
             FillItemCombobox(DropType.Item);
