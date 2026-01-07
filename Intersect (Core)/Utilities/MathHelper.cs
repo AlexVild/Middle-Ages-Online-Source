@@ -212,6 +212,20 @@ namespace Intersect.Utilities
             return Math.Abs(originalWidth * Math.Sin(angleRadians)) +
                    Math.Abs(originalHeight * Math.Cos(angleRadians));
         }
+
+        public static int Wrap(int value, int min, int max)
+        {
+            if (min > max)
+                throw new ArgumentException("min must be <= max");
+
+            if (value < min)
+                return max;
+
+            if (value > max)
+                return min;
+
+            return value;
+        }
     }
 
 }

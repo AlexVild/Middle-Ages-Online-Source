@@ -59,6 +59,9 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private frmNpcWaveGroups frmNpcWaveGroups;
 
+        public const int BRUSH_MAX_IDX = 7;
+        public const int BRUSH_MIN_IDX = 0;
+
         public FrmMapLayers()
         {
             InitializeComponent();
@@ -254,8 +257,23 @@ namespace Intersect.Editor.Forms.DockingElements
             SetAutoTile(cmbAutotile.SelectedIndex);
         }
 
+        public void SetAutotileDropdown(bool droppedDown)
+        {
+            if (!pnlTiles.Visible)
+            {
+                return;
+            }
+            
+            cmbAutotile.DroppedDown = droppedDown;
+        }
+
         public void SetAutoTile(int index)
         {
+            if (index < BRUSH_MIN_IDX || index > BRUSH_MAX_IDX)
+            {
+                return;
+            }
+            
             Globals.Autotilemode = index;
             cmbAutotile.SelectedIndex = index;
             switch (Globals.Autotilemode)

@@ -178,15 +178,15 @@
   <data name="toolStripBtnRedo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAHCSURBVDhPjZJNS1tREIZTLQWLWBDc1K6sP0Cs/ofiVi0U
-        CwV1IW79oNpKF124EjcWXBjjB36smuJCpKioYIjaRSqx5VJDGiEYJF7k5MychZW3zBXDyfVWfGHgcuc9
-        z5yZOaGQJQCVzDzEzMl0On3pOM5fZj5k5ndEVMvM0FofE9Ez+5wnY0y91tqZXv+JFwNRPHwVRnl7GE2D
-        Ucxu/oJS6s9p/gJ9kdhtiFSWw92ftxFqnQqMjvENZHKu930DKQKYeVgqS7KsLYyPSwdIZc9xnM3jw8K+
-        dxPJNfR9KQKlHRuQbOy/TsphItqQCmKSWNlLoerNbMmNSgAyMOlZEulTF8aYOulRID2TO7fauRdA/t9A
-        gmZTAiCio+bBqN3CNwCPbYhswA7/DN5HrCFOriXFEFdK1RRNd0mqFQqFlH3VkcV9WdVvY8xzvz9Q8pCU
-        Upn+mVgR0jmxhYKmMyJq8vsDRURPmTkxvpLwWhHIy0+ryF8o0lq3+P2Bcl33iQxxecdBxeuIB5HnvPv9
-        8MoY0+X3BwrAIyKa2/xxguq38x5k7GvCGyyAcr8/UAAeENFoIpXD0HzcG+i9t2KLiHqZOfe/bfwDC/HX
-        va9oplYAAAAASUVORK5CYII=
+        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAG/SURBVDhPjZLLSxxBEMbXKEJEFAK5GE/GP0B8/A/Ba1QI
+        BgKaQ8jVBz7xkIMn8aLgwXWjYszJFQ8hiIoPEF0vo6wuostqQFxkHaS3q/qg8klNcOkdJ8EPCoapr3/V
+        VdWhkCUApczcy8zxVCp1m0gk7pj5gJl7iOgNM0NrfUpElfY5T8aYaq318dTKEeq6oihqCaOwOYz67iim
+        1xJQSp1dZm7QEdl+CpHKcvjz+AZC7ycDo3V0Fedp1/t+hOQAzNwnlSX5oimMofk9JC+ucXqRwcBczLuJ
+        5Go6FnJAaccGxGs7/yblMBGtSgUxSSztJlH2cTrvRnkAGZj0LInUpQtjTJX0KJAvE5tP2nkWQP4/QoJm
+        kwcgosOG7qjdwjKAEhsiG7DDP4P+iDXEid9xMewopV7nTP+TVMtms0n7qoM/YrKqE2PMW78/UPKQlFLn
+        nd+3c5C2sXVkNV0RUb3fHygiqmBmZ3TJ8VoRyLtvv5C5UaS1bvT7A+W6brkM8efmMV5+iHgQec5bMefe
+        GNPu9wcKQDERzazt/8GrT7MeZGTR8QYLoNDvDxSAAiIadpJp9M7ueAN99lZsEdFXZk7/axsP7xrXsfJV
+        otsAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="toolStripBtnPen.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -313,6 +313,33 @@
   <metadata name="menuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 3</value>
   </metadata>
+  <data name="lblEditorShortcuts.Text" xml:space="preserve">
+    <value>Animation Editor (A)
+Challenge Editor (G)
+Class Editor (L)
+Common Event Editor (E)
+Crafts Editor (C)
+Crafting Table Editor (Ctrl+C)
+Dungeon Editor (D)
+Enhancement Editor (H)
+Item Editor (I)
+Label Editor (K)
+Loot Table Editor (O)
+Npc Editor (N)
+Projectile Editor (J)
+Quest Editor (Q)
+Quest Board Editor (Ctrl+B)
+Quest List Editor (Ctrl+L)
+Recipe Editor (Ctrl+R)
+Resource Editor (R)
+Shop Editor (B)
+Spell Editor (S)
+Territory Editor (Y)
+Time Editor (Ctrl+T)
+Timer Editor (T)
+Variable Editor (V)
+Weapon Type Editor (W)</value>
+  </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>31</value>
   </metadata>

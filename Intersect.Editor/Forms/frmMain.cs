@@ -895,7 +895,7 @@ namespace Intersect.Editor.Forms
             }
         }
 
-        private static void SaveMap()
+        private void SaveMap()
         {
             if (Globals.CurrentTool == (int) EditingTool.Selection)
             {
@@ -906,6 +906,8 @@ namespace Intersect.Editor.Forms
                     Globals.MapEditorWindow?.PlaceSelection();
                 }
             }
+
+            KeysDown.Clear();
 
             PacketSender.SendMap(Globals.CurrentMap);
         }
@@ -931,6 +933,7 @@ namespace Intersect.Editor.Forms
                 SaveMap();
             }
 
+            KeysDown.Clear();
             PacketSender.SendCreateMap(-1, Globals.CurrentMap.Id, null);
         }
 

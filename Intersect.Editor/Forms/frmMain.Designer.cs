@@ -41,6 +41,8 @@ namespace Intersect.Editor.Forms
             this.toolStripLabelRevision = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.toolstripLabelFps = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolstripLabelShortcutMode = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolstripSeparatorEditorMode = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabelDebug = new System.Windows.Forms.ToolStripStatusLabel();
             this.dockLeft = new WeifenLuo.WinFormsUI.Docking.DockPanel();
@@ -135,11 +137,12 @@ namespace Intersect.Editor.Forms
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapPropertyCopierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packageUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolstripLabelShortcutMode = new System.Windows.Forms.ToolStripStatusLabel();
+            this.grpEditorShortcuts = new DarkUI.Controls.DarkGroupBox();
+            this.lblEditorShortcuts = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip.SuspendLayout();
+            this.grpEditorShortcuts.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -196,6 +199,19 @@ namespace Intersect.Editor.Forms
             this.toolstripLabelFps.Name = "toolstripLabelFps";
             this.toolstripLabelFps.Size = new System.Drawing.Size(70, 26);
             this.toolstripLabelFps.Text = "FPS: 64";
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(6, 33);
+            // 
+            // toolstripLabelShortcutMode
+            // 
+            this.toolstripLabelShortcutMode.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolstripLabelShortcutMode.Name = "toolstripLabelShortcutMode";
+            this.toolstripLabelShortcutMode.Size = new System.Drawing.Size(131, 26);
+            this.toolstripLabelShortcutMode.Text = "Shortcut Mode";
+            this.toolstripLabelShortcutMode.Visible = false;
             // 
             // toolstripSeparatorEditorMode
             // 
@@ -573,7 +589,7 @@ namespace Intersect.Editor.Forms
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 29);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(54, 30);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // saveMapToolStripMenuItem
@@ -640,7 +656,7 @@ namespace Intersect.Editor.Forms
             this.selectToolStripMenuItem});
             this.editToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(58, 29);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(58, 30);
             this.editToolStripMenuItem.Text = "Edit";
             // 
             // undoToolStripMenuItem
@@ -743,7 +759,7 @@ namespace Intersect.Editor.Forms
             this.layersToolStripMenuItem});
             this.viewToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            this.viewToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
+            this.viewToolStripMenuItem.Size = new System.Drawing.Size(65, 30);
             this.viewToolStripMenuItem.Text = "View";
             // 
             // hideDarknessToolStripMenuItem
@@ -852,8 +868,8 @@ namespace Intersect.Editor.Forms
             this.weaponTypeEditorToolStripMenuItem});
             this.contentEditorsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.contentEditorsToolStripMenuItem.Name = "contentEditorsToolStripMenuItem";
-            this.contentEditorsToolStripMenuItem.Size = new System.Drawing.Size(151, 29);
-            this.contentEditorsToolStripMenuItem.Text = "Content Editors";
+            this.contentEditorsToolStripMenuItem.Size = new System.Drawing.Size(214, 29);
+            this.contentEditorsToolStripMenuItem.Text = "Content Editors (Ctrl+E)";
             // 
             // animationEditorToolStripMenuItem
             // 
@@ -1063,7 +1079,7 @@ namespace Intersect.Editor.Forms
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(65, 30);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // postQuestionToolStripMenuItem
@@ -1117,7 +1133,7 @@ namespace Intersect.Editor.Forms
             this.packageUpdateToolStripMenuItem});
             this.toolsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 29);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(69, 30);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // mapPropertyCopierToolStripMenuItem
@@ -1136,24 +1152,38 @@ namespace Intersect.Editor.Forms
             this.packageUpdateToolStripMenuItem.Text = "Package Update";
             this.packageUpdateToolStripMenuItem.Click += new System.EventHandler(this.packageUpdateToolStripMenuItem_Click);
             // 
-            // toolStripSeparator12
+            // grpEditorShortcuts
             // 
-            this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(6, 33);
+            this.grpEditorShortcuts.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.grpEditorShortcuts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpEditorShortcuts.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditorShortcuts.Controls.Add(this.lblEditorShortcuts);
+            this.grpEditorShortcuts.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEditorShortcuts.Location = new System.Drawing.Point(677, 187);
+            this.grpEditorShortcuts.Name = "grpEditorShortcuts";
+            this.grpEditorShortcuts.Size = new System.Drawing.Size(343, 685);
+            this.grpEditorShortcuts.TabIndex = 102;
+            this.grpEditorShortcuts.TabStop = false;
+            this.grpEditorShortcuts.Text = "Editor Shortcuts";
+            this.grpEditorShortcuts.Visible = false;
             // 
-            // toolstripLabelShortcutMode
+            // lblEditorShortcuts
             // 
-            this.toolstripLabelShortcutMode.ForeColor = System.Drawing.SystemColors.Control;
-            this.toolstripLabelShortcutMode.Name = "toolstripLabelShortcutMode";
-            this.toolstripLabelShortcutMode.Size = new System.Drawing.Size(131, 26);
-            this.toolstripLabelShortcutMode.Text = "Shortcut Mode";
-            this.toolstripLabelShortcutMode.Visible = false;
+            this.lblEditorShortcuts.AutoSize = true;
+            this.lblEditorShortcuts.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEditorShortcuts.Location = new System.Drawing.Point(28, 22);
+            this.lblEditorShortcuts.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblEditorShortcuts.Name = "lblEditorShortcuts";
+            this.lblEditorShortcuts.Size = new System.Drawing.Size(266, 625);
+            this.lblEditorShortcuts.TabIndex = 41;
+            this.lblEditorShortcuts.Text = resources.GetString("lblEditorShortcuts.Text");
             // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(1779, 1012);
+            this.Controls.Add(this.grpEditorShortcuts);
             this.Controls.Add(this.dockLeft);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
@@ -1175,6 +1205,8 @@ namespace Intersect.Editor.Forms
             this.toolStrip1.PerformLayout();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.grpEditorShortcuts.ResumeLayout(false);
+            this.grpEditorShortcuts.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1284,5 +1316,7 @@ namespace Intersect.Editor.Forms
         private ToolStripMenuItem mapPropertyCopierToolStripMenuItem;
         public ToolStripStatusLabel toolstripLabelShortcutMode;
         private ToolStripSeparator toolStripSeparator12;
+        private DarkGroupBox grpEditorShortcuts;
+        private Label lblEditorShortcuts;
     }
 }
