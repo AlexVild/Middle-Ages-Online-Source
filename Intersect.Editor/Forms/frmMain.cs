@@ -26,7 +26,7 @@ using Intersect.GameObjects;
 using Intersect.Localization;
 using Intersect.Network;
 using Intersect.Updater;
-
+using Intersect.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -105,6 +105,13 @@ namespace Intersect.Editor.Forms
 
         public UpdateTimeList TimeDelegate;
 
+        public readonly HashSet<Keys> KeysDown = new HashSet<Keys>();
+
+        private readonly System.Windows.Forms.Timer mMovementTimer = new System.Windows.Forms.Timer
+        {
+            Interval = 16 // ~60 FPS
+        };
+
         //Initialization & Setup Functions
         public FrmMain()
         {
@@ -121,7 +128,11 @@ namespace Intersect.Editor.Forms
             Globals.MapGridWindowNew = new FrmMapGrid();
             Globals.MapGridWindowNew.Show(dockLeft, DockState.Document);
 
+            mMovementTimer.Tick += MovementTimer_Tick;
+            mMovementTimer.Start();
+
             this.Icon = Properties.Resources.Icon;
+            KeyPreview = true;
         }
 
         [System.Runtime.InteropServices.DllImport("user32.dll")]
@@ -270,113 +281,16 @@ namespace Intersect.Editor.Forms
             }
         }
 
+        private void FrmMain_KeyUp(object sender, KeyEventArgs e)
+        {
+            KeysDown.Remove(e.KeyCode);
+            HandleHotkeyRemoval(e);
+        }
+
         private void FrmMain_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == (Keys.Control | Keys.Z))
-            {
-                toolStripBtnUndo_Click(null, null);
-
-                return;
-            }
-            else if (e.KeyData == (Keys.Control | Keys.Y))
-            {
-                toolStripBtnRedo_Click(null, null);
-
-                return;
-            }
-            else if (e.KeyData == (Keys.Control | Keys.X))
-            {
-                toolStripBtnCut_Click(null, null);
-
-                return;
-            }
-            else if (e.KeyData == (Keys.Control | Keys.C))
-            {
-                toolStripBtnCopy_Click(null, null);
-
-                return;
-            }
-            else if (e.KeyData == (Keys.Control | Keys.V))
-            {
-                toolStripBtnPaste_Click(null, null);
-
-                return;
-            }
-            else if (e.KeyData == (Keys.Control | Keys.S))
-            {
-                toolStripBtnSaveMap_Click(null, null);
-
-                return;
-            }
-
-            var xDiff = 0;
-            var yDiff = 0;
-            if (dockLeft.ActiveContent == Globals.MapEditorWindow ||
-                dockLeft.ActiveContent == null &&
-                Globals.MapEditorWindow.DockPanel.ActiveDocument == Globals.MapEditorWindow)
-            {
-                if (e.KeyCode == Keys.W || e.KeyCode == Keys.Up)
-                {
-                    yDiff -= 20;
-                }
-
-                if (e.KeyCode == Keys.S || e.KeyCode == Keys.Down)
-                {
-                    yDiff += 20;
-                }
-
-                if (e.KeyCode == Keys.A || e.KeyCode == Keys.Left)
-                {
-                    xDiff -= 20;
-                }
-
-                if (e.KeyCode == Keys.D || e.KeyCode == Keys.Right)
-                {
-                    xDiff += 20;
-                }
-
-                if (xDiff != 0 || yDiff != 0)
-                {
-                    var hWnd = WindowFromPoint((System.Drawing.Point) MousePosition);
-                    if (hWnd != IntPtr.Zero)
-                    {
-                        var ctl = Control.FromHandle(hWnd);
-                        if (ctl != null)
-                        {
-                            if (ctl.GetType() == typeof(ComboBox) || ctl.GetType() == typeof(DarkComboBox))
-                            {
-                                return;
-                            }
-                        }
-                    }
-
-                    Core.Graphics.CurrentView.X -= xDiff;
-                    Core.Graphics.CurrentView.Y -= yDiff;
-                    if (Core.Graphics.CurrentView.X > Options.MapWidth * Options.TileWidth)
-                    {
-                        Core.Graphics.CurrentView.X = Options.MapWidth * Options.TileWidth;
-                    }
-
-                    if (Core.Graphics.CurrentView.Y > Options.MapHeight * Options.TileHeight)
-                    {
-                        Core.Graphics.CurrentView.Y = Options.MapHeight * Options.TileHeight;
-                    }
-
-                    if (Core.Graphics.CurrentView.X - Globals.MapEditorWindow.picMap.Width <
-                        -Options.TileWidth * Options.MapWidth * 2)
-                    {
-                        Core.Graphics.CurrentView.X = -Options.TileWidth * Options.MapWidth * 2 +
-                                                      Globals.MapEditorWindow.picMap.Width;
-                    }
-
-                    if (Core.Graphics.CurrentView.Y - Globals.MapEditorWindow.picMap.Height <
-                        -Options.TileHeight * Options.MapHeight * 2)
-                    {
-                        Core.Graphics.CurrentView.Y = -Options.TileHeight * Options.MapHeight * 2 +
-                                                      Globals.MapEditorWindow.picMap.Height;
-                    }
-                }
-            }
+            KeysDown.Add(e.KeyCode);
+            HandleHotkeys(e);
         }
 
         private void InitMapProperties()
@@ -2313,6 +2227,11 @@ namespace Intersect.Editor.Forms
         {
             var copier = new frmMapCopier();
             copier.Show();
+        }
+
+        private void MovementTimer_Tick(object sender, EventArgs e)
+        {
+            HandleMapPanning();
         }
     }
 

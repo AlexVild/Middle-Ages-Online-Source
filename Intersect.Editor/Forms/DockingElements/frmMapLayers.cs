@@ -501,9 +501,35 @@ namespace Intersect.Editor.Forms.DockingElements
             chkGroundLevel.Checked = false;
         }
 
+        public void HotkeyBlockToggle()
+        {
+            if (rbBlocked.Checked)
+            {
+                return;
+            }
+
+            Core.Graphics.TilePreviewUpdated = true;
+            rbBlocked.Checked = true;
+        }
+
+        public bool BlockSelected()
+        {
+            return rbBlocked.Checked;
+        }
+
         private void rbNPCAvoid_CheckedChanged(object sender, EventArgs e)
         {
             HideAttributeMenus();
+        }
+
+        public void HotkeyNpcAvoidToggle()
+        {
+            if (rbNPCAvoid.Checked)
+            {
+                return;
+            }
+            rbNPCAvoid.Checked = true;
+            Core.Graphics.TilePreviewUpdated = true;
         }
 
         private void rbZDimension_CheckedChanged(object sender, EventArgs e)
@@ -560,6 +586,16 @@ namespace Intersect.Editor.Forms.DockingElements
 
             HideAttributeMenus();
             grpResource.Visible = true;
+        }
+
+        public void HotkeyResourceToggle()
+        {
+            if (rbResource.Checked)
+            {
+                return;
+            }
+            rbResource.Checked = true;
+            Core.Graphics.TilePreviewUpdated = true;
         }
 
         // Used for returning an integer value depending on which radio button is selected on the forms. This is merely used to make PlaceAtrribute less messy.
@@ -735,7 +771,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     break;
                 case MapAttributes.Blocked:
                     var blockAttribute = attribute as MapBlockedAttribute;
-                    blockAttribute.GroundLevel = chkGroundLevel.Checked;
+                    blockAttribute.GroundLevel = chkGroundLevel.Checked || Globals.MainForm.KeysDown.Contains(Keys.ShiftKey);
                     break;
 
                 case MapAttributes.Item:
@@ -1436,6 +1472,21 @@ namespace Intersect.Editor.Forms.DockingElements
             pnlTiles.Show();
         }
 
+        public void HotkeyToggleTiles(string tileLayer)
+        {
+            if (!TileLayers.Names.Contains(Globals.CurrentLayer))
+            {
+                ChangeTab();
+            }
+
+            Globals.CurrentTool = Globals.SavedTool;
+            SetLayer(tileLayer);
+            Core.Graphics.TilePreviewUpdated = true;
+            btnTileHeader.BackColor = System.Drawing.Color.FromArgb(90, 90, 90);
+            CurrentTab = LayerTabs.Tiles;
+            pnlTiles.Show();
+        }
+
         private void btnAttributeHeader_Click(object sender, EventArgs e)
         {
             Globals.CurrentTool = Globals.SavedTool;
@@ -1445,6 +1496,16 @@ namespace Intersect.Editor.Forms.DockingElements
             btnAttributeHeader.BackColor = System.Drawing.Color.FromArgb(90, 90, 90);
             CurrentTab = LayerTabs.Attributes;
             pnlAttributes.Show();
+        }
+
+        public void HotkeyToggleAttributes()
+        {
+            if (Globals.CurrentLayer == LayerOptions.Attributes)
+            {
+                return;
+            }
+
+            btnAttributeHeader_Click(null, null);
         }
 
         public void btnLightsHeader_Click(object sender, EventArgs e)
@@ -1462,6 +1523,16 @@ namespace Intersect.Editor.Forms.DockingElements
             pnlLights.Show();
         }
 
+        public void HotkeyToggleLights()
+        {
+            if (Globals.CurrentLayer == LayerOptions.Lights)
+            {
+                return;
+            }
+
+            btnLightsHeader_Click(null, null);
+        }
+
         private void btnEventsHeader_Click(object sender, EventArgs e)
         {
             if (Globals.CurrentLayer != LayerOptions.Lights && Globals.CurrentLayer != LayerOptions.Events && Globals.CurrentLayer != LayerOptions.Npcs)
@@ -1475,6 +1546,16 @@ namespace Intersect.Editor.Forms.DockingElements
             btnEventsHeader.BackColor = System.Drawing.Color.FromArgb(90, 90, 90);
             CurrentTab = LayerTabs.Events;
             pnlEvents.Show();
+        }
+
+        public void HotkeyToggleEvents()
+        {
+            if (Globals.CurrentLayer == LayerOptions.Events)
+            {
+                return;
+            }
+
+            btnEventsHeader_Click(null, null);
         }
 
         private void btnNpcsHeader_Click(object sender, EventArgs e)
@@ -1492,6 +1573,16 @@ namespace Intersect.Editor.Forms.DockingElements
             CurrentTab = LayerTabs.Npcs;
             pnlNpcs.Show();
             Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
+        }
+
+        public void HotkeyToggleNpcs()
+        {
+            if (Globals.CurrentLayer == LayerOptions.Npcs)
+            {
+                return;
+            }
+
+            btnNpcsHeader_Click(null, null);
         }
 
         private void picMapLayer_MouseClick(object sender, MouseEventArgs e)
