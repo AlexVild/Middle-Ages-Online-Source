@@ -40,8 +40,8 @@ namespace Intersect.Editor.Forms
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabelRevision = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabelFPS = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolstripLabelFps = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolstripSeparatorEditorMode = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabelDebug = new System.Windows.Forms.ToolStripStatusLabel();
             this.dockLeft = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.toolStripBtnNewMap = new System.Windows.Forms.ToolStripButton();
@@ -135,6 +135,8 @@ namespace Intersect.Editor.Forms
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapPropertyCopierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packageUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolstripLabelShortcutMode = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -151,8 +153,10 @@ namespace Intersect.Editor.Forms
             this.toolStripSeparator7,
             this.toolStripLabelRevision,
             this.toolStripSeparator8,
-            this.toolStripLabelFPS,
-            this.toolStripSeparator9,
+            this.toolstripLabelFps,
+            this.toolStripSeparator12,
+            this.toolstripLabelShortcutMode,
+            this.toolstripSeparatorEditorMode,
             this.toolStripLabelDebug});
             this.statusStrip1.Location = new System.Drawing.Point(0, 967);
             this.statusStrip1.Name = "statusStrip1";
@@ -186,17 +190,18 @@ namespace Intersect.Editor.Forms
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 33);
             // 
-            // toolStripLabelFPS
+            // toolstripLabelFps
             // 
-            this.toolStripLabelFPS.ForeColor = System.Drawing.SystemColors.Control;
-            this.toolStripLabelFPS.Name = "toolStripLabelFPS";
-            this.toolStripLabelFPS.Size = new System.Drawing.Size(70, 26);
-            this.toolStripLabelFPS.Text = "FPS: 64";
+            this.toolstripLabelFps.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolstripLabelFps.Name = "toolstripLabelFps";
+            this.toolstripLabelFps.Size = new System.Drawing.Size(70, 26);
+            this.toolstripLabelFps.Text = "FPS: 64";
             // 
-            // toolStripSeparator9
+            // toolstripSeparatorEditorMode
             // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 33);
+            this.toolstripSeparatorEditorMode.Name = "toolstripSeparatorEditorMode";
+            this.toolstripSeparatorEditorMode.Size = new System.Drawing.Size(6, 33);
+            this.toolstripSeparatorEditorMode.Visible = false;
             // 
             // toolStripLabelDebug
             // 
@@ -1131,6 +1136,19 @@ namespace Intersect.Editor.Forms
             this.packageUpdateToolStripMenuItem.Text = "Package Update";
             this.packageUpdateToolStripMenuItem.Click += new System.EventHandler(this.packageUpdateToolStripMenuItem_Click);
             // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(6, 33);
+            // 
+            // toolstripLabelShortcutMode
+            // 
+            this.toolstripLabelShortcutMode.ForeColor = System.Drawing.SystemColors.Control;
+            this.toolstripLabelShortcutMode.Name = "toolstripLabelShortcutMode";
+            this.toolstripLabelShortcutMode.Size = new System.Drawing.Size(131, 26);
+            this.toolstripLabelShortcutMode.Text = "Shortcut Mode";
+            this.toolstripLabelShortcutMode.Visible = false;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(144F, 144F);
@@ -1167,11 +1185,11 @@ namespace Intersect.Editor.Forms
 		private DarkStatusStrip statusStrip1;
 		public ToolStripStatusLabel toolStripLabelCoords;
 		private ToolStripSeparator toolStripSeparator7;
-		public ToolStripStatusLabel toolStripLabelFPS;
+		public ToolStripStatusLabel toolstripLabelFps;
 		private ToolStripSeparator toolStripSeparator8;
 		public ToolStripStatusLabel toolStripLabelDebug;
 		public ToolStripStatusLabel toolStripLabelRevision;
-		private ToolStripSeparator toolStripSeparator9;
+		private ToolStripSeparator toolstripSeparatorEditorMode;
 		private WeifenLuo.WinFormsUI.Docking.DockPanel dockLeft;
 		private ToolStripButton toolStripBtnNewMap;
 		private ToolStripButton toolStripBtnSaveMap;
@@ -1264,5 +1282,7 @@ namespace Intersect.Editor.Forms
         private ToolStripMenuItem enhancementEditorToolStripMenuItem;
         private ToolStripMenuItem territoryEditorToolStripMenuItem;
         private ToolStripMenuItem mapPropertyCopierToolStripMenuItem;
+        public ToolStripStatusLabel toolstripLabelShortcutMode;
+        private ToolStripSeparator toolStripSeparator12;
     }
 }

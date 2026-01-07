@@ -52,7 +52,7 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             //Collect folders
             var mFolders = new List<string>();

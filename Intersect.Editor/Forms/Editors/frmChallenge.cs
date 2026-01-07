@@ -141,7 +141,7 @@ namespace Intersect.Editor.Forms.Editors
             FormHelpers.GameObjectUpdatedDelegate(ref mEditorItem, InitEditor, UpdateEditor);
         }
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             FormHelpers.InitFoldersAndObjectList<ChallengeDescriptor>(
                 ref mKnownFolders,

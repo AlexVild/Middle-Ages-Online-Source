@@ -1,19 +1,18 @@
-﻿using System;
-using System.Drawing;
-using System.Reflection;
-using System.Windows.Forms;
-
-using DarkUI.Controls;
-
+﻿using DarkUI.Controls;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.GameObjects;
+using System;
+using System.Drawing;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Windows.Forms;
 
 namespace Intersect.Editor.Forms.Editors
 {
 
-    public partial class FrmTime : Form
+    public partial class FrmTime : EditorForm
     {
 
         private TimeBase mBackupTime;
@@ -50,8 +49,9 @@ namespace Intersect.Editor.Forms.Editors
             btnCancel.Text = Strings.TimeEditor.cancel;
         }
 
-        public void InitEditor(TimeBase time)
+        public override void InitEditor()
         {
+            var time = TimeBase.GetTimeBase();
             //Create a backup in case we want to revert
             mYTime = time;
             mBackupTime = new TimeBase();

@@ -20,6 +20,11 @@ namespace Intersect.Editor.Forms.Editors
             this.Icon = Properties.Resources.Icon;
         }
 
+        public virtual void InitEditor()
+        {
+            return;
+        }
+
         protected void ApplyHooks()
         {
             PacketHandler.GameObjectUpdatedDelegate = type =>

@@ -1567,7 +1567,7 @@ namespace Intersect.Editor.Forms.Editors
 
         #region "Item List - Folders, Searching, Sorting, Etc"
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             //Collect folders and cooldown groups
             var mFolders = new List<string>();

@@ -487,7 +487,7 @@ namespace Intersect.Editor.Forms.Editors
             btnCancel.Text = Strings.ClassEditor.cancel;
         }
 
-        public void InitEditor()
+        public override void InitEditor()
         {
             //Collect folders
             var mFolders = new List<string>();
