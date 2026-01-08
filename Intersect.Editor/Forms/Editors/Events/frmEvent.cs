@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-
-using DarkUI.Controls;
+﻿using DarkUI.Controls;
 using DarkUI.Forms;
-
 using Intersect.Editor.Content;
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
 using Intersect.Editor.Localization;
@@ -21,8 +13,14 @@ using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Utilities;
-
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace Intersect.Editor.Forms.Editors.Events
 {
@@ -65,6 +63,8 @@ namespace Intersect.Editor.Forms.Editors.Events
         public bool QuestEvent;
 
         public int mOldSelectedCommand;
+
+        private Dictionary<EventCommandType, string> mCommandMap = new Dictionary<EventCommandType, string>();
 
         private void txtEventname_TextChanged(object sender, EventArgs e)
         {
@@ -363,6 +363,45 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private void FrmEvent_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.Control && e.KeyCode == Keys.Space && !grpNewCommands.Visible)
+            {
+                DisableButtons();
+                grpNewCommands.Show();
+                mIsInsert = false;
+                e.Handled = true;
+                return;
+            }
+
+            if (e.KeyCode == Keys.Enter && lstEventCommands.Focused)
+            {
+                DisableButtons();
+                grpNewCommands.Show();
+                mIsInsert = mCommandProperties[mCurrentCommand].Type != EventCommandType.Null;
+                e.Handled = true;
+                return;
+            }
+
+            if (e.KeyCode == Keys.End && lstEventCommands.Focused)
+            {
+                lstEventCommands.SelectedIndex = lstEventCommands.Items.Count - 1;
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.F && grpNewCommands.Visible)
+            {
+                txtFilter.Focus();
+                e.Handled = true;
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.S && !grpNewCommands.Visible)
+            {
+                e.Handled = true;
+                btnSave_Click(null, null);
+                return;
+            }
+
             if (e.KeyCode == Keys.Escape)
             {
                 if (grpNewCommands.Visible)
@@ -501,15 +540,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             btnTabsLeft.Visible = pnlTabs.Left < 0;
         }
 
-        private void lstCommands_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void SelectCommand(EventCommandType type)
         {
-            if (e.Node.Tag == null)
-            {
-                return;
-            }
-
-            var type = (EventCommandType) int.Parse(e.Node.Tag.ToString());
-
             if ((type == EventCommandType.SetMoveRoute || type == EventCommandType.WaitForRouteCompletion) &&
                 MyEvent.CommonEvent)
             {
@@ -551,7 +583,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                     break;
                 case EventCommandType.SetSelfSwitch:
-                    tmpCommand = new SetSelfSwitchCommand() {Value = true};
+                    tmpCommand = new SetSelfSwitchCommand() { Value = true };
 
                     break;
                 case EventCommandType.ConditionalBranch:
@@ -952,6 +984,23 @@ namespace Intersect.Editor.Forms.Editors.Events
             mIsEdit = false;
         }
 
+        private void lstCommands_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node.Tag == null)
+            {
+                return;
+            }
+
+            var type = ParseCommandTag(e.Node.Tag);
+
+            SelectCommand(type);
+        }
+
+        private EventCommandType ParseCommandTag(object tag)
+        {
+            return (EventCommandType)int.Parse(tag.ToString());
+        }
+
         private void btnEditConditions_Click(object sender, EventArgs e)
         {
             var editForm = new FrmDynamicRequirements(CurrentPage.ConditionLists, RequirementType.Event);
@@ -979,6 +1028,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             grpCreateCommands.BringToFront();
             InitLocalization();
             lstCommands.ExpandAll();
+            RefocusEventList();
+        }
+
+        private void RefocusEventList()
+        {
+            lstEventCommands.Focus();
+            lstEventCommands.SelectedIndex = mOldSelectedCommand >= 0 ? mOldSelectedCommand : lstEventCommands.Items.Count - 1;
         }
 
         /// <summary>
@@ -1008,7 +1064,22 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
             else
             {
-                btnCancel_Click(null, null);
+                if (grpCreateCommands.Visible)
+                {
+                    CancelCommandEdit();
+                }
+
+                if (NewEvent)
+                {
+                    MyMap.LocalEvents.Remove(MyEvent.Id);
+                }
+                else
+                {
+                    MyEvent.Load(mEventBackup);
+                }
+
+                Hide();
+                Dispose();
             }
         }
 
@@ -1096,13 +1167,27 @@ namespace Intersect.Editor.Forms.Editors.Events
             grpQuestAnimation.Text = Strings.EventEditor.questanimationgroup;
             lblQuestAnimation.Text = Strings.EventEditor.questanimationlabel;
 
+            lstFilteredCommands.DisplayMember = "Value";
+            lstFilteredCommands.ValueMember = "Key";
+
+            PopulateCommandList();
+        }
+
+
+        private void PopulateCommandList()
+        {
             for (var i = 0; i < lstCommands.Nodes.Count; i++)
             {
-                lstCommands.Nodes[i].Text = Strings.EventCommands.commands[lstCommands.Nodes[i].Name];
+                var parentNode = lstCommands.Nodes[i];
+                lstCommands.Nodes[i].Text = Strings.EventCommands.commands[parentNode.Name];
                 for (var x = 0; x < lstCommands.Nodes[i].Nodes.Count; x++)
                 {
-                    lstCommands.Nodes[i].Nodes[x].Text =
-                        Strings.EventCommands.commands[lstCommands.Nodes[i].Nodes[x].Name];
+                    var node = lstCommands.Nodes[i].Nodes[x];
+                    var localizedName = Strings.EventCommands.commands[node.Name];
+                    
+                    // Store this data in our filterable list
+                    lstCommands.Nodes[i].Nodes[x].Text = localizedName;
+                    mCommandMap[ParseCommandTag(node.Tag)] = localizedName;
                 }
             }
         }
@@ -1284,26 +1369,6 @@ namespace Intersect.Editor.Forms.Editors.Events
             ListPageCommands();
             UpdateEventPreview();
             EnableButtons();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            if (grpCreateCommands.Visible)
-            {
-                CancelCommandEdit();
-            }
-
-            if (NewEvent)
-            {
-                MyMap.LocalEvents.Remove(MyEvent.Id);
-            }
-            else
-            {
-                MyEvent.Load(mEventBackup);
-            }
-
-            Hide();
-            Dispose();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -1768,6 +1833,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 ListPageCommands();
                 EnableButtons();
+                RefocusEventList();
             }
         }
 
@@ -1786,6 +1852,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             ListPageCommands();
             EnableButtons();
+            RefocusEventList();
         }
 
         /// <summary>
@@ -2441,6 +2508,93 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkIgnoreBlocked_CheckedChanged(object sender, EventArgs e)
         {
             CurrentPage.IgnoreBlocked = chkIgnoreBlocked.Checked;
+        }
+
+        private void ResetFilter()
+        {
+            txtFilter.Text = string.Empty;
+        }
+
+        private void txtFilter_TextChanged(object sender, EventArgs e)
+        {
+            lstFilteredCommands.Visible = txtFilter.Text != string.Empty;
+            lstCommands.Visible = txtFilter.Text == string.Empty;
+            
+            if (lstFilteredCommands.Visible)
+            {
+                PopulateFilteredCommands(txtFilter.Text);
+            }
+        }
+
+        private void PopulateFilteredCommands(string term)
+        {
+            var filteredMap = mCommandMap
+                .Where(cmd => TextUtils.IsSearchable(cmd.Value, term))
+                .ToDictionary(pair => pair.Key, pair => pair.Value);
+
+            lstFilteredCommands.Items.Clear();
+            foreach(var command in filteredMap)
+            {
+                lstFilteredCommands.Items.Add(command);
+            }
+        }
+
+        private void lstCommands_VisibleChanged(object sender, EventArgs e)
+        {
+            if (lstCommands.Visible)
+            {
+                ResetFilter();
+            }
+        }
+
+        private void SelectFilteredCommand()
+        {
+            if (lstFilteredCommands.SelectedIndex < 0 || lstFilteredCommands.SelectedIndex >= lstFilteredCommands.Items.Count)
+            {
+                return;
+            }
+
+            SelectCommand(((KeyValuePair<EventCommandType, string>)lstFilteredCommands.SelectedItem).Key);
+        }
+
+        private void lstFilteredCommands_DoubleClick(object sender, EventArgs e)
+        {
+            SelectFilteredCommand();
+        }
+
+        private void lblClearFilter_Click(object sender, EventArgs e)
+        {
+            ResetFilter();
+        }
+
+        private void grpNewCommands_VisibleChanged(object sender, EventArgs e)
+        {
+            ResetFilter();
+        }
+
+        private void lstFilteredCommands_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter)
+            {
+                return;
+            }
+            e.Handled = true;
+            SelectFilteredCommand();
+        }
+
+        private void lstFilteredCommands_Enter(object sender, EventArgs e)
+        {
+            if (lstFilteredCommands.Items.Count <= 0)
+            {
+                return;
+            }
+
+            lstFilteredCommands.SelectedIndex = 0;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            frmEvent_FormClosing(null, new FormClosingEventArgs(CloseReason.UserClosing, false));
         }
     }
 

@@ -137,6 +137,22 @@ namespace Intersect.Utilities
             // Default case
             return Array.Exists(vowels, v => v.Equals(firstChar.ToString(), StringComparison.OrdinalIgnoreCase)) ? "an" : "a";
         }
+
+        public static bool IsSearchable(string name, string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                return true;
+            }
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            return name.StartsWith(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                || name.EndsWith(searchTerm, StringComparison.CurrentCultureIgnoreCase)
+                || (searchTerm.Length > 3 && name.ToLower().Contains(searchTerm.ToLower()));
+        }
     }
 
 }

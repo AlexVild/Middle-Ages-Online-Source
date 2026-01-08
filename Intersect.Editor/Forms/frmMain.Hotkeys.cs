@@ -455,7 +455,10 @@ namespace Intersect.Editor.Forms
 
         private void HandleMapPanning()
         {
-            if (!EditingMap || ShortcutArmed)
+            if (!EditingMap 
+                || ShortcutArmed 
+                || KeysDown.Contains(Keys.ControlKey) 
+                || KeysDown.Contains(Keys.Alt))
             {
                 return;
             }
