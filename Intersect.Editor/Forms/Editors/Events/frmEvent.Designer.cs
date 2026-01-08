@@ -297,7 +297,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpEventConditions = new DarkUI.Controls.DarkGroupBox();
             this.btnEditConditions = new DarkUI.Controls.DarkButton();
             this.grpNewCommands = new DarkUI.Controls.DarkGroupBox();
+            this.lblCommandFilter = new System.Windows.Forms.Label();
+            this.lblClearFilter = new System.Windows.Forms.Label();
+            this.txtFilter = new DarkUI.Controls.DarkTextBox();
             this.lblCloseCommands = new System.Windows.Forms.Label();
+            this.lstFilteredCommands = new System.Windows.Forms.ListBox();
             this.lstCommands = new System.Windows.Forms.TreeView();
             this.grpEventCommands = new DarkUI.Controls.DarkGroupBox();
             this.lstEventCommands = new System.Windows.Forms.ListBox();
@@ -897,7 +901,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnSetRoute.Location = new System.Drawing.Point(110, 66);
             this.btnSetRoute.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSetRoute.Name = "btnSetRoute";
-            this.btnSetRoute.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSetRoute.Padding = new System.Windows.Forms.Padding(8);
             this.btnSetRoute.Size = new System.Drawing.Size(112, 35);
             this.btnSetRoute.TabIndex = 2;
             this.btnSetRoute.Text = "Set Route....";
@@ -1212,9 +1216,9 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnEditConditions.Location = new System.Drawing.Point(10, 31);
             this.btnEditConditions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnEditConditions.Name = "btnEditConditions";
-            this.btnEditConditions.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnEditConditions.Padding = new System.Windows.Forms.Padding(8);
             this.btnEditConditions.Size = new System.Drawing.Size(456, 35);
-            this.btnEditConditions.TabIndex = 0;
+            this.btnEditConditions.TabIndex = 3;
             this.btnEditConditions.Text = "Spawn/Execution Conditions";
             this.btnEditConditions.Click += new System.EventHandler(this.btnEditConditions_Click);
             // 
@@ -1222,7 +1226,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpNewCommands.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpNewCommands.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNewCommands.Controls.Add(this.lblCommandFilter);
+            this.grpNewCommands.Controls.Add(this.lblClearFilter);
+            this.grpNewCommands.Controls.Add(this.txtFilter);
             this.grpNewCommands.Controls.Add(this.lblCloseCommands);
+            this.grpNewCommands.Controls.Add(this.lstFilteredCommands);
             this.grpNewCommands.Controls.Add(this.lstCommands);
             this.grpNewCommands.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNewCommands.Location = new System.Drawing.Point(530, 137);
@@ -1234,6 +1242,40 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpNewCommands.TabStop = false;
             this.grpNewCommands.Text = "Add Commands";
             this.grpNewCommands.Visible = false;
+            this.grpNewCommands.VisibleChanged += new System.EventHandler(this.grpNewCommands_VisibleChanged);
+            // 
+            // lblCommandFilter
+            // 
+            this.lblCommandFilter.AutoSize = true;
+            this.lblCommandFilter.Location = new System.Drawing.Point(11, 21);
+            this.lblCommandFilter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCommandFilter.Name = "lblCommandFilter";
+            this.lblCommandFilter.Size = new System.Drawing.Size(44, 20);
+            this.lblCommandFilter.TabIndex = 4;
+            this.lblCommandFilter.Text = "Filter";
+            // 
+            // lblClearFilter
+            // 
+            this.lblClearFilter.AutoSize = true;
+            this.lblClearFilter.Location = new System.Drawing.Point(390, 21);
+            this.lblClearFilter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblClearFilter.Name = "lblClearFilter";
+            this.lblClearFilter.Size = new System.Drawing.Size(20, 20);
+            this.lblClearFilter.TabIndex = 112;
+            this.lblClearFilter.Text = "X";
+            this.lblClearFilter.Click += new System.EventHandler(this.lblClearFilter_Click);
+            // 
+            // txtFilter
+            // 
+            this.txtFilter.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtFilter.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtFilter.Location = new System.Drawing.Point(74, 19);
+            this.txtFilter.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtFilter.Name = "txtFilter";
+            this.txtFilter.Size = new System.Drawing.Size(308, 26);
+            this.txtFilter.TabIndex = 0;
+            this.txtFilter.TextChanged += new System.EventHandler(this.txtFilter_TextChanged);
             // 
             // lblCloseCommands
             // 
@@ -1245,6 +1287,24 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lblCloseCommands.TabIndex = 1;
             this.lblCloseCommands.Text = "X";
             this.lblCloseCommands.Click += new System.EventHandler(this.lblCloseCommands_Click);
+            // 
+            // lstFilteredCommands
+            // 
+            this.lstFilteredCommands.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstFilteredCommands.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstFilteredCommands.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstFilteredCommands.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstFilteredCommands.FormattingEnabled = true;
+            this.lstFilteredCommands.ItemHeight = 20;
+            this.lstFilteredCommands.Location = new System.Drawing.Point(9, 49);
+            this.lstFilteredCommands.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lstFilteredCommands.Name = "lstFilteredCommands";
+            this.lstFilteredCommands.Size = new System.Drawing.Size(779, 262);
+            this.lstFilteredCommands.TabIndex = 1;
+            this.lstFilteredCommands.Visible = false;
+            this.lstFilteredCommands.DoubleClick += new System.EventHandler(this.lstFilteredCommands_DoubleClick);
+            this.lstFilteredCommands.Enter += new System.EventHandler(this.lstFilteredCommands_Enter);
+            this.lstFilteredCommands.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstFilteredCommands_KeyDown);
             // 
             // lstCommands
             // 
@@ -1586,6 +1646,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lstCommands.Size = new System.Drawing.Size(778, 920);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);
+            this.lstCommands.VisibleChanged += new System.EventHandler(this.lstCommands_VisibleChanged);
             // 
             // grpEventCommands
             // 
@@ -1598,7 +1659,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpEventCommands.Name = "grpEventCommands";
             this.grpEventCommands.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpEventCommands.Size = new System.Drawing.Size(796, 954);
-            this.grpEventCommands.TabIndex = 6;
+            this.grpEventCommands.TabIndex = 0;
             this.grpEventCommands.TabStop = false;
             this.grpEventCommands.Text = "Commands";
             // 
@@ -1641,7 +1702,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnSave.Location = new System.Drawing.Point(1029, 1132);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSave.Padding = new System.Windows.Forms.Padding(8);
             this.btnSave.Size = new System.Drawing.Size(140, 46);
             this.btnSave.TabIndex = 6;
             this.btnSave.Text = "Save";
@@ -1652,7 +1713,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnCancel.Location = new System.Drawing.Point(1178, 1132);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(8);
             this.btnCancel.Size = new System.Drawing.Size(140, 46);
             this.btnCancel.TabIndex = 7;
             this.btnCancel.Text = "Cancel";
@@ -1745,7 +1806,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnClearPage.Location = new System.Drawing.Point(603, 25);
             this.btnClearPage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnClearPage.Name = "btnClearPage";
-            this.btnClearPage.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnClearPage.Padding = new System.Windows.Forms.Padding(8);
             this.btnClearPage.Size = new System.Drawing.Size(140, 46);
             this.btnClearPage.TabIndex = 17;
             this.btnClearPage.Text = "Clear Page";
@@ -1757,7 +1818,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnDeletePage.Location = new System.Drawing.Point(454, 25);
             this.btnDeletePage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDeletePage.Name = "btnDeletePage";
-            this.btnDeletePage.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnDeletePage.Padding = new System.Windows.Forms.Padding(8);
             this.btnDeletePage.Size = new System.Drawing.Size(140, 46);
             this.btnDeletePage.TabIndex = 16;
             this.btnDeletePage.Text = "Delete Page";
@@ -1768,7 +1829,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnPastePage.Location = new System.Drawing.Point(306, 25);
             this.btnPastePage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnPastePage.Name = "btnPastePage";
-            this.btnPastePage.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnPastePage.Padding = new System.Windows.Forms.Padding(8);
             this.btnPastePage.Size = new System.Drawing.Size(140, 46);
             this.btnPastePage.TabIndex = 15;
             this.btnPastePage.Text = "Paste Page";
@@ -1779,7 +1840,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnCopyPage.Location = new System.Drawing.Point(158, 25);
             this.btnCopyPage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCopyPage.Name = "btnCopyPage";
-            this.btnCopyPage.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnCopyPage.Padding = new System.Windows.Forms.Padding(8);
             this.btnCopyPage.Size = new System.Drawing.Size(140, 46);
             this.btnCopyPage.TabIndex = 14;
             this.btnCopyPage.Text = "Copy Page";
@@ -1790,7 +1851,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnNewPage.Location = new System.Drawing.Point(9, 25);
             this.btnNewPage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnNewPage.Name = "btnNewPage";
-            this.btnNewPage.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnNewPage.Padding = new System.Windows.Forms.Padding(8);
             this.btnNewPage.Size = new System.Drawing.Size(140, 46);
             this.btnNewPage.TabIndex = 13;
             this.btnNewPage.Text = "New Page";
@@ -1848,7 +1909,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnTabsRight.Location = new System.Drawing.Point(1221, 94);
             this.btnTabsRight.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnTabsRight.Name = "btnTabsRight";
-            this.btnTabsRight.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnTabsRight.Padding = new System.Windows.Forms.Padding(8);
             this.btnTabsRight.Size = new System.Drawing.Size(75, 35);
             this.btnTabsRight.TabIndex = 1;
             this.btnTabsRight.Text = ">";
@@ -1859,7 +1920,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnTabsLeft.Location = new System.Drawing.Point(18, 94);
             this.btnTabsLeft.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnTabsLeft.Name = "btnTabsLeft";
-            this.btnTabsLeft.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnTabsLeft.Padding = new System.Windows.Forms.Padding(8);
             this.btnTabsLeft.Size = new System.Drawing.Size(75, 35);
             this.btnTabsLeft.TabIndex = 0;
             this.btnTabsLeft.Text = "<";
@@ -2022,5 +2083,9 @@ namespace Intersect.Editor.Forms.Editors.Events
         private DarkCheckBox chkIdleAnim;
         private DarkCheckBox chkParallelRun;
         private DarkCheckBox chkIgnoreBlocked;
+        private DarkTextBox txtFilter;
+        private ListBox lstFilteredCommands;
+        private Label lblClearFilter;
+        private Label lblCommandFilter;
     }
 }
