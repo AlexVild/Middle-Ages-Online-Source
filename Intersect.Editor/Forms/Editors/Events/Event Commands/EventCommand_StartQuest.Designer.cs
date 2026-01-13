@@ -49,9 +49,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStartQuest.Controls.Add(this.btnCancel);
             this.grpStartQuest.Controls.Add(this.btnSave);
             this.grpStartQuest.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStartQuest.Location = new System.Drawing.Point(3, 3);
+            this.grpStartQuest.Location = new System.Drawing.Point(4, 5);
+            this.grpStartQuest.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpStartQuest.Name = "grpStartQuest";
-            this.grpStartQuest.Size = new System.Drawing.Size(330, 126);
+            this.grpStartQuest.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpStartQuest.Size = new System.Drawing.Size(533, 194);
             this.grpStartQuest.TabIndex = 17;
             this.grpStartQuest.TabStop = false;
             this.grpStartQuest.Text = "Start Quest";
@@ -59,9 +61,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // chkShowOfferWindow
             // 
             this.chkShowOfferWindow.AutoSize = true;
-            this.chkShowOfferWindow.Location = new System.Drawing.Point(47, 47);
+            this.chkShowOfferWindow.Location = new System.Drawing.Point(70, 72);
+            this.chkShowOfferWindow.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkShowOfferWindow.Name = "chkShowOfferWindow";
-            this.chkShowOfferWindow.Size = new System.Drawing.Size(127, 17);
+            this.chkShowOfferWindow.Size = new System.Drawing.Size(184, 24);
             this.chkShowOfferWindow.TabIndex = 23;
             this.chkShowOfferWindow.Text = "Show Offer Window?";
             // 
@@ -78,9 +81,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuests.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbQuests.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbQuests.FormattingEnabled = true;
-            this.cmbQuests.Location = new System.Drawing.Point(47, 19);
+            this.cmbQuests.Location = new System.Drawing.Point(70, 29);
+            this.cmbQuests.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cmbQuests.Name = "cmbQuests";
-            this.cmbQuests.Size = new System.Drawing.Size(275, 21);
+            this.cmbQuests.Size = new System.Drawing.Size(455, 27);
             this.cmbQuests.TabIndex = 22;
             this.cmbQuests.Text = null;
             this.cmbQuests.TextPadding = new System.Windows.Forms.Padding(2);
@@ -88,41 +92,45 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblQuest
             // 
             this.lblQuest.AutoSize = true;
-            this.lblQuest.Location = new System.Drawing.Point(4, 22);
+            this.lblQuest.Location = new System.Drawing.Point(6, 34);
+            this.lblQuest.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblQuest.Name = "lblQuest";
-            this.lblQuest.Size = new System.Drawing.Size(38, 13);
+            this.lblQuest.Size = new System.Drawing.Size(56, 20);
             this.lblQuest.TabIndex = 21;
             this.lblQuest.Text = "Quest:";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(89, 97);
+            this.btnCancel.Location = new System.Drawing.Point(413, 149);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(7, 97);
+            this.btnSave.Location = new System.Drawing.Point(293, 149);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Padding = new System.Windows.Forms.Padding(5);
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSave.Size = new System.Drawing.Size(112, 35);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // EventCommandStartQuest
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpStartQuest);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "EventCommandStartQuest";
-            this.Size = new System.Drawing.Size(337, 132);
+            this.Size = new System.Drawing.Size(544, 204);
             this.grpStartQuest.ResumeLayout(false);
             this.grpStartQuest.PerformLayout();
             this.ResumeLayout(false);
