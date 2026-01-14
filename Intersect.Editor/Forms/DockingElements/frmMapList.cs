@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 
 using DarkUI.Forms;
-
+using Intersect.Editor.Extensions;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -33,7 +33,7 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 if (Globals.CurrentMap != null &&
                     Globals.CurrentMap.Changed() &&
-                    DarkMessageBox.ShowInformation(
+                    MessageBoxExtensions.ShowInformation(
                         Strings.Mapping.savemapdialogue, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==
@@ -103,7 +103,7 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             if (mapTreeList.list.SelectedNode == null)
             {
-                DarkMessageBox.ShowError(
+                MessageBoxExtensions.ShowError(
                     Strings.MapList.selecttorename, Strings.MapList.rename, DarkDialogButton.Ok,
                     Properties.Resources.Icon
                 );
@@ -118,14 +118,14 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             if (mapTreeList.list.SelectedNode == null)
             {
-                DarkMessageBox.ShowError(
+                MessageBoxExtensions.ShowError(
                     Strings.MapList.selecttodelete, Strings.MapList.delete, DarkDialogButton.Ok,
                     Properties.Resources.Icon
                 );
             }
             else
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.MapList.deleteconfirm.ToString(((MapListItem) mapTreeList.list.SelectedNode.Tag).Name),
                         Strings.MapList.delete, DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==
@@ -145,7 +145,7 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void btnNewMap_Click(object sender, EventArgs e)
         {
-            if (DarkMessageBox.ShowWarning(
+            if (MessageBoxExtensions.ShowWarning(
                     Strings.Mapping.newmap, Strings.Mapping.newmapcaption, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) !=
@@ -155,7 +155,7 @@ namespace Intersect.Editor.Forms.DockingElements
             }
 
             if (Globals.CurrentMap.Changed() &&
-                DarkMessageBox.ShowInformation(
+                MessageBoxExtensions.ShowInformation(
                     Strings.Mapping.savemapdialogue, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using DarkUI.Forms;
 
 using Intersect.Editor.Content;
+using Intersect.Editor.Extensions;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -889,7 +890,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mEditorItem != null && lstGameObjects.Focused)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.ClassEditor.deleteprompt, Strings.ClassEditor.deletetitle, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==
@@ -922,7 +923,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mChanged.Contains(mEditorItem) && mEditorItem != null)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.ClassEditor.undoprompt, Strings.ClassEditor.undotitle, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==

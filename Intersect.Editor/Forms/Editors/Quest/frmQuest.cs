@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using DarkUI.Forms;
-
+using Intersect.Editor.Extensions;
 using Intersect.Editor.Forms.Editors.Events;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
@@ -504,7 +504,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         {
             if (mEditorItem != null && lstGameObjects.Focused)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.QuestEditor.deleteprompt, Strings.QuestEditor.deletetitle, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==
@@ -569,7 +569,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         {
             if (mChanged.Contains(mEditorItem) && mEditorItem != null)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.QuestEditor.undoprompt, Strings.QuestEditor.undotitle, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using DarkUI.Forms;
-
+using Intersect.Editor.Extensions;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -121,7 +121,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mEditorItem != null && lstGameObjects.Focused)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.CraftingTableEditor.deleteprompt, Strings.CraftingTableEditor.delete,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==
@@ -154,7 +154,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mChanged.Contains(mEditorItem) && mEditorItem != null)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.CraftingTableEditor.undoprompt, Strings.CraftingTableEditor.undotitle,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==
