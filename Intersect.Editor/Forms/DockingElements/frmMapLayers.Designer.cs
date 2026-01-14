@@ -146,6 +146,15 @@ namespace Intersect.Editor.Forms.DockingElements
             this.btnEventsHeader = new DarkUI.Controls.DarkButton();
             this.btnNpcsHeader = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlTiles = new System.Windows.Forms.Panel();
+            this.cmbMapLayer = new DarkUI.Controls.DarkComboBox();
+            this.picLayer5 = new System.Windows.Forms.PictureBox();
+            this.picLayer4 = new System.Windows.Forms.PictureBox();
+            this.picLayer3 = new System.Windows.Forms.PictureBox();
+            this.picLayer2 = new System.Windows.Forms.PictureBox();
+            this.picLayer1 = new System.Windows.Forms.PictureBox();
+            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
+            this.picTileset = new System.Windows.Forms.PictureBox();
             this.pnlNpcs = new System.Windows.Forms.Panel();
             this.grpSpawnGroup = new DarkUI.Controls.DarkGroupBox();
             this.nudSpawnGroup = new DarkUI.Controls.DarkNumericUpDown();
@@ -180,15 +189,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rdoTerritory = new DarkUI.Controls.DarkRadioButton();
             this.rdoFootstep = new DarkUI.Controls.DarkRadioButton();
             this.rbCritter = new DarkUI.Controls.DarkRadioButton();
-            this.pnlTiles = new System.Windows.Forms.Panel();
-            this.cmbMapLayer = new DarkUI.Controls.DarkComboBox();
-            this.picLayer5 = new System.Windows.Forms.PictureBox();
-            this.picLayer4 = new System.Windows.Forms.PictureBox();
-            this.picLayer3 = new System.Windows.Forms.PictureBox();
-            this.picLayer2 = new System.Windows.Forms.PictureBox();
-            this.picLayer1 = new System.Windows.Forms.PictureBox();
-            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
-            this.picTileset = new System.Windows.Forms.PictureBox();
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
@@ -218,6 +218,14 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.nudInstanceSpawnLimit)).BeginInit();
             this.grpSpawnLoc.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.pnlTiles.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
+            this.pnlTilesetContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlNpcs.SuspendLayout();
             this.grpSpawnGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).BeginInit();
@@ -229,14 +237,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpBlock.SuspendLayout();
             this.grpTerritorySettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTerritoryRadius)).BeginInit();
-            this.pnlTiles.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
-            this.pnlTilesetContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlEvents.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -1811,15 +1811,130 @@ namespace Intersect.Editor.Forms.DockingElements
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.pnlLights);
             this.panel1.Controls.Add(this.pnlTiles);
             this.panel1.Controls.Add(this.pnlNpcs);
-            this.panel1.Controls.Add(this.pnlLights);
             this.panel1.Controls.Add(this.pnlAttributes);
             this.panel1.Controls.Add(this.pnlEvents);
             this.panel1.Location = new System.Drawing.Point(8, 34);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(425, 973);
             this.panel1.TabIndex = 23;
+            // 
+            // pnlTiles
+            // 
+            this.pnlTiles.Controls.Add(this.cmbMapLayer);
+            this.pnlTiles.Controls.Add(this.picLayer5);
+            this.pnlTiles.Controls.Add(this.picLayer4);
+            this.pnlTiles.Controls.Add(this.picLayer3);
+            this.pnlTiles.Controls.Add(this.picLayer2);
+            this.pnlTiles.Controls.Add(this.picLayer1);
+            this.pnlTiles.Controls.Add(this.lblLayer);
+            this.pnlTiles.Controls.Add(this.cmbTilesets);
+            this.pnlTiles.Controls.Add(this.lblTileType);
+            this.pnlTiles.Controls.Add(this.cmbAutotile);
+            this.pnlTiles.Controls.Add(this.lblTileset);
+            this.pnlTiles.Controls.Add(this.pnlTilesetContainer);
+            this.pnlTiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlTiles.Location = new System.Drawing.Point(0, 0);
+            this.pnlTiles.Name = "pnlTiles";
+            this.pnlTiles.Size = new System.Drawing.Size(423, 971);
+            this.pnlTiles.TabIndex = 0;
+            // 
+            // cmbMapLayer
+            // 
+            this.cmbMapLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMapLayer.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMapLayer.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMapLayer.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMapLayer.DrawDropdownHoverOutline = false;
+            this.cmbMapLayer.DrawFocusRectangle = false;
+            this.cmbMapLayer.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMapLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMapLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMapLayer.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMapLayer.FormattingEnabled = true;
+            this.cmbMapLayer.Location = new System.Drawing.Point(84, 7);
+            this.cmbMapLayer.Name = "cmbMapLayer";
+            this.cmbMapLayer.Size = new System.Drawing.Size(178, 27);
+            this.cmbMapLayer.TabIndex = 29;
+            this.cmbMapLayer.Text = null;
+            this.cmbMapLayer.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbMapLayer.SelectedIndexChanged += new System.EventHandler(this.cmbMapLayer_SelectedIndexChanged);
+            // 
+            // picLayer5
+            // 
+            this.picLayer5.Location = new System.Drawing.Point(232, 2);
+            this.picLayer5.Name = "picLayer5";
+            this.picLayer5.Size = new System.Drawing.Size(30, 32);
+            this.picLayer5.TabIndex = 28;
+            this.picLayer5.TabStop = false;
+            this.picLayer5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer5.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer4
+            // 
+            this.picLayer4.Location = new System.Drawing.Point(195, 2);
+            this.picLayer4.Name = "picLayer4";
+            this.picLayer4.Size = new System.Drawing.Size(30, 32);
+            this.picLayer4.TabIndex = 27;
+            this.picLayer4.TabStop = false;
+            this.picLayer4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer4.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer3
+            // 
+            this.picLayer3.Location = new System.Drawing.Point(158, 2);
+            this.picLayer3.Name = "picLayer3";
+            this.picLayer3.Size = new System.Drawing.Size(30, 32);
+            this.picLayer3.TabIndex = 26;
+            this.picLayer3.TabStop = false;
+            this.picLayer3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer3.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer2
+            // 
+            this.picLayer2.Location = new System.Drawing.Point(121, 2);
+            this.picLayer2.Name = "picLayer2";
+            this.picLayer2.Size = new System.Drawing.Size(30, 32);
+            this.picLayer2.TabIndex = 25;
+            this.picLayer2.TabStop = false;
+            this.picLayer2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer2.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // picLayer1
+            // 
+            this.picLayer1.Location = new System.Drawing.Point(84, 2);
+            this.picLayer1.Name = "picLayer1";
+            this.picLayer1.Size = new System.Drawing.Size(30, 32);
+            this.picLayer1.TabIndex = 24;
+            this.picLayer1.TabStop = false;
+            this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
+            this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
+            // 
+            // pnlTilesetContainer
+            // 
+            this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTilesetContainer.AutoScroll = true;
+            this.pnlTilesetContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.pnlTilesetContainer.Controls.Add(this.picTileset);
+            this.pnlTilesetContainer.Location = new System.Drawing.Point(9, 106);
+            this.pnlTilesetContainer.Name = "pnlTilesetContainer";
+            this.pnlTilesetContainer.Size = new System.Drawing.Size(411, 857);
+            this.pnlTilesetContainer.TabIndex = 19;
+            // 
+            // picTileset
+            // 
+            this.picTileset.Location = new System.Drawing.Point(0, 0);
+            this.picTileset.Name = "picTileset";
+            this.picTileset.Size = new System.Drawing.Size(167, 148);
+            this.picTileset.TabIndex = 2;
+            this.picTileset.TabStop = false;
+            this.picTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseDown);
+            this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
+            this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
             // 
             // pnlNpcs
             // 
@@ -1892,7 +2007,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Location = new System.Drawing.Point(6, 6);
             this.lightEditor.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lightEditor.Name = "lightEditor";
-            this.lightEditor.Size = new System.Drawing.Size(410, 358);
+            this.lightEditor.Size = new System.Drawing.Size(410, 430);
             this.lightEditor.TabIndex = 2;
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
@@ -2305,121 +2420,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbCritter.Text = "Critter";
             this.rbCritter.CheckedChanged += new System.EventHandler(this.rbCritter_CheckedChanged);
             // 
-            // pnlTiles
-            // 
-            this.pnlTiles.Controls.Add(this.cmbMapLayer);
-            this.pnlTiles.Controls.Add(this.picLayer5);
-            this.pnlTiles.Controls.Add(this.picLayer4);
-            this.pnlTiles.Controls.Add(this.picLayer3);
-            this.pnlTiles.Controls.Add(this.picLayer2);
-            this.pnlTiles.Controls.Add(this.picLayer1);
-            this.pnlTiles.Controls.Add(this.lblLayer);
-            this.pnlTiles.Controls.Add(this.cmbTilesets);
-            this.pnlTiles.Controls.Add(this.lblTileType);
-            this.pnlTiles.Controls.Add(this.cmbAutotile);
-            this.pnlTiles.Controls.Add(this.lblTileset);
-            this.pnlTiles.Controls.Add(this.pnlTilesetContainer);
-            this.pnlTiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlTiles.Location = new System.Drawing.Point(0, 0);
-            this.pnlTiles.Name = "pnlTiles";
-            this.pnlTiles.Size = new System.Drawing.Size(423, 971);
-            this.pnlTiles.TabIndex = 0;
-            // 
-            // cmbMapLayer
-            // 
-            this.cmbMapLayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbMapLayer.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbMapLayer.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbMapLayer.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbMapLayer.DrawDropdownHoverOutline = false;
-            this.cmbMapLayer.DrawFocusRectangle = false;
-            this.cmbMapLayer.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbMapLayer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMapLayer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbMapLayer.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbMapLayer.FormattingEnabled = true;
-            this.cmbMapLayer.Location = new System.Drawing.Point(84, 7);
-            this.cmbMapLayer.Name = "cmbMapLayer";
-            this.cmbMapLayer.Size = new System.Drawing.Size(178, 27);
-            this.cmbMapLayer.TabIndex = 29;
-            this.cmbMapLayer.Text = null;
-            this.cmbMapLayer.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbMapLayer.SelectedIndexChanged += new System.EventHandler(this.cmbMapLayer_SelectedIndexChanged);
-            // 
-            // picLayer5
-            // 
-            this.picLayer5.Location = new System.Drawing.Point(232, 2);
-            this.picLayer5.Name = "picLayer5";
-            this.picLayer5.Size = new System.Drawing.Size(30, 32);
-            this.picLayer5.TabIndex = 28;
-            this.picLayer5.TabStop = false;
-            this.picLayer5.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer5.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer4
-            // 
-            this.picLayer4.Location = new System.Drawing.Point(195, 2);
-            this.picLayer4.Name = "picLayer4";
-            this.picLayer4.Size = new System.Drawing.Size(30, 32);
-            this.picLayer4.TabIndex = 27;
-            this.picLayer4.TabStop = false;
-            this.picLayer4.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer4.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer3
-            // 
-            this.picLayer3.Location = new System.Drawing.Point(158, 2);
-            this.picLayer3.Name = "picLayer3";
-            this.picLayer3.Size = new System.Drawing.Size(30, 32);
-            this.picLayer3.TabIndex = 26;
-            this.picLayer3.TabStop = false;
-            this.picLayer3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer3.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer2
-            // 
-            this.picLayer2.Location = new System.Drawing.Point(121, 2);
-            this.picLayer2.Name = "picLayer2";
-            this.picLayer2.Size = new System.Drawing.Size(30, 32);
-            this.picLayer2.TabIndex = 25;
-            this.picLayer2.TabStop = false;
-            this.picLayer2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer2.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // picLayer1
-            // 
-            this.picLayer1.Location = new System.Drawing.Point(84, 2);
-            this.picLayer1.Name = "picLayer1";
-            this.picLayer1.Size = new System.Drawing.Size(30, 32);
-            this.picLayer1.TabIndex = 24;
-            this.picLayer1.TabStop = false;
-            this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
-            this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
-            // 
-            // pnlTilesetContainer
-            // 
-            this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlTilesetContainer.AutoScroll = true;
-            this.pnlTilesetContainer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.pnlTilesetContainer.Controls.Add(this.picTileset);
-            this.pnlTilesetContainer.Location = new System.Drawing.Point(9, 106);
-            this.pnlTilesetContainer.Name = "pnlTilesetContainer";
-            this.pnlTilesetContainer.Size = new System.Drawing.Size(411, 857);
-            this.pnlTilesetContainer.TabIndex = 19;
-            // 
-            // picTileset
-            // 
-            this.picTileset.Location = new System.Drawing.Point(0, 0);
-            this.picTileset.Name = "picTileset";
-            this.picTileset.Size = new System.Drawing.Size(167, 148);
-            this.picTileset.TabIndex = 2;
-            this.picTileset.TabStop = false;
-            this.picTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseDown);
-            this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
-            this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
-            // 
             // pnlEvents
             // 
             this.pnlEvents.Controls.Add(this.lblEventInstructions);
@@ -2496,6 +2496,15 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSpawnLoc.ResumeLayout(false);
             this.grpSpawnLoc.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.pnlTiles.ResumeLayout(false);
+            this.pnlTiles.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
+            this.pnlTilesetContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.pnlNpcs.ResumeLayout(false);
             this.grpSpawnGroup.ResumeLayout(false);
             this.grpSpawnGroup.PerformLayout();
@@ -2512,15 +2521,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpTerritorySettings.ResumeLayout(false);
             this.grpTerritorySettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTerritoryRadius)).EndInit();
-            this.pnlTiles.ResumeLayout(false);
-            this.pnlTiles.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
-            this.pnlTilesetContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.ResumeLayout(false);
