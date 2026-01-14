@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using DarkUI.Forms;
 
 using Hjg.Pngcs;
-
+using Intersect.Editor.Extensions;
 using Intersect.Editor.Forms;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
@@ -218,7 +218,7 @@ namespace Intersect.Editor.Maps
                         {
                             if (Globals.CurrentMap != null &&
                                 Globals.CurrentMap.Changed() &&
-                                DarkMessageBox.ShowInformation(
+                                MessageBoxExtensions.ShowInformation(
                                     Strings.Mapping.savemapdialogue, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                                     Properties.Resources.Icon
                                 ) ==
@@ -261,7 +261,7 @@ namespace Intersect.Editor.Maps
             fileDialog.ShowDialog();
             if (fileDialog.FileName != "")
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.MapGrid.savescreenshotconfirm, Strings.MapGrid.savescreenshottitle,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==
@@ -405,7 +405,7 @@ namespace Intersect.Editor.Maps
             var maps = new List<Guid>();
             if (clearAllFirst)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.MapGrid.clearandfetch, Strings.MapGrid.fetchcaption, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) !=
@@ -414,7 +414,7 @@ namespace Intersect.Editor.Maps
                     return;
                 }
 
-                if (DarkMessageBox.ShowInformation(
+                if (MessageBoxExtensions.ShowInformation(
                         Strings.MapGrid.keepmapcache, Strings.MapGrid.mapcachecaption, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==
@@ -473,7 +473,7 @@ namespace Intersect.Editor.Maps
             if (maps.Count > 0)
             {
                 if (clearAllFirst ||
-                    DarkMessageBox.ShowWarning(
+                    MessageBoxExtensions.ShowWarning(
                         Strings.MapGrid.justfetch, Strings.MapGrid.fetchcaption, DarkDialogButton.YesNo,
                         Properties.Resources.Icon
                     ) ==
@@ -597,7 +597,7 @@ namespace Intersect.Editor.Maps
         {
             if (mContextMap != null && mContextMap.MapId != Guid.Empty)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.MapGrid.unlinkprompt.ToString(mContextMap.Name), Strings.MapGrid.unlinkcaption,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==

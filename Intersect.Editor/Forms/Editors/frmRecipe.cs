@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DarkUI.Forms;
 using Intersect.Editor.Content;
+using Intersect.Editor.Extensions;
 using Intersect.Editor.Forms.Helpers;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
@@ -446,7 +447,7 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
 
-            if (DarkMessageBox.ShowWarning(
+            if (MessageBoxExtensions.ShowWarning(
                         "Remove All Requirements", "Would you like to remove all requirements from this recipe?",
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                 ) ==

@@ -1,6 +1,7 @@
 ﻿using DarkUI.Controls;
 using DarkUI.Forms;
 using Intersect.Editor.Content;
+using Intersect.Editor.Extensions;
 using Intersect.Editor.Forms.Editors.Events.Event_Commands;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Maps;
@@ -545,7 +546,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             if ((type == EventCommandType.SetMoveRoute || type == EventCommandType.WaitForRouteCompletion) &&
                 MyEvent.CommonEvent)
             {
-                DarkMessageBox.ShowWarning(
+                MessageBoxExtensions.ShowWarning(
                     Strings.EventCommandList.notcommon, Strings.EventCommandList.notcommoncaption, DarkDialogButton.Ok,
                     Properties.Resources.Icon
                 );
@@ -1054,7 +1055,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                 return;
             }
 
-            if (DarkMessageBox.ShowWarning(
+            if (MessageBoxExtensions.ShowWarning(
                     Strings.EventEditor.savedialogue, Strings.EventEditor.savecaption, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==

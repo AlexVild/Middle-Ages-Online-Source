@@ -1,4 +1,5 @@
 ﻿using DarkUI.Forms;
+using Intersect.Editor.Extensions;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -238,7 +239,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mEditorItem != null)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.TimerEditor.DeletePrompt, Strings.TimerEditor.DeleteCaption,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==

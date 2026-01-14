@@ -14,6 +14,7 @@ using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Models;
 using Intersect.Extensions;
 using Intersect.Utilities;
+using Intersect.Editor.Extensions;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -166,7 +167,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mEditorItem != null)
             {
-                if (DarkMessageBox.ShowWarning(
+                if (MessageBoxExtensions.ShowWarning(
                         Strings.VariableEditor.deleteprompt, Strings.VariableEditor.deletecaption,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==

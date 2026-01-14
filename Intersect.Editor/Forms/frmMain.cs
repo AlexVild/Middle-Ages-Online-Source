@@ -14,6 +14,7 @@ using Intersect.Compression;
 using Intersect.Config;
 using Intersect.Editor.Classes.ContentManagement;
 using Intersect.Editor.Content;
+using Intersect.Editor.Extensions;
 using Intersect.Editor.Forms.DockingElements;
 using Intersect.Editor.Forms.Editors;
 using Intersect.Editor.Forms.Editors.Quest;
@@ -855,7 +856,7 @@ namespace Intersect.Editor.Forms
                 //Offer to export map
                 if (Globals.CurrentMap != null)
                 {
-                    if (DarkMessageBox.ShowError(
+                    if (MessageBoxExtensions.ShowError(
                             Strings.Errors.disconnectedsave, Strings.Errors.disconnectedsavecaption,
                             DarkDialogButton.YesNo, Properties.Resources.Icon
                         ) ==
@@ -871,7 +872,7 @@ namespace Intersect.Editor.Forms
                 }
                 else
                 {
-                    DarkMessageBox.ShowError(
+                    MessageBoxExtensions.ShowError(
                         Strings.Errors.disconnectedclosing, Strings.Errors.disconnected, DarkDialogButton.Ok,
                         Properties.Resources.Icon
                     );
@@ -885,7 +886,7 @@ namespace Intersect.Editor.Forms
         private void saveMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (Globals.CurrentMap.Changed() &&
-                DarkMessageBox.ShowInformation(
+                MessageBoxExtensions.ShowInformation(
                     Strings.Mapping.savemapdialoguesure, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==
@@ -914,7 +915,7 @@ namespace Intersect.Editor.Forms
 
         private void NewMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (DarkMessageBox.ShowWarning(
+            if (MessageBoxExtensions.ShowWarning(
                     Strings.Mapping.newmap, Strings.Mapping.newmapcaption, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) !=
@@ -924,7 +925,7 @@ namespace Intersect.Editor.Forms
             }
 
             if (Globals.CurrentMap.Changed() &&
-                DarkMessageBox.ShowInformation(
+                MessageBoxExtensions.ShowInformation(
                     Strings.Mapping.savemapdialogue, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==
@@ -981,7 +982,7 @@ namespace Intersect.Editor.Forms
             //    }
             //    else
             //    {
-            //        DarkMessageBox.ShowError(Strings.Errors.importfailed,
+            //        MessageBoxExtensions.ShowError(Strings.Errors.importfailed,
             //            Strings.Errors.importfailedcaption, DarkDialogButton.Ok, Properties.Resources.Icon);
             //    }
             //}
@@ -1583,7 +1584,7 @@ namespace Intersect.Editor.Forms
             if (!Globals.ClosingEditor &&
                 Globals.CurrentMap != null &&
                 Globals.CurrentMap.Changed() &&
-                DarkMessageBox.ShowWarning(
+                MessageBoxExtensions.ShowWarning(
                     Strings.Mapping.maphaschangesdialog, Strings.Mapping.mapnotsaved, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==

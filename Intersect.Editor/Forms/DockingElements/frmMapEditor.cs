@@ -8,6 +8,7 @@ using DarkUI.Forms;
 using Intersect.Config;
 using Intersect.Editor.Classes.Maps;
 using Intersect.Editor.Core;
+using Intersect.Editor.Extensions;
 using Intersect.Editor.Forms.Editors.Events;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
@@ -1047,7 +1048,7 @@ namespace Intersect.Editor.Forms.DockingElements
                             if (Globals.MapGrid.Grid[x, y].MapId != Guid.Empty)
                             {
                                 if (Globals.CurrentMap.Changed() &&
-                                    DarkMessageBox.ShowInformation(
+                                    MessageBoxExtensions.ShowInformation(
                                         Strings.Mapping.savemapdialogue, Strings.Mapping.savemap,
                                         DarkDialogButton.YesNo, Properties.Resources.Icon
                                     ) ==
@@ -1060,7 +1061,7 @@ namespace Intersect.Editor.Forms.DockingElements
                             }
                             else
                             {
-                                DarkMessageBox.ShowError(
+                                MessageBoxExtensions.ShowError(
                                     Strings.Mapping.diagonalwarning, Strings.Mapping.createmap, DarkDialogButton.Ok,
                                     Properties.Resources.Icon
                                 );
@@ -1070,7 +1071,7 @@ namespace Intersect.Editor.Forms.DockingElements
                         }
                         else
                         {
-                            DarkMessageBox.ShowError(
+                            MessageBoxExtensions.ShowError(
                                 Strings.Mapping.diagonalwarning, Strings.Mapping.createmap, DarkDialogButton.Ok,
                                 Properties.Resources.Icon
                             );
@@ -1084,7 +1085,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 {
                     if (newMapId == Guid.Empty)
                     {
-                        if (DarkMessageBox.ShowInformation(
+                        if (MessageBoxExtensions.ShowInformation(
                                 Strings.Mapping.createmapdialogue, Strings.Mapping.createmap, DarkDialogButton.YesNo,
                                 Properties.Resources.Icon
                             ) !=
@@ -1094,7 +1095,7 @@ namespace Intersect.Editor.Forms.DockingElements
                         }
 
                         if (Globals.CurrentMap.Changed() &&
-                            DarkMessageBox.ShowWarning(
+                            MessageBoxExtensions.ShowWarning(
                                 Strings.Mapping.savemapdialogue, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                                 Properties.Resources.Icon
                             ) ==
@@ -1108,7 +1109,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     else
                     {
                         if (Globals.CurrentMap.Changed() &&
-                            DarkMessageBox.ShowWarning(
+                            MessageBoxExtensions.ShowWarning(
                                 Strings.Mapping.savemapdialogue, Strings.Mapping.savemap, DarkDialogButton.YesNo,
                                 Properties.Resources.Icon
                             ) ==
@@ -1257,7 +1258,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 CurrentMapState = tmpMap.SaveInternal();
             }
 
-            if (DarkMessageBox.ShowWarning(
+            if (MessageBoxExtensions.ShowWarning(
                     Strings.Mapping.filllayerdialogue, Strings.Mapping.filllayer, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==
@@ -1346,7 +1347,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 CurrentMapState = tmpMap.SaveInternal();
             }
 
-            if (DarkMessageBox.ShowWarning(
+            if (MessageBoxExtensions.ShowWarning(
                     Strings.Mapping.eraselayerdialogue, Strings.Mapping.eraselayer, DarkDialogButton.YesNo,
                     Properties.Resources.Icon
                 ) ==
