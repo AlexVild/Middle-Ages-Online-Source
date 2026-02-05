@@ -67,6 +67,8 @@ namespace Intersect.Server.Entities.Events
 
         public bool IgnoreBlocked { get; set; }
 
+        public long MoveFreqencyTimer { get; set; }
+
         public EventPageInstance(
             EventBase myEvent,
             EventPage myPage,
@@ -328,7 +330,7 @@ namespace Intersect.Server.Entities.Events
 
                     break;
                 case EventMovementSpeed.Fastest:
-                    Speed = 99;
+                    Speed = 80;
 
                     break;
             }
@@ -365,26 +367,31 @@ namespace Intersect.Server.Entities.Events
             // Don't process movement stuff if the disable movement var is currently active on this instance
             if (!BaseEvent.Global || (MyPage.DisableMovementVar == Guid.Empty || (mapInstance?.GetInstanceVariable(MyPage.DisableMovementVar) ?? false)))
             {
-                if (MovementType == EventMovementType.MoveRoute && MoveRoute != null)
+                // Don't process movement stuff if we're in the middle of a frequency break
+                if (MoveFreqencyTimer <= Timing.Global.Milliseconds)
                 {
-                    ProcessMoveRoute(Player, timeMs);
-                }
-                else
-                {
-                    if (MovementType == EventMovementType.Random) //Random
+                    if (MovementType == EventMovementType.MoveRoute && MoveRoute != null)
                     {
-                        if (Randomization.Next(0, 2) != 0)
-                        {
-                            return;
-                        }
-
-                        var dir = (byte)Randomization.Next(0, 4);
-                        if (CanMove(dir) == -1)
-                        {
-                            Move(dir, Player);
-                        }
-                        MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
+                        ProcessMoveRoute(Player, timeMs);
                     }
+                    else
+                    {
+                        if (MovementType == EventMovementType.Random) //Random
+                        {
+                            if (Randomization.Next(0, 2) != 0)
+                            {
+                                return;
+                            }
+
+                            var dir = (byte)Randomization.Next(0, 4);
+                            if (CanMove(dir) == -1)
+                            {
+                                Move(dir, Player);
+                            }
+                            MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
+                        }
+                    }
+                    MoveFreqencyTimer = Timing.Global.Milliseconds + GetMovementFrequency();
                 }
             }
 
@@ -801,7 +808,7 @@ namespace Intersect.Server.Entities.Events
             return true;
         }
 
-        public override float GetMovementTime(int fromSpeed = -1)
+        public long GetMovementFrequency()
         {
             switch (MovementFreq)
             {
@@ -814,7 +821,7 @@ namespace Intersect.Server.Entities.Events
                 case EventMovementFrequency.Higher:
                     return 500;
                 case EventMovementFrequency.Highest:
-                    return 250;
+                    return (long)GetMovementTime();
                 default:
                     return 1000;
             }
