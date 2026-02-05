@@ -474,7 +474,7 @@ namespace Intersect.Client.Entities
 
             foreach (var anim in anims)
             {
-                Animations.Add(new Animation(anim, true, false, -1, this));
+                Animations.Add(new Animation(anim, true, !(anim.Lower.DisableRotations && anim.Upper.DisableRotations), -1, this));
             }
         }
 
