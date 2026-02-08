@@ -468,7 +468,7 @@ namespace Intersect.GameObjects
                 var magicTypeSpells = npc?.Spells?
                     .ToList()
                     .Select(id => SpellBase.Get(id))
-                    .Where(s => s.Combat?.DamageTypes.Contains(Enums.AttackTypes.Magic) ?? false)
+                    .Where(s => s != null && (s.Combat?.DamageTypes.Contains(Enums.AttackTypes.Magic) ?? false))
                     .OrderByDescending(s => s.Combat?.Scaling ?? 0)
                     .ToArray();
 

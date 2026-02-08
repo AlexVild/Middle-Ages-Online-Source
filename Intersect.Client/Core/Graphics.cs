@@ -563,9 +563,18 @@ namespace Intersect.Client.Core
             if (!takingScreenshot && !string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor) && !Globals.IsLoading)
             {
                 var renderLoc = ConvertToWindowPoint(Globals.InputManager.GetMousePosition());
-                DrawGameTexture(
-                    Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, ClientConfiguration.Instance.MouseCursor), renderLoc.X, renderLoc.Y
-               );
+                if (Globals.Me != null && Globals.Me.CombatMode && !Interface.Interface.GameUi.FocusedInventory)
+                {
+                    DrawGameTexture(
+                        Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "mouse_cursor_target.png"), renderLoc.X, renderLoc.Y
+                    );
+                }
+                else
+                {
+                    DrawGameTexture(
+                        Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, ClientConfiguration.Instance.MouseCursor), renderLoc.X, renderLoc.Y
+                   );
+                }
             }
 
             Renderer.End();
