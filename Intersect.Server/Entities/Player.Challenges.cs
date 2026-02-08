@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
 using Intersect.Server.Core.Instancing.Controller;
@@ -961,6 +962,23 @@ namespace Intersect.Server.Entities
                 {
                     mastery.Level = descriptor.MaxLevel;
                     mastery.Exp = 1L;
+                }
+            }
+        }
+
+        public void ValidateChallengeSpellUnlocks()
+        {
+            foreach (var challenge in Challenges.Where(c => c.Complete).ToArray())
+            {
+                var spellId = challenge.Challenge?.SpellUnlockId ?? Guid.Empty;
+                if (spellId == Guid.Empty)
+                {
+                    continue;
+                }
+
+                if (!TryGetSkillInSkillbook(spellId, out _))
+                {
+                    TryAddSkillToBook(spellId);
                 }
             }
         }

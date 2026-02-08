@@ -485,6 +485,7 @@ namespace Intersect.Server.Entities
 
             ReprocessEnhancements();
             ValidateCurrentWeaponLevels();
+            ValidateChallengeSpellUnlocks();
             PermaHeld = false;
         }
 
