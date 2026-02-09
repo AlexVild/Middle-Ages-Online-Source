@@ -2837,7 +2837,7 @@ namespace Intersect.Server.Networking
         public static void SendSkillbookToClient(Player player)
         {
             var skillBook = new Dictionary<Guid, SkillbookInstance>();
-            foreach (var skill in player?.SkillBook)
+            foreach (var skill in player?.SkillBook.ToArray())
             {
                 if (skillBook.ContainsKey(skill.SpellId))
                 {

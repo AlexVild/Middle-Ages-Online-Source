@@ -38,7 +38,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             AvailableSkillTypes.Add(OtherSkillsText);
 
             List<string> skillTypes = new List<string>();
-            foreach (var spell in Globals.Me?.Skillbook.Select(kv => SpellBase.Get(kv.Key)))
+            foreach (var spell in Globals.Me?.Skillbook.Select(kv => SpellBase.Get(kv.Key)).ToArray())
             {
                 if (spell == default)
                 {
@@ -237,7 +237,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private bool HasHigherLevelInSkillbook(SpellBase skill)
         {
-            return (Globals.Me.Skillbook.Any(kv =>
+            return (Globals.Me.Skillbook.ToArray().Any(kv =>
             {
                 if (!SpellBase.TryGet(kv.Key, out var compSpell))
                 {
