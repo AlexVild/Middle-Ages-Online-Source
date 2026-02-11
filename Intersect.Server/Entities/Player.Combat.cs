@@ -407,11 +407,7 @@ namespace Intersect.Server.Entities
 
             if (!instantCast && !SkillPrepared(spell.Id))
             {
-                if (Timing.Global.Milliseconds > ChatErrorLastSent)
-                {
-                    PacketSender.SendChatMsg(this, Strings.Combat.SpellNotPrepared, ChatMessageType.Error, "", true);
-                    ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
-                }
+                TrySendDebouncedChatError(Strings.Combat.SpellNotPrepared, ChatMessageType.Error);
                 return false;
             }
 
@@ -422,17 +418,13 @@ namespace Intersect.Server.Entities
 
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
-                if (Timing.Global.Milliseconds > ChatErrorLastSent)
+                if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
                 {
-                    if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
-                    {
-                        PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error, "", true);
-                    }
-                    else
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells, CustomColors.Alerts.Error);
-                    }
-                    ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
+                    TrySendDebouncedChatError(spell.CannotCastMessage, ChatMessageType.Spells);
+                }
+                else
+                {
+                    TrySendDebouncedChatError(Strings.Combat.dynamicreq, ChatMessageType.Spells);
                 }
 
                 return false;

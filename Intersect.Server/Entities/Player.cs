@@ -1,53 +1,53 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Amib.Threading;
+﻿using Amib.Threading;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
-using Intersect.GameObjects.QuestBoard;
-using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.QuestBoard;
+using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Switches_and_Variables;
+using Intersect.GameObjects.Timers;
 using Intersect.Logging;
 using Intersect.Network;
 using Intersect.Network.Packets.Server;
+using Intersect.Server.Core;
+using Intersect.Server.Core.Games.ClanWars;
+using Intersect.Server.Core.Instancing.Controller;
 using Intersect.Server.Database;
 using Intersect.Server.Database.Logging.Entities;
+using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Database.PlayerData.Security;
+using Intersect.Server.DTOs;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
-using Intersect.Utilities;
-
-using Newtonsoft.Json;
-using Intersect.Server.Entities.PlayerData;
-using Intersect.Server.Database.PlayerData;
-using static Intersect.Server.Maps.MapInstance;
-using Intersect.Server.Core;
-using Intersect.GameObjects.Timers;
 using Intersect.Server.Utilities;
-using System.Text;
-using System.ComponentModel;
-using Intersect.Server.Core.Games.ClanWars;
-using Microsoft.EntityFrameworkCore.Internal;
-using Intersect.Server.DTOs;
-using Org.BouncyCastle.Bcpg;
-using Intersect.Server.Core.Instancing.Controller;
-using MimeKit.Cryptography;
+using Intersect.Utilities;
 using Microsoft.Diagnostics.Runtime.ICorDebug;
+using Microsoft.EntityFrameworkCore.Internal;
+using MimeKit.Cryptography;
+using Newtonsoft.Json;
+using Org.BouncyCastle.Bcpg;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using static Intersect.Server.Maps.MapInstance;
 
 namespace Intersect.Server.Entities
 {
@@ -9523,15 +9523,26 @@ namespace Intersect.Server.Entities
                     idx++;
                 }
 
-                PacketSender.SendChatMsg(
-                        this, Strings.Player.NotEnoughComponents.ToString(sb.ToString()),
-                        ChatMessageType.Inventory,
-                        CustomColors.Alerts.Error
-                    );
+                TrySendDebouncedChatError(
+                    Strings.Player.NotEnoughComponents.ToString(sb.ToString()),
+                    ChatMessageType.Inventory
+                );
 
                 return false;
             }
 
+            return true;
+        }
+
+        public bool TrySendDebouncedChatError(string message, ChatMessageType msgType)
+        {
+            if (Timing.Global.Milliseconds <= ChatErrorLastSent)
+            {
+                return false;
+            }
+            
+            PacketSender.SendChatMsg(this, message, msgType, CustomColors.Alerts.Error);
+            ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
             return true;
         }
 
