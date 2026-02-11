@@ -1642,7 +1642,28 @@ namespace Intersect.Server.Entities
         {
         }
 
-        protected int[] GetPositionNearTarget(Guid mapId, int x, int y, int dir)
+        /// <summary>
+        /// Gets the direction opposite the entity is facing
+        /// </summary>
+        /// <returns>The <see cref="Directions"/></returns>
+        public static Directions GetBehindDir(int dir)
+        {
+            switch(dir)
+            {
+                case 0:
+                    return Directions.Down;
+                case 1:
+                    return Directions.Up;
+                case 2:
+                    return Directions.Right;
+                case 3:
+                    return Directions.Left;
+                default:
+                    throw new ArgumentException(nameof(Dir));
+            }
+        }
+
+        protected int[] GetSpellWarpPosition(Guid mapId, int x, int y, int dir)
         {
             if (!MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
             {
@@ -1650,98 +1671,43 @@ namespace Intersect.Server.Entities
             }
 
             List<int[]> validPosition = new List<int[]>();
+
+            var surroundTiles = new Dictionary<Directions, TileHelper>();
+
+            foreach (Directions direction in Enum.GetValues(typeof(Directions)))
+            {
+                var dirTile = new TileHelper(mapId, x, y);
+                if (dirTile.Translate((int)direction) 
+                    && dirTile.TryGetMapInstance(MapInstanceId, out var tileInstance)
+                    && !tileInstance.TileBlocked(dirTile.X, dirTile.Y))
+                {
+                    surroundTiles.Add(direction, dirTile);
+                }
+            }
+
+            // Prefer behind direction for warp-to spells
+            var behind = GetBehindDir(dir);
+            if (surroundTiles.TryGetValue(behind, out var preferredTile))
+            {
+                return new int[] { preferredTile.X, preferredTile.Y };
+            }
             
-
-            // Start by north, west, est and south
-            for (int col = -1; col < 2; col++)
+            // Otherwise, that tile wasn't an option -- so return the first available... if there are any
+            if (surroundTiles.Count > 0)
             {
-                for (int row = -1; row < 2; row++)
+                // Prefer not to go to the tile that is the same direction as the entity is facing...
+                foreach (Directions prefferedDir in surroundTiles.Keys.Where(k => k != (Directions)dir).ToArray())
                 {
-                    if (Math.Abs(col % 2) != Math.Abs(row % 2))
-                    {
-                        int newX = x + row;
-                        int newY = y + col;
-
-                        if (newX >= 0 && newX <= Options.MapWidth &&
-                            newY >= 0 && newY <= Options.MapHeight &&
-                            !instance.TileBlocked(newX, newY))
-                        {
-                            validPosition.Add(new int[] { newX, newY });
-                        }
-                    }
+                    var secondaryTile = surroundTiles[prefferedDir];
+                    return new int[] { secondaryTile.X, secondaryTile.Y };
                 }
+
+                // If that wasn't an option, fall back to dead-ahead of the entity...
+                var fallbackTile = surroundTiles.First().Value;
+                return new int[] { fallbackTile.X, fallbackTile.Y };
             }
 
-            if (validPosition.Count > 0)
-            {
-                // Prefer the _back_ of the target, if possible
-                var idealIdx = -1;
-                switch (dir)
-                {
-                    case (int)Directions.Down:
-                        idealIdx = validPosition.FindIndex((pos) =>
-                        {
-                            return pos[0] == x && pos[1] == y - 1;
-                        });
-                        break;
-                    case (int)Directions.Up:
-                        idealIdx = validPosition.FindIndex((pos) =>
-                        {
-                            return pos[0] == x && pos[1] == y + 1;
-                        });
-                        break;
-                    case (int)Directions.Left:
-                        idealIdx = validPosition.FindIndex((pos) =>
-                        {
-                            return pos[0] == x + 1 && pos[1] == y;
-                        });
-                        break;
-                    case (int)Directions.Right:
-                        idealIdx = validPosition.FindIndex((pos) =>
-                        {
-                            return pos[0] == x - 1 && pos[1] == y;
-                        });
-                        break;
-                }
-
-                if (idealIdx != -1)
-                {
-                    return validPosition[idealIdx];
-                }
-                else
-                {
-                    return validPosition[Randomization.Next(0, validPosition.Count)];
-                }
-            }
-
-            // If nothing found, diagonal direction
-            for (int col = -1; col < 2; col++)
-            {
-                for (int row = -1; row < 2; row++)
-                {
-                    if (Math.Abs(col % 2) == Math.Abs(row % 2))
-                    {
-                        int newX = x + row;
-                        int newY = y + col;
-
-                        // Tile must not be the target position
-                        if (newX >= 0 && newX <= Options.MapWidth &&
-                            newY >= 0 && newY <= Options.MapHeight &&
-                            !(x + row == x && y + col == y) &&
-                            !instance.TileBlocked(newX, newY))
-                        {
-                            validPosition.Add(new int[] { newX, newY });
-                        }
-                    }
-                }
-            }
-
-            if (validPosition.Count > 0)
-            {
-                return validPosition[Randomization.Next(0, validPosition.Count)];
-            }
-
-            // If nothing found, return target position
+            // If all else fails, return the entity's tile
             return new int[] { x, y };
         }
 
