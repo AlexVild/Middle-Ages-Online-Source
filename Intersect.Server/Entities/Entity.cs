@@ -1644,105 +1644,105 @@ namespace Intersect.Server.Entities
 
         protected int[] GetPositionNearTarget(Guid mapId, int x, int y, int dir)
         {
-            if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
-            {
-                List<int[]> validPosition = new List<int[]>();
-
-                // Start by north, west, est and south
-                for (int col = -1; col < 2; col++)
-                {
-                    for (int row = -1; row < 2; row++)
-                    {
-                        if (Math.Abs(col % 2) != Math.Abs(row % 2))
-                        {
-                            int newX = x + row;
-                            int newY = y + col;
-
-                            if (newX >= 0 && newX <= Options.MapWidth &&
-                                newY >= 0 && newY <= Options.MapHeight &&
-                                !instance.TileBlocked(newX, newY))
-                            {
-                                validPosition.Add(new int[] { newX, newY });
-                            }
-                        }
-                    }
-                }
-
-                if (validPosition.Count > 0)
-                {
-                    // Prefer the _back_ of the target, if possible
-                    var idealIdx = -1;
-                    switch (dir)
-                    {
-                        case (int)Directions.Down:
-                            idealIdx = validPosition.FindIndex((pos) =>
-                            {
-                                return pos[0] == x && pos[1] == y - 1;
-                            });
-                            break;
-                        case (int)Directions.Up:
-                            idealIdx = validPosition.FindIndex((pos) =>
-                            {
-                                return pos[0] == x && pos[1] == y + 1;
-                            });
-                            break;
-                        case (int)Directions.Left:
-                            idealIdx = validPosition.FindIndex((pos) =>
-                            {
-                                return pos[0] == x + 1 && pos[1] == y;
-                            });
-                            break;
-                        case (int)Directions.Right:
-                            idealIdx = validPosition.FindIndex((pos) =>
-                            {
-                                return pos[0] == x - 1 && pos[1] == y;
-                            });
-                            break;
-                    }
-
-                    if (idealIdx != -1)
-                    {
-                        return validPosition[idealIdx];
-                    }
-                    else
-                    {
-                        return validPosition[Randomization.Next(0, validPosition.Count)];
-                    }
-                }
-
-                // If nothing found, diagonal direction
-                for (int col = -1; col < 2; col++)
-                {
-                    for (int row = -1; row < 2; row++)
-                    {
-                        if (Math.Abs(col % 2) == Math.Abs(row % 2))
-                        {
-                            int newX = x + row;
-                            int newY = y + col;
-
-                            // Tile must not be the target position
-                            if (newX >= 0 && newX <= Options.MapWidth &&
-                                newY >= 0 && newY <= Options.MapHeight &&
-                                !(x + row == x && y + col == y) &&
-                                !instance.TileBlocked(newX, newY))
-                            {
-                                validPosition.Add(new int[] { newX, newY });
-                            }
-                        }
-                    }
-                }
-
-                if (validPosition.Count > 0)
-                {
-                    return validPosition[Randomization.Next(0, validPosition.Count)];
-                }
-
-                // If nothing found, return target position
-                return new int[] { x, y }; 
-            } else
+            if (!MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
             {
                 return new int[] { x, y };
             }
+
+            List<int[]> validPosition = new List<int[]>();
+            
+
+            // Start by north, west, est and south
+            for (int col = -1; col < 2; col++)
+            {
+                for (int row = -1; row < 2; row++)
+                {
+                    if (Math.Abs(col % 2) != Math.Abs(row % 2))
+                    {
+                        int newX = x + row;
+                        int newY = y + col;
+
+                        if (newX >= 0 && newX <= Options.MapWidth &&
+                            newY >= 0 && newY <= Options.MapHeight &&
+                            !instance.TileBlocked(newX, newY))
+                        {
+                            validPosition.Add(new int[] { newX, newY });
+                        }
+                    }
+                }
+            }
+
+            if (validPosition.Count > 0)
+            {
+                // Prefer the _back_ of the target, if possible
+                var idealIdx = -1;
+                switch (dir)
+                {
+                    case (int)Directions.Down:
+                        idealIdx = validPosition.FindIndex((pos) =>
+                        {
+                            return pos[0] == x && pos[1] == y - 1;
+                        });
+                        break;
+                    case (int)Directions.Up:
+                        idealIdx = validPosition.FindIndex((pos) =>
+                        {
+                            return pos[0] == x && pos[1] == y + 1;
+                        });
+                        break;
+                    case (int)Directions.Left:
+                        idealIdx = validPosition.FindIndex((pos) =>
+                        {
+                            return pos[0] == x + 1 && pos[1] == y;
+                        });
+                        break;
+                    case (int)Directions.Right:
+                        idealIdx = validPosition.FindIndex((pos) =>
+                        {
+                            return pos[0] == x - 1 && pos[1] == y;
+                        });
+                        break;
+                }
+
+                if (idealIdx != -1)
+                {
+                    return validPosition[idealIdx];
+                }
+                else
+                {
+                    return validPosition[Randomization.Next(0, validPosition.Count)];
+                }
+            }
+
+            // If nothing found, diagonal direction
+            for (int col = -1; col < 2; col++)
+            {
+                for (int row = -1; row < 2; row++)
+                {
+                    if (Math.Abs(col % 2) == Math.Abs(row % 2))
+                    {
+                        int newX = x + row;
+                        int newY = y + col;
+
+                        // Tile must not be the target position
+                        if (newX >= 0 && newX <= Options.MapWidth &&
+                            newY >= 0 && newY <= Options.MapHeight &&
+                            !(x + row == x && y + col == y) &&
+                            !instance.TileBlocked(newX, newY))
+                        {
+                            validPosition.Add(new int[] { newX, newY });
+                        }
+                    }
+                }
+            }
+
+            if (validPosition.Count > 0)
+            {
+                return validPosition[Randomization.Next(0, validPosition.Count)];
+            }
+
+            // If nothing found, return target position
+            return new int[] { x, y };
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.

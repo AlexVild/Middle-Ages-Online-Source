@@ -97,8 +97,8 @@ namespace Intersect.Server.Entities
         {
             foreach (var status in CachedStatuses.ToArray())  // ToArray the Array since removing a status will.. you know, change the collection.
             {
-                //Wake up any sleeping targets targets and take stealthed entities out of stealth
-                if (status.Type == StatusTypes.Sleep || status.Type == StatusTypes.Stealth)
+                //Take stealthed entities out of stealth
+                if (status.Type == StatusTypes.Stealth)
                 {
                     status.RemoveStatus();
                 }
