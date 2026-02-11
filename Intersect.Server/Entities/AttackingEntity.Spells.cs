@@ -4,6 +4,7 @@ using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.Pathfinding;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
@@ -639,6 +640,10 @@ namespace Intersect.Server.Entities
                         inRange = InRangeOf(CastTarget, spell.Combat.CastRange);
                     }
 
+                    // Don't let the player hop over blocked regions of the map with this spell.
+                    var rangeeee = Pathfinder.CalculatePathLength(this, CastTarget);
+                    inRange = inRange && Pathfinder.CalculatePathLength(this, CastTarget) <= spell.Combat.CastRange;
+
                     if (!inRange)
                     {
                         SendMissedAttackMessage(CastTarget, DamageType.Physical);
@@ -828,7 +833,6 @@ namespace Intersect.Server.Entities
                     {
                         if (spellTarget != null)
                         {
-                            // spellTarget used to be Target. I don't know if this is correct or not.
                             int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
                             Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
                             ChangeDir(DirToEnemy(spellTarget));
