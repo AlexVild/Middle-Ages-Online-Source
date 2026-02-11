@@ -833,7 +833,7 @@ namespace Intersect.Server.Entities
                     {
                         if (spellTarget != null)
                         {
-                            int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
+                            int[] position = GetSpellWarpPosition(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
                             Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
                             ChangeDir(DirToEnemy(spellTarget));
                         }
