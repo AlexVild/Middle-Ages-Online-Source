@@ -1561,7 +1561,7 @@ namespace Intersect.Server.Entities
             
             foreach (var en in instance.GetEntities(true))
             {
-                if (en.GetType() != typeof(Npc))
+                if (en.GetType() != typeof(Npc) || en.Id == Id)
                 {
                     continue;
                 }
