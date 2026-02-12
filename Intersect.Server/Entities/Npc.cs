@@ -1314,10 +1314,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // This is done to prevent an enemy from ALWAYS, immediately, facing you in melee combat.
-                    if (timeMs > DirChangeTime)
-                    {
-                        DirChangeTime = timeMs + Options.Instance.CombatOpts.NpcDirChangeTimer;
-                    }
+                    TryIncrementDirChangeTimer(timeMs);
                 }
             }
 
@@ -1392,6 +1389,22 @@ namespace Intersect.Server.Entities
                 && SpellIsAimableAt(ChannelingSpell, target))
             {
                 ChangeDir(DirToEnemy(target));
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TryIncrementDirChangeTimer(long timeMs = 0L)
+        {
+            if (timeMs == 0)
+            {
+                timeMs = Timing.Global.Milliseconds;
+            }
+
+            if (timeMs > DirChangeTime)
+            {
+                DirChangeTime = timeMs + Options.Instance.CombatOpts.NpcDirChangeTimer;
                 return true;
             }
 

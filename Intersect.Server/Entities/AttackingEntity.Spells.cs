@@ -834,6 +834,11 @@ namespace Intersect.Server.Entities
                         if (spellTarget != null)
                         {
                             var position = GetSpellWarpToPosition(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
+                            if (spellTarget is Npc npc)
+                            {
+                                // Don't let an NPC immediately turn to face the player
+                                npc.TryIncrementDirChangeTimer();
+                            }
                             Warp(position.MapId, (byte)position.X, (byte)position.Y, (byte)Dir);
 
                             // Face the target after warping to them
