@@ -2338,12 +2338,12 @@ namespace Intersect.Server.Entities
         /// <returns>True if the timestamp could be updated</returns>
         public bool TryUpdateBackstab()
         {
-            if (Timing.Global.MillisecondsUtc < BackstabTimestamp)
+            if (Timing.Global.Milliseconds < BackstabTimestamp)
             {
                 return false;
             }
 
-            BackstabTimestamp = Timing.Global.MillisecondsUtc + Options.Instance.CombatOpts.BackstabCooldown;
+            BackstabTimestamp = Timing.Global.Milliseconds + Options.Instance.CombatOpts.BackstabCooldown;
             return true;
         }
 
