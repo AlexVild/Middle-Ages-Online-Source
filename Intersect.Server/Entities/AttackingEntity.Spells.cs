@@ -641,8 +641,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // Don't let the player hop over blocked regions of the map with this spell.
-                    var rangeeee = Pathfinder.CalculatePathLength(this, CastTarget);
-                    inRange = inRange && Pathfinder.CalculatePathLength(this, CastTarget) <= spell.Combat.CastRange;
+                    inRange = inRange && Pathfinder.CalculatePathLength(this, CastTarget) <= spell.Combat.CastRange + 1;
 
                     if (!inRange)
                     {
