@@ -409,7 +409,8 @@ namespace Intersect.GameObjects
         public string Folder { get; set; } = "";
 
         public bool CanBackstab { get; set; } = false;
-        
+        public bool CanStealth { get; set; } = false;
+
         public float BackstabMultiplier { get; set; } = 1.0f;
 
         /// <summary>

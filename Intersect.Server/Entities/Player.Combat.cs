@@ -869,7 +869,7 @@ namespace Intersect.Server.Entities
             if (item == null || target == null) return baseDamage;
 
             var canBackstab = true;
-            var canStealth = true;
+            var canStealth = item?.CanStealth ?? false;
             if (target is Npc npc)
             {
                 canBackstab = !npc?.Base?.NoBackstab ?? true;
@@ -887,23 +887,17 @@ namespace Intersect.Server.Entities
                     if (target is AttackingEntity attackingEntity)
                     {
                         attackingEntity.PlayerBackstabbed(this, baseDamage);
+                        PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
                     }
                 }
-                if (StealthAttack && item.ProjectileId == Guid.Empty && canStealth) // Melee weapons only for stealth attacks
-                {
-                    var stealthDamage = CalculateStealthDamage(originalDamage, item) - originalDamage;
-                    baseDamage += Math.Max(0, stealthDamage);
-                    damageBonus = DamageBonus.Stealth;
-                }
+            }
 
-                if (damageBonus == DamageBonus.Backstab)
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
-                }
-                else if (damageBonus == DamageBonus.Stealth)
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
-                }
+            if (StealthAttack && canStealth)
+            {
+                var stealthDamage = CalculateStealthDamage(originalDamage, item) - originalDamage;
+                baseDamage += Math.Max(0, stealthDamage);
+                damageBonus = DamageBonus.Stealth;
+                PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
             }
 
             Backstab = false;

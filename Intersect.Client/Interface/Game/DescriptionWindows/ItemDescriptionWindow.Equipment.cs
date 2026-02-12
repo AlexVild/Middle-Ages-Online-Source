@@ -337,6 +337,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     StatValueColor,
                     unit: "x");
             }
+            if (mItem.CanStealth)
+            {
+                AddEquipmentRow(critRows,
+                    "Stealth Attack Multiplier",
+                    Options.Instance.CombatOpts.SneakAttackMultiplier,
+                    (EquippedItemDesc?.CanStealth ?? false) ? Options.Instance.CombatOpts.SneakAttackMultiplier : 0.0,
+                    false,
+                    StatLabelColor,
+                    StatValueColor,
+                    unit: "x");
+            }
 
             critRows.SizeToChildren(true, true);
         }
