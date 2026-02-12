@@ -491,6 +491,7 @@ namespace Intersect.Editor.Forms.Editors
                 chk2Hand.Checked = mEditorItem.TwoHanded;
                 
                 chkBackstab.Checked = Convert.ToBoolean(mEditorItem.CanBackstab);
+                chkCanStealth.Checked = Convert.ToBoolean(mEditorItem.CanStealth);
                 if (chkBackstab.Checked)
                 {
                     nudBackstabMultiplier.Enabled = true;
@@ -2521,6 +2522,11 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.OnDeconstructEventId = EventBase.IdFromList(cmbOnDecon.SelectedIndex - 1);
+        }
+
+        private void darkCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CanStealth = chkCanStealth.Checked;
         }
     }
 }

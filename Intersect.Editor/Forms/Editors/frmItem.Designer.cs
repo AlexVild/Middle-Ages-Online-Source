@@ -370,6 +370,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.chkCanStealth = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -2970,6 +2971,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpAdditionalWeaponProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAdditionalWeaponProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdditionalWeaponProps.Controls.Add(this.chkCanStealth);
             this.grpAdditionalWeaponProps.Controls.Add(this.lblAmmoOverride);
             this.grpAdditionalWeaponProps.Controls.Add(this.cmbAmmoOverride);
             this.grpAdditionalWeaponProps.Controls.Add(this.chkIsFocus);
@@ -3025,7 +3027,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkIsFocus
             // 
             this.chkIsFocus.AutoSize = true;
-            this.chkIsFocus.Location = new System.Drawing.Point(12, 203);
+            this.chkIsFocus.Location = new System.Drawing.Point(15, 237);
             this.chkIsFocus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkIsFocus.Name = "chkIsFocus";
             this.chkIsFocus.Size = new System.Drawing.Size(235, 24);
@@ -3036,7 +3038,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblBackBoost
             // 
             this.lblBackBoost.AutoSize = true;
-            this.lblBackBoost.Location = new System.Drawing.Point(6, 166);
+            this.lblBackBoost.Location = new System.Drawing.Point(9, 200);
             this.lblBackBoost.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblBackBoost.Name = "lblBackBoost";
             this.lblBackBoost.Size = new System.Drawing.Size(154, 20);
@@ -3047,7 +3049,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudBackBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudBackBoost.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudBackBoost.Location = new System.Drawing.Point(168, 163);
+            this.nudBackBoost.Location = new System.Drawing.Point(171, 197);
             this.nudBackBoost.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nudBackBoost.Maximum = new decimal(new int[] {
             1000,
@@ -3073,7 +3075,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudStrafeBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudStrafeBoost.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudStrafeBoost.Location = new System.Drawing.Point(168, 123);
+            this.nudStrafeBoost.Location = new System.Drawing.Point(171, 157);
             this.nudStrafeBoost.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nudStrafeBoost.Maximum = new decimal(new int[] {
             1000,
@@ -3098,7 +3100,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblStrafeModifier
             // 
             this.lblStrafeModifier.AutoSize = true;
-            this.lblStrafeModifier.Location = new System.Drawing.Point(6, 126);
+            this.lblStrafeModifier.Location = new System.Drawing.Point(9, 160);
             this.lblStrafeModifier.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStrafeModifier.Name = "lblStrafeModifier";
             this.lblStrafeModifier.Size = new System.Drawing.Size(131, 20);
@@ -3108,7 +3110,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblBackstabMultiplier
             // 
             this.lblBackstabMultiplier.AutoSize = true;
-            this.lblBackstabMultiplier.Location = new System.Drawing.Point(6, 86);
+            this.lblBackstabMultiplier.Location = new System.Drawing.Point(9, 120);
             this.lblBackstabMultiplier.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblBackstabMultiplier.Name = "lblBackstabMultiplier";
             this.lblBackstabMultiplier.Size = new System.Drawing.Size(146, 20);
@@ -3136,7 +3138,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudBackstabMultiplier.Location = new System.Drawing.Point(168, 83);
+            this.nudBackstabMultiplier.Location = new System.Drawing.Point(171, 117);
             this.nudBackstabMultiplier.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nudBackstabMultiplier.Maximum = new decimal(new int[] {
             1000,
@@ -5405,6 +5407,17 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // chkCanStealth
+            // 
+            this.chkCanStealth.AutoSize = true;
+            this.chkCanStealth.Location = new System.Drawing.Point(15, 75);
+            this.chkCanStealth.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkCanStealth.Name = "chkCanStealth";
+            this.chkCanStealth.Size = new System.Drawing.Size(178, 24);
+            this.chkCanStealth.TabIndex = 112;
+            this.chkCanStealth.Text = "Can Stealth Attack?";
+            this.chkCanStealth.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -5899,5 +5912,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtPbUnlockHint;
         private DarkComboBox cmbOnDecon;
         private Label lblDeconEvent;
+        private DarkCheckBox chkCanStealth;
     }
 }

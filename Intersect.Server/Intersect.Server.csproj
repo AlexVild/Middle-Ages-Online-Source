@@ -1579,6 +1579,10 @@
     <Compile Include="Migrations\Game\20260106174326_MapDisableDropsMigration.Designer.cs">
       <DependentUpon>20260106174326_MapDisableDropsMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20260212151942_StealthAttackMigration.cs" />
+    <Compile Include="Migrations\Game\20260212151942_StealthAttackMigration.Designer.cs">
+      <DependentUpon>20260212151942_StealthAttackMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
