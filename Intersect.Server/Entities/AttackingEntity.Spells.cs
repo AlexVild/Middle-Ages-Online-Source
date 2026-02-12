@@ -833,8 +833,10 @@ namespace Intersect.Server.Entities
                     {
                         if (spellTarget != null)
                         {
-                            int[] position = GetSpellWarpPosition(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
-                            Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                            var position = GetSpellWarpToPosition(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
+                            Warp(position.MapId, (byte)position.X, (byte)position.Y, (byte)Dir);
+
+                            // Face the target after warping to them
                             ChangeDir(DirToEnemy(spellTarget));
                         }
                     }

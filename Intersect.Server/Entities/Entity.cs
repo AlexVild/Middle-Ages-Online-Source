@@ -1663,11 +1663,12 @@ namespace Intersect.Server.Entities
             }
         }
 
-        protected int[] GetSpellWarpPosition(Guid mapId, int x, int y, int dir)
+        protected TileHelper GetSpellWarpToPosition(Guid mapId, int x, int y, int dir)
         {
             if (!MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
             {
-                return new int[] { x, y };
+                // Return current pos
+                return new TileHelper(MapId, X, Y);
             }
 
             List<int[]> validPosition = new List<int[]>();
@@ -1689,7 +1690,7 @@ namespace Intersect.Server.Entities
             var behind = GetBehindDir(dir);
             if (surroundTiles.TryGetValue(behind, out var preferredTile))
             {
-                return new int[] { preferredTile.X, preferredTile.Y };
+                return preferredTile;
             }
             
             // Otherwise, that tile wasn't an option -- so return the first available... if there are any
@@ -1698,17 +1699,15 @@ namespace Intersect.Server.Entities
                 // Prefer not to go to the tile that is the same direction as the entity is facing...
                 foreach (Directions prefferedDir in surroundTiles.Keys.Where(k => k != (Directions)dir).ToArray())
                 {
-                    var secondaryTile = surroundTiles[prefferedDir];
-                    return new int[] { secondaryTile.X, secondaryTile.Y };
+                    return surroundTiles[prefferedDir];
                 }
 
                 // If that wasn't an option, fall back to dead-ahead of the entity...
-                var fallbackTile = surroundTiles.First().Value;
-                return new int[] { fallbackTile.X, fallbackTile.Y };
+                return surroundTiles.First().Value;
             }
 
             // If all else fails, return the entity's tile
-            return new int[] { x, y };
+            return new TileHelper(mapId, x, y);
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.
