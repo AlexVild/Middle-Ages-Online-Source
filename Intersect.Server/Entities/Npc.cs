@@ -1853,8 +1853,13 @@ namespace Intersect.Server.Entities
 
         private void EnemySighted(Entity target)
         {
+            if (Movement == NpcMovement.Static)
+            {
+                return;
+            }
+
             var dirToEnemy = DirToEnemy(target);
-            if (dirToEnemy != Dir)
+            if (dirToEnemy != Dir && !IsStatusMovementBlocked)
             {
                 ChangeDir(dirToEnemy);
             }
