@@ -99,20 +99,6 @@ namespace Intersect.Client.Entities
         public int HarvestsRemaining = 0;
         public Guid HarvestingResource = Guid.Empty;
 
-        public string Name 
-        {
-            get
-            {
-                if (!Options.Instance.ProfanityFilterEnabled
-                    || !TextUtils.TryFilterProfanity(Name, Options.Instance.ProfanityList.ToArray(), out var filteredName))
-                {
-                    return Name;
-                }
-
-                return filteredName;
-            }
-        }
-
         public long CombatTimer { get; set; }
 
         public int ComboExp { get; set; }
