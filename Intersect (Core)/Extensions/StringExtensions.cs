@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Intersect.Extensions
 {
@@ -8,6 +11,32 @@ namespace Intersect.Extensions
     /// </summary>
     public static class StringExtensions
     {
+        private static readonly Dictionary<char, char> LeetMap = new Dictionary<char, char>()
+        {
+            ['4'] = 'a',
+            ['@'] = 'a',
+            ['8'] = 'b',
+            ['('] = 'c',
+            ['3'] = 'e',
+            ['6'] = 'g',
+            ['#'] = 'h',
+            ['1'] = 'i',
+            ['!'] = 'i',
+            ['|'] = 'l',
+            ['0'] = 'o',
+            ['9'] = 'p',
+            ['5'] = 's',
+            ['$'] = 's',
+            ['7'] = 't',
+            ['+'] = 't',
+            ['2'] = 'z'
+        };
+
+        private static readonly Regex SpacedOutPattern = new Regex(
+            @"(?<!\S)(\S\s+){2,}\S(?!\S)",
+            RegexOptions.Compiled
+        );
+
         /// <summary>
         /// Formats the string in the current culture with the provided arguments.
         /// </summary>
@@ -53,6 +82,23 @@ namespace Intersect.Extensions
             }
 
             return self + terminateWith;
+        }
+
+        public static string NormalizeLeet(this string text)
+        {
+            var sb = new StringBuilder(text.Length);
+            foreach (var c in text)
+            {
+                sb.Append(LeetMap.TryGetValue(c, out var normal) ? normal : c);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string NormalizeSpacing(this string text)
+        {
+            return SpacedOutPattern.Replace(text, match =>
+                Regex.Replace(match.Value, @"\s+", ""));
         }
     }
 }

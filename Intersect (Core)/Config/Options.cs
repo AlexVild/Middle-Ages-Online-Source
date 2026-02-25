@@ -360,6 +360,10 @@ namespace Intersect
         [JsonProperty("ServerPort", Order = -4)]
         public ushort _serverPort { get; set; } = DEFAULT_SERVER_PORT;
 
+        public List<string> ProfanityList = new List<string>();
+
+        public bool ProfanityFilterEnabled = DEFAULT_PROFANITY_FILTER_ENABLED;
+
         /// <summary>
         /// Passability configuration by map zone
         /// </summary>
@@ -453,6 +457,8 @@ namespace Intersect
         public const string DEFAULT_GAME_NAME = "Intersect";
 
         public const int DEFAULT_SERVER_PORT = 5400;
+
+        public const bool DEFAULT_PROFANITY_FILTER_ENABLED = true;
 
         #endregion
 

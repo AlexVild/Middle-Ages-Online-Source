@@ -33,6 +33,8 @@ namespace Intersect.Logging
                           ) ??
                           throw new InvalidOperationException();
 
+            var tattleOutput = ImmutableList.Create<ILogOutput>(new FileOutput($"tattle-tale.log", LogLevel.All)) ?? throw new InvalidOperationException();
+
             Pretty = new Logger(
                 new LogConfiguration
                 {
@@ -50,11 +52,22 @@ namespace Intersect.Logging
                     Outputs = outputs
                 }
             );
+
+            Tattle = new Logger(
+                new LogConfiguration
+                {
+                    Formatters = ImmutableList.Create(new DefaultFormatter()) ?? throw new InvalidOperationException(),
+                    LogLevel = LogLevel.All,
+                    Outputs = tattleOutput
+                }
+            );
         }
 
         public static Logger Pretty { get; internal set; }
 
         public static Logger Default { get; internal set; }
+
+        public static Logger Tattle { get; internal set; }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Write(LogLevel logLevel, string message)
@@ -234,6 +247,12 @@ namespace Intersect.Logging
         public static void Verbose(Exception exception, string message = null)
         {
             Default.Verbose(exception, message);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void TattleOn(string message)
+        {
+            Tattle.Info(message);
         }
 
         #endregion
