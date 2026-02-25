@@ -1,5 +1,10 @@
-﻿using Intersect.GameObjects.Timers;
+﻿using Intersect.Extensions;
+using Intersect.GameObjects.Timers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Intersect.Utilities
 {
@@ -152,6 +157,38 @@ namespace Intersect.Utilities
             return name.StartsWith(searchTerm, StringComparison.CurrentCultureIgnoreCase)
                 || name.EndsWith(searchTerm, StringComparison.CurrentCultureIgnoreCase)
                 || (searchTerm.Length > 3 && name.ToLower().Contains(searchTerm.ToLower()));
+        }
+
+        public static bool TryFilterProfanity(string text, string[] profanityList, out string filteredString)
+        {
+            filteredString = text;
+            if (string.IsNullOrEmpty(text) || profanityList?.Length == 0)
+            {
+                return false;
+            }
+
+            text = text
+                .Replace(",", "")
+                .Replace(".", "")
+                .Replace(";", "")
+                .Replace("`", "")
+                .Replace("'", "")
+                .Replace("-", "")
+                .Replace("_", "")
+                .Replace("~", "")
+                .NormalizeLeet();
+
+            var profanities = string.Join("|", profanityList.Select(p =>
+            {
+                var first = Regex.Escape(p[0].ToString()) + "+";
+                var middle = string.Concat(p.Substring(1, p.Length - 2).Select(c => @"\s*" + Regex.Escape(c.ToString()) + "+"));
+                var last = @"\s*" + Regex.Escape(p[p.Length - 1].ToString()) + "+";
+                return first + middle + last + @"(?:i?e?s|i?e?d|ing|ly|y)?";
+            }));
+
+            var pattern = @"\b(" + profanities + @")\b";
+            filteredString = Regex.Replace(text, pattern, match => new string('*', match.Length), RegexOptions.IgnoreCase);
+            return filteredString != text;
         }
     }
 

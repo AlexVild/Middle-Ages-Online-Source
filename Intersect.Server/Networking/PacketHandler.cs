@@ -752,6 +752,13 @@ namespace Intersect.Server.Networking
 
                 return;
             }
+            
+            if (Options.Instance.ProfanityFilterEnabled 
+                && TextUtils.TryFilterProfanity(msg, Options.Instance.ProfanityList.ToArray(), out var filteredMsg))
+            {
+                Log.TattleOn($"{player.Name} said something naughty on map {player.Map?.Name}:\n\t\"{msg}\"");
+                msg = filteredMsg;
+            }
 
             if (player.LastChatTime > Timing.Global.MillisecondsUtc)
             {
@@ -1198,6 +1205,14 @@ namespace Intersect.Server.Networking
                 return;
             }
 
+            if (Options.Instance.ProfanityFilterEnabled
+               && TextUtils.TryFilterProfanity(packet.Username, Options.Instance.ProfanityList.ToArray(), out _))
+            {
+                PacketSender.SendError(client, $"The name {packet.Username} has been flagged for profanity. Please try another name.");
+                Log.TattleOn($"{packet.Username} tried to make an account with a flagged name:\n\t\"{packet.Username}\"");
+                return;
+            }
+
             //Check for ban
             var isBanned = Ban.CheckBan(client.GetIp());
             if (isBanned != null)
@@ -1274,6 +1289,14 @@ namespace Intersect.Server.Networking
             {
                 PacketSender.SendError(client, Strings.Account.invalidname, resetUi: false);
 
+                return;
+            }
+
+            if (Options.Instance.ProfanityFilterEnabled 
+                && TextUtils.TryFilterProfanity(packet.Name, Options.Instance.ProfanityList.ToArray(), out _))
+            {
+                PacketSender.SendError(client, $"The name {packet.Name} has been flagged for profanity. Please try another name.");
+                Log.TattleOn($"{client.Name} - {client.Email} tried to make a character with a flagged name:\n\t\"{packet.Name}\"");
                 return;
             }
 
