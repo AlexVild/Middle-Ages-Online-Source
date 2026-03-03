@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Intersect.Enums;
+﻿using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
@@ -9,6 +7,10 @@ using Intersect.Server.General;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -54,7 +56,7 @@ namespace Intersect.Server.Entities.Events
 
         public EventTrigger Trigger;
 
-        public int Speed = 20;
+        private int mSpeed = 20;
 
         public int SpawnX { get; set; }
 
@@ -314,37 +316,30 @@ namespace Intersect.Server.Entities.Events
             switch (speed)
             {
                 case EventMovementSpeed.Slowest:
-                    Speed = 1;
+                    mSpeed = 1;
 
                     break;
                 case EventMovementSpeed.Slower:
-                    Speed = 10;
+                    mSpeed = 10;
 
                     break;
                 case EventMovementSpeed.Normal:
-                    Speed = 20;
+                    mSpeed = 20;
 
                     break;
                 case EventMovementSpeed.Faster:
-                    Speed = 50;
+                    mSpeed = 50;
 
                     break;
                 case EventMovementSpeed.Fastest:
-                    Speed = 80;
+                    mSpeed = 80;
 
                     break;
             }
         }
 
-        public override int[] StatVals
-        {
-            get
-            {
-                var stats = new int[(int)Stats.StatCount];
-                stats[(int)Stats.Speed] = Speed;
-                return stats;
-            }
-        }
+        [NotMapped, JsonIgnore]
+        public override int Speed => mSpeed;
 
         public void Update(bool isActive, long timeMs)
         {

@@ -2650,7 +2650,8 @@ namespace Intersect.Client.Entities
                         }
                         TryToChangeDimension();
                         PacketSender.SendMove();
-                        MoveTimer = (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) + (long)GetMovementTime();
+
+                        MoveTimer = (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) + (long)GetMovementTime(Speed);
                     }
                     else
                     {

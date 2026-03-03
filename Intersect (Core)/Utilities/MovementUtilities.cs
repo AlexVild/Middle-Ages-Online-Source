@@ -5,7 +5,7 @@ namespace Intersect.Utilities
 {
     public static class MovementUtilities
     {
-        public static int GetMovementTime(int speed, 
+        public static int CalculateMovementSpeed(int speed, 
             bool combatMode, 
             int moveDir, 
             int faceDir, 

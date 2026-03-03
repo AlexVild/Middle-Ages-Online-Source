@@ -8087,7 +8087,7 @@ namespace Intersect.Server.Entities
                 // collisions", latency willing
                 if (prevX != X || prevY != Y)
                 {
-                    TileMovementTime = Timing.Global.Milliseconds + (long)(GetMovementTime() / 2);
+                    TileMovementTime = Timing.Global.Milliseconds + (long)(GetMovementTime(Speed) / 2);
                 }
 
                 // Check for a warp, if so warp the player.
