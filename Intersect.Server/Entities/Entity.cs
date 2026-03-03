@@ -37,7 +37,7 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore] public Stat[] Stat = new Stat[(int)Stats.StatCount];
 
-        [NotMapped, JsonIgnore] public virtual int[] StatVals => Stat.Select(stat => stat.Value()).ToArray();
+        [NotMapped, JsonIgnore] public virtual int[] StatVals => Stat.Select(stat => stat?.Value() ?? 0).ToArray();
 
         [NotMapped, JsonIgnore]
         public bool IsScaledDown { get; set; }
@@ -855,7 +855,7 @@ namespace Intersect.Server.Entities
 
                 if (moved && MoveTimer < Timing.Global.Milliseconds)
                 {
-                    MoveTimer = Timing.Global.Milliseconds + (long) GetMovementTime();
+                    MoveTimer = Timing.Global.Milliseconds + (long) GetMovementTime(Speed);
                 }
             }
 
@@ -892,7 +892,7 @@ namespace Intersect.Server.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime(int fromSpeed = -1)
         {
-            return MovementUtilities.GetMovementTime(fromSpeed > 0 ? fromSpeed : StatVals[(int)Stats.Speed], 
+            return MovementUtilities.CalculateMovementSpeed(fromSpeed > 0 ? fromSpeed : Speed, 
                 GetCombatMode(), 
                 GetRealDir(), 
                 GetFaceDirection(), 
@@ -1080,7 +1080,7 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
+                        MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime(Speed);
                     }
 
                     if (TryToChangeDimension() && doNotUpdate == true)

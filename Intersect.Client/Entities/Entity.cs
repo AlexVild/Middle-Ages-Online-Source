@@ -580,7 +580,7 @@ namespace Intersect.Client.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime(int fromSpeed = -1)
         {
-            return MovementUtilities.GetMovementTime(fromSpeed > 0 ? fromSpeed : Speed,
+            return MovementUtilities.CalculateMovementSpeed(fromSpeed > 0 ? fromSpeed : Speed,
                 GetCombatMode(),
                 Dir,
                 GetFaceDirection(),
