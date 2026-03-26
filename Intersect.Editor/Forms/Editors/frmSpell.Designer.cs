@@ -34,6 +34,7 @@ namespace Intersect.Editor.Forms.Editors
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSpell));
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpNpcSpellChain = new DarkUI.Controls.DarkGroupBox();
+            this.chkAimWhileCasting = new DarkUI.Controls.DarkCheckBox();
             this.nudInterruptExhaustion = new DarkUI.Controls.DarkNumericUpDown();
             this.lblInterruptExhaustion = new System.Windows.Forms.Label();
             this.nudCastExhaustion = new DarkUI.Controls.DarkNumericUpDown();
@@ -87,6 +88,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblRange = new System.Windows.Forms.Label();
             this.scrlRange = new DarkUI.Controls.DarkScrollBar();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.cmbOnCastAnimation = new DarkUI.Controls.DarkComboBox();
+            this.lblOnCastAnimation = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -309,7 +312,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.chkAimWhileCasting = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer.SuspendLayout();
             this.grpNpcSpellChain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterruptExhaustion)).BeginInit();
@@ -445,6 +447,17 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcSpellChain.TabIndex = 125;
             this.grpNpcSpellChain.TabStop = false;
             this.grpNpcSpellChain.Text = "AI Caster Settings";
+            // 
+            // chkAimWhileCasting
+            // 
+            this.chkAimWhileCasting.AutoSize = true;
+            this.chkAimWhileCasting.Location = new System.Drawing.Point(350, 56);
+            this.chkAimWhileCasting.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkAimWhileCasting.Name = "chkAimWhileCasting";
+            this.chkAimWhileCasting.Size = new System.Drawing.Size(172, 24);
+            this.chkAimWhileCasting.TabIndex = 135;
+            this.chkAimWhileCasting.Text = "Aim While Casting?";
+            this.chkAimWhileCasting.CheckedChanged += new System.EventHandler(this.chkAimWhileCasting_CheckedChanged);
             // 
             // nudInterruptExhaustion
             // 
@@ -628,7 +641,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSetEmpty.Location = new System.Drawing.Point(12, 126);
             this.btnSetEmpty.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSetEmpty.Name = "btnSetEmpty";
-            this.btnSetEmpty.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSetEmpty.Padding = new System.Windows.Forms.Padding(8);
             this.btnSetEmpty.Size = new System.Drawing.Size(296, 42);
             this.btnSetEmpty.TabIndex = 59;
             this.btnSetEmpty.Text = "Set Empty";
@@ -639,7 +652,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAddSpellGroup.Location = new System.Drawing.Point(12, 75);
             this.btnAddSpellGroup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAddSpellGroup.Name = "btnAddSpellGroup";
-            this.btnAddSpellGroup.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnAddSpellGroup.Padding = new System.Windows.Forms.Padding(8);
             this.btnAddSpellGroup.Size = new System.Drawing.Size(296, 42);
             this.btnAddSpellGroup.TabIndex = 52;
             this.btnAddSpellGroup.Text = "Add New";
@@ -729,7 +742,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnRemoveComponent.Location = new System.Drawing.Point(176, 311);
             this.btnRemoveComponent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRemoveComponent.Name = "btnRemoveComponent";
-            this.btnRemoveComponent.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnRemoveComponent.Padding = new System.Windows.Forms.Padding(8);
             this.btnRemoveComponent.Size = new System.Drawing.Size(134, 42);
             this.btnRemoveComponent.TabIndex = 109;
             this.btnRemoveComponent.Text = "Remove";
@@ -740,7 +753,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAddComponent.Location = new System.Drawing.Point(9, 311);
             this.btnAddComponent.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAddComponent.Name = "btnAddComponent";
-            this.btnAddComponent.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnAddComponent.Padding = new System.Windows.Forms.Padding(8);
             this.btnAddComponent.Size = new System.Drawing.Size(132, 42);
             this.btnAddComponent.TabIndex = 52;
             this.btnAddComponent.Text = "Add";
@@ -1253,6 +1266,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.cmbOnCastAnimation);
+            this.grpGeneral.Controls.Add(this.lblOnCastAnimation);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
             this.grpGeneral.Controls.Add(this.lblFolder);
             this.grpGeneral.Controls.Add(this.cmbFolder);
@@ -1280,12 +1295,44 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
             // 
+            // cmbOnCastAnimation
+            // 
+            this.cmbOnCastAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbOnCastAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbOnCastAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbOnCastAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbOnCastAnimation.DrawDropdownHoverOutline = false;
+            this.cmbOnCastAnimation.DrawFocusRectangle = false;
+            this.cmbOnCastAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbOnCastAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOnCastAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbOnCastAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbOnCastAnimation.FormattingEnabled = true;
+            this.cmbOnCastAnimation.Location = new System.Drawing.Point(119, 408);
+            this.cmbOnCastAnimation.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cmbOnCastAnimation.Name = "cmbOnCastAnimation";
+            this.cmbOnCastAnimation.Size = new System.Drawing.Size(184, 27);
+            this.cmbOnCastAnimation.TabIndex = 61;
+            this.cmbOnCastAnimation.Text = null;
+            this.cmbOnCastAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbOnCastAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbOnCastAnimation_SelectedIndexChanged);
+            // 
+            // lblOnCastAnimation
+            // 
+            this.lblOnCastAnimation.AutoSize = true;
+            this.lblOnCastAnimation.Location = new System.Drawing.Point(3, 415);
+            this.lblOnCastAnimation.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblOnCastAnimation.Name = "lblOnCastAnimation";
+            this.lblOnCastAnimation.Size = new System.Drawing.Size(100, 20);
+            this.lblOnCastAnimation.TabIndex = 60;
+            this.lblOnCastAnimation.Text = "On-Cast An.:";
+            // 
             // btnAddFolder
             // 
             this.btnAddFolder.Location = new System.Drawing.Point(274, 68);
             this.btnAddFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAddFolder.Name = "btnAddFolder";
-            this.btnAddFolder.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnAddFolder.Padding = new System.Windows.Forms.Padding(8);
             this.btnAddFolder.Size = new System.Drawing.Size(27, 32);
             this.btnAddFolder.TabIndex = 59;
             this.btnAddFolder.Text = "+";
@@ -1327,7 +1374,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.chkBound.AutoSize = true;
             this.chkBound.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkBound.Location = new System.Drawing.Point(14, 415);
+            this.chkBound.Location = new System.Drawing.Point(210, 156);
             this.chkBound.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkBound.Name = "chkBound";
             this.chkBound.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -1349,10 +1396,10 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbHitAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbHitAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbHitAnimation.FormattingEnabled = true;
-            this.cmbHitAnimation.Location = new System.Drawing.Point(135, 371);
+            this.cmbHitAnimation.Location = new System.Drawing.Point(119, 371);
             this.cmbHitAnimation.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cmbHitAnimation.Name = "cmbHitAnimation";
-            this.cmbHitAnimation.Size = new System.Drawing.Size(164, 27);
+            this.cmbHitAnimation.Size = new System.Drawing.Size(184, 27);
             this.cmbHitAnimation.TabIndex = 21;
             this.cmbHitAnimation.Text = null;
             this.cmbHitAnimation.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1371,10 +1418,10 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCastAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCastAnimation.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCastAnimation.FormattingEnabled = true;
-            this.cmbCastAnimation.Location = new System.Drawing.Point(135, 329);
+            this.cmbCastAnimation.Location = new System.Drawing.Point(120, 334);
             this.cmbCastAnimation.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cmbCastAnimation.Name = "cmbCastAnimation";
-            this.cmbCastAnimation.Size = new System.Drawing.Size(164, 27);
+            this.cmbCastAnimation.Size = new System.Drawing.Size(183, 27);
             this.cmbCastAnimation.TabIndex = 20;
             this.cmbCastAnimation.Text = null;
             this.cmbCastAnimation.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1406,7 +1453,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblHitAnimation
             // 
             this.lblHitAnimation.AutoSize = true;
-            this.lblHitAnimation.Location = new System.Drawing.Point(9, 375);
+            this.lblHitAnimation.Location = new System.Drawing.Point(3, 374);
             this.lblHitAnimation.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblHitAnimation.Name = "lblHitAnimation";
             this.lblHitAnimation.Size = new System.Drawing.Size(108, 20);
@@ -1416,7 +1463,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCastAnimation
             // 
             this.lblCastAnimation.AutoSize = true;
-            this.lblCastAnimation.Location = new System.Drawing.Point(9, 334);
+            this.lblCastAnimation.Location = new System.Drawing.Point(1, 334);
             this.lblCastAnimation.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCastAnimation.Name = "lblCastAnimation";
             this.lblCastAnimation.Size = new System.Drawing.Size(121, 20);
@@ -1642,7 +1689,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAddCooldownGroup.Location = new System.Drawing.Point(582, 172);
             this.btnAddCooldownGroup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAddCooldownGroup.Name = "btnAddCooldownGroup";
-            this.btnAddCooldownGroup.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnAddCooldownGroup.Padding = new System.Windows.Forms.Padding(8);
             this.btnAddCooldownGroup.Size = new System.Drawing.Size(27, 32);
             this.btnAddCooldownGroup.TabIndex = 55;
             this.btnAddCooldownGroup.Text = "+";
@@ -1858,7 +1905,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnDynamicRequirements.Location = new System.Drawing.Point(16, 28);
             this.btnDynamicRequirements.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDynamicRequirements.Name = "btnDynamicRequirements";
-            this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(8);
             this.btnDynamicRequirements.Size = new System.Drawing.Size(303, 35);
             this.btnDynamicRequirements.TabIndex = 20;
             this.btnDynamicRequirements.Text = "Casting Requirements";
@@ -4420,7 +4467,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnVisualMapSelector.Location = new System.Drawing.Point(14, 232);
             this.btnVisualMapSelector.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnVisualMapSelector.Name = "btnVisualMapSelector";
-            this.btnVisualMapSelector.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnVisualMapSelector.Padding = new System.Windows.Forms.Padding(8);
             this.btnVisualMapSelector.Size = new System.Drawing.Size(333, 35);
             this.btnVisualMapSelector.TabIndex = 33;
             this.btnVisualMapSelector.Text = "Open Visual Interface";
@@ -4644,7 +4691,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Location = new System.Drawing.Point(1095, 1071);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(8);
             this.btnCancel.Size = new System.Drawing.Size(285, 42);
             this.btnCancel.TabIndex = 49;
             this.btnCancel.Text = "Cancel";
@@ -4655,7 +4702,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSave.Location = new System.Drawing.Point(795, 1071);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSave.Padding = new System.Windows.Forms.Padding(8);
             this.btnSave.Size = new System.Drawing.Size(285, 42);
             this.btnSave.TabIndex = 46;
             this.btnSave.Text = "Save";
@@ -4683,7 +4730,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch.Location = new System.Drawing.Point(268, 26);
             this.btnClearSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnClearSearch.Name = "btnClearSearch";
-            this.btnClearSearch.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnClearSearch.Padding = new System.Windows.Forms.Padding(8);
             this.btnClearSearch.Size = new System.Drawing.Size(27, 31);
             this.btnClearSearch.TabIndex = 34;
             this.btnClearSearch.Text = "X";
@@ -4720,17 +4767,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.SelectedImageIndex = 0;
             this.lstGameObjects.Size = new System.Drawing.Size(286, 925);
             this.lstGameObjects.TabIndex = 32;
-            // 
-            // chkAimWhileCasting
-            // 
-            this.chkAimWhileCasting.AutoSize = true;
-            this.chkAimWhileCasting.Location = new System.Drawing.Point(350, 56);
-            this.chkAimWhileCasting.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.chkAimWhileCasting.Name = "chkAimWhileCasting";
-            this.chkAimWhileCasting.Size = new System.Drawing.Size(172, 24);
-            this.chkAimWhileCasting.TabIndex = 135;
-            this.chkAimWhileCasting.Text = "Aim While Casting?";
-            this.chkAimWhileCasting.CheckedChanged += new System.EventHandler(this.chkAimWhileCasting_CheckedChanged);
             // 
             // FrmSpell
             // 
@@ -5157,5 +5193,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblInterruptExhaustion;
         private DarkNumericUpDown nudInterruptExhaustion;
         private DarkCheckBox chkAimWhileCasting;
+        private DarkComboBox cmbOnCastAnimation;
+        private System.Windows.Forms.Label lblOnCastAnimation;
     }
 }

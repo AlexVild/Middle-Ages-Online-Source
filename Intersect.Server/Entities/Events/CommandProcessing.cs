@@ -2050,7 +2050,14 @@ namespace Intersect.Server.Entities.Events
             }
             else
             {
-                value.Boolean = mod.Value;
+                if (mod.Toggle)
+                {
+                    value.Boolean = !value.Boolean;
+                }
+                else
+                {
+                    value.Boolean = mod.Value;
+                }
             }
 
             var changed = value.Boolean != originalValue;

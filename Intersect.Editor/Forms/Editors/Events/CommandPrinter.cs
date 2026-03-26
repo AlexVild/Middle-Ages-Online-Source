@@ -1393,13 +1393,20 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
             else
             {
-                if (mod.Value == true)
+                if (mod.Toggle)
                 {
-                    varvalue = Strings.EventCommandList.setvariable.ToString(Strings.EventCommandList.True);
+                    varvalue = Strings.EventCommandList.togglevariable.ToString();
                 }
                 else
                 {
-                    varvalue = Strings.EventCommandList.setvariable.ToString(Strings.EventCommandList.False);
+                    if (mod.Value == true)
+                    {
+                        varvalue = Strings.EventCommandList.setvariable.ToString(Strings.EventCommandList.True);
+                    }
+                    else
+                    {
+                        varvalue = Strings.EventCommandList.setvariable.ToString(Strings.EventCommandList.False);
+                    }
                 }
             }
 

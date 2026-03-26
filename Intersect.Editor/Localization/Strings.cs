@@ -2167,6 +2167,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString setvariable = @"Set to {00}";
 
+            public static LocalizedString togglevariable = @"Toggle boolean value";
+
             public static LocalizedString replace = @"Replace {00} with {01}";
 
             public static LocalizedString showoffer = @"Show Offer Window";

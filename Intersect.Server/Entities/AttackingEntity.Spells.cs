@@ -509,6 +509,15 @@ namespace Intersect.Server.Entities
             // Used because we don't want to dash until _after_ we've cancelled spell casting - otherwise, the dash won't move us since we're spellcasting
             var queueDashAfterSpellCancel = false;
             bool inRange;
+
+            // Play the On Cast animation
+            if (spell.OnCastAnimationId != Guid.Empty)
+            {
+                PacketSender.SendAnimationToProximity(
+                    spell.OnCastAnimationId, 1, Id, MapId, 0, 0, (sbyte)Dir, MapInstanceId
+                );
+            }
+
             switch (spell.SpellType)
             {
                 case SpellTypes.CombatSpell:

@@ -341,6 +341,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                 optBooleanTrue.Checked = mod.Value;
                 optBooleanFalse.Checked = !mod.Value;
+                optBooleanToggle.Checked = mod.Toggle;
 
                 if (mod.DuplicateVariableId != Guid.Empty)
                 {
@@ -373,6 +374,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             var mod = new BooleanVariableMod();
 
             mod.Value = optBooleanTrue.Checked;
+            mod.Toggle = optBooleanToggle.Checked;
 
             if (optBooleanClonePlayerVar.Checked)
             {

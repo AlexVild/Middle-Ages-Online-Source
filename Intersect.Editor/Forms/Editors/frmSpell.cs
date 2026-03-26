@@ -109,6 +109,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbTrapAnimation.Items.Clear();
             cmbTrapAnimation.Items.Add(Strings.General.none);
             cmbTrapAnimation.Items.AddRange(AnimationBase.Names);
+            cmbOnCastAnimation.Items.Clear();
+            cmbOnCastAnimation.Items.Add(Strings.General.none);
+            cmbOnCastAnimation.Items.AddRange(AnimationBase.Names);
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
@@ -301,6 +304,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbHitAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.HitAnimationId) + 1;
                 cmbOverTimeAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.OverTimeAnimationId) + 1;
                 cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
+                cmbOnCastAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.OnCastAnimationId) + 1;
                 cmbDashAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.Dash.DashAnimationId) + 1;
 
                 chkBound.Checked = mEditorItem.Bound;
@@ -1885,6 +1889,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkAimWhileCasting_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.NpcAimWhileCasting = chkAimWhileCasting.Checked;
+        }
+
+        private void cmbOnCastAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.OnCastAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbOnCastAnimation.SelectedIndex - 1));
         }
     }
 }

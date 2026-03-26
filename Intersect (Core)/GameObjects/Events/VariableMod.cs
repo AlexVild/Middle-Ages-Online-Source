@@ -30,6 +30,8 @@ namespace Intersect.GameObjects.Events
     {
 
         public bool Value { get; set; }
+        
+        public bool Toggle { get; set; }
 
         public VariableTypes DupVariableType { get; set; } = VariableTypes.PlayerVariable;
 

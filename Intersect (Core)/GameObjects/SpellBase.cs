@@ -97,6 +97,18 @@ namespace Intersect.GameObjects
             set => TrapAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        //Animations
+        [Column("OnCastAnimation")]
+        public Guid OnCastAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase OnCastAnimation
+        {
+            get => AnimationBase.Get(OnCastAnimationId);
+            set => OnCastAnimationId = value?.Id ?? Guid.Empty;
+        }
+
         //Spell Times
         public int CastDuration { get; set; }
 
