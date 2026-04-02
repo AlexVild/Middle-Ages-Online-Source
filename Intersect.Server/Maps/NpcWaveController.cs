@@ -39,6 +39,11 @@ namespace Intersect.Server.Maps
             {
                 if (Map.NpcSpawnGroup == waveGroup.Descriptor?.AutoStartWave)
                 {
+                    if (waveGroup.Descriptor.DisposeMapOnEmpty && Map.GetPlayers(true).Count == 0)
+                    {
+                        continue;
+                    }
+                    
                     waveGroup.Start();
                     break;
                 }

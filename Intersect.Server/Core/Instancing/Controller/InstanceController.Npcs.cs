@@ -4,6 +4,7 @@ using System.Linq;
 using Intersect.Server.Maps;
 using Intersect.Server.Core.Instancing.Controller.Components;
 using Intersect.Utilities;
+using Intersect.GameObjects.Events.Commands;
 
 namespace Intersect.Server.Core.Instancing.Controller
 {
@@ -12,8 +13,6 @@ namespace Intersect.Server.Core.Instancing.Controller
         public HashSet<string> PermadeadNpcs { get; set; } = new HashSet<string>();
 
         public Dictionary<Guid, SpawnInfo> MapSpawnGroups { get; set; } = new Dictionary<Guid, SpawnInfo>();
-
-        public Debouncer SpawnGroupDebouncer = new Debouncer();
 
         public void CleanupSpawnGroups()
         {
@@ -29,26 +28,27 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void ChangeSpawnGroup(Guid controllerId, int spawnGroup, bool persistCleanup, bool surroundingMaps)
         {
-            SpawnGroupDebouncer.Debounce(() => {
-                if (MapSpawnGroups.ContainsKey(controllerId))
+            if (MapSpawnGroups.TryGetValue(controllerId, out var spawnInfo))
+            {
+                spawnInfo.Debouncer.Debounce(() =>
                 {
-                    MapSpawnGroups[controllerId].Group = spawnGroup;
-                    MapSpawnGroups[controllerId].PersistCleanup = persistCleanup;
-                }
-                else
-                {
-                    MapSpawnGroups.Add(controllerId, new SpawnInfo(spawnGroup, persistCleanup));
-                }
+                    spawnInfo.Group = spawnGroup;
+                    spawnInfo.PersistCleanup = persistCleanup;
+                }, 500, pessimistic: true);
+            }
+            else
+            {
+                MapSpawnGroups.Add(controllerId, new SpawnInfo(spawnGroup, persistCleanup));
+            }
 
-                if (surroundingMaps)
+            if (surroundingMaps)
+            {
+                var map = MapController.Get(controllerId);
+                foreach (var surroundingMap in map.GetSurroundingMapIds(false))
                 {
-                    var map = MapController.Get(controllerId);
-                    foreach (var surroundingMap in map.GetSurroundingMapIds(false))
-                    {
-                        ChangeSpawnGroup(surroundingMap, spawnGroup, persistCleanup, false);
-                    }
+                    ChangeSpawnGroup(surroundingMap, spawnGroup, persistCleanup, false);
                 }
-            }, 500, pessimistic: true);
+            }
         }
 
         public void ClearPermadeadNpcs(Guid mapControllerId, bool forceRespawn)

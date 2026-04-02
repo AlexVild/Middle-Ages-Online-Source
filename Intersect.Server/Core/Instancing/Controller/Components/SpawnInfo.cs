@@ -1,4 +1,6 @@
-﻿namespace Intersect.Server.Core.Instancing.Controller.Components
+﻿using Intersect.Utilities;
+
+namespace Intersect.Server.Core.Instancing.Controller.Components
 {
     public class SpawnInfo
     {
@@ -17,5 +19,11 @@
         public int Group { get; set; }
 
         public bool PersistCleanup { get; set; }
+
+
+        /// <summary>
+        /// Used to debounce spawn group changes so that if several players request a change at once, only the most recent succeeds.
+        /// </summary>
+        public Debouncer Debouncer { get; set; } = new Debouncer();
     }
 }
