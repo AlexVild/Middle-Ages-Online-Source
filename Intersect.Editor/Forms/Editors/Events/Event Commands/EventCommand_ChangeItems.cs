@@ -6,6 +6,7 @@ using Intersect.Editor.Localization;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -36,6 +37,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             rdoVariable.Checked = mMyCommand.UseVariable;
             rdoGlobalVariable.Checked = mMyCommand.VariableType == VariableTypes.ServerVariable;
             rdoInstanceVariable.Checked = mMyCommand.VariableType == VariableTypes.InstanceVariable;
+            rdoGuildVariable.Checked = mMyCommand.VariableType == VariableTypes.GuildVariable;
 
             SetupAmountInput();
         }
@@ -219,8 +221,34 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     VariableBlank();
                 }
             }
+            else if (rdoGuildVariable.Checked)
+            {
+                cmbVariable.Items.AddRange(GuildVariableBase.GetNamesByType(VariableDataTypes.Integer));
+                // Do not update if the wrong type of variable is saved
+                if (mMyCommand.VariableType == VariableTypes.GuildVariable)
+                {
+                    var index = GuildVariableBase.ListIndex(mMyCommand.VariableId, VariableDataTypes.Integer);
+                    if (index > -1)
+                    {
+                        cmbVariable.SelectedIndex = index;
+                    }
+                    else
+                    {
+                        VariableBlank();
+                    }
+                }
+                else
+                {
+                    VariableBlank();
+                }
+            }
 
             nudGiveTakeAmount.Value = Math.Max(1, mMyCommand.Quantity);
+        }
+
+        private void rdoGuildVariable_CheckedChanged(object sender, EventArgs e)
+        {
+            SetupAmountInput();
         }
     }
 

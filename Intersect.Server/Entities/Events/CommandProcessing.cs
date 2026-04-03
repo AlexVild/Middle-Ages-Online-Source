@@ -1,32 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-
-using Intersect.Enums;
+﻿using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
-using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.QuestBoard;
+using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Switches_and_Variables;
+using Intersect.GameObjects.Timers;
+using Intersect.Network.Packets.Client;
+using Intersect.Network.Packets.Server;
+using Intersect.Server.Core;
 using Intersect.Server.Database;
+using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Database.PlayerData.Security;
+using Intersect.Server.Entities.Combat;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
-using Intersect.Utilities;
-using Intersect.GameObjects.Timers;
-using Intersect.Server.Database.PlayerData;
-using Intersect.Server.Core;
-using Intersect.Network.Packets.Server;
 using Intersect.Server.Utilities;
+using Intersect.Utilities;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
-using Intersect.Server.Entities.Combat;
-using Intersect.Network.Packets.Client;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -635,6 +635,18 @@ namespace Intersect.Server.Entities.Events
                         if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
                         {
                             quantity = (int)mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                        }
+                        break;
+                    case VariableTypes.GuildVariable:
+                        var guild = player.Guild;
+                        if (!player.IsInGuild)
+                        {
+                            quantity = 0;
+                        }
+                        else
+                        {
+                            var variable = guild.GetVariableValue(command.VariableId) ?? new VariableValue();
+                            quantity = (int)variable.Integer;
                         }
                         break;
                 }
