@@ -2611,6 +2611,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             cmbItemEnhancement.Enabled = !chkAnyItem.Checked;
         }
+
+        private void rdoVarCompareInstanceVar_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericVariableElements();
+        }
+
+        private void rdoVarCompareGuildVar_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericVariableElements();
+        }
     }
 
 }
