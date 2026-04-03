@@ -30,8 +30,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EventCommandInput));
             this.grpInput = new DarkUI.Controls.DarkGroupBox();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.txtTitle = new DarkUI.Controls.DarkTextBox();
             this.nudMaxVal = new DarkUI.Controls.DarkNumericUpDown();
             this.lblMaxVal = new System.Windows.Forms.Label();
             this.nudMinVal = new DarkUI.Controls.DarkNumericUpDown();
@@ -44,8 +45,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblText = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.txtTitle = new DarkUI.Controls.DarkTextBox();
-            this.lblTitle = new System.Windows.Forms.Label();
             this.grpInput.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinVal)).BeginInit();
@@ -70,25 +69,49 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpInput.Controls.Add(this.btnCancel);
             this.grpInput.Controls.Add(this.btnSave);
             this.grpInput.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInput.Location = new System.Drawing.Point(3, 3);
+            this.grpInput.Location = new System.Drawing.Point(4, 5);
+            this.grpInput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpInput.Name = "grpInput";
-            this.grpInput.Size = new System.Drawing.Size(259, 281);
+            this.grpInput.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpInput.Size = new System.Drawing.Size(388, 432);
             this.grpInput.TabIndex = 17;
             this.grpInput.TabStop = false;
             this.grpInput.Text = "Input Variable";
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(6, 32);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(42, 20);
+            this.lblTitle.TabIndex = 63;
+            this.lblTitle.Text = "Title:";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtTitle.Location = new System.Drawing.Point(76, 29);
+            this.txtTitle.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.Size = new System.Drawing.Size(284, 26);
+            this.txtTitle.TabIndex = 62;
             // 
             // nudMaxVal
             // 
             this.nudMaxVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMaxVal.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMaxVal.Location = new System.Drawing.Point(126, 220);
+            this.nudMaxVal.Location = new System.Drawing.Point(189, 338);
+            this.nudMaxVal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nudMaxVal.Maximum = new decimal(new int[] {
-            1000000,
-            0,
+            -1486618624,
+            232830643,
             0,
             0});
             this.nudMaxVal.Name = "nudMaxVal";
-            this.nudMaxVal.Size = new System.Drawing.Size(115, 20);
+            this.nudMaxVal.Size = new System.Drawing.Size(172, 26);
             this.nudMaxVal.TabIndex = 53;
             this.nudMaxVal.Value = new decimal(new int[] {
             1000,
@@ -99,9 +122,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblMaxVal
             // 
             this.lblMaxVal.AutoSize = true;
-            this.lblMaxVal.Location = new System.Drawing.Point(11, 222);
+            this.lblMaxVal.Location = new System.Drawing.Point(16, 342);
+            this.lblMaxVal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMaxVal.Name = "lblMaxVal";
-            this.lblMaxVal.Size = new System.Drawing.Size(84, 13);
+            this.lblMaxVal.Size = new System.Drawing.Size(125, 20);
             this.lblMaxVal.TabIndex = 52;
             this.lblMaxVal.Text = "Maximum Value:";
             // 
@@ -109,14 +133,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudMinVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMinVal.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMinVal.Location = new System.Drawing.Point(126, 194);
+            this.nudMinVal.Location = new System.Drawing.Point(189, 298);
+            this.nudMinVal.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.nudMinVal.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.nudMinVal.Name = "nudMinVal";
-            this.nudMinVal.Size = new System.Drawing.Size(115, 20);
+            this.nudMinVal.Size = new System.Drawing.Size(172, 26);
             this.nudMinVal.TabIndex = 51;
             this.nudMinVal.Value = new decimal(new int[] {
             0,
@@ -127,9 +152,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblMinVal
             // 
             this.lblMinVal.AutoSize = true;
-            this.lblMinVal.Location = new System.Drawing.Point(11, 196);
+            this.lblMinVal.Location = new System.Drawing.Point(16, 302);
+            this.lblMinVal.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMinVal.Name = "lblMinVal";
-            this.lblMinVal.Size = new System.Drawing.Size(81, 13);
+            this.lblMinVal.Size = new System.Drawing.Size(121, 20);
             this.lblMinVal.TabIndex = 50;
             this.lblMinVal.Text = "Minimum Value:";
             // 
@@ -146,9 +172,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbVariable.FormattingEnabled = true;
-            this.cmbVariable.Location = new System.Drawing.Point(7, 167);
+            this.cmbVariable.Location = new System.Drawing.Point(10, 257);
+            this.cmbVariable.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(234, 21);
+            this.cmbVariable.Size = new System.Drawing.Size(349, 27);
             this.cmbVariable.TabIndex = 49;
             this.cmbVariable.Text = null;
             this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
@@ -157,9 +184,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // rdoGlobalVariables
             // 
             this.rdoGlobalVariables.AutoSize = true;
-            this.rdoGlobalVariables.Location = new System.Drawing.Point(131, 144);
+            this.rdoGlobalVariables.Location = new System.Drawing.Point(196, 222);
+            this.rdoGlobalVariables.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.rdoGlobalVariables.Name = "rdoGlobalVariables";
-            this.rdoGlobalVariables.Size = new System.Drawing.Size(101, 17);
+            this.rdoGlobalVariables.Size = new System.Drawing.Size(150, 24);
             this.rdoGlobalVariables.TabIndex = 28;
             this.rdoGlobalVariables.Text = "Global Variables";
             this.rdoGlobalVariables.CheckedChanged += new System.EventHandler(this.rdoGlobalVariables_CheckedChanged);
@@ -168,9 +196,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.rdoPlayerVariables.AutoSize = true;
             this.rdoPlayerVariables.Checked = true;
-            this.rdoPlayerVariables.Location = new System.Drawing.Point(14, 144);
+            this.rdoPlayerVariables.Location = new System.Drawing.Point(21, 222);
+            this.rdoPlayerVariables.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.rdoPlayerVariables.Name = "rdoPlayerVariables";
-            this.rdoPlayerVariables.Size = new System.Drawing.Size(100, 17);
+            this.rdoPlayerVariables.Size = new System.Drawing.Size(147, 24);
             this.rdoPlayerVariables.TabIndex = 27;
             this.rdoPlayerVariables.TabStop = true;
             this.rdoPlayerVariables.Text = "Player Variables";
@@ -182,9 +211,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblCommands.BackColor = System.Drawing.Color.Transparent;
             this.lblCommands.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCommands.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.lblCommands.Location = new System.Drawing.Point(157, 49);
+            this.lblCommands.Location = new System.Drawing.Point(236, 75);
+            this.lblCommands.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCommands.Name = "lblCommands";
-            this.lblCommands.Size = new System.Drawing.Size(84, 13);
+            this.lblCommands.Size = new System.Drawing.Size(134, 20);
             this.lblCommands.TabIndex = 26;
             this.lblCommands.Text = "Chat Commands";
             this.lblCommands.Click += new System.EventHandler(this.lblCommands_Click);
@@ -194,70 +224,56 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtText.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtText.Location = new System.Drawing.Point(7, 65);
+            this.txtText.Location = new System.Drawing.Point(10, 100);
+            this.txtText.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtText.Multiline = true;
             this.txtText.Name = "txtText";
             this.txtText.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtText.Size = new System.Drawing.Size(234, 73);
+            this.txtText.Size = new System.Drawing.Size(350, 111);
             this.txtText.TabIndex = 22;
             // 
             // lblText
             // 
             this.lblText.AutoSize = true;
-            this.lblText.Location = new System.Drawing.Point(4, 49);
+            this.lblText.Location = new System.Drawing.Point(6, 75);
+            this.lblText.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblText.Name = "lblText";
-            this.lblText.Size = new System.Drawing.Size(31, 13);
+            this.lblText.Size = new System.Drawing.Size(43, 20);
             this.lblText.TabIndex = 21;
             this.lblText.Text = "Text:";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(89, 252);
+            this.btnCancel.Location = new System.Drawing.Point(134, 388);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(7, 252);
+            this.btnSave.Location = new System.Drawing.Point(10, 388);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Padding = new System.Windows.Forms.Padding(5);
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSave.Size = new System.Drawing.Size(112, 35);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // txtTitle
-            // 
-            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtTitle.Location = new System.Drawing.Point(51, 19);
-            this.txtTitle.Name = "txtTitle";
-            this.txtTitle.Size = new System.Drawing.Size(190, 20);
-            this.txtTitle.TabIndex = 62;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(4, 21);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(30, 13);
-            this.lblTitle.TabIndex = 63;
-            this.lblTitle.Text = "Title:";
-            // 
             // EventCommandInput
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpInput);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "EventCommandInput";
-            this.Size = new System.Drawing.Size(268, 287);
+            this.Size = new System.Drawing.Size(402, 442);
             this.grpInput.ResumeLayout(false);
             this.grpInput.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxVal)).EndInit();

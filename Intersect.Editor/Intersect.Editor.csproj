@@ -1057,6 +1057,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_HideEvent.resx">
       <DependentUpon>EventCommand_HideEvent.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Input.resx">
+      <DependentUpon>EventCommand_Input.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_MeleeSignup.resx">
       <DependentUpon>EventCommand_MeleeSignup.cs</DependentUpon>
     </EmbeddedResource>

@@ -118,7 +118,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             mMyCommand.Text = txtText.Text;
             mMyCommand.Title = txtTitle.Text;
-            mMyCommand.Maximum = (int) nudMaxVal.Value;
+            var maxVal = (int)nudMaxVal.Value == 0 ? int.MaxValue : (int)nudMaxVal.Value;
+            mMyCommand.Maximum = maxVal;
             mMyCommand.Minimum = (int) nudMinVal.Value;
 
             if (rdoPlayerVariables.Checked)
