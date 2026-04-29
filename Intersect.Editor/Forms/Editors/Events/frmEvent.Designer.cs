@@ -137,7 +137,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Hide Event");
             System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Show Event");
             System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Hold Player (Cross-map)");
-            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Movement", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Reset Event Position");
+            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Movement", new System.Windows.Forms.TreeNode[] {
             treeNode48,
             treeNode49,
             treeNode50,
@@ -150,20 +151,20 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode57,
             treeNode58,
             treeNode59,
-            treeNode60});
-            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Play Animation");
-            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Play BGM");
-            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Fadeout BGM");
-            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Play Sound");
-            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Stop Sounds");
-            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Show Picture");
-            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Hide Picture");
-            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Flash Screen");
-            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Fade In");
-            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Fade Out");
-            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Shake Screen");
-            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Special Effects", new System.Windows.Forms.TreeNode[] {
-            treeNode62,
+            treeNode60,
+            treeNode61});
+            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Play Animation");
+            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Play BGM");
+            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Fadeout BGM");
+            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Play Sound");
+            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Stop Sounds");
+            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Show Picture");
+            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Hide Picture");
+            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Flash Screen");
+            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Fade In");
+            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Fade Out");
+            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Shake Screen");
+            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Special Effects", new System.Windows.Forms.TreeNode[] {
             treeNode63,
             treeNode64,
             treeNode65,
@@ -173,73 +174,74 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode69,
             treeNode70,
             treeNode71,
-            treeNode72});
-            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Start Quest");
-            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Complete Quest Task");
-            System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("End Quest");
-            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Random Quest from List");
-            System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Open Quest Board");
-            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
-            treeNode74,
+            treeNode72,
+            treeNode73});
+            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Start Quest");
+            System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Complete Quest Task");
+            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("End Quest");
+            System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Random Quest from List");
+            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("Open Quest Board");
+            System.Windows.Forms.TreeNode treeNode80 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
             treeNode75,
             treeNode76,
             treeNode77,
-            treeNode78});
-            System.Windows.Forms.TreeNode treeNode80 = new System.Windows.Forms.TreeNode("Wait...");
-            System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("Open Leaderboard...");
-            System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Clear Record...");
-            System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("Reset Permadead NPCs");
-            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Reset Global Event Positions");
-            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Signup for Open Melee");
-            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Withdraw from Open Melee");
-            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Force NPC Exhaustion");
-            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
-            treeNode80,
+            treeNode78,
+            treeNode79});
+            System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("Wait...");
+            System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Open Leaderboard...");
+            System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("Clear Record...");
+            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Reset Permadead NPCs");
+            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Reset Global Event Positions");
+            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Signup for Open Melee");
+            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Withdraw from Open Melee");
+            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("Force NPC Exhaustion");
+            System.Windows.Forms.TreeNode treeNode89 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
             treeNode81,
             treeNode82,
             treeNode83,
             treeNode84,
             treeNode85,
             treeNode86,
-            treeNode87});
-            System.Windows.Forms.TreeNode treeNode89 = new System.Windows.Forms.TreeNode("Open Bank");
-            System.Windows.Forms.TreeNode treeNode90 = new System.Windows.Forms.TreeNode("Open Shop");
-            System.Windows.Forms.TreeNode treeNode91 = new System.Windows.Forms.TreeNode("Open Crafting Station");
-            System.Windows.Forms.TreeNode treeNode92 = new System.Windows.Forms.TreeNode("Close Crafting Table");
-            System.Windows.Forms.TreeNode treeNode93 = new System.Windows.Forms.TreeNode("Open Deconstructor");
-            System.Windows.Forms.TreeNode treeNode94 = new System.Windows.Forms.TreeNode("Open Enhancement Window");
-            System.Windows.Forms.TreeNode treeNode95 = new System.Windows.Forms.TreeNode("Open Upgrade Station");
-            System.Windows.Forms.TreeNode treeNode96 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
-            treeNode89,
+            treeNode87,
+            treeNode88});
+            System.Windows.Forms.TreeNode treeNode90 = new System.Windows.Forms.TreeNode("Open Bank");
+            System.Windows.Forms.TreeNode treeNode91 = new System.Windows.Forms.TreeNode("Open Shop");
+            System.Windows.Forms.TreeNode treeNode92 = new System.Windows.Forms.TreeNode("Open Crafting Station");
+            System.Windows.Forms.TreeNode treeNode93 = new System.Windows.Forms.TreeNode("Close Crafting Table");
+            System.Windows.Forms.TreeNode treeNode94 = new System.Windows.Forms.TreeNode("Open Deconstructor");
+            System.Windows.Forms.TreeNode treeNode95 = new System.Windows.Forms.TreeNode("Open Enhancement Window");
+            System.Windows.Forms.TreeNode treeNode96 = new System.Windows.Forms.TreeNode("Open Upgrade Station");
+            System.Windows.Forms.TreeNode treeNode97 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
             treeNode90,
             treeNode91,
             treeNode92,
             treeNode93,
             treeNode94,
-            treeNode95});
-            System.Windows.Forms.TreeNode treeNode97 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode98 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode99 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode100 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode101 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode97,
+            treeNode95,
+            treeNode96});
+            System.Windows.Forms.TreeNode treeNode98 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode99 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode100 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode101 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode102 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode98,
             treeNode99,
-            treeNode100});
-            System.Windows.Forms.TreeNode treeNode102 = new System.Windows.Forms.TreeNode("Start Timer");
-            System.Windows.Forms.TreeNode treeNode103 = new System.Windows.Forms.TreeNode("Modify Timer");
-            System.Windows.Forms.TreeNode treeNode104 = new System.Windows.Forms.TreeNode("Stop Timer");
-            System.Windows.Forms.TreeNode treeNode105 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
-            treeNode102,
+            treeNode100,
+            treeNode101});
+            System.Windows.Forms.TreeNode treeNode103 = new System.Windows.Forms.TreeNode("Start Timer");
+            System.Windows.Forms.TreeNode treeNode104 = new System.Windows.Forms.TreeNode("Modify Timer");
+            System.Windows.Forms.TreeNode treeNode105 = new System.Windows.Forms.TreeNode("Stop Timer");
+            System.Windows.Forms.TreeNode treeNode106 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
             treeNode103,
-            treeNode104});
-            System.Windows.Forms.TreeNode treeNode106 = new System.Windows.Forms.TreeNode("Change Dungeon");
-            System.Windows.Forms.TreeNode treeNode107 = new System.Windows.Forms.TreeNode("Obtain Treasure Gnome");
-            System.Windows.Forms.TreeNode treeNode108 = new System.Windows.Forms.TreeNode("Roll Dungeon Loot");
-            System.Windows.Forms.TreeNode treeNode109 = new System.Windows.Forms.TreeNode("Dungeons", new System.Windows.Forms.TreeNode[] {
-            treeNode106,
+            treeNode104,
+            treeNode105});
+            System.Windows.Forms.TreeNode treeNode107 = new System.Windows.Forms.TreeNode("Change Dungeon");
+            System.Windows.Forms.TreeNode treeNode108 = new System.Windows.Forms.TreeNode("Obtain Treasure Gnome");
+            System.Windows.Forms.TreeNode treeNode109 = new System.Windows.Forms.TreeNode("Roll Dungeon Loot");
+            System.Windows.Forms.TreeNode treeNode110 = new System.Windows.Forms.TreeNode("Dungeons", new System.Windows.Forms.TreeNode[] {
             treeNode107,
-            treeNode108});
+            treeNode108,
+            treeNode109});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -1492,157 +1494,160 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode60.Name = "permaholdplayer";
             treeNode60.Tag = "99";
             treeNode60.Text = "Hold Player (Cross-map)";
-            treeNode61.Name = "movement";
-            treeNode61.Text = "Movement";
-            treeNode62.Name = "playanimation";
-            treeNode62.Tag = "29";
-            treeNode62.Text = "Play Animation";
-            treeNode63.Name = "playbgm";
-            treeNode63.Tag = "30";
-            treeNode63.Text = "Play BGM";
-            treeNode64.Name = "fadeoutbgm";
-            treeNode64.Tag = "31";
-            treeNode64.Text = "Fadeout BGM";
-            treeNode65.Name = "playsound";
-            treeNode65.Tag = "32";
-            treeNode65.Text = "Play Sound";
-            treeNode66.Name = "stopsounds";
-            treeNode66.Tag = "33";
-            treeNode66.Text = "Stop Sounds";
-            treeNode67.Name = "showpicture";
-            treeNode67.Tag = "43";
-            treeNode67.Text = "Show Picture";
-            treeNode68.Name = "hidepicture";
-            treeNode68.Tag = "44";
-            treeNode68.Text = "Hide Picture";
-            treeNode69.Name = "flashscreen";
-            treeNode69.Tag = "58";
-            treeNode69.Text = "Flash Screen";
-            treeNode70.Name = "fadein";
-            treeNode70.Tag = "74";
-            treeNode70.Text = "Fade In";
-            treeNode71.Name = "fadeout";
-            treeNode71.Tag = "75";
-            treeNode71.Text = "Fade Out";
-            treeNode72.Name = "shakescreen";
-            treeNode72.Tag = "76";
-            treeNode72.Text = "Shake Screen";
-            treeNode73.Name = "specialeffects";
-            treeNode73.Text = "Special Effects";
-            treeNode74.Name = "startquest";
-            treeNode74.Tag = "40";
-            treeNode74.Text = "Start Quest";
-            treeNode75.Name = "completequesttask";
-            treeNode75.Tag = "41";
-            treeNode75.Text = "Complete Quest Task";
-            treeNode76.Name = "endquest";
-            treeNode76.Tag = "42";
-            treeNode76.Text = "End Quest";
-            treeNode77.Name = "randomquest";
-            treeNode77.Tag = "59";
-            treeNode77.Text = "Random Quest from List";
-            treeNode78.Name = "openquestboard";
-            treeNode78.Tag = "60";
-            treeNode78.Text = "Open Quest Board";
-            treeNode79.Name = "questcontrol";
-            treeNode79.Text = "Quest Control";
-            treeNode80.Name = "wait";
-            treeNode80.Tag = "34";
-            treeNode80.Text = "Wait...";
-            treeNode81.Name = "openleaderboard";
-            treeNode81.Tag = "68";
-            treeNode81.Text = "Open Leaderboard...";
-            treeNode82.Name = "clearrecord";
-            treeNode82.Tag = "69";
-            treeNode82.Text = "Clear Record...";
-            treeNode83.Name = "resetpermadeadnpcs";
-            treeNode83.Tag = "73";
-            treeNode83.Text = "Reset Permadead NPCs";
-            treeNode84.Name = "resetglobalevents";
-            treeNode84.Tag = "90";
-            treeNode84.Text = "Reset Global Event Positions";
-            treeNode85.Name = "meleesignup";
-            treeNode85.Tag = "91";
-            treeNode85.Text = "Signup for Open Melee";
-            treeNode86.Name = "meleewithdraw";
-            treeNode86.Tag = "92";
-            treeNode86.Text = "Withdraw from Open Melee";
-            treeNode87.Name = "forcenpcexhaustion";
-            treeNode87.Tag = "98";
-            treeNode87.Text = "Force NPC Exhaustion";
-            treeNode88.Name = "etc";
-            treeNode88.Text = "Etc";
-            treeNode89.Name = "openbank";
-            treeNode89.Tag = "35";
-            treeNode89.Text = "Open Bank";
-            treeNode90.Name = "openshop";
-            treeNode90.Tag = "36";
-            treeNode90.Text = "Open Shop";
-            treeNode91.Name = "opencraftingstation";
-            treeNode91.Tag = "37";
-            treeNode91.Text = "Open Crafting Station";
-            treeNode92.Name = "closecraftingtable";
-            treeNode92.Tag = "97";
-            treeNode92.Text = "Close Crafting Table";
-            treeNode93.Name = "opendeconstructor";
-            treeNode93.Tag = "85";
-            treeNode93.Text = "Open Deconstructor";
-            treeNode94.Name = "openenhancementwindow";
-            treeNode94.Tag = "87";
-            treeNode94.Text = "Open Enhancement Window";
-            treeNode95.Name = "openupgradestation";
-            treeNode95.Tag = "88";
-            treeNode95.Text = "Open Upgrade Station";
-            treeNode96.Name = "shopandbank";
-            treeNode96.Text = "Shop and Bank";
-            treeNode97.Name = "createguild";
-            treeNode97.Tag = "53";
-            treeNode97.Text = "Create Guild";
-            treeNode98.Name = "disbandguild";
-            treeNode98.Tag = "54";
-            treeNode98.Text = "Disband Guild";
-            treeNode99.Name = "openguildbank";
-            treeNode99.Tag = "55";
-            treeNode99.Text = "Open Guild Bank";
-            treeNode100.Name = "setguildbankslots";
-            treeNode100.Tag = "56";
-            treeNode100.Text = "Set Guild Bank Slots Count";
-            treeNode101.Name = "guilds";
-            treeNode101.Text = "Guilds";
-            treeNode102.Name = "starttimer";
-            treeNode102.Tag = "64";
-            treeNode102.Text = "Start Timer";
-            treeNode103.Name = "modifytimer";
-            treeNode103.Tag = "65";
-            treeNode103.Text = "Modify Timer";
-            treeNode104.Name = "stoptimer";
-            treeNode104.Tag = "66";
-            treeNode104.Text = "Stop Timer";
-            treeNode105.Name = "timers";
-            treeNode105.Text = "Timers";
-            treeNode106.Name = "changedungeon";
-            treeNode106.Tag = "82";
-            treeNode106.Text = "Change Dungeon";
-            treeNode107.Name = "obtaintreasuregnome";
-            treeNode107.Tag = "83";
-            treeNode107.Text = "Obtain Treasure Gnome";
-            treeNode108.Name = "rolldungeonloot";
-            treeNode108.Tag = "84";
-            treeNode108.Text = "Roll Dungeon Loot";
-            treeNode109.Name = "dungeons";
-            treeNode109.Text = "Dungeons";
+            treeNode61.Name = "reseteventposition";
+            treeNode61.Tag = "100";
+            treeNode61.Text = "Reset Event Position";
+            treeNode62.Name = "movement";
+            treeNode62.Text = "Movement";
+            treeNode63.Name = "playanimation";
+            treeNode63.Tag = "29";
+            treeNode63.Text = "Play Animation";
+            treeNode64.Name = "playbgm";
+            treeNode64.Tag = "30";
+            treeNode64.Text = "Play BGM";
+            treeNode65.Name = "fadeoutbgm";
+            treeNode65.Tag = "31";
+            treeNode65.Text = "Fadeout BGM";
+            treeNode66.Name = "playsound";
+            treeNode66.Tag = "32";
+            treeNode66.Text = "Play Sound";
+            treeNode67.Name = "stopsounds";
+            treeNode67.Tag = "33";
+            treeNode67.Text = "Stop Sounds";
+            treeNode68.Name = "showpicture";
+            treeNode68.Tag = "43";
+            treeNode68.Text = "Show Picture";
+            treeNode69.Name = "hidepicture";
+            treeNode69.Tag = "44";
+            treeNode69.Text = "Hide Picture";
+            treeNode70.Name = "flashscreen";
+            treeNode70.Tag = "58";
+            treeNode70.Text = "Flash Screen";
+            treeNode71.Name = "fadein";
+            treeNode71.Tag = "74";
+            treeNode71.Text = "Fade In";
+            treeNode72.Name = "fadeout";
+            treeNode72.Tag = "75";
+            treeNode72.Text = "Fade Out";
+            treeNode73.Name = "shakescreen";
+            treeNode73.Tag = "76";
+            treeNode73.Text = "Shake Screen";
+            treeNode74.Name = "specialeffects";
+            treeNode74.Text = "Special Effects";
+            treeNode75.Name = "startquest";
+            treeNode75.Tag = "40";
+            treeNode75.Text = "Start Quest";
+            treeNode76.Name = "completequesttask";
+            treeNode76.Tag = "41";
+            treeNode76.Text = "Complete Quest Task";
+            treeNode77.Name = "endquest";
+            treeNode77.Tag = "42";
+            treeNode77.Text = "End Quest";
+            treeNode78.Name = "randomquest";
+            treeNode78.Tag = "59";
+            treeNode78.Text = "Random Quest from List";
+            treeNode79.Name = "openquestboard";
+            treeNode79.Tag = "60";
+            treeNode79.Text = "Open Quest Board";
+            treeNode80.Name = "questcontrol";
+            treeNode80.Text = "Quest Control";
+            treeNode81.Name = "wait";
+            treeNode81.Tag = "34";
+            treeNode81.Text = "Wait...";
+            treeNode82.Name = "openleaderboard";
+            treeNode82.Tag = "68";
+            treeNode82.Text = "Open Leaderboard...";
+            treeNode83.Name = "clearrecord";
+            treeNode83.Tag = "69";
+            treeNode83.Text = "Clear Record...";
+            treeNode84.Name = "resetpermadeadnpcs";
+            treeNode84.Tag = "73";
+            treeNode84.Text = "Reset Permadead NPCs";
+            treeNode85.Name = "resetglobalevents";
+            treeNode85.Tag = "90";
+            treeNode85.Text = "Reset Global Event Positions";
+            treeNode86.Name = "meleesignup";
+            treeNode86.Tag = "91";
+            treeNode86.Text = "Signup for Open Melee";
+            treeNode87.Name = "meleewithdraw";
+            treeNode87.Tag = "92";
+            treeNode87.Text = "Withdraw from Open Melee";
+            treeNode88.Name = "forcenpcexhaustion";
+            treeNode88.Tag = "98";
+            treeNode88.Text = "Force NPC Exhaustion";
+            treeNode89.Name = "etc";
+            treeNode89.Text = "Etc";
+            treeNode90.Name = "openbank";
+            treeNode90.Tag = "35";
+            treeNode90.Text = "Open Bank";
+            treeNode91.Name = "openshop";
+            treeNode91.Tag = "36";
+            treeNode91.Text = "Open Shop";
+            treeNode92.Name = "opencraftingstation";
+            treeNode92.Tag = "37";
+            treeNode92.Text = "Open Crafting Station";
+            treeNode93.Name = "closecraftingtable";
+            treeNode93.Tag = "97";
+            treeNode93.Text = "Close Crafting Table";
+            treeNode94.Name = "opendeconstructor";
+            treeNode94.Tag = "85";
+            treeNode94.Text = "Open Deconstructor";
+            treeNode95.Name = "openenhancementwindow";
+            treeNode95.Tag = "87";
+            treeNode95.Text = "Open Enhancement Window";
+            treeNode96.Name = "openupgradestation";
+            treeNode96.Tag = "88";
+            treeNode96.Text = "Open Upgrade Station";
+            treeNode97.Name = "shopandbank";
+            treeNode97.Text = "Shop and Bank";
+            treeNode98.Name = "createguild";
+            treeNode98.Tag = "53";
+            treeNode98.Text = "Create Guild";
+            treeNode99.Name = "disbandguild";
+            treeNode99.Tag = "54";
+            treeNode99.Text = "Disband Guild";
+            treeNode100.Name = "openguildbank";
+            treeNode100.Tag = "55";
+            treeNode100.Text = "Open Guild Bank";
+            treeNode101.Name = "setguildbankslots";
+            treeNode101.Tag = "56";
+            treeNode101.Text = "Set Guild Bank Slots Count";
+            treeNode102.Name = "guilds";
+            treeNode102.Text = "Guilds";
+            treeNode103.Name = "starttimer";
+            treeNode103.Tag = "64";
+            treeNode103.Text = "Start Timer";
+            treeNode104.Name = "modifytimer";
+            treeNode104.Tag = "65";
+            treeNode104.Text = "Modify Timer";
+            treeNode105.Name = "stoptimer";
+            treeNode105.Tag = "66";
+            treeNode105.Text = "Stop Timer";
+            treeNode106.Name = "timers";
+            treeNode106.Text = "Timers";
+            treeNode107.Name = "changedungeon";
+            treeNode107.Tag = "82";
+            treeNode107.Text = "Change Dungeon";
+            treeNode108.Name = "obtaintreasuregnome";
+            treeNode108.Tag = "83";
+            treeNode108.Text = "Obtain Treasure Gnome";
+            treeNode109.Name = "rolldungeonloot";
+            treeNode109.Tag = "84";
+            treeNode109.Text = "Roll Dungeon Loot";
+            treeNode110.Name = "dungeons";
+            treeNode110.Text = "Dungeons";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode14,
             treeNode47,
-            treeNode61,
-            treeNode73,
-            treeNode79,
-            treeNode88,
-            treeNode96,
-            treeNode101,
-            treeNode105,
-            treeNode109});
+            treeNode62,
+            treeNode74,
+            treeNode80,
+            treeNode89,
+            treeNode97,
+            treeNode102,
+            treeNode106,
+            treeNode110});
             this.lstCommands.Size = new System.Drawing.Size(778, 920);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);

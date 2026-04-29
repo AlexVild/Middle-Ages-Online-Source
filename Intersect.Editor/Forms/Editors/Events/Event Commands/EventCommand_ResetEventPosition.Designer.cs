@@ -1,8 +1,6 @@
-﻿using DarkUI.Controls;
-
-namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
+﻿namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
-    partial class EventCommandWaitForRouteCompletion
+    partial class EventCommand_ResetEventPosition
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,31 +28,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         /// </summary>
         private void InitializeComponent()
         {
-            this.grpWaitRoute = new DarkUI.Controls.DarkGroupBox();
+            this.grpReset = new DarkUI.Controls.DarkGroupBox();
             this.cmbEntities = new DarkUI.Controls.DarkComboBox();
             this.lblEntity = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.grpWaitRoute.SuspendLayout();
+            this.grpReset.SuspendLayout();
             this.SuspendLayout();
             // 
-            // grpWaitRoute
+            // grpReset
             // 
-            this.grpWaitRoute.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpWaitRoute.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWaitRoute.Controls.Add(this.cmbEntities);
-            this.grpWaitRoute.Controls.Add(this.lblEntity);
-            this.grpWaitRoute.Controls.Add(this.btnCancel);
-            this.grpWaitRoute.Controls.Add(this.btnSave);
-            this.grpWaitRoute.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWaitRoute.Location = new System.Drawing.Point(4, 5);
-            this.grpWaitRoute.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpWaitRoute.Name = "grpWaitRoute";
-            this.grpWaitRoute.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpWaitRoute.Size = new System.Drawing.Size(278, 154);
-            this.grpWaitRoute.TabIndex = 17;
-            this.grpWaitRoute.TabStop = false;
-            this.grpWaitRoute.Text = "Wait for Move Route Completion:";
+            this.grpReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpReset.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpReset.Controls.Add(this.cmbEntities);
+            this.grpReset.Controls.Add(this.lblEntity);
+            this.grpReset.Controls.Add(this.btnCancel);
+            this.grpReset.Controls.Add(this.btnSave);
+            this.grpReset.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpReset.Location = new System.Drawing.Point(4, 5);
+            this.grpReset.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpReset.Name = "grpReset";
+            this.grpReset.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.grpReset.Size = new System.Drawing.Size(278, 154);
+            this.grpReset.TabIndex = 18;
+            this.grpReset.TabStop = false;
+            this.grpReset.Text = "Reset Event Position";
             // 
             // cmbEntities
             // 
@@ -69,10 +67,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbEntities.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEntities.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEntities.FormattingEnabled = true;
-            this.cmbEntities.Location = new System.Drawing.Point(10, 59);
+            this.cmbEntities.Location = new System.Drawing.Point(8, 59);
             this.cmbEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cmbEntities.Name = "cmbEntities";
-            this.cmbEntities.Size = new System.Drawing.Size(260, 27);
+            this.cmbEntities.Size = new System.Drawing.Size(262, 27);
             this.cmbEntities.TabIndex = 22;
             this.cmbEntities.Text = null;
             this.cmbEntities.TextPadding = new System.Windows.Forms.Padding(2);
@@ -92,7 +90,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnCancel.Location = new System.Drawing.Point(134, 109);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(8);
             this.btnCancel.Size = new System.Drawing.Size(112, 35);
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "Cancel";
@@ -103,34 +101,32 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Location = new System.Drawing.Point(10, 109);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.btnSave.Padding = new System.Windows.Forms.Padding(8);
             this.btnSave.Size = new System.Drawing.Size(112, 35);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommandWaitForRouteCompletion
+            // EventCommand_ResetEventPosition
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.Controls.Add(this.grpWaitRoute);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "EventCommandWaitForRouteCompletion";
-            this.Size = new System.Drawing.Size(286, 164);
-            this.grpWaitRoute.ResumeLayout(false);
-            this.grpWaitRoute.PerformLayout();
+            this.Controls.Add(this.grpReset);
+            this.Name = "EventCommand_ResetEventPosition";
+            this.Size = new System.Drawing.Size(295, 169);
+            this.grpReset.ResumeLayout(false);
+            this.grpReset.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private DarkGroupBox grpWaitRoute;
-        private DarkButton btnCancel;
-        private DarkButton btnSave;
+        private DarkUI.Controls.DarkGroupBox grpReset;
+        private DarkUI.Controls.DarkComboBox cmbEntities;
         private System.Windows.Forms.Label lblEntity;
-        private DarkComboBox cmbEntities;
+        private DarkUI.Controls.DarkButton btnCancel;
+        private DarkUI.Controls.DarkButton btnSave;
     }
 }

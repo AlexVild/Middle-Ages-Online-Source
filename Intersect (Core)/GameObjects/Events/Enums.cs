@@ -289,6 +289,7 @@ namespace Intersect.GameObjects.Events
         CloseCraftingTable, // 97
         ForceNpcExhaustion, // 98
         PermaHoldPlayer, // 99
+        ResetEventPosition, // 100
     }
 
     public enum NPCGuildManagementSelection

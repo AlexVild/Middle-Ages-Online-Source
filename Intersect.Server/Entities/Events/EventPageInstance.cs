@@ -87,8 +87,8 @@ namespace Intersect.Server.Entities.Events
             MapInstanceId = mapInstanceId;
             X = eventIndex.X;
             Y = eventIndex.Y;
-            SpawnX = X;
-            SpawnY = Y;
+            SpawnX = myEvent.SpawnX;
+            SpawnY = myEvent.SpawnY;
             Name = myEvent.Name;
             MovementType = MyPage.Movement.Type;
             MovementFreq = MyPage.Movement.Frequency;

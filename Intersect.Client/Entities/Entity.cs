@@ -2779,6 +2779,10 @@ namespace Intersect.Client.Entities
             {
                 return;
             }
+            if (IsStealthed())
+            {
+                return;
+            }
 
             var angle = Globals.Me.CalculateDirectionTo(this);
             var width = CASTER_INDICATOR_TEXTURE.GetWidth() / IndicatorFrames;

@@ -543,7 +543,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private void SelectCommand(EventCommandType type)
         {
-            if ((type == EventCommandType.SetMoveRoute || type == EventCommandType.WaitForRouteCompletion) &&
+            if ((type == EventCommandType.SetMoveRoute || type == EventCommandType.WaitForRouteCompletion || type == EventCommandType.ResetEventPosition) &&
                 MyEvent.CommonEvent)
             {
                 MessageBoxExtensions.ShowWarning(
@@ -961,6 +961,11 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.PermaHoldPlayer:
                     tmpCommand = new PermaHoldPlayer();
+
+                    break;
+
+                case EventCommandType.ResetEventPosition:
+                    tmpCommand = new ResetEventPositionCommand();
 
                     break;
 
@@ -1806,6 +1811,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmdWindow = new EventCommand_ForceNpcExhaustion((ForceNpcExhaustion)command, this);
                     break;
 
+
+                case EventCommandType.ResetEventPosition:
+                    cmdWindow = new EventCommand_ResetEventPosition(
+                        (ResetEventPositionCommand)command, this, mCurrentMap, MyEvent
+                    );
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

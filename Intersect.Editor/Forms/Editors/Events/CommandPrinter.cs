@@ -2287,5 +2287,16 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return "Hold Player (Across map transitions)";
         }
+
+        private static string GetCommandText(ResetEventPositionCommand command, MapInstance map)
+        {
+            var evtName = Strings.EventCommandList.deletedevent;
+            if (map.LocalEvents.ContainsKey(command.Target))
+            {
+                evtName = map.LocalEvents[command.Target].Name;
+            }
+
+            return $"Reset Event Position: {evtName}";
+        }
     }
 }

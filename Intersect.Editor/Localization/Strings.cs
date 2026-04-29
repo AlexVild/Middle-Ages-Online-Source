@@ -2480,6 +2480,7 @@ Tick timer saved in server config.json.";
                 {"closecraftingtable", @"Close Crafting Table"},
                 {"forcenpcexhaustion", @"Force NPC Exhaustion State"},
                 {"permaholdplayer", @"Hold Player (Cross-Map)" },
+                {"reseteventposition", @"Reset Event Position" },
             };
 
         }

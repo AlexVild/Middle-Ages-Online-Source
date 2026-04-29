@@ -1612,4 +1612,11 @@ namespace Intersect.GameObjects.Events.Commands
     {
         public override EventCommandType Type { get; } = EventCommandType.PermaHoldPlayer;
     }
+
+    public partial class ResetEventPositionCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ResetEventPosition;
+
+        public Guid Target { get; set; }
+    }
 }

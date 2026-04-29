@@ -4063,5 +4063,28 @@ namespace Intersect.Server.Entities.Events
             }
             player.SendPacket(new PermaHoldPlayerPacket());
         }
+
+        private static void ProcessCommand(
+          ResetEventPositionCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !player.Online)
+            {
+                return;
+            }
+
+            var evt = player.EventLookup.Values.FirstOrDefault(e => e.BaseEvent.Id == command.Target);
+
+            if (evt == default || evt.Global || evt.PageInstance == null)
+            {
+                return;
+            }
+
+            evt.PageInstance.ResetPosition();
+        }
     }
 }

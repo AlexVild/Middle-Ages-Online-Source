@@ -275,6 +275,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RemovePermabuff.Designer.cs">
       <DependentUpon>EventCommand_RemovePermabuff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetEventPosition.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetEventPosition.Designer.cs">
+      <DependentUpon>EventCommand_ResetEventPosition.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetGlobalEvents.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1099,6 +1105,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RemovePermabuff.resx">
       <DependentUpon>EventCommand_RemovePermabuff.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ResetEventPosition.resx">
+      <DependentUpon>EventCommand_ResetEventPosition.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ResetGlobalEvents.resx">
       <DependentUpon>EventCommand_ResetGlobalEvents.cs</DependentUpon>
     </EmbeddedResource>
@@ -1140,6 +1149,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Wait.resx">
       <DependentUpon>EventCommand_Wait.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_WaitForRouteCompletion.resx">
+      <DependentUpon>EventCommand_WaitForRouteCompletion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Warp.resx">
       <DependentUpon>EventCommand_Warp.cs</DependentUpon>
