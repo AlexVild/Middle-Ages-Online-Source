@@ -7665,6 +7665,38 @@ namespace Intersect.Server.Entities
 
                             value = ServerVariableBase.Get(cmd.VariableId)?.Value;
                         }
+                        else if (cmd.VariableType == VariableTypes.InstanceVariable)
+                        {
+                            var variable = InstanceVariableBase.Get(cmd.VariableId);
+                            if (variable != null)
+                            {
+                                type = variable.Type;
+                            }
+
+
+                            if (!MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
+                            {
+                                return;
+                            }
+                            
+                            value = mapInstance.GetInstanceVariable(cmd.VariableId);
+                        }
+                        else if (cmd.VariableType == VariableTypes.GuildVariable)
+                        {
+                            var variable = GuildVariableBase.Get(cmd.VariableId);
+                            if (variable != null)
+                            {
+                                type = variable.Type;
+                            }
+
+
+                            if (!IsInGuild)
+                            {
+                                return;
+                            }
+
+                            value = Guild.GetVariable(cmd.VariableId)?.Value;
+                        }
 
                         if (value == null)
                         {
@@ -7745,6 +7777,24 @@ namespace Intersect.Server.Entities
                                 variable.Value = value;
                                 StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", cmd.VariableId.ToString());
                                 DbInterface.UpdatedServerVariables.AddOrUpdate(variable.Id, variable, (key, oldValue) => variable);
+                            }
+                        }
+                        else if (cmd.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var currInstance))
+                        {
+                            var variable = currInstance.GetInstanceVariable(cmd.VariableId);
+                            if (changed)
+                            {
+                                SetInstanceVariable(cmd.VariableId, value, MapInstanceId);
+                                StartCommonEventsWithTriggerForAll(CommonEventTrigger.InstanceVariableChange, "", cmd.VariableId.ToString());
+                            }
+                        }
+                        else if (cmd.VariableType == VariableTypes.GuildVariable && IsInGuild)
+                        {
+                            var variable = Guild.GetVariable(cmd.VariableId);
+                            if (changed)
+                            {
+                                StartCommonEventsWithTriggerForAll(CommonEventTrigger.GuildVariableChange, "", cmd.VariableId.ToString());
+                                Guild.UpdatedVariables.AddOrUpdate(cmd.VariableId, GuildVariableBase.Get(cmd.VariableId), (key, oldValue) => GuildVariableBase.Get(cmd.VariableId));
                             }
                         }
 
