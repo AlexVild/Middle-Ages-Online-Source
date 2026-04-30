@@ -1098,6 +1098,10 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
+            if (player == null)
+            {
+                return;
+            }
             //Playing an animations requires a target type/target or just a tile.
             //We need an animation number and whether or not it should rotate (and the direction I guess)
             var animId = command.AnimationId;
@@ -1125,7 +1129,18 @@ namespace Intersect.Server.Entities.Events
 
                         if (evt.Value.BaseEvent.Id == command.EntityId)
                         {
-                            targetEntity = evt.Value.PageInstance;
+                            if (evt.Value.Global && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                            {
+                                var globalEvent = mapInstance.GetGlobalEventInstance(instance.BaseEvent);
+                                if (globalEvent != null && globalEvent.GlobalPageInstance != null)
+                                {
+                                    targetEntity = globalEvent.GlobalPageInstance[globalEvent.PageIndex];
+                                }
+                            }
+                            else
+                            {
+                                targetEntity = evt.Value.PageInstance;
+                            }
 
                             break;
                         }
