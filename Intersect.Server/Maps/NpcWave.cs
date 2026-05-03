@@ -47,7 +47,12 @@ namespace Intersect.Server.Maps
             var finalWave = FinishedLoop && ParentGroup.WavesRemaining() <= 1;
             var persistSpawnGroup = finalWave && ParentGroup.Descriptor.PersistFinalSpawnGroup;
 
-            Map.ChangeSpawnGroup(Map.NpcSpawnGroup + 1, true, true, persistSpawnGroup, false);
+            var nextSpawnGroup = Map.NpcSpawnGroup + 1;
+            if (Descriptor.CustomNextSpawnGroup)
+            {
+                nextSpawnGroup = Descriptor.NextSpawnGroup;
+            }
+            Map.ChangeSpawnGroup(nextSpawnGroup, true, true, persistSpawnGroup, false);
 
             Logging.Log.Debug($"--- ENDING ITERATION...");
 
@@ -56,10 +61,13 @@ namespace Intersect.Server.Maps
                 QueueEvent(endLoopEvent);
             }
             
-            if (FinishedLoop && EventBase.TryGet(Descriptor.OnEndEventId, out var endEvent))
+            if (FinishedLoop)
             {
-                QueueEvent(endEvent);
                 Logging.Log.Debug($"--- ENDING WAVE...");
+                if (EventBase.TryGet(Descriptor.OnEndEventId, out var endEvent))
+                {
+                    QueueEvent(endEvent);
+                }
             }
         }
 

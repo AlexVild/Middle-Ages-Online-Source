@@ -21,6 +21,8 @@ namespace Intersect.GameObjects.Maps
         public Guid OnLoopEndEventId { get; set; }
         public Guid OnLoopStartEventId { get; set; }
         public int LoopIterations { get; set; }
+        public bool CustomNextSpawnGroup { get; set; }
+        public int NextSpawnGroup { get; set; }
 
         public NpcWaveDescriptor()
         {
@@ -39,6 +41,8 @@ namespace Intersect.GameObjects.Maps
             OnLoopStartEventId = other.OnLoopStartEventId;
             OnLoopEndEventId = other.OnLoopEndEventId;
             LoopIterations = other.LoopIterations;
+            CustomNextSpawnGroup = other.CustomNextSpawnGroup;
+            NextSpawnGroup = other.NextSpawnGroup;
         }
     }
 

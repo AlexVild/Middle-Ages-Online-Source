@@ -119,6 +119,8 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             nudAdvancetimeout.Value = descriptor.AdvanceOnTimeoutMs;
             nudLoopIterations.Value = descriptor.LoopIterations;
             nudTransitionTime.Value = descriptor.TimeBetweenMs;
+            chkCustomWave.Checked = descriptor.CustomNextSpawnGroup;
+            nudCustomWave.Value = descriptor.NextSpawnGroup;
 
             cmbStartEvent.SelectedIndex = EventBase.ListIndex(descriptor.OnStartEventId) + 1;
             cmbEndEvent.SelectedIndex = EventBase.ListIndex(descriptor.OnEndEventId) + 1;
@@ -324,6 +326,26 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             }
 
             SelectedGroup.DisposeMapOnEmpty = chkDisposeMap.Checked;
+        }
+
+        private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            if (SelectedWave == null || mEditing)
+            {
+                return;
+            }
+
+            SelectedWave.NextSpawnGroup = (int)nudCustomWave.Value;
+        }
+
+        private void chkCustomWave_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SelectedWave == null || mEditing)
+            {
+                return;
+            }
+
+            SelectedWave.CustomNextSpawnGroup = chkCustomWave.Checked;
         }
     }
 }

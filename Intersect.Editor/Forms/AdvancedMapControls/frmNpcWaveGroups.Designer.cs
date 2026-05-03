@@ -33,6 +33,7 @@
             this.btnAddGroup = new DarkUI.Controls.DarkButton();
             this.btnRemoveGroup = new DarkUI.Controls.DarkButton();
             this.grpWaveGroup = new DarkUI.Controls.DarkGroupBox();
+            this.chkDisposeMap = new DarkUI.Controls.DarkCheckBox();
             this.chkPersistFinal = new DarkUI.Controls.DarkCheckBox();
             this.grpWave = new DarkUI.Controls.DarkGroupBox();
             this.grpEvents = new DarkUI.Controls.DarkGroupBox();
@@ -64,7 +65,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.chkDisposeMap = new DarkUI.Controls.DarkCheckBox();
+            this.nudCustomWave = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkCustomWave = new DarkUI.Controls.DarkCheckBox();
             this.grpWaveGroup.SuspendLayout();
             this.grpWave.SuspendLayout();
             this.grpEvents.SuspendLayout();
@@ -73,6 +75,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLoopIterations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAdvancetimeout)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStartWave)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCustomWave)).BeginInit();
             this.SuspendLayout();
             // 
             // lstWaveGroups
@@ -132,10 +135,21 @@
             this.grpWaveGroup.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpWaveGroup.Name = "grpWaveGroup";
             this.grpWaveGroup.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpWaveGroup.Size = new System.Drawing.Size(586, 922);
+            this.grpWaveGroup.Size = new System.Drawing.Size(586, 924);
             this.grpWaveGroup.TabIndex = 130;
             this.grpWaveGroup.TabStop = false;
             this.grpWaveGroup.Text = "Wave Group";
+            // 
+            // chkDisposeMap
+            // 
+            this.chkDisposeMap.AutoSize = true;
+            this.chkDisposeMap.Location = new System.Drawing.Point(181, 92);
+            this.chkDisposeMap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkDisposeMap.Name = "chkDisposeMap";
+            this.chkDisposeMap.Size = new System.Drawing.Size(292, 24);
+            this.chkDisposeMap.TabIndex = 135;
+            this.chkDisposeMap.Text = "Dispose map on empty (no players)?";
+            this.chkDisposeMap.CheckedChanged += new System.EventHandler(this.chkDisposeMap_CheckedChanged);
             // 
             // chkPersistFinal
             // 
@@ -155,7 +169,7 @@
             this.grpWave.Controls.Add(this.grpEvents);
             this.grpWave.Controls.Add(this.grpAdvancement);
             this.grpWave.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWave.Location = new System.Drawing.Point(12, 309);
+            this.grpWave.Location = new System.Drawing.Point(15, 307);
             this.grpWave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpWave.Name = "grpWave";
             this.grpWave.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -318,7 +332,9 @@
             // 
             this.grpAdvancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAdvancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdvancement.Controls.Add(this.chkCustomWave);
             this.grpAdvancement.Controls.Add(this.nudTransitionTime);
+            this.grpAdvancement.Controls.Add(this.nudCustomWave);
             this.grpAdvancement.Controls.Add(this.lblTransitionTime);
             this.grpAdvancement.Controls.Add(this.nudLoopIterations);
             this.grpAdvancement.Controls.Add(this.lblLoop);
@@ -331,7 +347,7 @@
             this.grpAdvancement.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.grpAdvancement.Name = "grpAdvancement";
             this.grpAdvancement.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.grpAdvancement.Size = new System.Drawing.Size(545, 232);
+            this.grpAdvancement.Size = new System.Drawing.Size(545, 252);
             this.grpAdvancement.TabIndex = 135;
             this.grpAdvancement.TabStop = false;
             this.grpAdvancement.Text = "Wave Advancement";
@@ -453,7 +469,7 @@
             // 
             // btnRemoveWave
             // 
-            this.btnRemoveWave.Location = new System.Drawing.Point(405, 268);
+            this.btnRemoveWave.Location = new System.Drawing.Point(405, 262);
             this.btnRemoveWave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnRemoveWave.Name = "btnRemoveWave";
             this.btnRemoveWave.Padding = new System.Windows.Forms.Padding(8);
@@ -464,7 +480,7 @@
             // 
             // btnAddWave
             // 
-            this.btnAddWave.Location = new System.Drawing.Point(223, 268);
+            this.btnAddWave.Location = new System.Drawing.Point(232, 262);
             this.btnAddWave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnAddWave.Name = "btnAddWave";
             this.btnAddWave.Padding = new System.Windows.Forms.Padding(8);
@@ -476,7 +492,7 @@
             // lbllWaves
             // 
             this.lbllWaves.AutoSize = true;
-            this.lbllWaves.Location = new System.Drawing.Point(17, 131);
+            this.lbllWaves.Location = new System.Drawing.Point(11, 125);
             this.lbllWaves.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbllWaves.Name = "lbllWaves";
             this.lbllWaves.Size = new System.Drawing.Size(57, 20);
@@ -491,7 +507,7 @@
             this.lstWaves.ForeColor = System.Drawing.Color.Gainsboro;
             this.lstWaves.FormattingEnabled = true;
             this.lstWaves.ItemHeight = 20;
-            this.lstWaves.Location = new System.Drawing.Point(21, 156);
+            this.lstWaves.Location = new System.Drawing.Point(13, 150);
             this.lstWaves.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lstWaves.Name = "lstWaves";
             this.lstWaves.Size = new System.Drawing.Size(553, 102);
@@ -564,7 +580,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(261, 1146);
+            this.btnSave.Location = new System.Drawing.Point(263, 1146);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(8);
@@ -575,7 +591,7 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(434, 1146);
+            this.btnCancel.Location = new System.Drawing.Point(436, 1146);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(8);
@@ -584,23 +600,44 @@
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // chkDisposeMap
+            // nudCustomWave
             // 
-            this.chkDisposeMap.AutoSize = true;
-            this.chkDisposeMap.Location = new System.Drawing.Point(181, 92);
-            this.chkDisposeMap.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.chkDisposeMap.Name = "chkDisposeMap";
-            this.chkDisposeMap.Size = new System.Drawing.Size(292, 24);
-            this.chkDisposeMap.TabIndex = 135;
-            this.chkDisposeMap.Text = "Dispose map on empty (no players)?";
-            this.chkDisposeMap.CheckedChanged += new System.EventHandler(this.chkDisposeMap_CheckedChanged);
+            this.nudCustomWave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudCustomWave.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudCustomWave.Location = new System.Drawing.Point(287, 213);
+            this.nudCustomWave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.nudCustomWave.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudCustomWave.Name = "nudCustomWave";
+            this.nudCustomWave.Size = new System.Drawing.Size(250, 26);
+            this.nudCustomWave.TabIndex = 137;
+            this.nudCustomWave.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudCustomWave.ValueChanged += new System.EventHandler(this.darkNumericUpDown1_ValueChanged);
+            // 
+            // chkCustomWave
+            // 
+            this.chkCustomWave.AutoSize = true;
+            this.chkCustomWave.Location = new System.Drawing.Point(12, 214);
+            this.chkCustomWave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkCustomWave.Name = "chkCustomWave";
+            this.chkCustomWave.Size = new System.Drawing.Size(180, 24);
+            this.chkCustomWave.TabIndex = 138;
+            this.chkCustomWave.Text = "Go to custom wave?";
+            this.chkCustomWave.CheckedChanged += new System.EventHandler(this.chkCustomWave_CheckedChanged);
             // 
             // frmNpcWaveGroups
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(615, 1195);
+            this.ClientSize = new System.Drawing.Size(615, 1200);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.label2);
@@ -623,6 +660,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.nudLoopIterations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAdvancetimeout)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStartWave)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCustomWave)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -666,5 +704,7 @@
         private System.Windows.Forms.Label lblLoopEndEvent;
         private DarkUI.Controls.DarkCheckBox chkPersistFinal;
         private DarkUI.Controls.DarkCheckBox chkDisposeMap;
+        private DarkUI.Controls.DarkNumericUpDown nudCustomWave;
+        private DarkUI.Controls.DarkCheckBox chkCustomWave;
     }
 }
