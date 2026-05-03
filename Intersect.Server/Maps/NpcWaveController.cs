@@ -35,11 +35,13 @@ namespace Intersect.Server.Maps
 
         public void ProcessWaves()
         {
+            var activePlayers = Map.GetPlayers(true).Where(p => p.Online && !p.IsDead());
+
             foreach (var waveGroup in NpcWaveGroups.Where(group => !group.Started).ToArray())
             {
                 if (Map.NpcSpawnGroup == waveGroup.Descriptor?.AutoStartWave)
                 {
-                    if (waveGroup.Descriptor.DisposeMapOnEmpty && Map.GetPlayers(true).Count == 0)
+                    if (waveGroup.Descriptor.DisposeMapOnEmpty && !activePlayers.Any())
                     {
                         continue;
                     }
@@ -53,7 +55,7 @@ namespace Intersect.Server.Maps
             if (currentGroup != null)
             {
                 currentGroup.Process();
-                if (currentGroup.Descriptor.DisposeMapOnEmpty && Map.GetPlayers(true).Count == 0)
+                if (currentGroup.Descriptor.DisposeMapOnEmpty && !activePlayers.Any())
                 {
                     currentGroup.ResetToStart();
                 }

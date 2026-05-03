@@ -110,6 +110,8 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             nudStartWave.Value = descriptor.AutoStartWave;
             chkPersistFinal.Checked = descriptor.PersistFinalSpawnGroup;
             chkDisposeMap.Checked = descriptor.DisposeMapOnEmpty;
+            darkCheckBox1.Checked = descriptor.ResetToCustomWave;
+            nudCustomReset.Value = descriptor.CustomResetWave;
             UpdateWaveList();
         }
 
@@ -338,7 +340,27 @@ namespace Intersect.Editor.Forms.AdvancedMapControls
             SelectedWave.NextSpawnGroup = (int)nudCustomWave.Value;
         }
 
-        private void chkCustomWave_CheckedChanged(object sender, EventArgs e)
+        private void darkCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (SelectedGroup == null || mEditing)
+            {
+                return;
+            }
+
+            SelectedGroup.ResetToCustomWave = darkCheckBox1.Checked;
+        }
+
+        private void nudCustomReset_ValueChanged(object sender, EventArgs e)
+        {
+            if (SelectedGroup == null || mEditing)
+            {
+                return;
+            }
+
+            SelectedGroup.CustomResetWave = (int)nudCustomReset.Value;
+        }
+
+        private void chkCustomWave_CheckedChanged_1(object sender, EventArgs e)
         {
             if (SelectedWave == null || mEditing)
             {

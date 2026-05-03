@@ -57,6 +57,8 @@ namespace Intersect.GameObjects.Maps
         public int AutoStartWave { get; set; }
         public bool PersistFinalSpawnGroup { get; set; }
         public bool DisposeMapOnEmpty { get; set; }
+        public bool ResetToCustomWave { get; set; }
+        public int CustomResetWave { get; set; }
 
         public NpcWaveGroupDescriptor()
         {
@@ -75,6 +77,8 @@ namespace Intersect.GameObjects.Maps
                 .Select(w => new NpcWaveDescriptor(w))
                 .ToList();
             DisposeMapOnEmpty = other.DisposeMapOnEmpty;
+            ResetToCustomWave = other.ResetToCustomWave;
+            CustomResetWave = other.CustomResetWave;
         }
     }
 

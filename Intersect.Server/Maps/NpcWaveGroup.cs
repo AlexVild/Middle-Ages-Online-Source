@@ -92,11 +92,14 @@ namespace Intersect.Server.Maps
 
         public void ResetToStart()
         {
-            if (!InstanceProcessor.TryGetInstanceController(Map.MapInstanceId, out var instanceController))
+            if (!InstanceProcessor.TryGetInstanceController(Map.MapInstanceId, out var instanceController) || Descriptor == null)
             {
                 return;
             }
-            instanceController.ChangeSpawnGroup(Map.GetController().Id, Descriptor?.AutoStartWave ?? 0, false, false);
+
+            var resetWave = Descriptor.ResetToCustomWave ? Descriptor.CustomResetWave : Descriptor?.AutoStartWave ?? 0;
+
+            instanceController.ChangeSpawnGroup(Map.GetController().Id, resetWave, false, false);
             instanceController.ClearPermadeadNpcs(Map.GetController().Id, true);
             
             Started = false;
