@@ -12,7 +12,7 @@
 
 # Intersect Contributors
 
-[Alex Vild](https://github.com/AlexVild)
+[Daywalkr](https://github.com/Daywalkrr)
 
 [A. I. Robin](https://github.com/alloin)
 
